@@ -12,7 +12,5 @@ engine as well as the fife-tutorials.
 
 ----
 = Linux Install =
- # Using subversion (either through a client such as TortoiseSVN or command line) checkout the [http://fife.svn.cvsdude.com/engine/branches/active/engine_maploader fife source code]
- # Make sure you have the [http://wiki.fifengine.de/Build_dependencies required dependencies] installed before trying to build
- # See the fife [http://wiki.fifengine.de/Building:Linux:SCons linux guide] for installing and building fife for Linux
+ TBD
   

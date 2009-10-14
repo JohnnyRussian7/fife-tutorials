@@ -6,9 +6,9 @@ engine as well as the fife-tutorials.
 
 ----
 = Windows Install =
-  # Using subversion (either through a client such as TortoiseSVN or command line) checkout the [http://fife.svn.cvsdude.com/engine/branches/active/engine_maploader fife source code]
-  # Download the [http://code.google.com/p/fife-tutorials/downloads/list Precompiled Dependencies] and unzip it in the _`<path-to-fife`>/build/win32_ directory
-  # Checkout the [https://fife-tutorials.googlecode.com/svn/trunk fife-tutorials] in the _`<path-to-fife`>/clients_ directory
+  # Checkout the [http://fife.svn.cvsdude.com/engine/branches/active/engine_maploader fife source code] either using the subversion command line or through a GUI such as tortoiseSVN
+  # Download the latest [http://code.google.com/p/fife-tutorials/downloads/list precompiled dependencies] and unzip it in the `<path-to-fife`>/build/win32 directory
+  # Checkout the [https://fife-tutorials.googlecode.com/svn/trunk fife-tutorials] in the `<path-to-fife`>/clients directory
 
 ----
 = Linux Install =

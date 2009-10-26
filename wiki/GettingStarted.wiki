@@ -10,7 +10,7 @@ engine as well as the fife-tutorials.
   # Download the latest [http://code.google.com/p/fife-tutorials/downloads/list precompiled dependencies] and unzip it in the `<path-to-fife`>/build/win32 directory
   # Checkout the [https://fife-tutorials.googlecode.com/svn/trunk fife-tutorials] in the `<path-to-fife`>/clients directory
 === Using Visual Studio ===
-  # Execute the script `<path-to-fife`>/win32/update_project_files.bat
+  # Execute the script `<path-to-fife`>/build/win32/update_project_files.bat
   # Navigate to `<path-to-fife`>/build/win32/build_environments/visual_studio`_`# where # is the version of visual studio you are using
   # Open the solution fife_engine.sln
   # Go to the build configurations menu within visual studio and select either the "Debug_static" or "Release_static" configuration

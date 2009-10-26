@@ -1,4 +1,5 @@
 #summary This page will guide you through setting up fife and fife-tutorials.
+#labels Featured,Phase-Deploy,Phase-Implementation
 
 = Introduction =
 The instructions below will guide you through downloading and setting up the fife

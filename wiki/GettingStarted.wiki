@@ -1,4 +1,4 @@
-#summary This page will guide you through setting fife and fife-tutorials.
+#summary This page will guide you through setting up fife and fife-tutorials.
 
 = Introduction =
 The instructions below will guide you through downloading and setting up the fife
@@ -9,6 +9,16 @@ engine as well as the fife-tutorials.
   # Checkout the [http://fife.svn.cvsdude.com/engine/branches/active/engine_maploader fife source code] either using the subversion command line or through a GUI such as tortoiseSVN
   # Download the latest [http://code.google.com/p/fife-tutorials/downloads/list precompiled dependencies] and unzip it in the `<path-to-fife`>/build/win32 directory
   # Checkout the [https://fife-tutorials.googlecode.com/svn/trunk fife-tutorials] in the `<path-to-fife`>/clients directory
+
+== Using Visual Studio ==
+  # Execute the script `<path-to-fife`>/win32/update_project_files.bat
+  # Navigate to `<path-to-fife`>/build/win32/build_environments/visual_studio_# where # is the version of visual studio you are using
+  # Open the solution file fife_engine.sln
+  # Go to the build configurations menu within visual studio and select either the "Debug_static" or "Release_static" configuration
+  # Build the solution
+
+== Using Mingw ==
+TBD
 
 ----
 = Linux Install =

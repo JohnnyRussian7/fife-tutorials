@@ -7,18 +7,17 @@ engine as well as the fife-tutorials.
 
 ----
 = Windows Install =
-  # Checkout the [http://fife.svn.cvsdude.com/engine/branches/active/engine_maploader fife source code] either using the subversion command line or through a GUI such as tortoiseSVN
-  # Download the latest [http://code.google.com/p/fife-tutorials/downloads/list precompiled dependencies] and unzip it in the `<path-to-fife>`/build/win32 directory
-  # Checkout the [https://fife-tutorials.googlecode.com/svn/trunk fife-tutorials] in the `<path-to-fife>`/clients directory
+  # Download the FIFE 0.3.1 [http://sourceforge.net/projects/fife/files/active/packages/FIFE-0.3.1_installer_win32.exe/download win32 installer] from sourceforge
+  # Checkout the [https://fife-tutorials.googlecode.com/svn/trunk fife-tutorials] trunk to the location `<path-to-fife>`/tutorials
 === Using Visual Studio ===
   # Execute the script `<path-to-fife>`/build/win32/update_project_files.bat
   # Navigate to `<path-to-fife>`/build/win32/build_environments/visual_studio`_`# where # is the version of visual studio you are using
   # Open the solution fife_engine.sln
   # Go to the build configurations menu within visual studio and select either the "Debug_static" or "Release_static" configuration
   # Build the solution and make sure no errors occurred
-  # Navigate to `<path-to-fife>`/clients/`<fife-tutorials-directory>`/build/ and choose the directory based on which version of visual studio you are using
+  # Navigate to `<path-to-fife>`/tutorials/build/ and choose the directory based on which version of visual studio you are using
   # Open the solution (.sln) file within the directory
-  # Set the build configuration within visual studio to either "Debug" or "Release" to correspond to how fife was built
+  # Set the build configuration within visual studio to either "Debug" or "Release" to correspond to how FIFE was built
   # Build solution and make sure no errors occurred
 === Using Mingw ===
 TBD

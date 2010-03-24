@@ -7,7 +7,7 @@ engine as well as the fife-tutorials.
 
 ----
 = Windows Install =
-  # Download the FIFE 0.3.1 [http://sourceforge.net/projects/fife/files/active/packages/FIFE-0.3.1_installer_win32.exe/download win32 installer] from sourceforge
+  # Download the FIFE 0.3.1 [http://sourceforge.net/projects/fife/files/active/packages/FIFE-0.3.1_installer_win32.exe/download win32 installer] from sourceforge and run the installer
   # Checkout the [https://fife-tutorials.googlecode.com/svn/trunk fife-tutorials] trunk to the location `<path-to-fife>`/tutorials
 === Using Visual Studio ===
   # Execute the script `<path-to-fife>`/build/win32/update_project_files.bat

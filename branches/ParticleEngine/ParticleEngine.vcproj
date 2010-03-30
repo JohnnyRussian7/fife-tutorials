@@ -213,6 +213,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\WindowInput.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\winmain.cpp"
 				>
 			</File>
@@ -280,6 +284,10 @@
 			</File>
 			<File
 				RelativePath=".\Vector.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WindowInput.h"
 				>
 			</File>
 			<File

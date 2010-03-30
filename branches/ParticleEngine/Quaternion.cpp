@@ -1,0 +1,141 @@
+
+#include <cmath>
+
+#include "Quaternion.h"
+#include "Vector.h"
+#include "Matrix.h"
+
+const double pi = 3.1415926535;
+
+static double rad_2_deg_constant()
+{
+	static double rad2deg = 180.0/pi;
+	return rad2deg;
+}
+
+static double deg_2_rad_constant()
+{
+	static double deg2rad = pi/180.0;
+	return deg2rad;
+}
+
+static double rad_2_deg(float rad)
+{
+	return rad * rad_2_deg_constant();
+}
+
+static double deg_2_rad(float deg)
+{
+	return deg * deg_2_rad_constant();
+}
+
+Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
+{
+	return Quaternion(q1.w*q2.x + q1.x*q2.w + q1.y*q2.z - q1.z*q2.y,
+						q1.w*q2.y + q1.y*q2.w + q1.z*q2.x - q1.x*q2.z,
+						q1.w*q2.z + q1.z*q2.w + q1.x*q2.y - q1.y*q2.x,
+						q1.w*q2.w - q1.x*q2.x - q1.y*q2.y - q1.z*q2.z);
+}
+
+Vector3 operator*(const Quaternion& q, const Vector3& v)
+{
+	Vector3 normVector = normalize(v);
+
+	Quaternion normVectorQuaternion(normVector.x, normVector.y, normVector.z, 0.f);
+
+	Quaternion result = normVectorQuaternion * conjugate(q);
+	result *= q;
+
+	return Vector3(result.x, result.y, result.z);
+}
+
+float magnitude(const Quaternion& q)
+{
+	return std::sqrt(q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w);
+}
+
+float magnitudeSquare(const Quaternion& q)
+{
+	return q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w;
+}
+
+Quaternion normalize(const Quaternion& q)
+{
+	const float Tolerance = 0.00001f;
+
+	float magSquared = magnitudeSquare(q);
+
+	if (magSquared != 0.f && std::abs(magSquared - 1.0f) > Tolerance)
+	{
+		float mag = std::sqrt(magSquared);
+		return Quaternion(q.x/mag, q.y/mag, q.z/mag, q.w/mag);
+	}
+
+	return q;
+}
+
+Quaternion conjugate(const Quaternion& q)
+{
+	return Quaternion(-q.x, -q.y, -q.z, q.w);
+}
+
+Quaternion fromAxis(const Vector3& v, float angle)
+{
+	angle *= 0.5f;
+	float sinAngle = std::sin(angle);
+
+	Vector3 normVector = normalize(v);
+	
+	return Quaternion(normVector.x*sinAngle, 
+						normVector.y*sinAngle, 
+						normVector.z*sinAngle,				
+						cos(angle));
+}
+
+float toAxis(const Quaternion& q, Vector3& v)
+{
+	float scale = std::sqrt(q.x*q.x + q.y*q.y + q.z*q.z);
+	v.x = q.x/scale;
+	v.y = q.y/scale;
+	v.z = q.z/scale;
+	
+	return (std::acos(q.w) * 2.0f);
+
+}
+
+Quaternion fromEuler(float pitch, float yaw, float roll)
+{
+	float p = pitch * deg_2_rad_constant() / 2.0;
+	float y = yaw * deg_2_rad_constant() / 2.0;
+	float r = roll * deg_2_rad_constant() / 2.0;
+
+	float sinp = std::sin(p);
+	float siny = std::sin(y);
+	float sinr = std::sin(r);
+	float cosp = std::cos(p);
+	float cosy = std::cos(y);
+	float cosr = std::cos(r);
+
+	return normalize(Quaternion(sinr*cosp*cosy - cosr*sinp*siny,
+						cosr*sinp*cosy + sinr*cosp*siny,
+						cosr*cosp*siny - sinr*sinp*cosy,
+						cosr*cosp*cosy + sinr*sinp*siny));
+}
+
+Matrix4 toMatrix(const Quaternion& q)
+{
+	float x2 = q.x*q.x;
+	float y2 = q.y*q.y;
+	float z2 = q.z*q.z;
+	float xy = q.x*q.y;
+	float xz = q.x*q.z;
+	float yz = q.y*q.z;
+	float wx = q.w*q.x;
+	float wy = q.w*q.y;
+	float wz = q.w*q.z;
+
+	return Matrix4(1.0f - 2.0f*(y2+z2), 2.0f*(xy-wz), 2.0f*(xz+wy), 0.0f,
+					2.0f*(xy+wz), 1.0f - 2.0f*(x2+z2), 2.0f*(yz-wx), 0.0f,
+					2.0f*(xz-wy), 2.0f*(yz+wx), 1.0f - 2.0f*(x2+y2), 0.0f,
+					0.0f, 0.0f, 0.0f, 1.0f);
+}

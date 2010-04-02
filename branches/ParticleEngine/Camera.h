@@ -8,7 +8,7 @@
 class Camera
 {
 public:
-	Camera(float rotspeed, float movespeed);
+	Camera(const Vector3& position, const Vector3& lookAt, float xrot, float yrot);
 
 	void Init();
 	void Resize(int width, int height);
@@ -26,7 +26,11 @@ public:
 	void render();
 
 private:
+	Matrix4 buildLookAt() const;
+
+private:
 	Vector3 position;
+	Vector3 lookAt;
 	Quaternion rotation;
 
 	float rotspeed;

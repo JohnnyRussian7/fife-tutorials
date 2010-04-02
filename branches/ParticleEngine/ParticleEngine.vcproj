@@ -247,6 +247,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MathUtil.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Matrix.h"
 				>
 			</File>

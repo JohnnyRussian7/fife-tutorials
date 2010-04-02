@@ -55,7 +55,7 @@ float magnitude(const Quaternion& q);
 float magnitudeSquare(const Quaternion& q);
 Quaternion normalize(const Quaternion& q);
 Quaternion conjugate(const Quaternion& q);
-Quaternion fromAxis(const Vector3& v, float angle);
+Quaternion fromAxisAngle(const Vector3& v, float angle);
 float toAxis(const Quaternion& q, Vector3& v);
 Quaternion fromEuler(float pitch, float yaw, float roll);
 Matrix4 toMatrix(const Quaternion& q);

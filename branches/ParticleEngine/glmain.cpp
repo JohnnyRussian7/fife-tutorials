@@ -17,9 +17,9 @@ float angle = 0.f;
 #include "ParticleFadeOutEffect.h"
 #include "Color.h"
 
-Camera cam(0.002f, 0.002f);
+Camera cam(Vector3(0.f, 0.f, -4.f), Vector3(0.f, 0.f, 1000.f), 30, 45);
 ParticleEmitter* emitter = new ParticleEmitter(true, 
-												AxisAlignedBoundingBox(Vector3(0.f, 0.f, 0.f), Vector3(14.f, 14.f, 14.f)),
+												AxisAlignedBoundingBox(Vector3(0.f, 0.f, 0.f), Vector3(1.f, 1.f, 1.f)),
 												80, 100,
 												0.01f, 0.05f,
 												800, 2000,
@@ -53,8 +53,10 @@ void InitFrame()
 
 void RenderFrame()
 {
+	cam.render();
 	renderer.Update(updateRate);
     renderer.Render(cam);
+	
 
     //cam.update(0.f, 0.f, angle, 0.f, 0.f);
     //cam.render();

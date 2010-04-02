@@ -1,6 +1,7 @@
 
 #include "Camera.h"
 #include "Matrix.h"
+#include "MathUtil.h"
 
 #include <windows.h>
 #include <gl/glu.h>
@@ -8,10 +9,11 @@
 
 const float PIOVER180 = 3.14159265/180.f;
 
-Camera::Camera(float rotspeed, float movespeed)
-: rotation(0.0f, 0.0f, 0.0f, 1.0f), rotspeed(rotspeed), movespeed(movespeed)
+Camera::Camera(const Vector3& position, const Vector3& lookAt, float xrot, float yrot)
+: position(position), lookAt(lookAt), rotation(0.0f, 0.0f, 0.0f, 1.0f)
 {
-
+	rotation = fromAxisAngle(Vector3(0.f, 1.f, 0.f), deg_2_rad(yrot));
+	rotation *= fromAxisAngle(Vector3(1.f, 0.f, 0.f), deg_2_rad(xrot));
 }
 
 void Camera::Init()
@@ -34,10 +36,11 @@ void Camera::Resize(int width, int height)
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(52.0f, aspectratio, 0.2f, 255.0f);
+	gluPerspective(45.0f, aspectratio, 0.2f, 255.0f);
+	//glOrtho(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -4.0f);
+	//glTranslatef(position.x, position.y, position.z);
 }
 
 const Vector3& Camera::GetPosition() const
@@ -52,7 +55,9 @@ const Quaternion& Camera::GetRotation() const
 
 Matrix4 Camera::GetViewMatrix() const
 {
-	return toMatrix(rotation);
+	//Matrix4 view = toMatrix(rotation);
+	//return toMatrix(rotation);
+	return buildLookAt();
 }
 
 void Camera::movex(float xmod)
@@ -72,13 +77,13 @@ void Camera::movez(float zmod)
 
 void Camera::rotatex(float xmod)
 {
-	Quaternion nrot(1.0f, 0.0f, 0.0f, xmod * PIOVER180);
+	Quaternion nrot(1.0f, 0.0f, 0.0f, deg_2_rad(xmod));
 	rotation = rotation * nrot;
 }
 
 void Camera::rotatey(float ymod)
 {
-	Quaternion nrot(0.0f, 1.0f, 0.0f, ymod * PIOVER180);
+	Quaternion nrot(0.0f, 1.0f, 0.0f, deg_2_rad(ymod));
 	rotation = nrot * rotation;
 }
 
@@ -114,15 +119,28 @@ void Camera::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	glLoadMatrixf((GLfloat*)toMatrix(rotation).matrix);
-	glTranslatef(0.0f, 0.0f, -4.0f);
+	glLoadMatrixf((GLfloat*)buildLookAt().matrix);
+	glTranslatef(position.x, position.y, position.z);
 
-	glBegin(GL_TRIANGLES);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(-1.0f, -0.5f, 0.0f);    // A
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f( 1.0f, -0.5f, 0.0f);    // B
-	glColor3f(0.0f, 0.0f, 1.0f);
-	glVertex3f( 0.0f,  0.5f, 0.0f);    // C
-	glEnd();
+// 	glBegin(GL_TRIANGLES);
+// 	glColor3f(1.0f, 0.0f, 0.0f);
+// 	glVertex3f(-1.0f, -0.5f, 0.0f);    // A
+// 	glColor3f(0.0f, 1.0f, 0.0f);
+// 	glVertex3f( 1.0f, -0.5f, 0.0f);    // B
+// 	glColor3f(0.0f, 0.0f, 1.0f);
+// 	glVertex3f( 0.0f,  0.5f, 0.0f);    // C
+// 	glEnd();
+}
+
+Matrix4 Camera::buildLookAt() const
+{
+	Vector3 up(0.f, 1.f, 0.f);
+	Vector3 forward = normalize(lookAt - position);
+	Vector3 right = normalize(cross(up, forward));
+	up = cross(forward, right);
+
+	return Matrix4(right.x, up.x, forward.x, 0, 
+					right.y, up.y, forward.y, 0, 
+					right.z, up.z, forward.z, 0, 
+					-dot(right, position), -dot(up, position), -dot(forward, position), 1);
 }

@@ -193,6 +193,17 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 				
 				break;
 			}
+		case WM_KEYDOWN:							// Is A Key Being Held Down?
+			{
+				keys[wparam] = TRUE;					// If So, Mark It As TRUE
+				return 0;								// Jump Back
+			}
+
+		case WM_KEYUP:								// Has A Key Been Released?
+			{
+				keys[wparam] = FALSE;					// If So, Mark It As FALSE
+				return 0;								// Jump Back
+			}
 	}
 
 	return DefWindowProc(hwnd, msg, wparam, lparam);

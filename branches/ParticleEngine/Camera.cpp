@@ -7,13 +7,11 @@
 #include <gl/glu.h>
 #include <gl/gl.h>
 
-const float PIOVER180 = 3.14159265/180.f;
-
-Camera::Camera(const Vector3& position, const Vector3& lookAt, float xrot, float yrot)
-: position(position), lookAt(lookAt), rotation(0.0f, 0.0f, 0.0f, 1.0f)
+Camera::Camera(const Vector3& position)
+: m_position(0.f, 0.f, 0.f), m_rotation(0.0f, 0.0f, 0.0f, 1.0f), 
+  m_translationVelocity(0.001f), m_rotationVelocity(0.05f)
 {
-	rotation = fromAxisAngle(Vector3(0.f, 1.f, 0.f), deg_2_rad(yrot));
-	rotation *= fromAxisAngle(Vector3(1.f, 0.f, 0.f), deg_2_rad(xrot));
+
 }
 
 void Camera::Init()
@@ -40,107 +38,86 @@ void Camera::Resize(int width, int height)
 	//glOrtho(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//glTranslatef(position.x, position.y, position.z);
+}
+
+void Camera::SetTranslationVelocity(float velocity)
+{
+	m_translationVelocity = velocity;
+}
+
+void Camera::SetRotationVelocity(float velocity)
+{
+	m_rotationVelocity = velocity;
 }
 
 const Vector3& Camera::GetPosition() const
 {
-    return position;
+    return m_position;
 }
 
 const Quaternion& Camera::GetRotation() const
 {
-    return rotation;
+    return m_rotation;
 }
 
 Matrix4 Camera::GetViewMatrix() const
 {
-	//Matrix4 view = toMatrix(rotation);
-	//return toMatrix(rotation);
-	return buildLookAt();
+	return toMatrix(conjugate(m_rotation));
 }
 
-void Camera::movex(float xmod)
+void Camera::Translate(const Vector3& translation)
 {
-	position += rotation * Vector3(xmod, 0.0f, 0.0f);
+	m_position += m_rotation * (translation * m_translationVelocity);
 }
 
-void Camera::movey(float ymod)
+void Camera::Rotate(float xrot, float yrot, float zrot)
 {
-	position.y -= ymod;
-}
+	pitch += (xrot * m_rotationVelocity);
+	yaw += (yrot * m_rotationVelocity);
+	//roll += (zrot * m_rotationVelocity);
 
-void Camera::movez(float zmod)
-{
-	position += rotation * Vector3(0.0f, 0.0f, -zmod);
-}
-
-void Camera::rotatex(float xmod)
-{
-	Quaternion nrot(1.0f, 0.0f, 0.0f, deg_2_rad(xmod));
-	rotation = rotation * nrot;
-}
-
-void Camera::rotatey(float ymod)
-{
-	Quaternion nrot(0.0f, 1.0f, 0.0f, deg_2_rad(ymod));
-	rotation = nrot * rotation;
-}
-
-void Camera::update(float xrot, float yrot, float xmove, float ymove, float zmove, float delta)
-{
-	if (xrot != 0.0f)
+	if (pitch > 360.f)
 	{
-		rotatex(xrot * delta * rotspeed);
+		pitch -= 360.f;
+	}
+	else if (pitch < -360.f)
+	{
+		pitch += 360.f;
 	}
 
-	if (yrot != 0.0f) 
+	if (yaw > 360.f)
 	{
-		rotatey(yrot * delta * rotspeed);
+		yaw -= 360.f;
+	}
+	else if (yaw < -360.f)
+	{
+		yaw += 360.f;
 	}
 
-	if (xmove != 0.0f) 
-	{
-		movex(xmove * delta * movespeed);
-	}
+	// create quaternion from pitch and yaw
+	Quaternion pitchQuat = fromAxisAngle(Vector3(1.f, 0.f, 0.f), DegToRad(pitch));
+	Quaternion yawQuat = fromAxisAngle(Vector3(0.f, 1.f, 0.f), DegToRad(yaw));
 
-	if (ymove != 0.0f) 
-	{
-		movey(ymove * delta * movespeed);
-	}
-
-	if (zmove != 0.0f) 
-	{
-		movez(zmove * delta * movespeed);
-	}
+	m_rotation = yawQuat * pitchQuat;
 }
 
-void Camera::render()
+// void Camera::rotatex(float xmod)
+// {
+// 	Quaternion nrot(1.0f, 0.0f, 0.0f, DegToRad(xmod));
+// 	m_rotation = m_rotation * nrot;
+// }
+// 
+// void Camera::rotatey(float ymod)
+// {
+// 	Quaternion nrot(0.0f, 1.0f, 0.0f, DegToRad(ymod));
+// 	m_rotation = nrot * m_rotation;
+// }
+
+void Camera::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	glLoadMatrixf((GLfloat*)buildLookAt().matrix);
-	glTranslatef(position.x, position.y, position.z);
-
-// 	glBegin(GL_TRIANGLES);
-// 	glColor3f(1.0f, 0.0f, 0.0f);
-// 	glVertex3f(-1.0f, -0.5f, 0.0f);    // A
-// 	glColor3f(0.0f, 1.0f, 0.0f);
-// 	glVertex3f( 1.0f, -0.5f, 0.0f);    // B
-// 	glColor3f(0.0f, 0.0f, 1.0f);
-// 	glVertex3f( 0.0f,  0.5f, 0.0f);    // C
-// 	glEnd();
-}
-
-Matrix4 Camera::buildLookAt() const
-{
-	Vector3 up(0.f, 1.f, 0.f);
-	Vector3 forward = normalize(lookAt - position);
-	Vector3 right = normalize(cross(up, forward));
-	up = cross(forward, right);
-
-	return Matrix4(right.x, up.x, forward.x, 0, 
-					right.y, up.y, forward.y, 0, 
-					right.z, up.z, forward.z, 0, 
-					-dot(right, position), -dot(up, position), -dot(forward, position), 1);
+	//glLoadMatrixf((GLfloat*)GetViewMatrix().matrix);
+	glMultMatrixf((GLfloat*)GetViewMatrix().matrix);
+	glTranslatef(-m_position.x, -m_position.y, -m_position.z);
 }

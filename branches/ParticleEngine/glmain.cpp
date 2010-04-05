@@ -7,8 +7,6 @@
 #include "system.h"
 #include "glmain.h"
 
-float angle = 0.f;
-
 #include "Camera.h"
 #include "Vector.h"
 #include "AxisAlignedBoundingBox.h"
@@ -16,8 +14,11 @@ float angle = 0.f;
 #include "ParticleRenderer.h"
 #include "ParticleFadeOutEffect.h"
 #include "Color.h"
+#include "WindowInput.h"
 
-Camera cam(Vector3(0.f, 0.f, -4.f), Vector3(0.f, 0.f, 1000.f), 30, 45);
+bool keys[256];
+
+Camera cam(Vector3(0.f, 0.f, 40.f));
 ParticleEmitter* emitter = new ParticleEmitter(true, 
 												AxisAlignedBoundingBox(Vector3(0.f, 0.f, 0.f), Vector3(1.f, 1.f, 1.f)),
 												80, 100,
@@ -27,6 +28,7 @@ ParticleEmitter* emitter = new ParticleEmitter(true,
 												Vector3(0.f, 0.0005f, 0.f));
 ParticleRenderer renderer;
 float updateRate = 1.0;
+WindowInput winInput(800, 600, cam);
 
 void DrawTriangle()
 {
@@ -45,6 +47,7 @@ void InitFrame()
     // initialize camera
     cam.Init();
     cam.Resize(800,600);
+	cam.Rotate(45.f, 30.f, 0.f);
 
 	ParticleFadeOutEffect* fadeOutEffect = new ParticleFadeOutEffect(Color(0.f, 0.f, 0.f, 0.f), 1000);
 	emitter->AddEffect(fadeOutEffect);
@@ -53,7 +56,9 @@ void InitFrame()
 
 void RenderFrame()
 {
-	cam.render();
+	winInput.ReadInput(keys);
+
+	cam.Render();
 	renderer.Update(updateRate);
     renderer.Render(cam);
 	

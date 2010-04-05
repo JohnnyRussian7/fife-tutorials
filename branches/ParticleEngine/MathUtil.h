@@ -3,27 +3,17 @@
 #define MATH_UTIL_H_
 
 const double pi = 3.1415926535;
+const double radtodeg = 180.0/pi;
+const double degtorad = pi/180.0;
 
-static double rad_2_deg_constant()
+static double RadToDeg(float rad)
 {
-	static double rad2deg = 180.0/pi;
-	return rad2deg;
+	return rad * radtodeg;
 }
 
-static double deg_2_rad_constant()
+static double DegToRad(float deg)
 {
-	static double deg2rad = pi/180.0;
-	return deg2rad;
-}
-
-static double rad_2_deg(float rad)
-{
-	return rad * rad_2_deg_constant();
-}
-
-static double deg_2_rad(float deg)
-{
-	return deg * deg_2_rad_constant();
+	return deg * degtorad;
 }
 
 #endif

@@ -7,15 +7,14 @@ class WindowInput
 {
 public:
 	WindowInput(int windowWidth, int windowHeight, Camera& camera);
-	void ReadInput();
+	void ReadInput(bool keys[]);
 	void SetWindowWidth(int width);
 	void SetWindowHeight(int height);
 private:
 	void CheckMouse();
-	void CheckKeyboard();
+	void CheckKeyboard(bool keys[]);
 
 private:
-	static bool keys[256];
 	Camera& camera;
 	int centerX;
 	int centerY;

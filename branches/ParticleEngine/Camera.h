@@ -8,33 +8,29 @@
 class Camera
 {
 public:
-	Camera(const Vector3& position, const Vector3& lookAt, float xrot, float yrot);
+	Camera(const Vector3& position);
 
 	void Init();
 	void Resize(int width, int height);
+
+	void SetTranslationVelocity(float velocity);
+	void SetRotationVelocity(float velocity);
 
     const Vector3& GetPosition() const;
     const Quaternion& GetRotation() const;
 	Matrix4 GetViewMatrix() const;
 
-	void Camera::movex(float xmod);
-	void Camera::movey(float ymod);
-	void Camera::movez(float zmod);
-	void Camera::rotatex(float xmod);
-	void Camera::rotatey(float ymod);
-	void update(float xrot, float yrot, float xmove, float ymove, float zmove, float delta=1.f);
-	void render();
+	void Translate(const Vector3& translation);
+	void Rotate(float xrot, float yrot, float zrot);
+	void Render();
 
 private:
-	Matrix4 buildLookAt() const;
-
-private:
-	Vector3 position;
-	Vector3 lookAt;
-	Quaternion rotation;
-
-	float rotspeed;
-	float movespeed;
+	float pitch;
+	float yaw;
+	Vector3 m_position;
+	Quaternion m_rotation;
+	float m_translationVelocity;
+	float m_rotationVelocity;
 };
 
 #endif

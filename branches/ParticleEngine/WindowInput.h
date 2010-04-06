@@ -20,6 +20,9 @@ private:
 	int centerY;
 	int mouseX;
 	int mouseY;
+	float m_angleX;
+	float m_angleY;
+	float m_mouseSensitivity;
 };
 
 #endif

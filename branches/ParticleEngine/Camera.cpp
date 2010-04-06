@@ -76,27 +76,27 @@ void Camera::Rotate(float xrot, float yrot, float zrot)
 	yaw += (yrot * m_rotationVelocity);
 	//roll += (zrot * m_rotationVelocity);
 
-	if (pitch > 360.f)
+	if (pitch > pi)
 	{
-		pitch -= 360.f;
+		pitch -= pi;
 	}
-	else if (pitch < -360.f)
+	else if (pitch < -pi)
 	{
-		pitch += 360.f;
+		pitch += pi;
 	}
 
-	if (yaw > 360.f)
+	if (yaw > 2*pi)
 	{
-		yaw -= 360.f;
+		yaw -= 2*pi;
 	}
-	else if (yaw < -360.f)
+	else if (yaw < -2*pi)
 	{
-		yaw += 360.f;
+		yaw += 2*pi;
 	}
 
 	// create quaternion from pitch and yaw
-	Quaternion pitchQuat = fromAxisAngle(Vector3(1.f, 0.f, 0.f), DegToRad(pitch));
-	Quaternion yawQuat = fromAxisAngle(Vector3(0.f, 1.f, 0.f), DegToRad(yaw));
+	Quaternion pitchQuat = fromAxisAngle(Vector3(1.f, 0.f, 0.f), pitch);
+	Quaternion yawQuat = fromAxisAngle(Vector3(0.f, 1.f, 0.f), yaw);
 
 	m_rotation = yawQuat * pitchQuat;
 }

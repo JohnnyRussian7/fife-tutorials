@@ -4,9 +4,11 @@
 
 #include "WindowInput.h"
 #include "Camera.h"
+#include "MathUtil.h"
 
 WindowInput::WindowInput(int windowWidth, int windowHeight, Camera& camera)
-: camera(camera), centerX(windowWidth/2), centerY(windowWidth/2), mouseX(0), mouseY(0)
+: camera(camera), centerX(windowWidth/2), centerY(windowWidth/2), mouseX(0), mouseY(0), 
+  m_angleX(0.f), m_angleY(0.f), m_mouseSensitivity(1000000)
 {
 
 }
@@ -35,73 +37,55 @@ void WindowInput::CheckMouse(void)
 
 	GetCursorPos(&pt);
 
+	int prevMouseX = mouseX;
+	int prevMouseY = mouseY;
+
 	mouseX = pt.x;
 	mouseY = pt.y;
 
-	deltaMouseX = float(mouseX - centerX);
-	deltaMouseY = float(mouseY - centerY);
+	m_angleX += float(centerY - mouseY) / m_mouseSensitivity;
+	m_angleY += float(centerX - mouseX) / m_mouseSensitivity;
+	//deltaMouseX = float(mouseX - centerX);
+	//deltaMouseY = float(mouseY - centerY);
 
-	camera.Rotate(deltaMouseX, deltaMouseY, 0.f);
-
-// 	if(mouseX < centerX)
-// 	{
-// 		deltaMouse = float(centerX - mouseX);
-// 
-// 		camera.rotate
-// 		//camera.ChangeHeading(-0.2f * deltaMouse);
-// 
-// 	}
-// 	else if(mouseX > centerX)
-// 	{
-// 		deltaMouse = float(mouseX - centerX);
-// 
-// 		//camera.ChangeHeading(0.2f * deltaMouse);
-// 	}
-// 
-// 	if(mouseY < centerY)
-// 	{
-// 		deltaMouse = float(centerY - mouseY);
-// 
-// 		//camera.ChangePitch(-0.2f * deltaMouse);
-// 	}
-// 	else if(mouseY > centerY)
-// 	{
-// 		deltaMouse = float(mouseY - centerY);
-// 
-// 		//camera.ChangePitch(0.2f * deltaMouse);
-// 	}
-
-	//mouseX = centerX;
-	//mouseY = centerY;
+	if (mouseX != prevMouseX || mouseY != prevMouseY)
+	{
+		camera.Rotate(m_angleX, m_angleY, 0.f);
+	}
 
 	SetCursorPos(centerX, centerY);
 }
 
 void WindowInput::CheckKeyboard(bool keys[])
 {
+	bool keydown = false;
 	float xrotation = 0.f;
 	float yrotation = 0.f;
 
 	if(keys[VK_UP])
 	{
-		xrotation = 5.f;	
+		xrotation = pi/8;	
+		keydown = true;
 		//camera.ChangePitch(5.0f);
 	}
 	else if(keys[VK_DOWN])
 	{
-		xrotation = -5.f;
+		xrotation = -pi/8;
+		keydown = true;
 		//camera.ChangePitch(-5.0f);
 	}
 
 	if(keys[VK_LEFT])
 	{
-		yrotation = -5.f;
+		yrotation = pi/8;
+		keydown = true;
 		//camera.ChangeHeading(-5.0f);
 	}
 
 	if(keys[VK_RIGHT])
 	{
-		yrotation = 5.f;
+		yrotation = -pi/8;
+		keydown = true;
 		//camera.ChangeHeading(5.0f);
 	}
 
@@ -117,5 +101,8 @@ void WindowInput::CheckKeyboard(bool keys[])
 		//camera.ChangeVelocity(-0.1f);
 	}
 
-	camera.Rotate(xrotation, yrotation, 0.f);
+	if (keydown)
+	{
+		camera.Rotate(xrotation, yrotation, 0.f);
+	}
 }

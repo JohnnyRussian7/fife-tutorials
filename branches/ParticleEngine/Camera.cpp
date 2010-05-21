@@ -34,7 +34,8 @@ void Camera::Resize(int width, int height)
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0f, aspectratio, 0.2f, 255.0f);
+    glFrustum(-0.5, 0.5, -aspectratio*0.5, aspectratio*0.5, 1, 5000);
+	//gluPerspective(45.0f, aspectratio, 0.2f, 255.0f);
 	//glOrtho(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -67,7 +68,7 @@ Matrix4 Camera::GetViewMatrix() const
 
 void Camera::Translate(const Vector3& translation)
 {
-	m_position += m_rotation * (translation * m_translationVelocity);
+	m_position += /*m_rotation * */(translation * m_translationVelocity);
 }
 
 void Camera::Rotate(float xrot, float yrot, float zrot)
@@ -117,7 +118,7 @@ void Camera::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	//glLoadMatrixf((GLfloat*)GetViewMatrix().matrix);
-	glMultMatrixf((GLfloat*)GetViewMatrix().matrix);
+	glLoadMatrixf((GLfloat*)GetViewMatrix().matrix);
+	//glMultMatrixf((GLfloat*)GetViewMatrix().matrix);
 	glTranslatef(-m_position.x, -m_position.y, -m_position.z);
 }

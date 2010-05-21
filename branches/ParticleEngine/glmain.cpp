@@ -18,13 +18,13 @@
 
 bool keys[256];
 
-Camera cam(Vector3(0.f, 0.f, 40.f));
+Camera cam(Vector3(0.f, 0.f, 0.f));
 ParticleEmitter* emitter = new ParticleEmitter(true, 
 												AxisAlignedBoundingBox(Vector3(0.f, 0.f, 0.f), Vector3(1.f, 1.f, 1.f)),
 												80, 100,
 												0.01f, 0.05f,
 												800, 2000,
-												Vector3(0.f, 0.f, 0.f), 
+												Vector3(0.f, 0.f, 10.f), 
 												Vector3(0.f, 0.0005f, 0.f));
 ParticleRenderer renderer;
 float updateRate = 1.0;
@@ -47,7 +47,7 @@ void InitFrame()
     // initialize camera
     cam.Init();
     cam.Resize(800,600);
-	cam.Rotate(45.f, 30.f, 0.f);
+	//cam.Rotate(45.f, 30.f, 0.f);
 
 	ParticleFadeOutEffect* fadeOutEffect = new ParticleFadeOutEffect(Color(0.f, 0.f, 0.f, 0.f), 1000);
 	emitter->AddEffect(fadeOutEffect);

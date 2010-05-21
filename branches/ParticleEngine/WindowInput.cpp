@@ -53,7 +53,7 @@ void WindowInput::CheckMouse(void)
 		camera.Rotate(m_angleX, m_angleY, 0.f);
 	}
 
-	SetCursorPos(centerX, centerY);
+	//SetCursorPos(centerX, centerY);
 }
 
 void WindowInput::CheckKeyboard(bool keys[])
@@ -64,39 +64,74 @@ void WindowInput::CheckKeyboard(bool keys[])
 
 	if(keys[VK_UP])
 	{
-		xrotation = pi/8;	
-		keydown = true;
+        camera.Translate(Vector3(0.f, 1.f, 0.f));
+		//xrotation = pi/8;	
+		//keydown = true;
 		//camera.ChangePitch(5.0f);
 	}
 	else if(keys[VK_DOWN])
 	{
-		xrotation = -pi/8;
-		keydown = true;
+        camera.Translate(Vector3(0.f, -1.f, 0.f));
+		//xrotation = -pi/8;
+		//keydown = true;
 		//camera.ChangePitch(-5.0f);
 	}
 
-	if(keys[VK_LEFT])
+    if(keys[VK_LEFT])
+    {
+        camera.Translate(Vector3(-1.f, 0.f, 0.f));
+        //xrotation = -pi/8;
+        //keydown = true;
+        //camera.ChangePitch(-5.0f);
+    }
+    else if(keys[VK_RIGHT])
+    {
+        camera.Translate(Vector3(1.f, 0.f, 0.f));
+        //xrotation = -pi/8;
+        //keydown = true;
+        //camera.ChangePitch(-5.0f);
+    }
+
+    if(keys['W'])
+    {
+        // rotate up
+        xrotation = pi/4;
+        keydown = true;
+        //camera.ChangeHeading(-5.0f);
+    }
+    else if(keys['S'])
+    {
+        // rotate down
+        xrotation = -pi/4;
+        keydown = true;
+        //camera.ChangeHeading(-5.0f);
+    }
+
+	if(keys['A'])
 	{
-		yrotation = pi/8;
+        // rotation left
+		yrotation = pi/4;
 		keydown = true;
 		//camera.ChangeHeading(-5.0f);
 	}
-
-	if(keys[VK_RIGHT])
+	else if(keys['D'])
 	{
-		yrotation = -pi/8;
+        // rotate right
+		yrotation = -pi/4;
 		keydown = true;
 		//camera.ChangeHeading(5.0f);
 	}
 
-	if(keys['W'] == TRUE)
+	if(keys[VK_ADD] == TRUE)
 	{
+        // zoom in
 		camera.Translate(Vector3(0.f, 0.f, 1.f));
 		//camera.ChangeVelocity(0.1f);	
 	}
 
-	if(keys['S'] == TRUE)
+	if(keys[VK_SUBTRACT] == TRUE)
 	{
+        // zoom out
 		camera.Translate(Vector3(0.f, 0.f, -1.f));
 		//camera.ChangeVelocity(-0.1f);
 	}

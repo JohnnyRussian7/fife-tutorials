@@ -86,15 +86,12 @@ void ParticleRenderer::Render(const Camera& camera)
 
 			Vector3 horizontal(halfwidth*viewMatrix.matrix[0], halfwidth*viewMatrix.matrix[4], halfwidth*viewMatrix.matrix[8]);
 			Vector3 vertical(halfheight*viewMatrix.matrix[1], halfheight*viewMatrix.matrix[5], halfheight*viewMatrix.matrix[9]);
-
-			
-	 		//Vector3 position = rotation * particle.position;
-	 
+ 
 	 		ParticleQuad quad;
-	 		quad.vertex1 = /*position*/ particle.position + horizontal - vertical /*+ Vector3(particle.size, -particle.size, 0)*/;
-	 		quad.vertex2 = /*position*/ particle.position - horizontal - vertical /*+ Vector3(particle.size, -particle.size, 0)*/;
-	 		quad.vertex3 = /*position*/ particle.position - horizontal + vertical /*+ Vector3(particle.size, particle.size, 0)*/;
-			quad.vertex4 = /*position*/ particle.position + horizontal + vertical /*+ Vector3(-particle.size, particle.size, 0)*/;
+	 		quad.vertex1 = particle.position + horizontal - vertical;
+	 		quad.vertex2 = particle.position - horizontal - vertical;
+	 		quad.vertex3 = particle.position - horizontal + vertical;
+			quad.vertex4 = particle.position + horizontal + vertical;
 	 		particleQuads.push_back(quad);
 		}
 

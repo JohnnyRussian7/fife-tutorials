@@ -72,15 +72,35 @@ Quaternion fromAxisAngle(const Vector3& v, float angle)
 
 float toAxisAngle(const Quaternion& q, Vector3& v)
 {
-	float scale = std::sqrt(q.x*q.x + q.y*q.y + q.z*q.z);
-	v.x = q.x/scale;
-	v.y = q.y/scale;
-	v.z = q.z/scale;
+    Quaternion normQuat(q);
+    
+    float scale = std::sqrt(1-normQuat.w*normQuat.w);
 	
-	return (std::acos(q.w) * 2.0f);
+    if (scale < 0.0005)
+    {
+        scale = 1.f;
+    }
+    
+    v.x = normQuat.x / scale;
+    v.y = normQuat.y / scale;
+    v.z = normQuat.z / scale;
 
+	return (std::acos(normQuat.w) * 2.0f);
 }
 
+/*
+* cosy = cos(yaw / 2)
+* cosp = cos(pitch / 2)
+* cosr = cos(roll / 2)
+* siny = sin(yaw / 2)
+* sinp = sin(pitch / 2)
+* sinr = sin(roll / 2)
+
+* x = siny*sinp*cosr + cosy*cosp*sinr
+* y = siny*cosp*cosr + cosy*sinp*sinr
+* z = cosy*sinp*cosr - siny*cosp*sinr
+* w = cosy*cosp*cosr - siny*sinp*sinr
+*/
 Quaternion fromEuler(float pitch, float yaw, float roll)
 {
 	float p = DegToRad(pitch) / 2.0;
@@ -117,8 +137,8 @@ Matrix4 toMatrix(const Quaternion& q)
 // 					2.0f*(xz-wy), 2.0f*(yz+wx), 1.0f - 2.0f*(x2+y2), 0.0f,
 // 					0.0f, 0.0f, 0.0f, 1.0f);
 
-	return Matrix4(1.0f - 2.0f*(y2+z2), 2.0f*(xy+wz), 2.0f*(xz-wy), 0.0f,
-		2.0f*(xy-wz), 1.0f - 2.0f*(x2-z2), 2.0f*(yz-wx), 0.0f,
-		2.0f*(xz+wy), 2.0f*(yz-wx), 1.0f - 2.0f*(x2-y2), 0.0f,
+	return Matrix4(1.0f - 2.0f*(y2+z2), 2.0f*(xy-wz), 2.0f*(xz+wy), 0.0f,
+		2.0f*(xy+wz), 1.0f - 2.0f*(x2+z2), 2.0f*(yz-wx), 0.0f,
+		2.0f*(xz-wy), 2.0f*(yz+wx), 1.0f - 2.0f*(x2+y2), 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f);
 }

@@ -20,9 +20,9 @@ Vector3 operator*(const Quaternion& q, const Vector3& v)
 
 	Quaternion normVectorQuaternion(normVector.x, normVector.y, normVector.z, 0.f);
 
-	Quaternion result = normVectorQuaternion * conjugate(q);
+	Quaternion result = q * normVectorQuaternion * conjugate(q);
 	//result *= q;
-	result = q * result;
+	//result = q * result;
 
 	return Vector3(result.x, result.y, result.z);
 }

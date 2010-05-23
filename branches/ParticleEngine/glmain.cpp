@@ -18,13 +18,14 @@
 
 bool keys[256];
 
-Camera cam(Vector3(0.f, 0.f, 0.f));
+Camera cam(Vector3(0.f, 0.f, 5.f));
 ParticleEmitter* emitter = new ParticleEmitter(true, 
-												AxisAlignedBoundingBox(Vector3(0.f, 0.f, 0.f), Vector3(1.f, 1.f, 1.f)),
+												AxisAlignedBoundingBox(Vector3(0.f, 0.f, 0.f), 
+																		Vector3(1.f, 1.f, 1.f)),
 												80, 100,
 												0.01f, 0.05f,
 												800, 2000,
-												Vector3(0.f, 0.f, 10.f), 
+												Vector3(0.f, 0.f, 0.f), 
 												Vector3(0.f, 0.0005f, 0.f));
 ParticleRenderer renderer;
 float updateRate = 1.0;
@@ -61,29 +62,4 @@ void RenderFrame()
 	cam.Render();
 	renderer.Update(updateRate);
     renderer.Render(cam);
-	
-
-    //cam.update(0.f, 0.f, angle, 0.f, 0.f);
-    //cam.render();
-
-// 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-// 
-// 	glLoadIdentity();
-// 	glTranslatef(0.0f, 0.0f, -4.0f);
-// 	glRotatef(angle, 0.0f, 1.0f, 0.0f);
-// 
-// 	DrawTriangle();
-// 
-// 	glLoadIdentity();
-// 	glTranslatef(0.0f, 0.0f, -5.0f);
-// 	glRotatef(-angle, 0.0f, 0.0f, 1.0f);
-// 
-// 	DrawTriangle();
-
-// 	angle += 0.5f;
-// 
-// 	if (angle >= 360.0f)
-// 	{
-// 		angle = 0.0f;
-// 	}
 }

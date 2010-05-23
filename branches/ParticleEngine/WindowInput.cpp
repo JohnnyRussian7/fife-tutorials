@@ -8,7 +8,7 @@
 
 WindowInput::WindowInput(int windowWidth, int windowHeight, Camera& camera)
 : camera(camera), centerX(windowWidth/2), centerY(windowWidth/2), mouseX(0), mouseY(0), 
-  m_angleX(0.f), m_angleY(0.f), m_mouseSensitivity(1000000)
+  m_angleX(0.f), m_angleY(0.f), m_mouseSensitivity(100)
 {
 
 }
@@ -31,29 +31,35 @@ void WindowInput::ReadInput(bool keys[])
 
 void WindowInput::CheckMouse(void)
 {
-	float deltaMouseX;
-	float deltaMouseY;
+	float pitch = 0.0;
+	float heading = 0.0;
 	POINT pt;
+	bool isActive = false;
 
 	GetCursorPos(&pt);
 
-	int prevMouseX = mouseX;
-	int prevMouseY = mouseY;
-
-	mouseX = pt.x;
-	mouseY = pt.y;
-
-	m_angleX += float(centerY - mouseY) / m_mouseSensitivity;
-	m_angleY += float(centerX - mouseX) / m_mouseSensitivity;
-	//deltaMouseX = float(mouseX - centerX);
-	//deltaMouseY = float(mouseY - centerY);
-
-	if (mouseX != prevMouseX || mouseY != prevMouseY)
+	if (mouseY != pt.y)
 	{
-		camera.Rotate(m_angleX, m_angleY, 0.f);
+		pitch += float(mouseY - pt.y) / m_mouseSensitivity;
+
+		mouseY = pt.y;
+
+		isActive = true;
 	}
 
-	//SetCursorPos(centerX, centerY);
+	if (mouseX != pt.x)
+	{
+		heading += float(mouseX - pt.x) / m_mouseSensitivity;
+
+		mouseX = pt.x;
+
+		isActive = true;
+	}
+
+	if (isActive)
+	{
+		camera.Rotate(pitch, heading, 0.f);
+	}
 }
 
 void WindowInput::CheckKeyboard(bool keys[])
@@ -122,14 +128,14 @@ void WindowInput::CheckKeyboard(bool keys[])
 		//camera.ChangeHeading(5.0f);
 	}
 
-	if(keys[VK_ADD] == TRUE)
+	if(keys['I'] == TRUE)
 	{
         // zoom in
 		camera.Translate(Vector3(0.f, 0.f, 1.f));
 		//camera.ChangeVelocity(0.1f);	
 	}
 
-	if(keys[VK_SUBTRACT] == TRUE)
+	if(keys['O'] == TRUE)
 	{
         // zoom out
 		camera.Translate(Vector3(0.f, 0.f, -1.f));

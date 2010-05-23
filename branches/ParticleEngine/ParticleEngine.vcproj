@@ -185,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Matrix.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ParticleEmitter.cpp"
 				>
 			</File>

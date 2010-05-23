@@ -8,8 +8,8 @@
 #include <gl/gl.h>
 
 Camera::Camera(const Vector3& position)
-: m_position(0.f, 0.f, 0.f), m_rotation(0.0f, 0.0f, 0.0f, 1.0f), 
-  m_translationVelocity(0.001f), m_rotationVelocity(0.05f)
+: m_position(position), m_rotation(0.0f, 0.0f, 0.0f, 1.0f), 
+  m_translationVelocity(0.01f), m_rotationVelocity(0.05f)
 {
 
 }
@@ -63,12 +63,20 @@ const Quaternion& Camera::GetRotation() const
 
 Matrix4 Camera::GetViewMatrix() const
 {
-	return toMatrix(conjugate(m_rotation));
+	// create matrix for position
+	Matrix4 posMatrix = Matrix4::Identity();
+	posMatrix.matrix[12] = -m_position.x;
+	posMatrix.matrix[13] = -m_position.y;
+	posMatrix.matrix[14] = -m_position.z;
+
+	Matrix4 conjRotMatrix = toMatrix(conjugate(m_rotation));
+
+	return posMatrix * conjRotMatrix;
 }
 
 void Camera::Translate(const Vector3& translation)
 {
-	m_position += /*m_rotation * */(translation * m_translationVelocity);
+	m_position += translation * m_translationVelocity;
 }
 
 void Camera::Rotate(float xrot, float yrot, float zrot)
@@ -102,23 +110,13 @@ void Camera::Rotate(float xrot, float yrot, float zrot)
 	m_rotation = yawQuat * pitchQuat;
 }
 
-// void Camera::rotatex(float xmod)
-// {
-// 	Quaternion nrot(1.0f, 0.0f, 0.0f, DegToRad(xmod));
-// 	m_rotation = m_rotation * nrot;
-// }
-// 
-// void Camera::rotatey(float ymod)
-// {
-// 	Quaternion nrot(0.0f, 1.0f, 0.0f, DegToRad(ymod));
-// 	m_rotation = nrot * m_rotation;
-// }
-
 void Camera::Render()
 {
+	Matrix4 viewMatrix = GetViewMatrix();
+
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	glLoadMatrixf((GLfloat*)GetViewMatrix().matrix);
+	glLoadMatrixf((GLfloat*)viewMatrix.matrix);
 	//glMultMatrixf((GLfloat*)GetViewMatrix().matrix);
-	glTranslatef(-m_position.x, -m_position.y, -m_position.z);
+	//glTranslatef(-m_position.x, -m_position.y, -m_position.z);
 }

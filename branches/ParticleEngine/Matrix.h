@@ -35,26 +35,19 @@ struct Matrix4
 		matrix[15] = _33;
 	}
 
-	float matrix[16];
+	static Matrix4 Zero()
+	{
+		return Matrix4(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+	}
 
-		/*
-		float _00;
-		float _10;
-		float _20;
-		float _30;
-		float _01;
-		float _11;
-		float _21;
-		float _31;
-		float _02;
-		float _12;
-		float _22;
-		float _32;
-		float _03;
-		float _13;
-		float _23;
-		float _33;
-		*/
+	static Matrix4 Identity()
+	{
+		return Matrix4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+	}
+
+	float matrix[16];
 };
+
+Matrix4 operator*(const Matrix4& rhs, const Matrix4& lhs);
 
 #endif

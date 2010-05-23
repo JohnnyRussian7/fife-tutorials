@@ -60,10 +60,6 @@ void ParticleRenderer::Update(float time)
 
 void ParticleRenderer::Render(const Camera& camera)
 {
-    //glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    //glLoadIdentity();
-	//glTranslatef(0.f, 0.f, -4.f);
-
 	if (isEnabled && m_emitter)
 	{
 		Matrix4 viewMatrix = camera.GetViewMatrix();

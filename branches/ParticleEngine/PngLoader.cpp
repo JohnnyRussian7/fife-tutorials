@@ -142,4 +142,14 @@ void PngLoader::load(const char* filename)
 	{
 		png_set_strip_16(pngPtr);
 	}
+
+	// read updated info after changes above
+	png_read_update_info(pngPtr, infoPtr);
+
+	width = png_get_image_width(pngPtr, infoPtr);
+	height = png_get_image_height(pngPtr, infoPtr);
+	bitDepth = png_get_bit_depth(pngPtr, infoPtr);
+	channels = png_get_channels(pngPtr, infoPtr);
+	colorType = png_get_color_type(pngPtr, infoPtr);
+
 }

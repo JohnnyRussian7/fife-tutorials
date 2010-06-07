@@ -1,5 +1,7 @@
 
 #include "PngLoader.h"
+#include "Image.h"
+
 #include "libpng/png.h"
 
 #include <fstream>
@@ -14,7 +16,7 @@ static void png_error(png_structp pngPtr, png_const_charp msg)
 void PNGAPI userReadData(png_structp pngPtr, png_bytep data, png_size_t length)
 {
 	// get io pointer from read struct and cast to istream 
-	std::istream* file = (std::ifstream*)png_get_io_ptr(pngPtr);
+	std::istream* file = (std::istream*)png_get_io_ptr(pngPtr);
 	
 	// read length amount into data
 	file->read((char*)data,length);
@@ -26,40 +28,40 @@ void PNGAPI userReadData(png_structp pngPtr, png_bytep data, png_size_t length)
 	}
 }
 
-bool PngLoader::isLoadable(std::istream& source)
+bool PngLoader::IsLoadable(std::istream& source)
 {
 	png_byte pngsig[PNG_SIG_SIZE];
 
 	source.read((char*)pngsig, PNG_SIG_SIZE);
 
-	if (!source.good())
+	int blah = source.gcount();
+
+	if (source.gcount() != PNG_SIG_SIZE)
 	{
 		return false;
 	}
 
-	int isLoadable = png_sig_cmp(pngsig, 0, PNG_SIG_SIZE);
-
-	return (isLoadable == 0);
+	return !png_sig_cmp(pngsig, 0, PNG_SIG_SIZE);
 }
 
-void PngLoader::load(const char* filename)
+Image* PngLoader::Load(const char* filename)
 {
 	if (!filename)
 	{
-		//return 0;
+		return 0;
 	}
 
-	std::ifstream file(filename);
-	if (!file || !isLoadable(file))
+	std::ifstream file(filename, std::ios::binary);
+	if (!file || !IsLoadable(file))
 	{
-		//return 0;
+		return 0;
 	}
 
 	// create read struct
 	png_structp pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, (png_error_ptr)png_error, NULL);
 	if (!pngPtr)
 	{
-		//return 0;
+		return 0;
 	}
 
 	png_infop infoPtr = png_create_info_struct(pngPtr);
@@ -68,11 +70,10 @@ void PngLoader::load(const char* filename)
 		// destroy read structure created above
 		png_destroy_read_struct(&pngPtr, NULL, NULL);
 
-		//return 0;
+		return 0;
 	}
 
 	png_bytep* rowPtrs = NULL;
-	char* data = NULL;
 
 	if (setjmp(png_jmpbuf(pngPtr)))
 	{
@@ -85,13 +86,7 @@ void PngLoader::load(const char* filename)
 			rowPtrs = NULL;
 		}
 
-		if (data)
-		{
-			delete data;
-			data = NULL;
-		}
-
-		//return 0;
+		return 0;
 	}
 
 	// setup custom read function
@@ -152,4 +147,32 @@ void PngLoader::load(const char* filename)
 	channels = png_get_channels(pngPtr, infoPtr);
 	colorType = png_get_color_type(pngPtr, infoPtr);
 
+	ColorFormat::Enum colorFormat = ColorFormat::R8G8B8A8;
+	if (colorType == PNG_COLOR_TYPE_RGB)
+	{
+		colorFormat = ColorFormat::R8G8B8;
+	}
+
+	// create image object
+	Image* img = new Image(colorFormat, width, height);
+
+	// assign image data to row pointers for reading
+	rowPtrs = new png_bytep[height];
+	unsigned char* data = img->GetData();
+	for (std::size_t i=0; i < height; ++i)
+	{
+		png_uint_32 dataPtr = (height - i - 1) * img->GetStride();
+		rowPtrs[i] = (png_bytep)data + dataPtr;
+	}
+
+	// read image data
+	png_read_image(pngPtr, rowPtrs);
+
+	//png_read_end(pngPtr, NULL);
+
+	delete [] rowPtrs;
+
+	png_destroy_read_struct(&pngPtr, &infoPtr, NULL);
+
+	return img;
 }

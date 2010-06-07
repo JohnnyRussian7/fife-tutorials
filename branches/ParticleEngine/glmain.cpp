@@ -15,6 +15,10 @@
 #include "ParticleFadeOutEffect.h"
 #include "Color.h"
 #include "WindowInput.h"
+#include "Image.h"
+
+// TODO - this is temporary
+#include "PngLoader.h"
 
 bool keys[256];
 
@@ -30,6 +34,28 @@ ParticleEmitter* emitter = new ParticleEmitter(true,
 ParticleRenderer renderer;
 float updateRate = 1.0;
 WindowInput winInput(800, 600, cam);
+unsigned int textureId = -1;
+Image* image = NULL;
+
+void DrawQuadPlane()
+{
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0); glVertex3f(-2.0, 2.0, 2.0);
+	glTexCoord2f(1.0, 0.0); glVertex3f(2.0, 2.0, 2.0);
+	glTexCoord2f(1.0, 1.0); glVertex3f(2.0, 2.0, -2.0);
+	glTexCoord2f(0.0, 1.0); glVertex3f(-2.0, 2.0, -2.0);
+	glEnd();
+}
+
+void DrawPlane()
+{
+	glBegin(GL_TRIANGLE_STRIP);
+	glTexCoord2f(1.0, 0.0); glVertex3f(2.0, -2.0, -2.0);
+	glTexCoord2f(0.0, 0.0); glVertex3f(-2.0, -2.0, -2.0);
+	glTexCoord2f(1.0, 1.0); glVertex3f(2.0, -2.0, 2.0);
+	glTexCoord2f(0.0, 1.0); glVertex3f(-2.0, -2.0, 2.0);
+	glEnd();
+}
 
 void DrawTriangle()
 {
@@ -53,6 +79,31 @@ void InitFrame()
 	ParticleFadeOutEffect* fadeOutEffect = new ParticleFadeOutEffect(Color(0.f, 0.f, 0.f, 0.f), 1000);
 	emitter->AddEffect(fadeOutEffect);
 	renderer.SetEmitter(emitter);
+
+	// TODO - this is temporary here
+	PngLoader loader;
+
+	image = loader.Load("C:\\Documents and Settings\\JESSE\\My Documents\\Programming\\ParticleEngine\\data\\fireparticle.png");
+
+	if (image)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glGenTextures(1, &textureId);
+		glBindTexture(GL_TEXTURE_2D, textureId);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		if (image->GetColorFormat() == ColorFormat::R8G8B8)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->GetWidth(), image->GetHeight(),
+							0, GL_RGB, GL_UNSIGNED_BYTE, image->GetData());
+		}
+		else if (image->GetColorFormat() == ColorFormat::R8G8B8A8)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->GetWidth(), image->GetHeight(),
+				0, GL_RGBA, GL_UNSIGNED_BYTE, image->GetData());
+		}
+	}
 }
 
 void RenderFrame()
@@ -60,6 +111,15 @@ void RenderFrame()
 	winInput.ReadInput(keys);
 
 	cam.Render();
-	renderer.Update(updateRate);
-    renderer.Render(cam);
+	//renderer.Update(updateRate);
+    //renderer.Render(cam);
+
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, -10.0);
+	glRotatef(90, 1.0, 0.0, 0.0);
+
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	DrawQuadPlane();
+	//DrawPlane();
+	glPopMatrix();
 }

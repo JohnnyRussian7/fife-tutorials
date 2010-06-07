@@ -4,12 +4,13 @@
 
 #include <istream>
 
+class Image;
 
 class PngLoader
 {
 public:
-	bool isLoadable(std::istream& source);
-	void /*Image**/ load(const char* filename);
+	bool IsLoadable(std::istream& source);
+	Image* Load(const char* filename);
 };
 
 #endif

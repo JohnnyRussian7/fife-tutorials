@@ -186,6 +186,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Image.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Matrix.cpp"
 				>
 			</File>
@@ -257,6 +261,10 @@
 			</File>
 			<File
 				RelativePath=".\glmain.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Image.h"
 				>
 			</File>
 			<File

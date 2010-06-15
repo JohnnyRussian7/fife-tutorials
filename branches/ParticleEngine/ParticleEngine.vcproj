@@ -194,6 +194,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OpenglTexture.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ParticleEmitter.cpp"
 				>
 			</File>
@@ -273,6 +277,10 @@
 			</File>
 			<File
 				RelativePath=".\Matrix.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Opengltexture.h"
 				>
 			</File>
 			<File

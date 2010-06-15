@@ -16,6 +16,7 @@
 #include "Color.h"
 #include "WindowInput.h"
 #include "Image.h"
+#include "Opengltexture.h"
 
 // TODO - this is temporary
 #include "PngLoader.h"
@@ -36,6 +37,7 @@ float updateRate = 1.0;
 WindowInput winInput(800, 600, cam);
 unsigned int textureId = -1;
 Image* image = NULL;
+OpenglTexture* texture = NULL;
 
 void DrawQuadPlane()
 {
@@ -85,41 +87,27 @@ void InitFrame()
 
 	image = loader.Load("C:\\Documents and Settings\\JESSE\\My Documents\\Programming\\ParticleEngine\\data\\fireparticle.png");
 
-	if (image)
-	{
-		glEnable(GL_TEXTURE_2D);
-		glGenTextures(1, &textureId);
-		glBindTexture(GL_TEXTURE_2D, textureId);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-		if (image->GetColorFormat() == ColorFormat::R8G8B8)
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->GetWidth(), image->GetHeight(),
-							0, GL_RGB, GL_UNSIGNED_BYTE, image->GetData());
-		}
-		else if (image->GetColorFormat() == ColorFormat::R8G8B8A8)
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->GetWidth(), image->GetHeight(),
-				0, GL_RGBA, GL_UNSIGNED_BYTE, image->GetData());
-		}
-	}
+	texture = new OpenglTexture(image);
 }
 
 void RenderFrame()
 {
 	winInput.ReadInput(keys);
 
+	//glBindTexture(GL_TEXTURE_2D, textureId);
+
 	cam.Render();
-	//renderer.Update(updateRate);
-    //renderer.Render(cam);
+	renderer.Update(updateRate);
+    renderer.Render(cam);
 
-	glPushMatrix();
-	glTranslatef(0.0, 0.0, -10.0);
-	glRotatef(90, 1.0, 0.0, 0.0);
+	//glPushMatrix();
+	//glLoadIdentity();
+	//glTranslatef(0.0, 0.0, -10.0);
+	//glRotatef(90, 0.0, 1.0, 0.0);
+	//glRotatef(90, 1.0, 0.0, 0.0);
 
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	DrawQuadPlane();
+	//glBindTexture(GL_TEXTURE_2D, textureId);
+	//DrawQuadPlane();
 	//DrawPlane();
-	glPopMatrix();
+	//glPopMatrix();
 }

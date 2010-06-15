@@ -30,6 +30,7 @@ class Image
 {
 public:
 	Image(ColorFormat::Enum format, unsigned int width, unsigned int height);
+	Image::Image(const Image& rhs);
 	~Image();
 
 	unsigned int GetWidth() const;

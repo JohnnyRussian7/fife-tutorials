@@ -16,96 +16,101 @@ Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
 
 Vector3 operator*(const Quaternion& q, const Vector3& v)
 {
-	Vector3 normVector = normalize(v);
+	Vector3 normVector = Normalize(v);
 
 	Quaternion normVectorQuaternion(normVector.x, normVector.y, normVector.z, 0.f);
 
-	Quaternion result = q * normVectorQuaternion * conjugate(q);
-	//result *= q;
-	//result = q * result;
+	Quaternion result = q * normVectorQuaternion * Conjugate(q);
 
 	return Vector3(result.x, result.y, result.z);
 }
 
-float magnitude(const Quaternion& q)
+float Magnitude(const Quaternion& q)
 {
 	return std::sqrt(q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w);
 }
 
-float magnitudeSquare(const Quaternion& q)
+float MagnitudeSquare(const Quaternion& q)
 {
 	return q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w;
 }
 
-Quaternion normalize(const Quaternion& q)
+Quaternion Normalize(const Quaternion& q)
 {
 	const float Tolerance = 0.00001f;
 
-	float magSquared = magnitudeSquare(q);
+	float magSquared = MagnitudeSquare(q);
 
 	if (magSquared != 0.f && std::abs(magSquared - 1.0f) > Tolerance)
 	{
-		float mag = std::sqrt(magSquared);
-		return Quaternion(q.x/mag, q.y/mag, q.z/mag, q.w/mag);
+		float mag = 1.f/std::sqrt(magSquared);
+		return Quaternion(q.x*mag, q.y*mag, q.z*mag, q.w*mag);
 	}
 
 	return q;
 }
 
-Quaternion conjugate(const Quaternion& q)
+Quaternion Conjugate(const Quaternion& q)
 {
 	return Quaternion(-q.x, -q.y, -q.z, q.w);
 }
 
-Quaternion fromAxisAngle(const Vector3& v, float angle)
+float Dot(const Quaternion& q1, const Quaternion& q2)
+{
+	return ((q1.x*q2.x) + (q1.y*q2.y) + (q1.z*q2.z) + (q1.w*q2.w));
+}
+
+Vector3 Rotate(const Quaternion& q, const Vector3& v)
+{
+	Matrix4 rotMat = ToMatrix(q);
+	return rotMat*v;
+}
+
+Quaternion FromAxisAngle(const Vector3& v, float angle)
 {
 	angle *= 0.5f;
 	float sinAngle = std::sin(angle);
 
-	Vector3 normVector = normalize(v);
+	Vector3 normVector = Normalize(v);
 	
 	return Quaternion(normVector.x*sinAngle, 
 						normVector.y*sinAngle, 
 						normVector.z*sinAngle,				
-						cos(angle));
+						std::cos(angle));
 }
 
-float toAxisAngle(const Quaternion& q, Vector3& v)
+float ToAxisAngle(const Quaternion& q, Vector3& v)
 {
-    Quaternion normQuat(q);
-    
-    float scale = std::sqrt(1-normQuat.w*normQuat.w);
-	
-    if (scale < 0.0005)
-    {
-        scale = 1.f;
-    }
-    
-    v.x = normQuat.x / scale;
-    v.y = normQuat.y / scale;
-    v.z = normQuat.z / scale;
+	// The quaternion representing the rotation is
+	//   q = cos(A/2)+sin(A/2)*(x*i+y*j+z*k)
 
-	return (std::acos(normQuat.w) * 2.0f);
+	float sqrLength = q.x*q.x + q.y*q.y + q.z*q.z;
+	if (sqrLength > 0.0f)
+	{
+		float invLength = 1.0f/std::sqrt(sqrLength);
+
+		v.x = q.x*invLength;
+		v.y = q.y*invLength;
+		v.z = q.z*invLength;
+
+		return 2.f*std::acos(q.w);
+	}
+	else
+	{
+		// angle is 0 (mod 2*pi), so any axis will do.
+		v.x = 1.0f;
+		v.y = 0.0f;
+		v.z = 0.0f;
+
+		return 0.f;
+	}
 }
 
-/*
-* cosy = cos(yaw / 2)
-* cosp = cos(pitch / 2)
-* cosr = cos(roll / 2)
-* siny = sin(yaw / 2)
-* sinp = sin(pitch / 2)
-* sinr = sin(roll / 2)
-
-* x = siny*sinp*cosr + cosy*cosp*sinr
-* y = siny*cosp*cosr + cosy*sinp*sinr
-* z = cosy*sinp*cosr - siny*cosp*sinr
-* w = cosy*cosp*cosr - siny*sinp*sinr
-*/
-Quaternion fromEuler(float pitch, float yaw, float roll)
+Quaternion FromEuler(float pitch, float yaw, float roll)
 {
-	float p = DegToRad(pitch) / 2.0;
-	float y = DegToRad(yaw) / 2.0;
-	float r = DegToRad(roll) / 2.0;
+	float p = DegToRad(pitch) / 2.f;
+	float y = DegToRad(yaw) / 2.f;
+	float r = DegToRad(roll) / 2.f;
 
 	float sinp = std::sin(p);
 	float siny = std::sin(y);
@@ -114,13 +119,13 @@ Quaternion fromEuler(float pitch, float yaw, float roll)
 	float cosy = std::cos(y);
 	float cosr = std::cos(r);
 
-	return normalize(Quaternion(sinr*cosp*cosy - cosr*sinp*siny,
+	return Normalize(Quaternion(sinr*cosp*cosy - cosr*sinp*siny,
 						cosr*sinp*cosy + sinr*cosp*siny,
 						cosr*cosp*siny - sinr*sinp*cosy,
 						cosr*cosp*cosy + sinr*sinp*siny));
 }
 
-Matrix4 toMatrix(const Quaternion& q)
+Matrix4 ToMatrix(const Quaternion& q)
 {
 	float x2 = q.x*q.x;
 	float y2 = q.y*q.y;
@@ -132,13 +137,77 @@ Matrix4 toMatrix(const Quaternion& q)
 	float wy = q.w*q.y;
 	float wz = q.w*q.z;
 
-// 	return Matrix4(1.0f - 2.0f*(y2+z2), 2.0f*(xy-wz), 2.0f*(xz+wy), 0.0f,
-// 					2.0f*(xy+wz), 1.0f - 2.0f*(x2+z2), 2.0f*(yz-wx), 0.0f,
-// 					2.0f*(xz-wy), 2.0f*(yz+wx), 1.0f - 2.0f*(x2+y2), 0.0f,
-// 					0.0f, 0.0f, 0.0f, 1.0f);
+	// filling up row-wise
+	Matrix4 mat;
+	mat.matrix[0] = 1.0f - 2.0f*(y2+z2);		// [0][0]
+	mat.matrix[4] = 2.0f*(xy-wz);				// [0][1]
+	mat.matrix[8] = 2.0f*(xz+wy);				// [0][2]
+	mat.matrix[12] = 0.f;						// [0][3]
 
-	return Matrix4(1.0f - 2.0f*(y2+z2), 2.0f*(xy-wz), 2.0f*(xz+wy), 0.0f,
-		2.0f*(xy+wz), 1.0f - 2.0f*(x2+z2), 2.0f*(yz-wx), 0.0f,
-		2.0f*(xz-wy), 2.0f*(yz+wx), 1.0f - 2.0f*(x2+y2), 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);
+	mat.matrix[1] = 2.0f*(xy+wz);				// [1][0]
+	mat.matrix[5] = 1.0f - 2.0f*(x2+z2);		// [1][1]
+	mat.matrix[9] = 2.0f*(yz-wx);				// [1][2]
+	mat.matrix[13] = 0.f;						// [1][3]
+
+	mat.matrix[2] = 2.0f*(xz-wy);				// [2][0]
+	mat.matrix[6] = 2.0f*(yz+wx);				// [2][1]
+	mat.matrix[10] = 1.0f - 2.0f*(x2+y2);		// [2][2]
+	mat.matrix[14] = 0.f;						// [2][3]
+
+	mat.matrix[3] = 0.f;						// [3][0]
+	mat.matrix[7] = 0.f;						// [3][1]
+	mat.matrix[11] = 0.f;						// [3][2]
+	mat.matrix[15] = 1.f;						// [3][3]
+
+	return mat;
+
+// 	return Matrix4(1.0f - 2.0f*(y2+z2), 2.0f*(xy-wz), 2.0f*(xz+wy), 0.0f,
+// 		2.0f*(xy+wz), 1.0f - 2.0f*(x2+z2), 2.0f*(yz-wx), 0.0f,
+// 		2.0f*(xz-wy), 2.0f*(yz+wx), 1.0f - 2.0f*(x2+y2), 0.0f,
+// 		0.0f, 0.0f, 0.0f, 1.0f);
 }
+
+// Interpolates between quaternions using spherical linear interpolation.
+// algorithm from: http://www.geometrictools.com
+Quaternion Slerp(float t, const Quaternion& p, const Quaternion& q)
+{
+	Quaternion ret;
+
+	float cs = Dot(p, q);
+	float angle = std::acos(cs);
+
+	if (std::abs(angle) > 0.0f)
+	{
+		float sn = std::sin(angle);
+		float invSn = 1.0f/sn;
+		float tAngle = t*angle;
+		float coeff0 = std::sin(angle - tAngle)*invSn;
+		float coeff1 = std::sin(tAngle)*invSn;
+
+		ret.x = coeff0*p.x + coeff1*q.x;
+		ret.y = coeff0*p.y + coeff1*q.y;
+		ret.z = coeff0*p.z + coeff1*q.z;
+		ret.w = coeff0*p.w + coeff1*q.w;
+	}
+	else
+	{
+		ret.x = p.x;
+		ret.y = p.y;
+		ret.z = p.z;
+		ret.w = p.w;
+	}
+
+	return ret;
+}
+
+// Interpolates between quaternions using spherical quadrangle interpolation.
+// algorithm from: http://www.geometrictools.com
+Quaternion Squad(float t, const Quaternion& q0, const Quaternion& a0, 
+				 const Quaternion& a1, const Quaternion& q1)
+{
+	float slerpT = 2.0f*t*(1.0f - t);
+	Quaternion slerpP = Slerp(t, q0, q1);
+	Quaternion slerpQ = Slerp(t, a0, a1);
+	return Slerp(slerpT, slerpP, slerpQ);
+}
+

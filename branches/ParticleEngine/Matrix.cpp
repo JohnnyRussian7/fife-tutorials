@@ -1,9 +1,10 @@
 
 #include "Matrix.h"
+#include "Vector.h"
 
 Matrix4 operator*(const Matrix4& lhs, const Matrix4& rhs)
 {
-	Matrix4 result = Matrix4::Zero();
+	Matrix4 result;
 
 	result.matrix[0] = lhs.matrix[0]*rhs.matrix[0] + lhs.matrix[4]*rhs.matrix[1] + lhs.matrix[8]*rhs.matrix[2] + lhs.matrix[12]*rhs.matrix[3];
 	result.matrix[1] = lhs.matrix[1]*rhs.matrix[0] + lhs.matrix[5]*rhs.matrix[1] + lhs.matrix[9]*rhs.matrix[2] + lhs.matrix[13]*rhs.matrix[3];
@@ -36,4 +37,21 @@ Matrix4 operator*(const Matrix4& lhs, const Matrix4& rhs)
 	*/
 
 	return result;
+}
+
+Vector3 operator* (const Matrix4& mat, const Vector3& p)
+{
+	return Vector3(
+		mat.matrix[0]*p.x +
+		mat.matrix[4]*p.y +
+		mat.matrix[8]*p.z,
+
+		mat.matrix[1]*p.x +
+		mat.matrix[5]*p.y +
+		mat.matrix[9]*p.z,
+
+		mat.matrix[2]*p.x +
+		mat.matrix[6]*p.y +
+		mat.matrix[10]*p.z
+	);
 }

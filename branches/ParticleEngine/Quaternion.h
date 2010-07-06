@@ -7,7 +7,7 @@ struct Matrix4;
 
 struct Quaternion
 {
-	Quaternion(float x, float y, float z, float w): x(x), y(y), z(z), w(w) { };
+	Quaternion(float x=0.f, float y=0.f, float z=0.f, float w=1.f): x(x), y(y), z(z), w(w) { };
 	Quaternion(const Quaternion& rhs): x(rhs.x), y(rhs.y), z(rhs.z), w(rhs.w) { };
 	inline Quaternion& operator=(const Quaternion& rhs);
 	inline Quaternion& operator*=(const Quaternion& rhs);
@@ -51,13 +51,17 @@ Quaternion operator*(const Quaternion& q1, const Quaternion& q2);
 Vector3 operator*(const Quaternion& q, const Vector3& v);
 
 // free helper functions for quaternion math
-float magnitude(const Quaternion& q);
-float magnitudeSquare(const Quaternion& q);
-Quaternion normalize(const Quaternion& q);
-Quaternion conjugate(const Quaternion& q);
-Quaternion fromAxisAngle(const Vector3& v, float angle);
-float toAxisAngle(const Quaternion& q, Vector3& v);
-Quaternion fromEuler(float pitch, float yaw, float roll);
-Matrix4 toMatrix(const Quaternion& q);
+float Magnitude(const Quaternion& q);
+float MagnitudeSquare(const Quaternion& q);
+Quaternion Normalize(const Quaternion& q);
+Quaternion Conjugate(const Quaternion& q);
+float Dot(const Quaternion& q1, const Quaternion& q2);
+Vector3 Rotate(const Quaternion& q, const Vector3& v);
+Quaternion FromAxisAngle(const Vector3& v, float angle);
+float ToAxisAngle(const Quaternion& q, Vector3& v);
+Quaternion FromEuler(float pitch, float yaw, float roll);
+Matrix4 ToMatrix(const Quaternion& q);
+Quaternion Slerp(float t, const Quaternion& p, const Quaternion& q);
+Quaternion Squad(float t, const Quaternion& q0, const Quaternion& a0, const Quaternion& a1, const Quaternion& q1);
 
 #endif

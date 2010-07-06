@@ -2,20 +2,44 @@
 #ifndef VECTOR_H_
 #define	VECTOR_H_
 
+struct Quaternion;
+
 struct Vector3
 {
 	Vector3(float x=0, float y=0, float z=0): x(x), y(y), z(z) { }
 	Vector3(const Vector3& rhs): x(rhs.x), y(rhs.y), z(rhs.z) { }
+	inline Vector3 operator-() const;
 	inline Vector3& operator=(const Vector3& rhs);
 	inline Vector3& operator+=(const Vector3& rhs);
 	inline Vector3& operator-=(const Vector3& rhs);
 	inline Vector3& operator*=(float value);
 	inline Vector3& operator/=(float value);
 
+	static Vector3 UnitX() 
+	{ 
+		static Vector3 unitX(1.f, 0.f, 0.f);
+		return unitX;
+	}
+	static Vector3 UnitY() 
+	{ 
+		static Vector3 unitY(0.f, 1.f, 0.f);
+		return unitY; 
+	}
+	static Vector3 UnitZ() 
+	{ 
+		static Vector3 unitZ(0.f, 0.f, 1.f);
+		return unitZ; 
+	}
+
 	float x;
 	float y;
 	float z;
 };
+
+Vector3 Vector3::operator-() const
+{
+	return Vector3(-x, -y, -z);	
+}
 
 Vector3& Vector3::operator=(const Vector3& rhs)
 {
@@ -73,12 +97,12 @@ Vector3 operator*(const Vector3& vector, float value);
 Vector3 operator/(const Vector3& vector, float value);
 
 // free functions for vector math
-float magnitude(const Vector3& vector);
-float magnitudeSquare(const Vector3& vector);
-Vector3 normalize(const Vector3& vector);
-//inline void normalize(Vector3& vector);
-float dot(const Vector3& vector1, const Vector3& vector2);
+float Magnitude(const Vector3& vector);
+float MagnitudeSquare(const Vector3& vector);
+Vector3 Normalize(const Vector3& vector);
+float Dot(const Vector3& vector1, const Vector3& vector2);
 Vector3 cross(const Vector3& vector1, const Vector3& vector2);
+Quaternion GetRotationTo(const Vector3& source, const Vector3& dest);
 
 
 #endif

@@ -2,6 +2,8 @@
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
+struct Vector3;
+
 /*
  * Column-major 4x4 matrix
  *
@@ -12,6 +14,8 @@
  */
 struct Matrix4
 {
+	Matrix4() { }
+
 	Matrix4(float _00, float _10, float _20, float _30,
 			float _01, float _11, float _21, float _31,
 			float _02, float _12, float _22, float _32,
@@ -37,17 +41,20 @@ struct Matrix4
 
 	static Matrix4 Zero()
 	{
-		return Matrix4(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+		static Matrix4 zero(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+		return zero;
 	}
 
 	static Matrix4 Identity()
 	{
-		return Matrix4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+		static Matrix4 identity(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+		return identity;
 	}
 
 	float matrix[16];
 };
 
 Matrix4 operator*(const Matrix4& rhs, const Matrix4& lhs);
+Vector3 operator* (const Matrix4& mat, const Vector3& p);
 
 #endif

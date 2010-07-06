@@ -28,6 +28,11 @@ OpenglTexture::~OpenglTexture()
 	delete m_image;
 }
 
+unsigned int OpenglTexture::GetTextureId() const
+{
+	return m_textureId;
+}
+
 void OpenglTexture::Upload()
 {
 	if (m_image)

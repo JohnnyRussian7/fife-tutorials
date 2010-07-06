@@ -38,7 +38,7 @@ public:
 	BlendMode::Enum GetBlendMode() const;
 
 	void Update(float time);
-	void Render(const Camera& camera);
+	void Render(Camera& camera);
 
 private:
 	void SetupBillboard(const Vector3& cameraPosition, const Vector3& particlePosition);

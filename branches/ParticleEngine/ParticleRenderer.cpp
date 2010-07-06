@@ -58,11 +58,11 @@ void ParticleRenderer::Update(float time)
 	}
 }
 
-void ParticleRenderer::Render(const Camera& camera)
+void ParticleRenderer::Render(Camera& camera)
 {
 	if (isEnabled && m_emitter)
 	{
-		Matrix4 viewMatrix = camera.GetViewMatrix();
+		const Matrix4& viewMatrix = camera.GetViewMatrix();
 
 		const std::vector<Particle>& particles = m_emitter->GetParticles();
 

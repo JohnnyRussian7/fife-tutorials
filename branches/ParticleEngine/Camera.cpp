@@ -7,9 +7,10 @@
 #include <gl/glu.h>
 #include <gl/gl.h>
 
-Camera::Camera(const Vector3& position)
-: m_position(position), m_rotation(0.0f, 0.0f, 0.0f, 1.0f), 
-  m_translationVelocity(0.01f), m_rotationVelocity(0.05f)
+Camera::Camera(const Vector3& position, const Quaternion& rotation)
+: m_position(position), m_rotation(rotation), 
+  m_translationVelocity(0.01f), m_rotationVelocity(0.05f),
+  m_viewMatrix(Matrix4::Identity())
 {
 
 }
@@ -61,22 +62,68 @@ const Quaternion& Camera::GetRotation() const
     return m_rotation;
 }
 
-Matrix4 Camera::GetViewMatrix() const
+const Matrix4& Camera::GetViewMatrix()
 {
-	// create matrix for position
-	Matrix4 posMatrix = Matrix4::Identity();
-	posMatrix.matrix[12] = -m_position.x;
-	posMatrix.matrix[13] = -m_position.y;
-	posMatrix.matrix[14] = -m_position.z;
+	// update the view matrix
+	UpdateView();
 
-	Matrix4 conjRotMatrix = toMatrix(conjugate(m_rotation));
+	return m_viewMatrix;
+}
 
-	return posMatrix * conjRotMatrix;
+Vector3 Camera::GetUp() const
+{
+	return m_rotation * Vector3::UnitY();
+}
+
+Vector3 Camera::GetRight() const
+{
+	return m_rotation * Vector3::UnitX();
+}
+
+Vector3 Camera::GetLookAt() const
+{
+	// always looking down the -z axis
+	return m_rotation * -Vector3::UnitZ();
 }
 
 void Camera::Translate(const Vector3& translation)
 {
 	m_position += translation * m_translationVelocity;
+}
+
+void Camera::LookAt(const Vector3& direction)
+{
+	// TODO - need to implement
+}
+
+void Camera::Pitch(float angle)
+{
+	Vector3 xaxis = m_rotation * Vector3::UnitX();
+	Rotate(xaxis, angle);
+}
+
+void Camera::Yaw(float angle)
+{
+	Vector3 yaxis = m_rotation * Vector3::UnitY();
+	Rotate(yaxis, angle);
+}
+
+void Camera::Roll(float angle)
+{
+	Vector3 zaxis = m_rotation * Vector3::UnitZ();
+	Rotate(zaxis, angle);
+}
+
+void Camera::Rotate(const Vector3& axis, float angle)
+{
+	Quaternion rotQ = FromAxisAngle(axis, angle);
+	Rotate(rotQ);
+}
+
+void Camera::Rotate(const Quaternion& rotQ)
+{
+	Quaternion normQ = Normalize(rotQ);
+	m_rotation = normQ * m_rotation;
 }
 
 void Camera::Rotate(float xrot, float yrot, float zrot)
@@ -103,16 +150,37 @@ void Camera::Rotate(float xrot, float yrot, float zrot)
 		yaw += 2*pi;
 	}
 
-	// create quaternion from pitch and yaw
-	Quaternion pitchQuat = fromAxisAngle(Vector3(1.f, 0.f, 0.f), pitch);
-	Quaternion yawQuat = fromAxisAngle(Vector3(0.f, 1.f, 0.f), yaw);
+	// process yaw first
+	Yaw(yaw);
+	Pitch(pitch);
 
-	m_rotation = yawQuat * pitchQuat;
+	// create quaternion from pitch and yaw
+// 	Quaternion pitchQuat = fromAxisAngle(Vector3(1.f, 0.f, 0.f), pitch);
+// 	Quaternion yawQuat = fromAxisAngle(Vector3(0.f, 1.f, 0.f), yaw);
+// 
+// 	m_rotation = yawQuat * pitchQuat;
+}
+
+void Camera::UpdateView()
+{
+	// TODO - this should check whether the view needs to be updated
+	//		  before performing update
+
+	// create matrix for position
+	Matrix4 posMatrix = Matrix4::Identity();
+	posMatrix.matrix[12] = -m_position.x;
+	posMatrix.matrix[13] = -m_position.y;
+	posMatrix.matrix[14] = -m_position.z;
+
+	// create rotation matrix
+	Matrix4 conjRotMatrix = ToMatrix(Conjugate(m_rotation));
+
+	m_viewMatrix = posMatrix * conjRotMatrix;
 }
 
 void Camera::Render()
 {
-	Matrix4 viewMatrix = GetViewMatrix();
+	const Matrix4& viewMatrix = GetViewMatrix();
 
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();

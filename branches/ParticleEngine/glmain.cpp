@@ -1,3 +1,4 @@
+
 #include <windows.h>
 
 #include <gl/gl.h>			// OpenGL headers
@@ -37,7 +38,9 @@ float updateRate = 1.0;
 WindowInput winInput(800, 600, cam);
 unsigned int textureId = -1;
 Image* image = NULL;
+Image* background = NULL;
 OpenglTexture* texture = NULL;
+OpenglTexture* bgTexture = NULL;
 
 void DrawQuadPlane()
 {
@@ -85,18 +88,24 @@ void InitFrame()
 	// TODO - this is temporary here
 	PngLoader loader;
 
-	image = loader.Load("C:\\Documents and Settings\\JESSE\\My Documents\\Programming\\ParticleEngine\\data\\fireparticle.png");
+	image = loader.Load("C:\\Documents and Settings\\jesse\\My Documents\\Programming\\ParticleEngine\\ParticleEngine\\data\\fireparticle.png");
+	background = loader.Load("C:\\Documents and Settings\\jesse\\My Documents\\Programming\\ParticleEngine\\ParticleEngine\\data\\grass\\45.png");
 
 	texture = new OpenglTexture(image);
+	bgTexture = new OpenglTexture(background);
 }
 
 void RenderFrame()
 {
 	winInput.ReadInput(keys);
 
-	//glBindTexture(GL_TEXTURE_2D, textureId);
 
 	cam.Render();
+	//glBindTexture(GL_TEXTURE_2D, texture->GetTextureId());
+	glBindTexture(GL_TEXTURE_2D, bgTexture->GetTextureId());
+	DrawPlane();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	renderer.Update(updateRate);
     renderer.Render(cam);
 

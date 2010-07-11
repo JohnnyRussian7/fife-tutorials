@@ -14,7 +14,13 @@ struct Vector3
 	inline Vector3& operator-=(const Vector3& rhs);
 	inline Vector3& operator*=(float value);
 	inline Vector3& operator/=(float value);
+	inline bool operator==(const Vector3& rhs) const;
 
+	static Vector3 Zero()
+	{
+		static Vector3 zero(0.f, 0.f, 0.f);
+		return zero;
+	}
 	static Vector3 UnitX() 
 	{ 
 		static Vector3 unitX(1.f, 0.f, 0.f);
@@ -88,6 +94,11 @@ Vector3& Vector3::operator/=(float value)
 	z *= inverseValue;
 
 	return *this;
+}
+
+bool Vector3::operator==(const Vector3& rhs) const
+{
+	return (x == rhs.x && y == rhs.y && z == rhs.z);
 }
 
 // free functions for binary vector operators

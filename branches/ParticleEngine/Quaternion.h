@@ -12,6 +12,20 @@ struct Quaternion
 	inline Quaternion& operator=(const Quaternion& rhs);
 	inline Quaternion& operator*=(const Quaternion& rhs);
 
+	// convenience function for an invalid quaternion (all 0's)
+	static Quaternion Zero()
+	{
+		static Quaternion zero(0, 0, 0, 0);
+		return zero;
+	}
+
+	// convenience function for the identity quaternion
+	static Quaternion Identity()
+	{
+		static Quaternion identity(0, 0, 0, 1);
+		return identity;
+	}
+
 	float x;
 	float y;
 	float z;
@@ -55,12 +69,16 @@ float Magnitude(const Quaternion& q);
 float MagnitudeSquare(const Quaternion& q);
 Quaternion Normalize(const Quaternion& q);
 Quaternion Conjugate(const Quaternion& q);
+Quaternion Inverse(const Quaternion& q);
 float Dot(const Quaternion& q1, const Quaternion& q2);
 Vector3 Rotate(const Quaternion& q, const Vector3& v);
 Quaternion FromAxisAngle(const Vector3& v, float angle);
 float ToAxisAngle(const Quaternion& q, Vector3& v);
 Quaternion FromEuler(float pitch, float yaw, float roll);
 Matrix4 ToMatrix(const Quaternion& q);
+Vector3 XAxis(const Quaternion& q);
+Vector3 YAxis(const Quaternion& q);
+Vector3 ZAxis(const Quaternion& q);
 Quaternion Slerp(float t, const Quaternion& p, const Quaternion& q);
 Quaternion Squad(float t, const Quaternion& q0, const Quaternion& a0, const Quaternion& a1, const Quaternion& q1);
 

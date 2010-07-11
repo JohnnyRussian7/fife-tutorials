@@ -6,7 +6,7 @@
 #include <gl/gl.h>			// OpenGL headers
 #include <gl/glu.h>
 
-OpenglTexture::OpenglTexture(Image *image)
+OpenglTexture::OpenglTexture(TextureType::Enum type, Image *image)
 : m_image(image)
 {
 	if (image)

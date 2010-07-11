@@ -1,6 +1,7 @@
 
 #include "Camera.h"
 #include "Matrix.h"
+#include "Vector.h"
 #include "MathUtil.h"
 
 #include <windows.h>
@@ -8,7 +9,7 @@
 #include <gl/gl.h>
 
 Camera::Camera(const Vector3& position, const Quaternion& rotation)
-: m_position(position), m_rotation(rotation), 
+: m_position(position), m_orientation(rotation), 
   m_translationVelocity(0.01f), m_rotationVelocity(0.05f),
   m_viewMatrix(Matrix4::Identity())
 {
@@ -57,9 +58,9 @@ const Vector3& Camera::GetPosition() const
     return m_position;
 }
 
-const Quaternion& Camera::GetRotation() const
+const Quaternion& Camera::GetOrientation() const
 {
-    return m_rotation;
+    return m_orientation;
 }
 
 const Matrix4& Camera::GetViewMatrix()
@@ -72,45 +73,63 @@ const Matrix4& Camera::GetViewMatrix()
 
 Vector3 Camera::GetUp() const
 {
-	return m_rotation * Vector3::UnitY();
+	return m_orientation * Vector3::UnitY();
 }
 
 Vector3 Camera::GetRight() const
 {
-	return m_rotation * Vector3::UnitX();
+	return m_orientation * Vector3::UnitX();
 }
 
 Vector3 Camera::GetLookAt() const
 {
 	// always looking down the -z axis
-	return m_rotation * -Vector3::UnitZ();
+	return m_orientation * -Vector3::UnitZ();
 }
 
 void Camera::Translate(const Vector3& translation)
 {
+	// translate in world space
 	m_position += translation * m_translationVelocity;
+
+	// TODO - implement translate in local space, using algorithm below 
+	//m_position += m_orientation * (translation * m_translationVelocity);
 }
 
-void Camera::LookAt(const Vector3& direction)
+void Camera::LookAt(const Vector3& target)
 {
-	// TODO - need to implement
+	Vector3 direction = target - m_position;
+
+	// nothing to do if direction is zero vector
+	if (direction == Vector3::Zero())
+	{
+		return;
+	}
+
+	Vector3 zAxis = ZAxis(m_orientation);
+
+	// get shortest rotation arc to direction
+	Quaternion rotation = GetRotationTo(zAxis, direction);
+
+	m_orientation = rotation * m_orientation;
+
 }
 
 void Camera::Pitch(float angle)
 {
-	Vector3 xaxis = m_rotation * Vector3::UnitX();
+	Vector3 xaxis = m_orientation * Vector3::UnitX();
 	Rotate(xaxis, angle);
 }
 
 void Camera::Yaw(float angle)
 {
-	Vector3 yaxis = m_rotation * Vector3::UnitY();
+	Vector3 yaxis = m_orientation * Vector3::UnitY();
 	Rotate(yaxis, angle);
 }
 
 void Camera::Roll(float angle)
 {
-	Vector3 zaxis = m_rotation * Vector3::UnitZ();
+	Vector3 zaxis = m_orientation * Vector3::UnitZ();
 	Rotate(zaxis, angle);
 }
 
@@ -123,7 +142,7 @@ void Camera::Rotate(const Vector3& axis, float angle)
 void Camera::Rotate(const Quaternion& rotQ)
 {
 	Quaternion normQ = Normalize(rotQ);
-	m_rotation = normQ * m_rotation;
+	m_orientation = normQ * m_orientation;
 }
 
 void Camera::Rotate(float xrot, float yrot, float zrot)
@@ -158,7 +177,7 @@ void Camera::Rotate(float xrot, float yrot, float zrot)
 // 	Quaternion pitchQuat = fromAxisAngle(Vector3(1.f, 0.f, 0.f), pitch);
 // 	Quaternion yawQuat = fromAxisAngle(Vector3(0.f, 1.f, 0.f), yaw);
 // 
-// 	m_rotation = yawQuat * pitchQuat;
+// 	m_orientation = yawQuat * pitchQuat;
 }
 
 void Camera::UpdateView()
@@ -173,7 +192,7 @@ void Camera::UpdateView()
 	posMatrix.matrix[14] = -m_position.z;
 
 	// create rotation matrix
-	Matrix4 conjRotMatrix = ToMatrix(Conjugate(m_rotation));
+	Matrix4 conjRotMatrix = ToMatrix(Conjugate(m_orientation));
 
 	m_viewMatrix = posMatrix * conjRotMatrix;
 }

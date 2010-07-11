@@ -9,7 +9,7 @@
 class Camera
 {
 public:
-	Camera(const Vector3& position = Vector3(0.f, 0.f, 0.f),
+	Camera(const Vector3& position = Vector3::Zero(),
 			const Quaternion& rotation = Quaternion());
 
 	void Init();
@@ -19,7 +19,7 @@ public:
 	void SetRotationVelocity(float velocity);
 
     const Vector3& GetPosition() const;
-    const Quaternion& GetRotation() const;
+    const Quaternion& GetOrientation() const;
 	const Matrix4& GetViewMatrix();
 
 	Vector3 GetUp() const;
@@ -27,7 +27,7 @@ public:
 	Vector3 GetLookAt() const;
 
 	void Translate(const Vector3& translation);
-	void LookAt(const Vector3& direction);
+	void LookAt(const Vector3& target);
 
 	void Pitch(float angle);
 	void Yaw(float angle);
@@ -44,7 +44,7 @@ private:
 	float pitch;
 	float yaw;
 	Vector3 m_position;
-	Quaternion m_rotation;
+	Quaternion m_orientation;
 	float m_translationVelocity;
 	float m_rotationVelocity;
 	Matrix4 m_viewMatrix;

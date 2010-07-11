@@ -64,86 +64,92 @@ void WindowInput::CheckMouse(void)
 
 void WindowInput::CheckKeyboard(bool keys[])
 {
-	bool keydown = false;
+	bool shouldYaw = false;
+	bool shouldPitch = false;
 	float xrotation = 0.f;
 	float yrotation = 0.f;
 
 	if(keys[VK_UP])
 	{
         camera.Translate(Vector3(0.f, 1.f, 0.f));
-		//xrotation = pi/8;	
-		//keydown = true;
-		//camera.ChangePitch(5.0f);
 	}
 	else if(keys[VK_DOWN])
 	{
         camera.Translate(Vector3(0.f, -1.f, 0.f));
-		//xrotation = -pi/8;
-		//keydown = true;
-		//camera.ChangePitch(-5.0f);
 	}
 
     if(keys[VK_LEFT])
     {
         camera.Translate(Vector3(-1.f, 0.f, 0.f));
-        //xrotation = -pi/8;
-        //keydown = true;
-        //camera.ChangePitch(-5.0f);
     }
     else if(keys[VK_RIGHT])
     {
         camera.Translate(Vector3(1.f, 0.f, 0.f));
-        //xrotation = -pi/8;
-        //keydown = true;
-        //camera.ChangePitch(-5.0f);
     }
 
     if(keys['W'])
     {
         // rotate up
         xrotation = pi/4;
-        keydown = true;
-        //camera.ChangeHeading(-5.0f);
+        shouldPitch = true;
     }
     else if(keys['S'])
     {
         // rotate down
         xrotation = -pi/4;
-        keydown = true;
-        //camera.ChangeHeading(-5.0f);
+        shouldPitch = true;
     }
 
 	if(keys['A'])
 	{
         // rotation left
 		yrotation = pi/4;
-		keydown = true;
-		//camera.ChangeHeading(-5.0f);
+		shouldYaw = true;
 	}
 	else if(keys['D'])
 	{
         // rotate right
 		yrotation = -pi/4;
-		keydown = true;
-		//camera.ChangeHeading(5.0f);
+		shouldYaw = true;
 	}
 
 	if(keys['I'] == TRUE)
 	{
         // zoom in
-		camera.Translate(Vector3(0.f, 0.f, 1.f));
-		//camera.ChangeVelocity(0.1f);	
+		camera.Translate(Vector3(0.f, 0.f, -1.f));
 	}
 
 	if(keys['O'] == TRUE)
 	{
         // zoom out
-		camera.Translate(Vector3(0.f, 0.f, -1.f));
-		//camera.ChangeVelocity(-0.1f);
+		camera.Translate(Vector3(0.f, 0.f, 1.f));
 	}
 
-	if (keydown)
+	if (shouldYaw)
 	{
-		camera.Rotate(xrotation, yrotation, 0.f);
+		if (yrotation > 2*pi)
+		{
+			yrotation -= 2*pi;
+		}
+		else if (yrotation < -2*pi)
+		{
+			yrotation += 2*pi;
+		}
+
+		camera.Yaw(yrotation);
+	}
+
+	if (shouldPitch)
+	{
+		if (xrotation > pi)
+		{
+			xrotation -= pi;
+		}
+		else if (xrotation < -pi)
+		{
+			xrotation += pi;
+		}
+
+		camera.Pitch(xrotation);
 	}
 }

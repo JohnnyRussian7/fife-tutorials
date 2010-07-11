@@ -55,6 +55,22 @@ Quaternion Conjugate(const Quaternion& q)
 	return Quaternion(-q.x, -q.y, -q.z, q.w);
 }
 
+Quaternion Inverse(const Quaternion& q)
+{
+	float magSqr = MagnitudeSquare(q);
+
+	if ( magSqr > 0.0 )
+	{
+		float invMag = 1.f/magSqr;
+		return Quaternion(-q.x*invMag, -q.y*invMag, -q.z*invMag, q.w*invMag);
+	}
+	else
+	{
+		// need to signal bad operation, return an invalid quaternion
+		return Quaternion::Zero();
+	}
+}
+
 float Dot(const Quaternion& q1, const Quaternion& q2)
 {
 	return ((q1.x*q2.x) + (q1.y*q2.y) + (q1.z*q2.z) + (q1.w*q2.w));
@@ -127,15 +143,15 @@ Quaternion FromEuler(float pitch, float yaw, float roll)
 
 Matrix4 ToMatrix(const Quaternion& q)
 {
-	float x2 = q.x*q.x;
-	float y2 = q.y*q.y;
-	float z2 = q.z*q.z;
-	float xy = q.x*q.y;
-	float xz = q.x*q.z;
-	float yz = q.y*q.z;
-	float wx = q.w*q.x;
-	float wy = q.w*q.y;
-	float wz = q.w*q.z;
+	const float x2 = q.x*q.x;
+	const float y2 = q.y*q.y;
+	const float z2 = q.z*q.z;
+	const float xy = q.x*q.y;
+	const float xz = q.x*q.z;
+	const float yz = q.y*q.z;
+	const float wx = q.w*q.x;
+	const float wy = q.w*q.y;
+	const float wz = q.w*q.z;
 
 	// filling up row-wise
 	Matrix4 mat;
@@ -165,6 +181,42 @@ Matrix4 ToMatrix(const Quaternion& q)
 // 		2.0f*(xy+wz), 1.0f - 2.0f*(x2+z2), 2.0f*(yz-wx), 0.0f,
 // 		2.0f*(xz-wy), 2.0f*(yz+wx), 1.0f - 2.0f*(x2+y2), 0.0f,
 // 		0.0f, 0.0f, 0.0f, 1.0f);
+}
+
+Vector3 XAxis(const Quaternion& q)
+{
+	const float y2 = q.y*q.y;
+	const float z2 = q.z*q.z;
+	const float xy = q.x*q.y;
+	const float xz = q.x*q.z;
+	const float wy = q.w*q.y;
+	const float wz = q.w*q.z;
+
+	return Vector3(1.0f - 2.0f*(y2+z2), 2.0f*(xy-wz), 2.0f*(xz+wy));
+}
+
+Vector3 YAxis(const Quaternion& q)
+{
+	const float x2 = q.x*q.x;
+	const float z2 = q.z*q.z;
+	const float xy = q.x*q.y;
+	const float yz = q.y*q.z;
+	const float wx = q.w*q.x;
+	const float wz = q.w*q.z;
+
+	return Vector3(2.0f*(xy+wz), 1.0f - 2.0f*(x2+z2), 2.0f*(yz-wx));
+}
+
+Vector3 ZAxis(const Quaternion& q)
+{
+	const float x2 = q.x*q.x;
+	const float y2 = q.y*q.y;
+	const float xz = q.x*q.z;
+	const float yz = q.y*q.z;
+	const float wx = q.w*q.x;
+	const float wy = q.w*q.y;
+
+	return Vector3(2.0f*(xz-wy), 2.0f*(yz+wx), 1.0f - 2.0f*(x2+y2));
 }
 
 // Interpolates between quaternions using spherical linear interpolation.

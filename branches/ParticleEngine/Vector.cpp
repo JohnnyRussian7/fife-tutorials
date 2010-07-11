@@ -70,6 +70,9 @@ Vector3 cross(const Vector3& vector1, const Vector3& vector2)
 }
 
 // provides shortest rotation arc between 2 vectors
+// algorithm from Game Programming Gems 
+// Section 2.10 The Shortest Arc Quaternion
+// By Stan Melax
 Quaternion GetRotationTo(const Vector3& source, const Vector3& dest)
 {
 	Vector3 normSource = Normalize(source);

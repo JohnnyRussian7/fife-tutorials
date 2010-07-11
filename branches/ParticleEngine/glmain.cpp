@@ -18,13 +18,14 @@
 #include "WindowInput.h"
 #include "Image.h"
 #include "Opengltexture.h"
+#include "RendererEnums.h"
 
 // TODO - this is temporary
 #include "PngLoader.h"
 
 bool keys[256];
 
-Camera cam(Vector3(0.f, 0.f, 5.f));
+Camera cam(Vector3(0.f, 0.f, 0.f));
 ParticleEmitter* emitter = new ParticleEmitter(true, 
 												AxisAlignedBoundingBox(Vector3(0.f, 0.f, 0.f), 
 																		Vector3(1.f, 1.f, 1.f)),
@@ -79,6 +80,7 @@ void InitFrame()
     // initialize camera
     cam.Init();
     cam.Resize(800,600);
+	cam.LookAt(Vector3(0, 0, 10));
 	//cam.Rotate(45.f, 30.f, 0.f);
 
 	ParticleFadeOutEffect* fadeOutEffect = new ParticleFadeOutEffect(Color(0.f, 0.f, 0.f, 0.f), 1000);
@@ -91,8 +93,8 @@ void InitFrame()
 	image = loader.Load("C:\\Documents and Settings\\jesse\\My Documents\\Programming\\ParticleEngine\\ParticleEngine\\data\\fireparticle.png");
 	background = loader.Load("C:\\Documents and Settings\\jesse\\My Documents\\Programming\\ParticleEngine\\ParticleEngine\\data\\grass\\45.png");
 
-	texture = new OpenglTexture(image);
-	bgTexture = new OpenglTexture(background);
+	texture = new OpenglTexture(TextureType::_2d, image);
+	bgTexture = new OpenglTexture(TextureType::_2d, background);
 }
 
 void RenderFrame()

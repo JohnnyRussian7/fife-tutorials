@@ -77,8 +77,8 @@ void ParticleRenderer::Render(Camera& camera)
 		{
 			const Particle& particle = particles[i];
 
-			float halfwidth = 0.5 * particle.size;
-			float halfheight = 0.5 * particle.size;
+			float halfwidth = 0.5f * particle.size;
+			float halfheight = 0.5f * particle.size;
 
 			Vector3 horizontal(halfwidth*viewMatrix.matrix[0], halfwidth*viewMatrix.matrix[4], halfwidth*viewMatrix.matrix[8]);
 			Vector3 vertical(halfheight*viewMatrix.matrix[1], halfheight*viewMatrix.matrix[5], halfheight*viewMatrix.matrix[9]);

@@ -7,10 +7,22 @@ struct Vector3;
 /*
  * Column-major 4x4 matrix
  *
- * Layout:	0  4  8  12
+ * Layout:	
+ *			0  4  8  12
  *			1  5  9  13
  *			2  6  10 14
  *			3  7  11 15
+ *
+ *  3x3 Rotation Matrix Indices
+ *			0  4  8
+ *			1  5  9
+ *			2  6  10
+ *
+ *  3x1 Translation Indices
+ *			12
+ *			13
+ *			14
+ *
  */
 struct Matrix4
 {
@@ -50,6 +62,9 @@ struct Matrix4
 		static Matrix4 identity(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 		return identity;
 	}
+
+	float& operator[](int index) { return matrix[index]; }
+	const float& operator[](int index) const { return matrix[index]; }
 
 	float matrix[16];
 };

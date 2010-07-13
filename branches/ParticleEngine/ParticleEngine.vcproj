@@ -194,6 +194,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MathUtil.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Matrix.cpp"
 				>
 			</File>

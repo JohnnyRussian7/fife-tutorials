@@ -9,15 +9,6 @@
 class Camera;
 class ParticleEmitter;
 
-struct BlendMode
-{
-	enum Enum
-	{
-		None = 0,
-		Alpha
-	};
-};
-
 struct ParticleQuad
 {
 	Vector3 vertex1;
@@ -29,23 +20,20 @@ struct ParticleQuad
 class ParticleRenderer
 {
 public:
-	ParticleRenderer(BlendMode::Enum blendMode=BlendMode::Alpha);
+	ParticleRenderer();
 	~ParticleRenderer();
 	void SetEmitter(ParticleEmitter* emitter);
 	void SetEnabled(bool enabled);
 	bool IsEnabled() const;
-	void SetBlendMode(BlendMode::Enum mode);
-	BlendMode::Enum GetBlendMode() const;
-
 	void Update(float time);
 	void Render(Camera& camera);
 
 private:
 	void SetupBillboard(const Vector3& cameraPosition, const Vector3& particlePosition);
+
 private:
 	bool isEnabled;
 	ParticleEmitter* m_emitter;
-	BlendMode::Enum blendMode;
 	std::vector<ParticleQuad> particleQuads;
 };
 

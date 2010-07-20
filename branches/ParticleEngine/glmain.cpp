@@ -80,7 +80,7 @@ void InitFrame()
     // initialize camera
     cam.Init();
     cam.Resize(800,600);
-	cam.LookAt(Vector3(0, 0, 10));
+	cam.LookAt(Vector3::UnitZ());
     cam.Yaw(DegToRad(-45));
     cam.Pitch(DegToRad(-30));
 	//cam.Rotate(45.f, 30.f, 0.f);

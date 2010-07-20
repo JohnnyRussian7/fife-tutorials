@@ -13,8 +13,8 @@
 #include <gl/gl.h>
 #endif
 
-ParticleRenderer::ParticleRenderer(BlendMode::Enum blendMode)
-: isEnabled(true), blendMode(blendMode)
+ParticleRenderer::ParticleRenderer()
+: isEnabled(true)
 {
 	
 }
@@ -37,16 +37,6 @@ void ParticleRenderer::SetEnabled(bool enabled)
 bool ParticleRenderer::IsEnabled() const
 {
 	return isEnabled;
-}
-
-void ParticleRenderer::SetBlendMode(BlendMode::Enum mode)
-{
-	blendMode = mode;
-}
-
-BlendMode::Enum ParticleRenderer::GetBlendMode() const
-{
-	return blendMode;
 }
 
 void ParticleRenderer::Update(float time)

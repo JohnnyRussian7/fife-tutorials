@@ -17,9 +17,13 @@ public:
 	void AddChild(SceneNode* child);
 	void RemoveChild(SceneNode* child);
 
-	const Vector3& GetScale() const;
-	const Vector3& GetPosition() const;
-	const Quaternion& GetOrientation() const;
+	const Vector3& GetRelativeScale() const;
+	const Vector3& GetRelativePosition() const;
+	const Quaternion& GetRelativeOrientation() const;
+
+	const Vector3& GetAbsoluteScale() const;
+	const Vector3& GetAbsolutePosition() const;
+	const Quaternion& GetAbsoluteOrientation() const;
 
 	void SetScale(const Vector3& scale);
 	void SetScale(float x, float y, float z);
@@ -30,16 +34,23 @@ public:
 	void SetOrientation(const Quaternion& orientation);
 	void SetOrientation(float x, float y, float z, float w);
 
+	const Matrix4& GetRelativeTransform() const;
+	const Matrix4& GetAbsoluteTransform() const;
+	
 private:
 	SceneNode* m_parent;
 	std::vector<SceneNode*> m_childNodes;
 
-	Vector3 m_scale;
-	Vector3 m_position;
-	Quaternion m_orientation;
+	Vector3 m_relativeScale;
+	Vector3 m_relativePosition;
+	Quaternion m_relativeOrientation;
 
-	bool m_updateWorldTransform;
-	Matrix4 m_worldTransform;
+	Vector3 m_absoluteScale;
+	Vector3 m_absolutePosition;
+	Quaternion m_absoluteOrientation;
+
+	bool m_updateTransform;
+	Matrix4 m_transform;
 };
 
 #endif

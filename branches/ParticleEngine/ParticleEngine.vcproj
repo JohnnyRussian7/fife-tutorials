@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;zlib&quot;"
+				AdditionalIncludeDirectories="zlib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PE_EXPORT;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -116,6 +116,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="zlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PE_EXPORT"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -250,7 +251,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Timer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Vector.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Win32TimerImpl.cpp"
 				>
 			</File>
 			<File
@@ -356,7 +365,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Timer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Vector.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Win32TimerImpl.h"
 				>
 			</File>
 			<File

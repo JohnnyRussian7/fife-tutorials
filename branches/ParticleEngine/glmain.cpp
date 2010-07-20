@@ -19,6 +19,7 @@
 #include "Image.h"
 #include "Opengltexture.h"
 #include "RendererEnums.h"
+#include "MathUtil.h"
 
 // TODO - this is temporary
 #include "PngLoader.h"
@@ -31,8 +32,7 @@ ParticleEmitter* emitter = new ParticleEmitter(true,
 																		Vector3(1.f, 1.f, 1.f)),
 												80, 100,
 												0.01f, 0.05f,
-												800, 2000,
-												Vector3(0.f, 0.f, 0.f), 
+												800, 2000, 
 												Vector3(0.f, 0.0005f, 0.f));
 ParticleRenderer renderer;
 float updateRate = 1.0;
@@ -81,6 +81,8 @@ void InitFrame()
     cam.Init();
     cam.Resize(800,600);
 	cam.LookAt(Vector3(0, 0, 10));
+    cam.Yaw(DegToRad(-45));
+    cam.Pitch(DegToRad(-30));
 	//cam.Rotate(45.f, 30.f, 0.f);
 
 	ParticleFadeOutEffect* fadeOutEffect = new ParticleFadeOutEffect(Color(0.f, 0.f, 0.f, 0.f), 1000);

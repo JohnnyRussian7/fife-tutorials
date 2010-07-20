@@ -7,7 +7,7 @@
 #include "MathUtil.h"
 
 WindowInput::WindowInput(int windowWidth, int windowHeight, Camera& camera)
-: camera(camera), centerX(windowWidth/2), centerY(windowWidth/2), mouseX(0), mouseY(0), 
+: camera(camera), centerX(windowWidth/2), centerY(windowHeight/2), mouseX(0), mouseY(0), 
   m_angleX(0.f), m_angleY(0.f), m_mouseSensitivity(100)
 {
 
@@ -31,34 +31,43 @@ void WindowInput::ReadInput(bool keys[])
 
 void WindowInput::CheckMouse(void)
 {
-	float pitch = 0.0;
-	float heading = 0.0;
 	POINT pt;
-	bool isActive = false;
 
 	GetCursorPos(&pt);
 
-	if (mouseY != pt.y)
-	{
-		pitch += float(mouseY - pt.y) / m_mouseSensitivity;
-
-		mouseY = pt.y;
-
-		isActive = true;
-	}
-
 	if (mouseX != pt.x)
 	{
-		heading += float(mouseX - pt.x) / m_mouseSensitivity;
+		float yaw = float(mouseX - pt.x) / m_mouseSensitivity;
 
+		if (yaw > 2*pi)
+		{
+			yaw -= 2*pi;
+		}
+		else if (yaw < -2*pi)
+		{
+			yaw += 2*pi;
+		}
+
+		camera.Yaw(yaw);
 		mouseX = pt.x;
-
-		isActive = true;
 	}
 
-	if (isActive)
+	if (mouseY != pt.y)
 	{
-		camera.Rotate(pitch, heading, 0.f);
+		float pitch = float(mouseY - pt.y) / m_mouseSensitivity;
+
+		if (pitch > pi)
+		{
+			pitch -= pi;
+		}
+		else if (pitch < -pi)
+		{
+			pitch += pi;
+		}
+
+		camera.Pitch(pitch);
+
+		mouseY = pt.y;
 	}
 }
 

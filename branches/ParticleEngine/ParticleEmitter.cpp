@@ -8,8 +8,7 @@ ParticleEmitter::ParticleEmitter(bool enabled, const AxisAlignedBoundingBox& aab
 								 std::size_t minParticles, std::size_t maxParticles,
 								 const float minSize, const float maxSize, 
 								 const float minEnergy, const float maxEnergy,
-								 const Vector3& position, const Vector3& velocity
-								)
+								 const Vector3& velocity)
 : isEnabled(enabled), aabb(aabb), minParticles(minParticles), 
   maxParticles(maxParticles), activeParticles(0), position(position), 
   velocity(velocity), minSize(minSize), maxSize(maxSize), minEnergy(minEnergy), 

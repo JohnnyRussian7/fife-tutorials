@@ -145,41 +145,6 @@ void Camera::Rotate(const Quaternion& rotQ)
 	m_orientation = normQ * m_orientation;
 }
 
-void Camera::Rotate(float xrot, float yrot, float zrot)
-{
-	pitch += (xrot * m_rotationVelocity);
-	yaw += (yrot * m_rotationVelocity);
-	//roll += (zrot * m_rotationVelocity);
-
-	if (pitch > pi)
-	{
-		pitch -= pi;
-	}
-	else if (pitch < -pi)
-	{
-		pitch += pi;
-	}
-
-	if (yaw > 2*pi)
-	{
-		yaw -= 2*pi;
-	}
-	else if (yaw < -2*pi)
-	{
-		yaw += 2*pi;
-	}
-
-	// process yaw first
-	Yaw(yaw);
-	Pitch(pitch);
-
-	// create quaternion from pitch and yaw
-// 	Quaternion pitchQuat = fromAxisAngle(Vector3(1.f, 0.f, 0.f), pitch);
-// 	Quaternion yawQuat = fromAxisAngle(Vector3(0.f, 1.f, 0.f), yaw);
-// 
-// 	m_orientation = yawQuat * pitchQuat;
-}
-
 void Camera::UpdateView()
 {
 	// TODO - this should check whether the view needs to be updated
@@ -204,6 +169,4 @@ void Camera::Render()
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	glLoadMatrixf((GLfloat*)viewMatrix.matrix);
-	//glMultMatrixf((GLfloat*)GetViewMatrix().matrix);
-	//glTranslatef(-m_position.x, -m_position.y, -m_position.z);
 }

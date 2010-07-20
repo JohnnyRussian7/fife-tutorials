@@ -33,7 +33,6 @@ public:
 	void Yaw(float angle);
 	void Roll(float angle);
 	void Rotate(const Vector3& axis, float angle);
-	void Rotate(float xrot, float yrot, float zrot);
 	void Rotate(const Quaternion& rotQ);
 
 	void UpdateView();

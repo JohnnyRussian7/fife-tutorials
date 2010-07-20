@@ -13,12 +13,11 @@ class IParticleEffect;
 class ParticleEmitter
 {
 public:
-	ParticleEmitter::ParticleEmitter(bool enabled, const AxisAlignedBoundingBox& aabb, 
-									std::size_t minParticles, std::size_t maxParticles,
-									const float minSize, const float maxSize, 
-									const float minEnergy, const float maxEnergy,
-									const Vector3& position, const Vector3& velocity
-									);
+	ParticleEmitter(bool enabled, const AxisAlignedBoundingBox& aabb, 
+		std::size_t minParticles, std::size_t maxParticles,
+		const float minSize, const float maxSize, 
+		const float minEnergy, const float maxEnergy,
+		const Vector3& velocity);
 	~ParticleEmitter();
 	void Emit(); 
 	void Update(float deltaTime);

@@ -98,7 +98,7 @@ void Camera::Translate(const Vector3& translation)
 
 void Camera::LookAt(const Vector3& target)
 {
-	Vector3 direction = target - m_position;
+	Vector3 direction = -(target - m_position);
 
 	// nothing to do if direction is zero vector
 	if (direction == Vector3::Zero())
@@ -106,13 +106,17 @@ void Camera::LookAt(const Vector3& target)
 		return;
 	}
 
+	// always looking down negative z-axis so need to 
+	// negate and normalize direction vector
+	Vector3 normDirection = Normalize(-direction);
+
+	// get z-axis of current rotation
 	Vector3 zAxis = ZAxis(m_orientation);
 
 	// get shortest rotation arc to direction
-	Quaternion rotation = GetRotationTo(zAxis, direction);
+	Quaternion rotation = GetRotationTo(zAxis, normDirection);
 
 	m_orientation = rotation * m_orientation;
-
 }
 
 void Camera::Pitch(float angle)

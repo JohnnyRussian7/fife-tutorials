@@ -46,20 +46,34 @@ OpenglTexture* bgTexture = NULL;
 void DrawQuadPlane()
 {
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0); glVertex3f(-2.0, 2.0, 2.0);
-	glTexCoord2f(1.0, 0.0); glVertex3f(2.0, 2.0, 2.0);
-	glTexCoord2f(1.0, 1.0); glVertex3f(2.0, 2.0, -2.0);
-	glTexCoord2f(0.0, 1.0); glVertex3f(-2.0, 2.0, -2.0);
+	glTexCoord2f(0.0, 0.0);			 // lower left
+	glVertex3f(-2.0, -2.0, -2.0);
+
+	glTexCoord2f(1.0, 0.0);			// lower right
+	glVertex3f(2.0, -2.0, -2.0);	
+
+	glTexCoord2f(1.0, 1.0);			// upper right
+	glVertex3f(2.0, 2.0, -2.0);		
+
+	glTexCoord2f(0.0, 1.0);			// upper left
+	glVertex3f(-2.0, 2.0, -2.0);	
 	glEnd();
 }
 
 void DrawPlane()
 {
 	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(1.0, 0.0); glVertex3f(2.0, -2.0, -2.0);
-	glTexCoord2f(0.0, 0.0); glVertex3f(-2.0, -2.0, -2.0);
-	glTexCoord2f(1.0, 1.0); glVertex3f(2.0, -2.0, 2.0);
-	glTexCoord2f(0.0, 1.0); glVertex3f(-2.0, -2.0, 2.0);
+	glTexCoord2f(0.0, 0.0);			// left bottom
+	glVertex3f(-2.0, -2.0, -2.0);
+
+	glTexCoord2f(1.0, 0.0);			// right bottom
+	glVertex3f(2.0, -2.0, -2.0);
+
+	glTexCoord2f(0.0, 1.0);			// top left
+	glVertex3f(-2.0, 2.0, -2.0);
+
+	glTexCoord2f(1.0, 1.0);			// top right
+	glVertex3f(2.0, 2.0, -2.0);
 	glEnd();
 }
 
@@ -80,9 +94,9 @@ void InitFrame()
     // initialize camera
     cam.Init();
     cam.Resize(800,600);
-	cam.LookAt(Vector3::UnitZ());
-    cam.Yaw(DegToRad(-45));
-    cam.Pitch(DegToRad(-30));
+    //cam.Yaw(DegToRad(-45));
+    //cam.Pitch(DegToRad(-30));
+	cam.LookAt(Vector3(0, 0, 5));
 	//cam.Rotate(45.f, 30.f, 0.f);
 
 	ParticleFadeOutEffect* fadeOutEffect = new ParticleFadeOutEffect(Color(0.f, 0.f, 0.f, 0.f), 1000);
@@ -93,7 +107,7 @@ void InitFrame()
 	PngLoader loader;
 
 	image = loader.Load("C:\\Documents and Settings\\jesse\\My Documents\\Programming\\ParticleEngine\\ParticleEngine\\data\\fireparticle.png");
-	background = loader.Load("C:\\Documents and Settings\\jesse\\My Documents\\Programming\\ParticleEngine\\ParticleEngine\\data\\grass\\45.png");
+	background = loader.Load("C:\\Documents and Settings\\JESSE\\My Documents\\Programming\\Particle Engine\\ParticleEngine\\data\\grass.png");
 
 	texture = new OpenglTexture(TextureType::_2d, image);
 	bgTexture = new OpenglTexture(TextureType::_2d, background);
@@ -103,15 +117,15 @@ void RenderFrame()
 {
 	winInput.ReadInput(keys);
 
-
 	cam.Render();
 	//glBindTexture(GL_TEXTURE_2D, texture->GetTextureId());
 	glBindTexture(GL_TEXTURE_2D, bgTexture->GetTextureId());
 	DrawPlane();
+	//DrawQuadPlane();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	renderer.Update(updateRate);
-    renderer.Render(cam);
+	//renderer.Update(updateRate);
+    //renderer.Render(cam);
 
 	//glPushMatrix();
 	//glLoadIdentity();

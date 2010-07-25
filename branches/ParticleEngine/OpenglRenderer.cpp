@@ -13,6 +13,11 @@ OpenglRenderer::~OpenglRenderer()
 
 }
 
+RenderSystemType::Enum OpenglRenderer::GetRenderSystemType() const
+{
+	return RenderSystemType::Opengl;
+}
+
 void OpenglRenderer::SetTransform(TransformType::Enum type, const Matrix4& mat)
 {
 	switch (type)

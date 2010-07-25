@@ -213,54 +213,54 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 //  WinMain
 //*=====================
 
-int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline, int nshowcmd)
-{
-	MSG msg;
-	WNDCLASSEX ex;
-
-	ex.cbSize = sizeof(WNDCLASSEX);
-	ex.style = CS_HREDRAW|CS_VREDRAW|CS_OWNDC;
-	ex.lpfnWndProc = WinProc;
-	ex.cbClsExtra = 0;
-	ex.cbWndExtra = 0;
-	ex.hInstance = hinstance;
-	ex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	ex.hCursor = LoadCursor(NULL, IDC_ARROW);
-	ex.hbrBackground = NULL;
-	ex.lpszMenuName = NULL;
-	ex.lpszClassName = _T(WNDCLASSNAME);
-	ex.hIconSm = NULL;
-
-	if (!RegisterClassEx(&ex))
-	{
-		MessageBox(NULL, _T("Failed to register the window class"), _T("Window Reg Error"), MB_OK);
-		return 1;
-	}
-
-	// Create the window
-	CreateWnd(hinstance, screenw, screenh, SCRDEPTH, WINDOWED);	
-
-    InitFrame();
-
-	// The message loop
-	while (!quit)
-	{
-		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
-		{
-			if (msg.message == WM_QUIT)
-				quit = true;
-
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-
-		RenderFrame();
-
-		SwapBuffers(hdc);
-
-		if (GetAsyncKeyState(VK_ESCAPE))
-			SysShutdown();
-	}
-
-	return msg.lParam;
-}
+// int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline, int nshowcmd)
+// {
+// 	MSG msg;
+// 	WNDCLASSEX ex;
+// 
+// 	ex.cbSize = sizeof(WNDCLASSEX);
+// 	ex.style = CS_HREDRAW|CS_VREDRAW|CS_OWNDC;
+// 	ex.lpfnWndProc = WinProc;
+// 	ex.cbClsExtra = 0;
+// 	ex.cbWndExtra = 0;
+// 	ex.hInstance = hinstance;
+// 	ex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+// 	ex.hCursor = LoadCursor(NULL, IDC_ARROW);
+// 	ex.hbrBackground = NULL;
+// 	ex.lpszMenuName = NULL;
+// 	ex.lpszClassName = _T(WNDCLASSNAME);
+// 	ex.hIconSm = NULL;
+// 
+// 	if (!RegisterClassEx(&ex))
+// 	{
+// 		MessageBox(NULL, _T("Failed to register the window class"), _T("Window Reg Error"), MB_OK);
+// 		return 1;
+// 	}
+// 
+// 	// Create the window
+// 	CreateWnd(hinstance, screenw, screenh, SCRDEPTH, WINDOWED);	
+// 
+//     InitFrame();
+// 
+// 	// The message loop
+// 	while (!quit)
+// 	{
+// 		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
+// 		{
+// 			if (msg.message == WM_QUIT)
+// 				quit = true;
+// 
+// 			TranslateMessage(&msg);
+// 			DispatchMessage(&msg);
+// 		}
+// 
+// 		RenderFrame();
+// 
+// 		SwapBuffers(hdc);
+// 
+// 		if (GetAsyncKeyState(VK_ESCAPE))
+// 			SysShutdown();
+// 	}
+// 
+// 	return msg.lParam;
+// }

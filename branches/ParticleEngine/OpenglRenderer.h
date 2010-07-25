@@ -2,15 +2,19 @@
 #ifndef OPENGL_RENDERER_H_
 #define OPENGL_RENDERER_H_
 
+#include "IRenderSystem.h"
+
 #include "RendererEnums.h"
 #include "Matrix.h"
 #include "Opengltexture.h"
 
-class OpenglRenderer
+class OpenglRenderer : public IRenderSystem
 {
 public:
 	OpenglRenderer();
 	~OpenglRenderer();
+
+	RenderSystemType::Enum GetRenderSystemType() const;
 
 	void SetTransform(TransformType::Enum type, const Matrix4& mat);
 

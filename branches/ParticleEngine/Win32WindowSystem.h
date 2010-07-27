@@ -26,6 +26,7 @@ public:
 	virtual bool IsMaximized() const;
 	virtual void OnResize();
 	virtual bool Run();
+	virtual void Update();
 
 private:
 	void Resize();

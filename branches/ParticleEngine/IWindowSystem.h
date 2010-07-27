@@ -50,6 +50,7 @@ public:
 	virtual bool IsMaximized() const = 0;
 	virtual void OnResize() = 0;
 	virtual bool Run() = 0;
+	virtual void Update() = 0;
 };
 
 IWindowSystem* CreateWindowSystem(const WindowSystemSettings& settings);

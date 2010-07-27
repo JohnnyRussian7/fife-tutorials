@@ -24,6 +24,7 @@ public:
 
     void Tick();
 
+	unsigned int QueryRealTime() const;
 private:
     class TimerImpl;
     TimerImpl* m_impl;

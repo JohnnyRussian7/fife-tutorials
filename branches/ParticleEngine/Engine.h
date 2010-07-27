@@ -38,7 +38,15 @@ public:
     IRenderSystem* GetRenderSystem() const;
     IFileSystem* GetFileSystem() const;
 
+	unsigned int GetFps() const;
+
+	void BeginScene();
+	void EndScene();
+
     bool Run();
+
+private:
+	void ComputeFps();
 
 private:
     EngineSettings m_settings;
@@ -47,6 +55,10 @@ private:
     IFileSystem* m_fileSystem;
 
     Timer m_timer;
+
+	unsigned int m_fps;
+	unsigned int m_fpsFrameCount;
+	unsigned int m_fpsStartTime;
 };
 
 #endif

@@ -255,6 +255,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Viewport.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Win32TimerImpl.cpp"
 				>
 			</File>
@@ -394,6 +398,10 @@
 			</File>
 			<File
 				RelativePath=".\Vector.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Viewport.h"
 				>
 			</File>
 			<File

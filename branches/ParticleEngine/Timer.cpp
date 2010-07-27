@@ -69,3 +69,8 @@ void Timer::Tick()
 {
     m_impl->Tick();
 }
+
+unsigned int Timer::QueryRealTime() const
+{
+	return m_impl->QueryRealTime();
+}

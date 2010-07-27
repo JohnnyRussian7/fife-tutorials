@@ -7,6 +7,7 @@
 #include "RendererEnums.h"
 #include "Matrix.h"
 #include "Opengltexture.h"
+#include "Viewport.h"
 
 class OpenglRenderer : public IRenderSystem
 {
@@ -14,7 +15,8 @@ public:
 	OpenglRenderer(const RenderSystemSettings& settings);
 	~OpenglRenderer();
 
-	RenderSystemType::Enum GetRenderSystemType() const;
+	virtual RenderSystemType::Enum GetRenderSystemType() const;
+	virtual void SetViewPort(const Viewport& viewport);
 
 	void SetTransform(TransformType::Enum type, const Matrix4& mat);
 
@@ -29,6 +31,7 @@ private:
 private:
     RenderSystemSettings m_settings;
 
+	Viewport m_viewport;
 	Matrix4 m_modelMatrix;
 	Matrix4 m_viewMatrix;
 	Matrix4 m_projectionMatrix;

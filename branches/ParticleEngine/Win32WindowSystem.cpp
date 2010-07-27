@@ -346,6 +346,11 @@ bool Win32WindowSystem::Run()
 	return !m_quit;
 }
 
+void Win32WindowSystem::Update()
+{
+	// TODO - call SwapBuffers(m_dc)
+}
+
 void Win32WindowSystem::Resize()
 {
 	if (!m_shouldResize || !m_settings.allowResizeable)

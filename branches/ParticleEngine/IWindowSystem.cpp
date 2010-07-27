@@ -2,14 +2,14 @@
 #include "IWindowSystem.h"
 #include "Win32WindowSystem.h"
 
-IWindowSystem* CreateWindowSystem(const WindowSettings& settings)
+IWindowSystem* CreateWindowSystem(const WindowSystemSettings& settings)
 {
-	IWindowSystem* application = NULL;
+	IWindowSystem* windowSystem = NULL;
 
-	switch (settings.applicationType)
+	switch (settings.windowSystemType)
 	{
 	case WindowSystemType::Win32:
-		application = new Win32WindowSystem(settings);
+		windowSystem = new Win32WindowSystem(settings);
 		break;
 	case WindowSystemType::MacOsx:
 		break;
@@ -21,5 +21,5 @@ IWindowSystem* CreateWindowSystem(const WindowSettings& settings)
 		break;
 	}
 
-	return application;
+	return windowSystem;
 }

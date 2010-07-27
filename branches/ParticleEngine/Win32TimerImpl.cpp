@@ -18,7 +18,7 @@ Timer::TimerImpl::TimerImpl()
     SYSTEM_INFO sysinfo;
     GetSystemInfo(&sysinfo);
     m_hasMultiCore = (sysinfo.dwNumberOfProcessors > 1);
-    m_hasHighPerformanceCounter = QueryPerformanceFrequency(&HighPerformanceFrequency) == TRUE ? true : false;
+    m_hasHighPerformanceCounter = (QueryPerformanceFrequency(&HighPerformanceFrequency) == TRUE) ? true : false;
 
     // set to an initial state
     Reset();

@@ -1,8 +1,8 @@
 
 #include "OpenglRenderer.h"
 
-OpenglRenderer::OpenglRenderer()
-: m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
+OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
+: m_settings(settings), m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
   m_projectionMatrix(Matrix4::Identity()), m_activeTexture(0)
 {
 

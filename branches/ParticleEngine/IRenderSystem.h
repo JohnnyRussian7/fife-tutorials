@@ -1,8 +1,21 @@
 
-#ifndef RENDER_SYSTEM_H_
-#define RENDER_SYSTEM_H_
+#ifndef IRENDER_SYSTEM_H_
+#define IRENDER_SYSTEM_H_
 
 #include "RenderSystemTypes.h"
+
+struct RenderSystemSettings
+{
+    RenderSystemSettings()
+    : renderSystemType(RenderSystemType::Opengl)
+    {
+
+    }
+
+    RenderSystemType::Enum renderSystemType;
+
+
+};
 
 class IRenderSystem
 {
@@ -12,5 +25,5 @@ public:
 	virtual RenderSystemType::Enum GetRenderSystemType() const = 0;
 };
 
-IRenderSystem* CreateRenderSystem(RenderSystemType::Enum type);
+IRenderSystem* CreateRenderSystem(const RenderSystemSettings& settings);
 #endif

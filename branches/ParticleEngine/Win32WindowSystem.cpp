@@ -77,7 +77,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-Win32WindowSystem::Win32WindowSystem(const WindowSettings& settings)
+Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 : m_settings(settings), m_externalWindow(settings.useExternalWindow), m_hwnd(0), m_quit(false),
   m_shouldResize(false)
 {
@@ -176,9 +176,6 @@ Win32WindowSystem::Win32WindowSystem(const WindowSettings& settings)
 		m_settings.height = window.bottom - window.top;
 		m_settings.allowFullScreen = false;
 	}
-
-	// create the render system
-	m_renderSystem = CreateRenderSystem(m_settings.renderSystemType);
 
 	// set this as active window
 	SetActiveWindow(m_hwnd);
@@ -347,11 +344,6 @@ bool Win32WindowSystem::Run()
 	}
 
 	return !m_quit;
-}
-
-IRenderSystem* Win32WindowSystem::GetRenderSystem() const
-{
-	return m_renderSystem;
 }
 
 void Win32WindowSystem::Resize()

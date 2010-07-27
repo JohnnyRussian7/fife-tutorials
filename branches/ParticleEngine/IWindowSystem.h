@@ -1,31 +1,28 @@
 
-#ifndef WINDOW_SYSTEM_H_
-#define WINDOW_SYSTEM_H_
+#ifndef IWINDOW_SYSTEM_H_
+#define IWINDOW_SYSTEM_H_
 
 #include "WindowSystemTypes.h"
-#include "RenderSystemTypes.h"
 
 class IRenderSystem;
 
-struct WindowSettings
+struct WindowSystemSettings
 {
-	WindowSettings() 
-		: applicationType(WindowSystemType::Invalid),
-		renderSystemType(RenderSystemType::Opengl),
-		width(800), height(600), bitsPerPixel(16), useExternalWindow(false), 
-		allowFullScreen(false), allowResizeable(true), windowId(0)
+	WindowSystemSettings() 
+	: windowSystemType(WindowSystemType::Invalid),
+	width(800), height(600), bitsPerPixel(16), useExternalWindow(false), 
+	allowFullScreen(false), allowResizeable(true), windowId(0)
 	{
 #if defined(WIN32) || defined(WIN64) || defined(_WIN64)
-		applicationType = WindowSystemType::Win32;
+		windowSystemType = WindowSystemType::Win32;
 #elif defined(__APPLE__) || defined(MACOSX)
-		applicationType = WindowSystemType::MacOsx;
+		windowSystemType = WindowSystemType::MacOsx;
 #else
-		applicationType = WindowSystemType::Linux;
+		windowSystemType = WindowSystemType::Linux;
 #endif
 	}
 	
-	WindowSystemType::Enum applicationType;
-	RenderSystemType::Enum renderSystemType;
+	WindowSystemType::Enum windowSystemType;
 	unsigned int width;
 	unsigned int height;
 	unsigned int bitsPerPixel;
@@ -53,10 +50,8 @@ public:
 	virtual bool IsMaximized() const = 0;
 	virtual void OnResize() = 0;
 	virtual bool Run() = 0;
-
-	virtual IRenderSystem* GetRenderSystem() const = 0;
 };
 
-IWindowSystem* CreateWindowSystem(const WindowSettings& settings);
+IWindowSystem* CreateWindowSystem(const WindowSystemSettings& settings);
 
 #endif

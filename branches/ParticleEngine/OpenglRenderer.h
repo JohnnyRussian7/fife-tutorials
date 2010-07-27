@@ -11,7 +11,7 @@
 class OpenglRenderer : public IRenderSystem
 {
 public:
-	OpenglRenderer();
+	OpenglRenderer(const RenderSystemSettings& settings);
 	~OpenglRenderer();
 
 	RenderSystemType::Enum GetRenderSystemType() const;
@@ -27,6 +27,8 @@ private:
 	void ClearBuffers();
 
 private:
+    RenderSystemSettings m_settings;
+
 	Matrix4 m_modelMatrix;
 	Matrix4 m_viewMatrix;
 	Matrix4 m_projectionMatrix;

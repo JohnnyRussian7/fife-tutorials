@@ -6,7 +6,7 @@
 int main()
 {
 	Engine engine;
-
+	
 	while (engine.Run())
 	{
 		engine.BeginScene();

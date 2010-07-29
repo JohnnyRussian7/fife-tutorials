@@ -27,6 +27,7 @@ public:
 	virtual void OnResize();
 	virtual bool Run();
 	virtual void Update();
+	virtual void SwapBuffers();
 
 private:
 	void Resize();
@@ -39,6 +40,8 @@ private:
 	bool m_quit;
 
 	HWND m_hwnd;
+	HDC m_hdc;
+	HGLRC m_hglrc;
 };
 
 #endif

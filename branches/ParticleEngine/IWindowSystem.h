@@ -11,7 +11,7 @@ struct WindowSystemSettings
 	WindowSystemSettings() 
 	: windowSystemType(WindowSystemType::Invalid),
 	width(800), height(600), bitsPerPixel(16), useExternalWindow(false), 
-	allowFullScreen(false), allowResizeable(true), windowId(0)
+	allowFullScreen(true), useFullScreen(false), allowResizeable(true), windowId(0)
 	{
 #if defined(WIN32) || defined(WIN64) || defined(_WIN64)
 		windowSystemType = WindowSystemType::Win32;
@@ -28,6 +28,7 @@ struct WindowSystemSettings
 	unsigned int bitsPerPixel;
 	bool useExternalWindow;
 	bool allowFullScreen;
+	bool useFullScreen;
 	bool allowResizeable;
 	void* windowId;
 };
@@ -51,6 +52,7 @@ public:
 	virtual void OnResize() = 0;
 	virtual bool Run() = 0;
 	virtual void Update() = 0;
+	virtual void SwapBuffers() = 0;
 };
 
 IWindowSystem* CreateWindowSystem(const WindowSystemSettings& settings);

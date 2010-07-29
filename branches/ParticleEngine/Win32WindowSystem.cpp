@@ -21,19 +21,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
-	case WM_PAINT:
-		PAINTSTRUCT ps;
-		BeginPaint(hWnd, &ps);
-		EndPaint(hWnd, &ps);
-		return 0;
+// 	case WM_PAINT:
+// 		PAINTSTRUCT ps;
+// 		BeginPaint(hWnd, &ps);
+// 		EndPaint(hWnd, &ps);
+// 		return 0;
 
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
-
-	case WM_ERASEBKGND:
-		return 1;
-		//return 0;
 
 	case WM_SIZE:
 		if (application)
@@ -91,14 +87,14 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 		// Register Class
 		WNDCLASSEX wcex;
 		wcex.cbSize			= sizeof(WNDCLASSEX);
-		wcex.style			= CS_HREDRAW | CS_VREDRAW;
+		wcex.style			= CS_OWNDC;
 		wcex.lpfnWndProc	= WndProc;
 		wcex.cbClsExtra		= 0;
 		wcex.cbWndExtra		= 0;
 		wcex.hInstance		= hInstance;
-		wcex.hIcon			= NULL;
+		wcex.hIcon			= LoadIcon(NULL, IDI_APPLICATION);
 		wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-		wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
+		wcex.hbrBackground	= (HBRUSH)GetStockObject(BLACK_BRUSH); //(HBRUSH)(COLOR_WINDOW+1);
 		wcex.lpszMenuName	= 0;
 		wcex.lpszClassName	= className;
 		wcex.hIconSm		= 0;
@@ -117,7 +113,14 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 
 		DWORD windowStyle = WS_POPUP;
 
-		if (!m_settings.allowFullScreen)
+		// get the width and height of the window RECT
+		int actualWidth = 0;
+		int actualHeight = 0;
+
+		unsigned int windowLeft = 0;
+		unsigned int windowTop = 0;
+
+		if (!m_settings.allowFullScreen || (m_settings.allowFullScreen && !m_settings.useFullScreen))
 		{
 			if (m_settings.allowResizeable)
 			{
@@ -128,19 +131,16 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 			{
 				windowStyle = WS_SYSMENU | WS_BORDER | WS_CAPTION | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 			}
-		}
 
-		AdjustWindowRect(&windowSize, windowStyle, FALSE);
+			AdjustWindowRect(&windowSize, windowStyle, FALSE);
 
-		// get the width and height of the window RECT
-		const int actualWidth = windowSize.right - windowSize.left;
-		const int actualHeight = windowSize.bottom - windowSize.top;
+			// get the width and height of the window RECT
+			actualWidth = windowSize.right - windowSize.left;
+			actualHeight = windowSize.bottom - windowSize.top;
 
-		unsigned int windowLeft = 0;
-		unsigned int windowTop = 0;
+			windowLeft = 0;
+			windowTop = 0;
 
-		if (!m_settings.allowFullScreen)
-		{
 			windowLeft = (GetSystemMetrics(SM_CXSCREEN) - actualWidth) / 2;
 			windowTop = (GetSystemMetrics(SM_CYSCREEN) - actualHeight) / 2;
 
@@ -153,6 +153,12 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 			{
 				windowTop = 0;
 			}
+		}
+		else
+		{
+			SetFullScreen(true);
+			actualWidth = m_settings.width;
+			actualHeight = m_settings.height;
 		}
 
 		// create the window
@@ -180,11 +186,38 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 	// set this as active window
 	SetActiveWindow(m_hwnd);
 	SetForegroundWindow(m_hwnd);
+
+	m_hdc = GetDC(m_hwnd);
+
+	PIXELFORMATDESCRIPTOR pfd;
+	memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+	pfd.nVersion = 1;
+	pfd.cColorBits = 16;
+	pfd.cDepthBits = 15;
+	pfd.dwFlags = PFD_DRAW_TO_WINDOW|PFD_SUPPORT_OPENGL|PFD_DOUBLEBUFFER;
+	pfd.iPixelType = PFD_TYPE_RGBA;
+
+	// if these fail, wglCreateContext will also quietly fail
+	int format;
+	if ((format = ChoosePixelFormat(m_hdc, &pfd)) != 0)
+		SetPixelFormat(m_hdc, format, &pfd);
+
+	HGLRC m_hglrc = wglCreateContext(m_hdc);
+
+	wglMakeCurrent(m_hdc, m_hglrc);
 }
 
 Win32WindowSystem::~Win32WindowSystem()
 {
+	wglDeleteContext(m_hglrc);
+	m_hglrc = 0;
 
+	SetFullScreen(false);
+	DestroyWindow(m_hwnd);
+
+	m_hwnd = 0;
+	m_hdc = 0;
 }
 
 WindowSystemType::Enum Win32WindowSystem::GetWindowSystemType() const
@@ -238,6 +271,8 @@ void Win32WindowSystem::Restore()
 
 void Win32WindowSystem::SetFullScreen(bool fullScreen)
 {
+	DWORD style = WS_VISIBLE | WS_CLIPCHILDREN;
+
 	if (!m_settings.allowFullScreen)
 	{
 		return;
@@ -245,10 +280,15 @@ void Win32WindowSystem::SetFullScreen(bool fullScreen)
 
 	if (fullScreen == false)
 	{
+		style |= WS_OVERLAPPEDWINDOW;
+
 		ChangeDisplaySettings(NULL, 0);
+		SetWindowLongPtr(m_hwnd, GWL_STYLE, style);
 	}
 	else
 	{
+		style |= WS_POPUP;
+
 		DEVMODE dm;
 		memset(&dm, 0, sizeof(dm));
 		dm.dmSize = sizeof(dm);
@@ -262,21 +302,15 @@ void Win32WindowSystem::SetFullScreen(bool fullScreen)
 		dm.dmBitsPerPel = m_settings.bitsPerPixel;
 		dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT | DM_DISPLAYFREQUENCY;
 
-		LONG ret = ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
-		if (ret != DISP_CHANGE_SUCCESSFUL)
+		if (ChangeDisplaySettings(&dm, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
 		{ 
 			// try without forcing display frequency
-			dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
-			ret = ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
+			dm.dmFields ^= DM_DISPLAYFREQUENCY;
 		}
+			
+		ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
 
-		switch(ret)
-		{
-		case DISP_CHANGE_SUCCESSFUL:
-			break;
-		default:
-			break;
-		}
+		SetWindowLongPtr(m_hwnd, GWL_STYLE, style);
 	}
 }
 
@@ -349,6 +383,11 @@ bool Win32WindowSystem::Run()
 void Win32WindowSystem::Update()
 {
 	// TODO - call SwapBuffers(m_dc)
+}
+
+void Win32WindowSystem::SwapBuffers()
+{
+	::SwapBuffers(m_hdc);
 }
 
 void Win32WindowSystem::Resize()

@@ -2,6 +2,8 @@
 #ifndef IMAGE_H_
 #define IMAGE_H_
 
+#include "stdint.h"
+
 struct ColorFormat
 {
 	enum Enum
@@ -10,7 +12,7 @@ struct ColorFormat
 		R8G8B8A8	// RGBA 32-bit
 	};
 
-	static unsigned int GetBitsPerPixel(Enum type)
+	static uint32_t GetBitsPerPixel(Enum type)
 	{
 		switch (type)
 		{
@@ -29,26 +31,26 @@ struct ColorFormat
 class Image
 {
 public:
-	Image(ColorFormat::Enum format, unsigned int width, unsigned int height);
+	Image(ColorFormat::Enum format, uint32_t width, uint32_t height);
 	Image::Image(const Image& rhs);
 	~Image();
 
-	unsigned int GetWidth() const;
-	unsigned int GetHeight() const;
-	unsigned int GetStride() const;
-	unsigned int GetBytesPerPixel() const;
+	uint32_t GetWidth() const;
+	uint32_t GetHeight() const;
+	uint32_t GetStride() const;
+	uint32_t GetBytesPerPixel() const;
 	ColorFormat::Enum GetColorFormat() const;
 
-	unsigned char* GetData();
+	uint8_t* GetData();
 
 private:
-	unsigned int m_width;
-	unsigned int m_height;
-	unsigned int m_stride;
-	unsigned int m_bytesPerPixel;
+	uint32_t m_width;
+	uint32_t m_height;
+	uint32_t m_stride;
+	uint32_t m_bytesPerPixel;
 	ColorFormat::Enum m_colorFormat;
 
-	unsigned char* m_data;
+	uint8_t* m_data;
 };
 
 #endif

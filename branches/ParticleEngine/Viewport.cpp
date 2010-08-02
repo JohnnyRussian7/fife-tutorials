@@ -13,22 +13,22 @@ Viewport::Viewport(int left, int top, int width, int height)
 
 }
 
-int Viewport::GetLeft() const
+int32_t Viewport::GetLeft() const
 {
 	return m_left;
 }
 
-int Viewport::GetTop() const
+int32_t Viewport::GetTop() const
 {
 	return m_top;
 }
 
-int Viewport::GetWidth() const
+int32_t Viewport::GetWidth() const
 {
 	return m_width;
 }
 
-int Viewport::GetHeight() const
+int32_t Viewport::GetHeight() const
 {
 	return m_height;
 }

@@ -158,7 +158,7 @@ Image* PngLoader::Load(const char* filename)
 
 	// assign image data to row pointers for reading
 	rowPtrs = new png_bytep[height];
-	unsigned char* data = img->GetData();
+	uint8_t* data = img->GetData();
 	for (std::size_t i=0; i < height; ++i)
 	{
 		png_uint_32 dataPtr = (height - i - 1) * img->GetStride();

@@ -11,7 +11,7 @@ OpenglTexture::OpenglTexture(TextureType::Enum type, Image *image)
 {
 	if (image)
 	{
-		glGenTextures(1, &m_textureId);
+		glGenTextures(1, reinterpret_cast<GLuint*>(&m_textureId));
 
 		// push texture to GPU
 		Upload();
@@ -22,13 +22,13 @@ OpenglTexture::~OpenglTexture()
 {
 	if (m_textureId)
 	{
-		glDeleteTextures(1, &m_textureId);
+		glDeleteTextures(1, reinterpret_cast<GLuint*>(&m_textureId));
 	}
 
 	delete m_image;
 }
 
-unsigned int OpenglTexture::GetTextureId() const
+uint32_t OpenglTexture::GetTextureId() const
 {
 	return m_textureId;
 }

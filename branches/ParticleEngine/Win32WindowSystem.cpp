@@ -1,4 +1,5 @@
 
+#include "stdint.h"
 #include "Win32WindowSystem.h"
 #include "IRenderSystem.h"
 
@@ -117,8 +118,8 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 		int actualWidth = 0;
 		int actualHeight = 0;
 
-		unsigned int windowLeft = 0;
-		unsigned int windowTop = 0;
+		uint32_t windowLeft = 0;
+		uint32_t windowTop = 0;
 
 		if (!m_settings.allowFullScreen || (m_settings.allowFullScreen && !m_settings.useFullScreen))
 		{

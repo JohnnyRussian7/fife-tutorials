@@ -8,7 +8,7 @@ ParticleFadeOutEffect::ParticleFadeOutEffect(const Color& endColor, float fadeOu
 
 }
 
-void ParticleFadeOutEffect::apply(Particle* particles, unsigned int particleCount, float updateRate)
+void ParticleFadeOutEffect::apply(Particle* particles, uint32_t particleCount, float updateRate)
 {
 	for (std::size_t i=0; i < particleCount; ++i)
 	{

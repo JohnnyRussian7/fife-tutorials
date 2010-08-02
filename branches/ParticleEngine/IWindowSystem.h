@@ -2,6 +2,7 @@
 #ifndef IWINDOW_SYSTEM_H_
 #define IWINDOW_SYSTEM_H_
 
+#include "stdint.h"
 #include "WindowSystemTypes.h"
 
 class IRenderSystem;
@@ -23,9 +24,9 @@ struct WindowSystemSettings
 	}
 	
 	WindowSystemType::Enum windowSystemType;
-	unsigned int width;
-	unsigned int height;
-	unsigned int bitsPerPixel;
+	uint32_t width;
+	uint32_t height;
+	uint32_t bitsPerPixel;
 	bool useExternalWindow;
 	bool allowFullScreen;
 	bool useFullScreen;

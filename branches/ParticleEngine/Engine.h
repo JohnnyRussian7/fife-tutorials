@@ -43,7 +43,7 @@ public:
     IFileSystem* GetFileSystem() const;
 	SceneManager* GetSceneManager() const;
 
-	unsigned int GetFps() const;
+	uint32_t GetFps() const;
 
 	void BeginScene();
 	void EndScene();
@@ -62,9 +62,9 @@ private:
 
     Timer m_timer;
 
-	unsigned int m_fps;
-	unsigned int m_fpsFrameCount;
-	unsigned int m_fpsStartTime;
+	uint32_t m_fps;
+	uint32_t m_fpsFrameCount;
+	uint32_t m_fpsStartTime;
 };
 
 #endif

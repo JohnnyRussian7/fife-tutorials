@@ -81,7 +81,7 @@ SceneManager* Engine::GetSceneManager() const
 	return m_sceneManager;
 }
 
-unsigned int Engine::GetFps() const
+uint32_t Engine::GetFps() const
 {
 	return m_fps;
 }
@@ -119,10 +119,10 @@ void Engine::ComputeFps()
 	++m_fpsFrameCount;
 
 	// get current system time
-	unsigned int now = m_timer.QueryRealTime();
+	uint32_t now = m_timer.QueryRealTime();
 
 	// total elapsed time since last frame
-	unsigned int deltaTime = now - m_fpsStartTime;
+	uint32_t deltaTime = now - m_fpsStartTime;
 
 	// calculate fps approx. once a second
 	if (deltaTime > 1000)
@@ -130,7 +130,7 @@ void Engine::ComputeFps()
 		float inverseDelta = 1.f / deltaTime;
 
 		// calculate fps, rounding up
-		m_fps = static_cast<unsigned int>(std::ceil(1000 * m_fpsFrameCount * inverseDelta));
+		m_fps = static_cast<uint32_t>(std::ceil(1000 * m_fpsFrameCount * inverseDelta));
 
 		// update the fps start time
 		m_fpsStartTime = now;

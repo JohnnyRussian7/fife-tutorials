@@ -13,7 +13,7 @@ void Randomizer::seed()
 	std::srand(time(NULL));
 }
 
-int Randomizer::rand()
+int32_t Randomizer::rand()
 {
 	if (!initialized)
 	{

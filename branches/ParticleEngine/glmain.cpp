@@ -37,7 +37,7 @@ ParticleEmitter* emitter = new ParticleEmitter(true,
 ParticleRenderer renderer;
 float updateRate = 1.0;
 WindowInput winInput(800, 600, cam);
-unsigned int textureId = -1;
+uint32_t textureId = -1;
 Image* image = NULL;
 Image* background = NULL;
 OpenglTexture* texture = NULL;

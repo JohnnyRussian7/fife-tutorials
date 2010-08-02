@@ -29,12 +29,12 @@ Timer::TimerImpl::~TimerImpl()
     
 }
 
-unsigned int Timer::TimerImpl::GetTime() const
+uint32_t Timer::TimerImpl::GetTime() const
 {
     return m_virtualTime;
 }
 
-void Timer::TimerImpl::SetTime(unsigned int time)
+void Timer::TimerImpl::SetTime(uint32_t time)
 {
     // reset to initial state
     Reset();
@@ -104,11 +104,11 @@ void Timer::TimerImpl::Tick()
         m_realTime = QueryRealTime();
 
         // update the virtual time based on the real time
-        m_virtualTime = m_virtualTime + static_cast<unsigned int>((m_realTime - m_realTimeStart) * m_multiplier);
+        m_virtualTime = m_virtualTime + static_cast<uint32_t>((m_realTime - m_realTimeStart) * m_multiplier);
     }
 }
 
-unsigned int Timer::TimerImpl::QueryRealTime()
+uint32_t Timer::TimerImpl::QueryRealTime()
 {
     if (m_hasHighPerformanceCounter)
     {
@@ -131,7 +131,7 @@ unsigned int Timer::TimerImpl::QueryRealTime()
 
         if (success)
         {
-            return unsigned int((time.QuadPart) * 1000 / HighPerformanceFrequency.QuadPart);
+            return uint32_t((time.QuadPart) * 1000 / HighPerformanceFrequency.QuadPart);
         }
     }
 

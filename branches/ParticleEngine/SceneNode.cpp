@@ -1,6 +1,7 @@
 
 #include <sstream>
 
+#include "stdint.h"
 #include "SceneNode.h"
 #include "SceneManager.h"
 
@@ -9,7 +10,7 @@ namespace
 	std::string CreateSceneNodeUniqueName()
 	{
 		// automated counting for scene node name generation, in case the user doesn't provide a name
-		static unsigned int uniqueNumber = 0;
+		static uint32_t uniqueNumber = 0;
 		static std::string sceneNodeBaseName = "SceneNode";
 
 		std::ostringstream oss;

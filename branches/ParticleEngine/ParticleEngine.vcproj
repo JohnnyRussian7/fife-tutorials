@@ -195,6 +195,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Material.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MathUtil.cpp"
 				>
 			</File>
@@ -333,7 +337,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ITexture.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IWindowSystem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Material.h"
 				>
 			</File>
 			<File
@@ -394,6 +406,10 @@
 			</File>
 			<File
 				RelativePath=".\SceneNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\stdint.h"
 				>
 			</File>
 			<File

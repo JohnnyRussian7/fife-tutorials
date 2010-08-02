@@ -20,12 +20,12 @@ Timer::~Timer()
     m_impl = 0;
 }
 
-unsigned int Timer::GetTime() const
+uint32_t Timer::GetTime() const
 {
     return m_impl->GetTime();
 }
 
-void Timer::SetTime(unsigned int time)
+void Timer::SetTime(uint32_t time)
 {
     m_impl->SetTime(time);
 }
@@ -70,7 +70,7 @@ void Timer::Tick()
     m_impl->Tick();
 }
 
-unsigned int Timer::QueryRealTime() const
+uint32_t Timer::QueryRealTime() const
 {
 	return m_impl->QueryRealTime();
 }

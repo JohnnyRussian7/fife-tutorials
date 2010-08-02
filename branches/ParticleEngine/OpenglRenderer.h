@@ -24,6 +24,7 @@ public:
 	void DisableTextures(TextureType::Enum type);
 
 	void SetActiveTexture(OpenglTexture* texture);
+	virtual void Render();
 
 private:
 	void ClearBuffers();

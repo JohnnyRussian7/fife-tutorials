@@ -167,6 +167,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Entity.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FileSystem.cpp"
 				>
 			</File>
@@ -302,6 +306,10 @@
 			</File>
 			<File
 				RelativePath=".\Engine.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Entity.h"
 				>
 			</File>
 			<File

@@ -1,10 +1,40 @@
 
-#include "SceneNode.h"
+#include <sstream>
 
-SceneNode::SceneNode(SceneNode* parent)
-: m_parent(parent), m_relativeScale(1, 1, 1), m_relativePosition(Vector3::Zero()),
+#include "SceneNode.h"
+#include "SceneManager.h"
+
+namespace
+{
+	std::string CreateSceneNodeUniqueName()
+	{
+		// automated counting for scene node name generation, in case the user doesn't provide a name
+		static unsigned int uniqueNumber = 0;
+		static std::string sceneNodeBaseName = "SceneNode";
+
+		std::ostringstream oss;
+		oss << sceneNodeBaseName << "_" << uniqueNumber;
+		
+		const std::string name = oss.str();
+		++uniqueNumber;
+
+		return name;
+	}
+}
+
+SceneNode::SceneNode(const char* name, SceneManager* manager)
+: m_name(""), m_sceneManager(manager), m_parent(0), m_relativeScale(1, 1, 1), m_relativePosition(Vector3::Zero()),
   m_relativeOrientation(Quaternion::Identity())
 {
+	if (name)
+	{
+		m_name = std::string(name);
+	}
+	else
+	{
+		m_name = CreateSceneNodeUniqueName();
+	}
+
 	if (m_parent)
 	{
 		m_parent->AddChild(this);
@@ -13,13 +43,51 @@ SceneNode::SceneNode(SceneNode* parent)
 
 SceneNode::~SceneNode()
 {
-	// delete all children
-	std::vector<SceneNode*>::iterator iter = m_childNodes.begin();
-	for (; iter != m_childNodes.end(); ++iter)
+	RemoveAllChildren();
+}
+
+const char* SceneNode::GetName() const
+{
+	return m_name.c_str();
+}
+
+void SceneNode::SetParent(SceneNode* parent)
+{
+	if (m_parent != 0)
 	{
-		delete *iter;
+		// remove child but don't delete it
+		// or we would be deleting ourselves
+		m_parent->RemoveChild(this, false);
 	}
-	m_childNodes.clear();
+
+	m_parent = parent;
+	
+	if (m_parent)
+	{
+		m_parent->AddChild(this);
+	}
+}
+
+void SceneNode::SetParent(const char* parentName)
+{
+	if (m_parent != 0)
+	{
+		// remove child but don't delete it
+		// or we would be deleting ourselves
+		m_parent->RemoveChild(this, false);
+	}
+
+	m_parent = m_sceneManager->GetSceneNode(parentName);
+	
+	if (m_parent)
+	{
+		m_parent->AddChild(this);
+	}
+}
+
+SceneNode* SceneNode::GetParent() const
+{
+	return m_parent;
 }
 
 void SceneNode::AddChild(SceneNode* child)
@@ -30,7 +98,7 @@ void SceneNode::AddChild(SceneNode* child)
 	}
 }
 
-void SceneNode::RemoveChild(SceneNode* child)
+void SceneNode::RemoveChild(SceneNode* child, bool shouldDeleteChild)
 {
 	if (child)
 	{
@@ -39,12 +107,26 @@ void SceneNode::RemoveChild(SceneNode* child)
 		{
 			if (*iter == child)
 			{
-				delete *iter;
+				if (shouldDeleteChild)
+				{
+					delete *iter;
+				}
 				m_childNodes.erase(iter);
 				break;
 			}
 		}
 	}
+}
+
+void SceneNode::RemoveAllChildren()
+{
+	// delete all children
+	std::vector<SceneNode*>::iterator iter = m_childNodes.begin();
+	for (; iter != m_childNodes.end(); ++iter)
+	{
+		delete *iter;
+	}
+	m_childNodes.clear();
 }
 
 const Vector3& SceneNode::GetRelativeScale() const

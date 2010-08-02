@@ -8,18 +8,21 @@
 #include "IWindowSystem.h"
 #include "IRenderSystem.h"
 #include "IFilesystem.h"
+#include "SceneManager.h"
 #include "Timer.h"
 
 // read comment above to know why these are here
 class IWindowSystem;
 class IRenderSystem;
 class IFileSystem;
+class SceneManager;
 
 struct EngineSettings
 {
     WindowSystemSettings windowSettings;
     RenderSystemSettings renderSystemSettings;
     FileSystemSettings fileSystemSettings;
+	SceneManagerSettings sceneManagerSettings;
 };
 
 class Engine
@@ -33,10 +36,12 @@ public:
     void SetWindowSystem(IWindowSystem* windowSystem);
     void SetRenderSystem(IRenderSystem* renderSystem);
     void SetFileSystem(IFileSystem* fileSystem);
+	void SetSceneManager(SceneManager* sceneManager);
 
     IWindowSystem* GetWindowSystem() const;
     IRenderSystem* GetRenderSystem() const;
     IFileSystem* GetFileSystem() const;
+	SceneManager* GetSceneManager() const;
 
 	unsigned int GetFps() const;
 
@@ -53,6 +58,7 @@ private:
     IWindowSystem* m_windowSystem;
     IRenderSystem* m_renderSystem;
     IFileSystem* m_fileSystem;
+	SceneManager* m_sceneManager;
 
     Timer m_timer;
 

@@ -27,6 +27,8 @@ public:
 
 	virtual RenderSystemType::Enum GetRenderSystemType() const = 0;
 	virtual void SetViewPort(const Viewport& viewport) = 0;
+
+	virtual void Render() = 0;
 };
 
 IRenderSystem* CreateRenderSystem(const RenderSystemSettings& settings);

@@ -3,19 +3,29 @@
 #define SCENE_NODE_H_
 
 #include <vector>
+#include <string>
 
 #include "Vector.h"
 #include "Quaternion.h"
 #include "Matrix.h"
 
+class SceneManager;
+
 class SceneNode
 {
 public:
-	SceneNode(SceneNode* parent);
+	SceneNode(const char* name, SceneManager* manager);
 	~SceneNode();
 	
+	const char* GetName() const;
+
+	void SetParent(SceneNode* parent);
+	void SetParent(const char* parentName);
+	SceneNode* GetParent() const;
+
 	void AddChild(SceneNode* child);
-	void RemoveChild(SceneNode* child);
+	void RemoveChild(SceneNode* child, bool shouldDeleteChild = true);
+	void RemoveAllChildren();
 
 	const Vector3& GetRelativeScale() const;
 	const Vector3& GetRelativePosition() const;
@@ -38,6 +48,8 @@ public:
 	const Matrix4& GetAbsoluteTransform() const;
 	
 private:
+	std::string m_name;
+	SceneManager* m_sceneManager;
 	SceneNode* m_parent;
 	std::vector<SceneNode*> m_childNodes;
 

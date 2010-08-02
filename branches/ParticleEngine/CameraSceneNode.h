@@ -7,11 +7,12 @@
 #include "Quaternion.h"
 
 class Camera;
+class SceneManager;
 
 class CameraSceneNode : public SceneNode
 {
 public:
-	CameraSceneNode(SceneNode* parent = NULL, 
+	CameraSceneNode(const char* name, SceneManager* manager, 
 					const Vector3& position = Vector3(),
 					const Quaternion& rotation = Quaternion());
 	~CameraSceneNode();

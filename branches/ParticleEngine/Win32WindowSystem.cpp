@@ -201,9 +201,11 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 	// if these fail, wglCreateContext will also quietly fail
 	int format;
 	if ((format = ChoosePixelFormat(m_hdc, &pfd)) != 0)
+	{
 		SetPixelFormat(m_hdc, format, &pfd);
+	}
 
-	HGLRC m_hglrc = wglCreateContext(m_hdc);
+	m_hglrc = wglCreateContext(m_hdc);
 
 	wglMakeCurrent(m_hdc, m_hglrc);
 }

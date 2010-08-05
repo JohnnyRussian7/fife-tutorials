@@ -175,10 +175,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\glmain.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\IFileSystem.cpp"
 				>
 			</File>
@@ -251,10 +247,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\system.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Timer.cpp"
 				>
 			</File>
@@ -276,10 +268,6 @@
 			</File>
 			<File
 				RelativePath=".\WindowInput.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\winmain.cpp"
 				>
 			</File>
 		</Filter>
@@ -321,10 +309,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\glmain.h"
-				>
-			</File>
-			<File
 				RelativePath=".\IFileSystem.h"
 				>
 			</File>
@@ -342,6 +326,10 @@
 			</File>
 			<File
 				RelativePath=".\IWindowSystem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IWindowSystemEventListener.h"
 				>
 			</File>
 			<File
@@ -413,10 +401,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\system.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Timer.h"
 				>
 			</File>
@@ -442,10 +426,6 @@
 			</File>
 			<File
 				RelativePath=".\WindowSystemTypes.h"
-				>
-			</File>
-			<File
-				RelativePath=".\winmain.h"
 				>
 			</File>
 		</Filter>

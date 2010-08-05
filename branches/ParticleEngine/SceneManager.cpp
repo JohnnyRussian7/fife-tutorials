@@ -1,11 +1,12 @@
 
 #include "SceneManager.h"
 #include "SceneNode.h"
-#include "CameraSceneNode.h"
+#include "Camera.h"
 #include "Entity.h"
+#include "IRenderSystem.h"
 
-SceneManager::SceneManager(const SceneManagerSettings& settings)
-: m_settings(settings), m_rootSceneNode(0)
+SceneManager::SceneManager(const SceneManagerSettings& settings, IRenderSystem* renderSystem)
+: m_settings(settings), m_rootSceneNode(0), m_renderSystem(renderSystem)
 {
 	if (m_settings.rootNodeName == "")
 	{
@@ -23,9 +24,14 @@ SceneManager::~SceneManager()
 
 }
 
-void SceneManager::AddCamera(const char* name, const Vector3& position, const Quaternion& rotation)
+Camera* SceneManager::CreateCamera(const char* name, const Vector3& position, const Quaternion& orientation)
 {
-	m_camSceneNode = new CameraSceneNode(name, this, position, rotation);
+    return new Camera(name, position, orientation);
+}
+
+void SceneManager::AddCamera(Camera* camera)
+{
+	m_camera = camera;
 }
 
 SceneNode* SceneManager::GetRootSceneNode() const
@@ -92,4 +98,17 @@ SceneNode* SceneManager::GetSceneNode(const char* name) const
 Entity* SceneManager::CreateEntity(const char* name) const
 {
 	return new Entity(name);
+}
+
+void SceneManager::RenderScene()
+{
+    // push data to render system
+
+    if (m_camera)
+    {
+        m_renderSystem->SetTransform(TransformType::View, m_camera->GetViewMatrix());
+    }
+
+    // render the scene now that all data is pushed to renderer
+    m_renderSystem->Render();
 }

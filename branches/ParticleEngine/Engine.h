@@ -10,6 +10,8 @@
 #include "IFilesystem.h"
 #include "SceneManager.h"
 #include "Timer.h"
+#include "stdint.h"
+#include "IWindowSystemEventListener.h"
 
 // read comment above to know why these are here
 class IWindowSystem;
@@ -25,7 +27,7 @@ struct EngineSettings
 	SceneManagerSettings sceneManagerSettings;
 };
 
-class Engine
+class Engine : public IWindowSystemEventListener
 {
 public:
     Engine();
@@ -47,8 +49,11 @@ public:
 
 	void BeginScene();
 	void EndScene();
+    void Render();
 
     bool Run();
+
+	virtual void OnResize(uint32_t width, uint32_t height);
 
 private:
 	void ComputeFps();

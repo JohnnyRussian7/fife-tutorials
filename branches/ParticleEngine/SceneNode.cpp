@@ -7,7 +7,7 @@
 
 namespace
 {
-	std::string CreateSceneNodeUniqueName()
+	std::string CreateUniqueSceneNodeName()
 	{
 		// automated counting for scene node name generation, in case the user doesn't provide a name
 		static uint32_t uniqueNumber = 0;
@@ -33,7 +33,7 @@ SceneNode::SceneNode(const char* name, SceneManager* manager)
 	}
 	else
 	{
-		m_name = CreateSceneNodeUniqueName();
+		m_name = CreateUniqueSceneNodeName();
 	}
 
 	if (m_parent)

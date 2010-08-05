@@ -45,17 +45,9 @@ Vector3 Normalize(const Vector3& vector)
         return vector;
     }
 
-	float inverseMag = 1/Magnitude(vector);
+	float inverseMag = 1.f/Magnitude(vector);
 	return Vector3(vector.x*inverseMag, vector.y*inverseMag, vector.z*inverseMag);
 }
-
-/*
-void normalize(Vector3& vector)
-{
-	float inverseMag = 1/magnitude(vector);
-	vector *= inverseMag;
-}
-*/
 
 float Dot(const Vector3& vector1, const Vector3& vector2)
 {
@@ -75,17 +67,22 @@ Vector3 cross(const Vector3& vector1, const Vector3& vector2)
 // By Stan Melax
 Quaternion GetRotationTo(const Vector3& source, const Vector3& dest)
 {
-	Vector3 normSource = Normalize(source);
-	Vector3 nomrDeset = Normalize(dest);
+// 	Vector3 normSource = Normalize(source);
+// 	Vector3 normDest = Normalize(dest);
 
-	Vector3 c = cross(source, dest);
-	float d = Dot(source, dest);
-	float s = std::sqrt((1+d)*2);
-	float invs = 1.f/s;
+// 	Vector3 c = cross(source, dest);
+// 	float d = Dot(source, dest);
+// 	float s = std::sqrt((1+d)*2.f);
+// 	float invs = 1.f/s;
+//  Quaternion qnorm(Normalize(Quaternion(c.x*invs, c.y*invs, c.z*invs, s*0.5f)));
 
-	// TODO - figure out if normalization is needed here
-	Quaternion qnorm(Normalize(Quaternion(c.x*invs, c.y*invs, c.z*invs, s*0.5f)));
+    // TODO - see if this could be more efficient
+    Vector3 c = cross(source, dest);
+    float d = Dot(source, dest);
+
+    float wValue = std::sqrt(MagnitudeSquare(source) * MagnitudeSquare(dest)) + d;
+
+    Quaternion qnorm(Normalize(Quaternion(c.x, c.y, c.z, wValue)));
 	
 	return qnorm;
-	//return Quaternion(c.x*invs, c.y*invs, c.z*invs, s*0.5f);
 }

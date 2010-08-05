@@ -9,8 +9,9 @@
 #include "Quaternion.h"
 
 class SceneNode;
-class CameraSceneNode;
+class Camera;
 class Entity;
+class IRenderSystem;
 
 struct SceneManagerType
 {
@@ -36,28 +37,33 @@ struct SceneManagerSettings
 class SceneManager
 {
 public:
-	SceneManager(const SceneManagerSettings& settings);
+	SceneManager(const SceneManagerSettings& settings, IRenderSystem* renderSystem);
 	~SceneManager();
 
-	void AddCamera(const char* name, 
-					const Vector3& position=Vector3(), 
-					const Quaternion& rotation=Quaternion());
+    Camera* CreateCamera(const char* name = 0, 
+                            const Vector3& position=Vector3::Zero(), 
+                            const Quaternion& orientation=Quaternion::Identity());
+
+    void AddCamera(Camera* camera);
 
 	SceneNode* GetRootSceneNode() const;
 	SceneNode* CreateSceneNode(const char* name);
 	void DestroySceneNode(const char* name);
 	void DestroySceneNode(SceneNode* node);
 	SceneNode* GetSceneNode(const char* name) const;
-
 	Entity* CreateEntity(const char* name) const;
+
+    void RenderScene();
 
 private:
 	SceneManagerSettings m_settings;
 	SceneNode* m_rootSceneNode;
-	CameraSceneNode* m_camSceneNode;
+	Camera* m_camera;
 
 	typedef std::map<std::string, SceneNode*> SceneNodeContainer;
 	SceneNodeContainer m_sceneNodes;
+
+    IRenderSystem* m_renderSystem;
 };
 
 #endif

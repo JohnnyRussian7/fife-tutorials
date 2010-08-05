@@ -2,6 +2,8 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+#include <string>
+
 #include "Vector.h"
 #include "Matrix.h"
 #include "Quaternion.h"
@@ -9,14 +11,10 @@
 class Camera
 {
 public:
-	Camera(const Vector3& position = Vector3::Zero(),
-			const Quaternion& rotation = Quaternion());
+	Camera(const char* name, const Vector3& position = Vector3::Zero(),
+            const Quaternion& orientation = Quaternion::Identity());
 
-	void Init();
-	void Resize(int width, int height);
-
-	void SetTranslationVelocity(float velocity);
-	void SetRotationVelocity(float velocity);
+    const char* GetName() const;
 
     const Vector3& GetPosition() const;
     const Quaternion& GetOrientation() const;
@@ -37,16 +35,11 @@ public:
 
 	void UpdateView();
 
-	void Render();
-
 private:
-	float pitch;
-	float yaw;
+    std::string m_name;
 	Vector3 m_position;
 	Quaternion m_orientation;
-	float m_translationVelocity;
-	float m_rotationVelocity;
-	Matrix4 m_viewMatrix;
+    Matrix4 m_viewMatrix;
 };
 
 #endif

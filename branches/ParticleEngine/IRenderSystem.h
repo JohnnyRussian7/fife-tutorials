@@ -6,6 +6,7 @@
 #include "RendererEnums.h"
 
 class Viewport;
+struct Matrix4;
 
 struct RenderSystemSettings
 {
@@ -27,9 +28,11 @@ public:
 
 	virtual RenderSystemType::Enum GetRenderSystemType() const = 0;
 	virtual void SetViewPort(const Viewport& viewport) = 0;
+    virtual void SetTransform(TransformType::Enum type, const Matrix4& mat) = 0;
 
 	virtual void Render() = 0;
 };
 
 IRenderSystem* CreateRenderSystem(const RenderSystemSettings& settings);
+
 #endif

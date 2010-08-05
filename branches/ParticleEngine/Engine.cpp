@@ -13,9 +13,12 @@ Engine::Engine()
   m_sceneManager(0), m_fps(30), m_fpsFrameCount(0), m_fpsStartTime(0)
 {
     m_windowSystem = CreateWindowSystem(m_settings.windowSettings);
+	m_windowSystem->Init();
+	m_windowSystem->AddListener(this);
+
     m_renderSystem = CreateRenderSystem(m_settings.renderSystemSettings);
     m_fileSystem = CreateFileSystem(m_settings.fileSystemSettings);
-	m_sceneManager = new SceneManager(m_settings.sceneManagerSettings);
+	m_sceneManager = new SceneManager(m_settings.sceneManagerSettings, m_renderSystem);
 
 	// TODO - this needs to be moved elsewhere
 	m_renderSystem->SetViewPort(Viewport(0, 0, m_settings.windowSettings.width, m_settings.windowSettings.height));
@@ -96,6 +99,12 @@ void Engine::EndScene()
 	ComputeFps();
 }
 
+void Engine::Render()
+{
+    m_sceneManager->RenderScene();
+    m_windowSystem->SwapBuffers();
+}
+
 bool Engine::Run()
 {
     assert(m_windowSystem && m_renderSystem);
@@ -104,13 +113,18 @@ bool Engine::Run()
 
     bool retVal = m_windowSystem->Run();
 	
-	if (retVal)
-	{
-		m_renderSystem->Render();
-		m_windowSystem->SwapBuffers();
-	}
+// 	if (retVal)
+// 	{
+// 		m_renderSystem->Render();
+// 		m_windowSystem->SwapBuffers();
+// 	}
 
     return retVal;
+}
+
+void Engine::OnResize(uint32_t width, uint32_t height)
+{
+	m_renderSystem->SetViewPort(Viewport(0, 0, width, height));
 }
 
 void Engine::ComputeFps()

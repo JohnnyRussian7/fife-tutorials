@@ -1,56 +1,44 @@
 
+#include <sstream>
+
+#include "stdint.h"
 #include "Camera.h"
-#include "Matrix.h"
-#include "Vector.h"
 #include "MathUtil.h"
 
-#include <windows.h>
-#include <gl/glu.h>
-#include <gl/gl.h>
-
-Camera::Camera(const Vector3& position, const Quaternion& rotation)
-: m_position(position), m_orientation(rotation), 
-  m_translationVelocity(0.01f), m_rotationVelocity(0.05f),
-  m_viewMatrix(Matrix4::Identity())
+namespace
 {
+    std::string CreateUniqueCameraName()
+    {
+        // automated counting for camera name generation, in case the user doesn't provide a name
+        static uint32_t uniqueNumber = 0;
+        static std::string cameraBaseName = "Camera";
 
+        std::ostringstream oss;
+        oss << cameraBaseName << "_" << uniqueNumber;
+
+        const std::string name = oss.str();
+        ++uniqueNumber;
+
+        return name;
+    }
 }
 
-void Camera::Init()
+Camera::Camera(const char* name, const Vector3& position, const Quaternion& orientation)
+: m_position(position), m_orientation(orientation), m_viewMatrix(Matrix4::Identity())
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth(1.0f);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glShadeModel(GL_SMOOTH);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    if (name)
+    {
+        m_name = std::string(name);
+    }
+    else
+    {
+        m_name = CreateUniqueCameraName();
+    }
 }
 
-void Camera::Resize(int width, int height)
+const char* Camera::GetName() const
 {
-	if (height <= 0)
-		height = 1;
-
-	int aspectratio = width / height;
-
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-    glFrustum(-0.5, 0.5, -aspectratio*0.5, aspectratio*0.5, 1, 5000);
-	//gluPerspective(45.0f, aspectratio, 0.2f, 255.0f);
-	//glOrtho(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-}
-
-void Camera::SetTranslationVelocity(float velocity)
-{
-	m_translationVelocity = velocity;
-}
-
-void Camera::SetRotationVelocity(float velocity)
-{
-	m_rotationVelocity = velocity;
+    return m_name.c_str();
 }
 
 const Vector3& Camera::GetPosition() const
@@ -90,10 +78,10 @@ Vector3 Camera::GetLookAt() const
 void Camera::Translate(const Vector3& translation)
 {
 	// translate in world space
-	m_position += translation * m_translationVelocity;
+	m_position += translation;
 
 	// TODO - implement translate in local space, using algorithm below 
-	//m_position += m_orientation * (translation * m_translationVelocity);
+	//m_position += m_orientation * translation;
 }
 
 void Camera::LookAt(const Vector3& target)
@@ -166,11 +154,3 @@ void Camera::UpdateView()
 	m_viewMatrix = posMatrix * conjRotMatrix;
 }
 
-void Camera::Render()
-{
-	const Matrix4& viewMatrix = GetViewMatrix();
-
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-	glLoadMatrixf((GLfloat*)viewMatrix.matrix);
-}

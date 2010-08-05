@@ -6,6 +6,7 @@
 #include "WindowSystemTypes.h"
 
 class IRenderSystem;
+class IWindowSystemEventListener;
 
 struct WindowSystemSettings
 {
@@ -40,8 +41,10 @@ public:
 
 	virtual ~IWindowSystem() = 0 { };
 
+	virtual void Init() = 0;
 	virtual WindowSystemType::Enum GetWindowSystemType() const = 0;
 	virtual void SetWindowTitle(const wchar_t* text) = 0;
+	virtual void Destroy() = 0;
 	virtual void Minimize() = 0;
 	virtual void Maximize() = 0;
 	virtual void Restore() = 0;
@@ -54,6 +57,8 @@ public:
 	virtual bool Run() = 0;
 	virtual void Update() = 0;
 	virtual void SwapBuffers() = 0;
+	virtual void AddListener(IWindowSystemEventListener* listener) = 0;
+	virtual void RemoveListener(IWindowSystemEventListener* listener) = 0;
 };
 
 IWindowSystem* CreateWindowSystem(const WindowSystemSettings& settings);

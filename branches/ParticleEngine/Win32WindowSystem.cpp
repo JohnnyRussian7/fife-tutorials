@@ -1,7 +1,10 @@
 
+#include <algorithm>
+
 #include "stdint.h"
 #include "Win32WindowSystem.h"
 #include "IRenderSystem.h"
+#include "IWindowSystemEventListener.h"
 
 // these may not be defined, so define them here if not
 #ifndef WM_MOUSEWHEEL
@@ -16,10 +19,25 @@
 #define MAPVK_VSC_TO_VK_EX 3
 #endif
 
-Win32WindowSystem* application = NULL;
-
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	Win32WindowSystem* window = 0;
+
+	if (message == WM_NCCREATE)
+	{
+		LPCREATESTRUCT ptr = reinterpret_cast<LPCREATESTRUCT>(lParam);
+		SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)ptr->lpCreateParams);
+	}
+	else
+	{
+		window = reinterpret_cast<Win32WindowSystem*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+	}
+
+	if (!window)
+	{
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+
 	switch (message)
 	{
 // 	case WM_PAINT:
@@ -31,27 +49,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
+		break;
 
 	case WM_SIZE:
-		if (application)
-		{
-			application->OnResize();
-		}
+		window->OnResize();
 		return 0;
 
 	case WM_ACTIVATE:
-		if (application)
-		{
-			if ((wParam & 0xFF) == WA_INACTIVE)
-			{
-				application->SetFullScreen(false);
-			}
-			else
-			{
-				application->SetFullScreen(true);
-			}
-		}
+	{
+		bool active = (LOWORD(wParam) != WA_INACTIVE);
+		//window->SetFullScreen(active);
 		break;
+	}
+
+	case WM_GETMINMAXINFO:
+		// default to a minimum size
+		((MINMAXINFO*)lParam)->ptMinTrackSize.x = 100;
+		((MINMAXINFO*)lParam)->ptMinTrackSize.y = 100;
+		break;
+
+	case WM_CLOSE:
+		window->Destroy();
+		return 0;
 
 	case WM_KEYDOWN:
 	case WM_KEYUP:
@@ -77,6 +96,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 : m_settings(settings), m_externalWindow(settings.useExternalWindow), m_hwnd(0), m_quit(false),
   m_shouldResize(false)
+{
+	
+}
+
+Win32WindowSystem::~Win32WindowSystem()
+{
+	Destroy();
+}
+
+void Win32WindowSystem::Init()
 {
 	if (!m_externalWindow)
 	{
@@ -126,7 +155,7 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 			if (m_settings.allowResizeable)
 			{
 				windowStyle = WS_SYSMENU | WS_THICKFRAME | WS_CAPTION | WS_CLIPCHILDREN | WS_CLIPSIBLINGS
-								| WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+					| WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 			}
 			else
 			{
@@ -163,8 +192,8 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 		}
 
 		// create the window
-		m_hwnd = CreateWindow(className, __TEXT(""), windowStyle, windowLeft, windowTop, 
-								actualWidth, actualHeight, NULL, NULL, hInstance, NULL);
+		m_hwnd = CreateWindowEx(NULL, className, __TEXT(""), windowStyle, windowLeft, windowTop, 
+			actualWidth, actualHeight, NULL, NULL, hInstance, this);
 
 		ShowWindow(m_hwnd, SW_SHOW);
 		UpdateWindow(m_hwnd);
@@ -211,18 +240,6 @@ Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 	wglMakeCurrent(m_hdc, m_hglrc);
 }
 
-Win32WindowSystem::~Win32WindowSystem()
-{
-	wglDeleteContext(m_hglrc);
-	m_hglrc = 0;
-
-	SetFullScreen(false);
-	DestroyWindow(m_hwnd);
-
-	m_hwnd = 0;
-	m_hdc = 0;
-}
-
 WindowSystemType::Enum Win32WindowSystem::GetWindowSystemType() const
 {
 	return WindowSystemType::Win32;
@@ -239,6 +256,21 @@ void Win32WindowSystem::SetWindowTitle(const wchar_t* text)
 		SendMessageTimeout(m_hwnd, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(text),
 							SMTO_ABORTIFHUNG, 2000, &result);
 //#endif
+	}
+}
+
+void Win32WindowSystem::Destroy()
+{
+	if (m_hwnd)
+	{
+		wglDeleteContext(m_hglrc);
+		m_hglrc = 0;
+
+		SetFullScreen(false);
+		DestroyWindow(m_hwnd);
+
+		m_hwnd = 0;
+		m_hdc = 0;
 	}
 }
 
@@ -393,6 +425,19 @@ void Win32WindowSystem::SwapBuffers()
 	::SwapBuffers(m_hdc);
 }
 
+void Win32WindowSystem::AddListener(IWindowSystemEventListener* listener)
+{
+	if (listener)
+	{
+		m_listeners.push_back(listener);
+	}
+}
+
+void Win32WindowSystem::RemoveListener(IWindowSystemEventListener* listener)
+{
+	m_listeners.erase(std::remove(m_listeners.begin(), m_listeners.end(), listener), m_listeners.end());
+}
+
 void Win32WindowSystem::Resize()
 {
 	if (!m_shouldResize || !m_settings.allowResizeable)
@@ -404,4 +449,13 @@ void Win32WindowSystem::Resize()
 	GetClientRect(m_hwnd, &r);
 
 	m_shouldResize = false;
+
+	// alert listeners of resize
+	for (Listeners::iterator iter = m_listeners.begin(); iter != m_listeners.end(); ++iter)
+	{
+		if (*iter)
+		{
+			(*iter)->OnResize(static_cast<uint32_t>(r.right), static_cast<uint32_t>(r.bottom));
+		}
+	}
 }

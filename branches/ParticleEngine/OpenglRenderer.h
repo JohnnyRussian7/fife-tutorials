@@ -17,8 +17,7 @@ public:
 
 	virtual RenderSystemType::Enum GetRenderSystemType() const;
 	virtual void SetViewPort(const Viewport& viewport);
-
-	void SetTransform(TransformType::Enum type, const Matrix4& mat);
+	virtual void SetTransform(TransformType::Enum type, const Matrix4& mat);
 
 	void EnableTextures(TextureType::Enum type);
 	void DisableTextures(TextureType::Enum type);
@@ -36,6 +35,10 @@ private:
 	Matrix4 m_modelMatrix;
 	Matrix4 m_viewMatrix;
 	Matrix4 m_projectionMatrix;
+
+    bool m_modelMatrixUpdate;
+    bool m_viewMatrixUpdate;
+    bool m_projectionMatrixUpdate;
 
 	OpenglTexture* m_activeTexture;
 };

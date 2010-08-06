@@ -10,6 +10,7 @@
 #include "Matrix.h"
 
 class SceneManager;
+class Entity;
 
 class SceneNode
 {
@@ -26,6 +27,11 @@ public:
 	void AddChild(SceneNode* child);
 	void RemoveChild(SceneNode* child, bool shouldDeleteChild = true);
 	void RemoveAllChildren();
+
+    void AddEntity(Entity* entity);
+    void RemoveEntity(Entity* entity, bool shouldDeleteEntity = true);
+    void RemoveEntity(const char* name, bool shouldDeleteChild);
+    void RemoveAllEntities();
 
 	const Vector3& GetRelativeScale() const;
 	const Vector3& GetRelativePosition() const;
@@ -44,14 +50,17 @@ public:
 	void SetOrientation(const Quaternion& orientation);
 	void SetOrientation(float x, float y, float z, float w);
 
-	const Matrix4& GetRelativeTransform() const;
-	const Matrix4& GetAbsoluteTransform() const;
+	Matrix4 GetRelativeTransform() const;
+	Matrix4 GetAbsoluteTransform() const;
 	
 private:
 	std::string m_name;
 	SceneManager* m_sceneManager;
 	SceneNode* m_parent;
 	std::vector<SceneNode*> m_childNodes;
+
+    typedef std::vector<Entity*> EntityContainer;
+    EntityContainer m_entities;
 
 	Vector3 m_relativeScale;
 	Vector3 m_relativePosition;

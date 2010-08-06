@@ -41,23 +41,15 @@ SceneNode* SceneManager::GetRootSceneNode() const
 
 SceneNode* SceneManager::CreateSceneNode(const char* name)
 {
-	SceneNode* node = 0;
+	SceneNode* node = new SceneNode(name, this);
+    std::pair<SceneNodeContainer::iterator, bool> retVal = m_sceneNodes.insert(std::make_pair(node->GetName(), node));
 
-	if (name)
-	{
-		// lets make sure the node doesn't already exist before creating it
-		SceneNodeContainer::iterator iter = m_sceneNodes.find(name);
-		if (iter != m_sceneNodes.end())
-		{
-			node = new SceneNode(name, this);
-			m_sceneNodes.insert(std::make_pair(name, node));
-		}
-	}
+    if (retVal.second)
+    {
+        return (retVal.first->second);
+    }
 
-	node = new SceneNode(name, this);
-	m_sceneNodes.insert(std::make_pair(name, node));
-
-	return node;
+    return 0;
 }
 
 void SceneManager::DestroySceneNode(const char* name)
@@ -108,6 +100,15 @@ void SceneManager::RenderScene()
     {
         m_renderSystem->SetTransform(TransformType::View, m_camera->GetViewMatrix());
     }
+
+//     SceneNode* node = GetRootSceneNode();
+//     while (node)
+//     {
+//         m_renderSystem->SetTransform(TransformType::Model, node->GetRelativeTransform());
+//         m_renderSystem->Render();
+// 
+//         node = node->
+//     }
 
     // render the scene now that all data is pushed to renderer
     m_renderSystem->Render();

@@ -47,11 +47,11 @@ public:
     void AddCamera(Camera* camera);
 
 	SceneNode* GetRootSceneNode() const;
-	SceneNode* CreateSceneNode(const char* name);
+	SceneNode* CreateSceneNode(const char* name = 0);
 	void DestroySceneNode(const char* name);
 	void DestroySceneNode(SceneNode* node);
 	SceneNode* GetSceneNode(const char* name) const;
-	Entity* CreateEntity(const char* name) const;
+	Entity* CreateEntity(const char* name = 0) const;
 
     void RenderScene();
 

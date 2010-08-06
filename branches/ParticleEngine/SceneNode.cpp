@@ -4,6 +4,8 @@
 #include "stdint.h"
 #include "SceneNode.h"
 #include "SceneManager.h"
+#include "Entity.h"
+#include "MathUtil.h"
 
 namespace
 {
@@ -130,6 +132,61 @@ void SceneNode::RemoveAllChildren()
 	m_childNodes.clear();
 }
 
+void SceneNode::AddEntity(Entity* entity)
+{
+    if (entity)
+    {
+        m_entities.push_back(entity);
+    }
+}
+
+void SceneNode::RemoveEntity(Entity* entity, bool shouldDeleteEntity)
+{
+    if (entity)
+    {
+        for (EntityContainer::iterator iter = m_entities.begin(); iter != m_entities.end(); ++iter)
+        {
+            if (*iter == entity)
+            {
+                if (shouldDeleteEntity)
+                {
+                    delete *iter;
+                }
+                m_entities.erase(iter);
+                break;
+            }
+        }
+    }
+}
+
+void SceneNode::RemoveEntity(const char* name, bool shouldDeleteEntity)
+{
+    if (name)
+    {
+        for (EntityContainer::iterator iter = m_entities.begin(); iter != m_entities.end(); ++iter)
+        {
+            if ((*iter)->GetName() == name)
+            {
+                if (shouldDeleteEntity)
+                {
+                    delete *iter;
+                }
+                m_entities.erase(iter);
+                break;
+            }
+        }
+    }
+}
+
+void SceneNode::RemoveAllEntities()
+{
+    for (EntityContainer::iterator iter = m_entities.begin(); iter != m_entities.end(); ++iter)
+    {
+        delete *iter;
+    }
+    m_entities.clear();
+}
+
 const Vector3& SceneNode::GetRelativeScale() const
 {
 	return m_relativeScale;
@@ -190,5 +247,14 @@ void SceneNode::SetOrientation(float x, float y, float z, float w)
 	SetOrientation(Quaternion(x,y,z,w));
 }
 
+Matrix4 SceneNode::GetRelativeTransform() const
+{
+    return MakeTransform(m_relativeScale, m_relativePosition, m_relativeOrientation);
+}
+
+Matrix4 SceneNode::GetAbsoluteTransform() const
+{
+    return MakeTransform(m_absoluteScale, m_absolutePosition, m_absoluteOrientation);
+}
 
 

@@ -13,13 +13,12 @@ public:
 	Material();
 	~Material();
 
-	void SetTexture(ITexture* texture);
-
-	void SetAmbientColor(const Color& color);
-	void SetDiffuseColor(const Color& color);
-	void SetSpecularColor(const Color& color);
-	void SetShininess(uint8_t shininess);
-	void SetEmissiveColor(const Color& color);
+	virtual void SetTexture(ITexture* texture);
+	virtual void SetAmbientColor(const Color& color);
+	virtual void SetDiffuseColor(const Color& color);
+	virtual void SetSpecularColor(const Color& color);
+	virtual void SetShininess(uint8_t shininess);
+	virtual void SetEmissiveColor(const Color& color);
 
 private:
 	ITexture* m_texture;

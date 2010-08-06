@@ -4,6 +4,8 @@
 
 #include <string>
 
+class IMaterial;
+
 class Entity
 {
 public:
@@ -11,9 +13,12 @@ public:
 	~Entity();
 
 	const char* GetName() const;
+    void SetMaterial(IMaterial* material);
+    IMaterial* GetMaterial() const;
 
 private:
 	std::string m_name;
+    IMaterial* m_material;
 };
 
 #endif

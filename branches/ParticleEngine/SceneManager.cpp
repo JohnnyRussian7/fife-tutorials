@@ -60,7 +60,13 @@ void SceneManager::DestroySceneNode(const char* name)
 
 		if (iter != m_sceneNodes.end())
 		{
-			iter->second->GetParent()->RemoveChild(iter->second);
+            SceneNode* parent = iter->second->GetParent();
+
+            if (parent)
+            {
+                iter->second->GetParent()->RemoveChild(iter->second);
+            }
+
 			delete iter->second;
 			m_sceneNodes.erase(iter);
 		}
@@ -92,10 +98,18 @@ Entity* SceneManager::CreateEntity(const char* name) const
 	return new Entity(name);
 }
 
+void SceneManager::UpdateScene()
+{
+    // start the cascading update calls to all scene nodes
+    GetRootSceneNode()->Update();
+}
+
 void SceneManager::RenderScene()
 {
-    // push data to render system
+    // update the scene graph information before rendering
+    UpdateScene();
 
+    // push data to render system
     if (m_camera)
     {
         m_renderSystem->SetTransform(TransformType::View, m_camera->GetViewMatrix());

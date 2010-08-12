@@ -131,9 +131,9 @@ void Camera::Rotate(const Vector3& axis, float angle)
 	Rotate(rotQ);
 }
 
-void Camera::Rotate(const Quaternion& rotQ)
+void Camera::Rotate(const Quaternion& rotation)
 {
-	Quaternion normQ = Normalize(rotQ);
+	Quaternion normQ = Normalize(rotation);
 	m_orientation = normQ * m_orientation;
 }
 

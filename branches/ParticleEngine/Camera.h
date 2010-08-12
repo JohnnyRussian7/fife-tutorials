@@ -30,8 +30,9 @@ public:
 	void Pitch(float angle);
 	void Yaw(float angle);
 	void Roll(float angle);
+
 	void Rotate(const Vector3& axis, float angle);
-	void Rotate(const Quaternion& rotQ);
+	void Rotate(const Quaternion& rotation);
 
 	void UpdateView();
 

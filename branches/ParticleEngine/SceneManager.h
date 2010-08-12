@@ -53,6 +53,7 @@ public:
 	SceneNode* GetSceneNode(const char* name) const;
 	Entity* CreateEntity(const char* name = 0) const;
 
+    void UpdateScene();
     void RenderScene();
 
 private:

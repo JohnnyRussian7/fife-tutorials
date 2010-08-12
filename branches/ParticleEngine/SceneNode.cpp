@@ -1,3 +1,24 @@
+/**********************************************************************
+*	Filename: SceneNode.cpp
+*	
+*	Copyright (C) 2010, FIFE team
+*	http://www.fifengine.net
+*
+*	This file is part of FIFE.
+*
+*	FIFE is free software: you can redistribute it and/or modify it
+*	under the terms of the GNU Lesser General Public License as
+*	published by the Free Software Foundation, either version 3 of
+*	the License, or any later version.
+*
+*	FIFE is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* 	GNU Lesser General Public License for more details.
+*
+*	You should have received a copy of the GNU Lesser General Public
+*	License along with FIFE. If not, see http://www.gnu.org/licenses/.
+***********************************************************************/
 
 #include <sstream>
 
@@ -26,8 +47,9 @@ namespace
 }
 
 SceneNode::SceneNode(const char* name, SceneManager* manager)
-: m_name(""), m_sceneManager(manager), m_parent(0), m_relativeScale(1, 1, 1), m_relativePosition(Vector3::Zero()),
-  m_relativeOrientation(Quaternion::Identity())
+: m_name(""), m_sceneManager(manager), m_parent(0), m_scale(1, 1, 1), m_position(Vector3::Zero()),
+m_orientation(Quaternion::Identity()), m_relativeScale(1, 1, 1), m_relativePosition(Vector3::Zero()),
+m_relativeOrientation(Quaternion::Identity()), m_requiresUpdate(false)
 {
 	if (name)
 	{
@@ -38,10 +60,8 @@ SceneNode::SceneNode(const char* name, SceneManager* manager)
 		m_name = CreateUniqueSceneNodeName();
 	}
 
-	if (m_parent)
-	{
-		m_parent->AddChild(this);
-	}
+    // TODO - does this need to be here
+    SetDirtyFlag(true);
 }
 
 SceneNode::~SceneNode()
@@ -56,36 +76,30 @@ const char* SceneNode::GetName() const
 
 void SceneNode::SetParent(SceneNode* parent)
 {
+    if (!parent)
+    {
+        // TODO - invalid parameter do nothing, may need to report this error
+        return;
+    }
+
 	if (m_parent != 0)
 	{
-		// remove child but don't delete it
-		// or we would be deleting ourselves
+		// remove ourselves from our current parent
+        // if we have one, but tell parent not to 
+        // delete us
 		m_parent->RemoveChild(this, false);
 	}
 
 	m_parent = parent;
-	
-	if (m_parent)
-	{
-		m_parent->AddChild(this);
-	}
+    m_parent->AddChild(this);
+
+    SetDirtyFlag();
 }
 
 void SceneNode::SetParent(const char* parentName)
 {
-	if (m_parent != 0)
-	{
-		// remove child but don't delete it
-		// or we would be deleting ourselves
-		m_parent->RemoveChild(this, false);
-	}
-
-	m_parent = m_sceneManager->GetSceneNode(parentName);
-	
-	if (m_parent)
-	{
-		m_parent->AddChild(this);
-	}
+    SceneNode* parent = m_sceneManager->GetSceneNode(parentName);
+	SetParent(parent);
 }
 
 SceneNode* SceneNode::GetParent() const
@@ -112,7 +126,7 @@ void SceneNode::RemoveChild(SceneNode* child, bool shouldDeleteChild)
 			{
 				if (shouldDeleteChild)
 				{
-					delete *iter;
+					m_sceneManager->DestroySceneNode(child);
 				}
 				m_childNodes.erase(iter);
 				break;
@@ -127,7 +141,7 @@ void SceneNode::RemoveAllChildren()
 	std::vector<SceneNode*>::iterator iter = m_childNodes.begin();
 	for (; iter != m_childNodes.end(); ++iter)
 	{
-		delete *iter;
+		m_sceneManager->DestroySceneNode(*iter);
 	}
 	m_childNodes.clear();
 }
@@ -187,6 +201,21 @@ void SceneNode::RemoveAllEntities()
     m_entities.clear();
 }
 
+const Vector3& SceneNode::GetScale() const
+{
+	return m_scale;
+}
+
+const Vector3& SceneNode::GetPosition() const
+{
+	return m_position;
+}
+
+const Quaternion& SceneNode::GetOrientation() const
+{
+	return m_orientation;
+}
+
 const Vector3& SceneNode::GetRelativeScale() const
 {
 	return m_relativeScale;
@@ -202,24 +231,11 @@ const Quaternion& SceneNode::GetRelativeOrientation() const
 	return m_relativeOrientation;
 }
 
-const Vector3& SceneNode::GetAbsoluteScale() const
-{
-	return m_absoluteScale;
-}
-
-const Vector3& SceneNode::GetAbsolutePosition() const
-{
-	return m_absolutePosition;
-}
-
-const Quaternion& SceneNode::GetAbsoluteOrientation() const
-{
-	return m_absoluteOrientation;
-}
-
 void SceneNode::SetScale(const Vector3& scale)
 {
-	m_relativeScale = scale;
+	m_scale = scale;
+
+    SetDirtyFlag();
 }
 
 void SceneNode::SetScale(float x, float y, float z)
@@ -229,7 +245,9 @@ void SceneNode::SetScale(float x, float y, float z)
 
 void SceneNode::SetPosition(const Vector3& position)
 {
-	m_relativePosition = position;
+	m_position = position;
+
+    SetDirtyFlag();
 }
 
 void SceneNode::SetPosition(float x, float y, float z)
@@ -239,22 +257,136 @@ void SceneNode::SetPosition(float x, float y, float z)
 
 void SceneNode::SetOrientation(const Quaternion& orientation)
 {
-	m_relativeOrientation = Normalize(orientation);
+	m_orientation = Normalize(orientation);
+
+    SetDirtyFlag();
 }
 
-void SceneNode::SetOrientation(float x, float y, float z, float w)
+void SceneNode::SetOrientation(const Vector3& axis, float angle)
 {
-	SetOrientation(Quaternion(x,y,z,w));
+	SetOrientation(FromAxisAngle(axis, angle));
 }
 
-Matrix4 SceneNode::GetRelativeTransform() const
+Matrix4 SceneNode::GetTransform()
 {
-    return MakeTransform(m_relativeScale, m_relativePosition, m_relativeOrientation);
+    // performs lazy update of transform if needed
+    // we do it here so it only gets updated if its actually used
+    if (m_updateTransform)
+    {
+        m_transform = MakeTransform(m_relativeScale, m_relativePosition, m_relativeOrientation);
+        m_updateTransform = false;
+    }
+
+    return m_transform;
 }
 
-Matrix4 SceneNode::GetAbsoluteTransform() const
+void SceneNode::Translate(const Vector3& translation)
 {
-    return MakeTransform(m_absoluteScale, m_absolutePosition, m_absoluteOrientation);
+    m_position += translation;
+
+    SetDirtyFlag();
 }
 
+void SceneNode::Translate(float x, float y, float z)
+{
+    Translate(Vector3(x, y, z));
+}
 
+void SceneNode::Rotate(const Quaternion& rotation)
+{
+    Quaternion normRotation = Normalize(rotation);
+
+    m_orientation = normRotation * m_orientation;
+
+    SetDirtyFlag();
+}
+
+void SceneNode::Rotate(const Vector3& axis, float angle)
+{
+    Rotate(FromAxisAngle(axis, angle));
+}
+
+void SceneNode::Pitch(float angle)
+{
+    Rotate(Vector3::UnitX(), angle);
+}
+
+void SceneNode::Yaw(float angle)
+{
+    Rotate(Vector3::UnitY(), angle);
+}
+
+void SceneNode::Roll(float angle)
+{
+    Rotate(Vector3::UnitZ(), angle);
+}
+
+bool SceneNode::IsDirty()
+{
+    return m_requiresUpdate;
+}
+
+void SceneNode::Update()
+{
+    if (IsDirty())
+    {
+        if (m_parent)
+        {
+            // update relative to parent
+            m_relativePosition = (m_parent->GetRelativeOrientation() * (m_parent->GetRelativeScale() * m_position)) + m_parent->GetRelativePosition();
+            m_relativeOrientation = m_parent->GetRelativeOrientation() * m_orientation;
+            m_relativeScale = m_parent->GetRelativeScale() * m_scale;        
+        }
+        else
+        {
+            m_relativePosition = m_position;
+            m_relativeOrientation = m_orientation;
+            m_relativeScale = m_scale;
+        }
+
+        // reset the dirty flag, but be sure not to change dirty flag for children
+        ResetDirtyFlag(false);
+
+        // mark the cached transform for this node as needing an update
+        m_updateTransform = true;
+    }
+
+    // give children chance to update
+    std::vector<SceneNode*>::iterator iter;
+    for (iter = m_childNodes.begin(); iter != m_childNodes.end(); ++iter)
+    {
+        (*iter)->Update();
+    }
+}
+
+void SceneNode::SetDirtyFlag(bool setChildren)
+{
+    m_requiresUpdate = true;
+
+    if (setChildren)
+    {
+        // all children will need the same dirty flag set
+        // so the update cycle will process them
+        std::vector<SceneNode*>::iterator iter;
+        for (iter = m_childNodes.begin(); iter != m_childNodes.end(); ++iter)
+        {
+            (*iter)->SetDirtyFlag(setChildren);
+        }
+    }
+
+}
+
+void SceneNode::ResetDirtyFlag(bool resetChildren)
+{
+    m_requiresUpdate = false;
+
+    if (resetChildren)
+    {
+        // notify children of the dirty flag change
+        std::vector<SceneNode*>::iterator iter;
+        for (iter = m_childNodes.begin(); iter != m_childNodes.end(); ++iter)
+        {
+            (*iter)->ResetDirtyFlag(resetChildren);
+        }
+    }
+}

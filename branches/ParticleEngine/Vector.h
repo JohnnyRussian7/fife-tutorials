@@ -105,6 +105,7 @@ bool Vector3::operator==(const Vector3& rhs) const
 Vector3 operator+(const Vector3& vector1, const Vector3& vector2);
 Vector3 operator-(const Vector3& vector1, const Vector3& vector2);
 Vector3 operator*(const Vector3& vector, float value);
+Vector3 operator*(const Vector3& vector1, const Vector3& vector2);
 Vector3 operator/(const Vector3& vector, float value);
 
 // free functions for vector math
@@ -112,7 +113,7 @@ float Magnitude(const Vector3& vector);
 float MagnitudeSquare(const Vector3& vector);
 Vector3 Normalize(const Vector3& vector);
 float Dot(const Vector3& vector1, const Vector3& vector2);
-Vector3 cross(const Vector3& vector1, const Vector3& vector2);
+Vector3 Cross(const Vector3& vector1, const Vector3& vector2);
 Quaternion GetRotationTo(const Vector3& source, const Vector3& dest);
 
 

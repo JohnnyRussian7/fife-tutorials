@@ -1,11 +1,33 @@
+/**********************************************************************
+*	Filename: OpenglRenderer.cpp
+*	
+*	Copyright (C) 2010, FIFE team
+*	http://www.fifengine.net
+*
+*	This file is part of FIFE.
+*
+*	FIFE is free software: you can redistribute it and/or modify it
+*	under the terms of the GNU Lesser General Public License as
+*	published by the Free Software Foundation, either version 3 of
+*	the License, or any later version.
+*
+*	FIFE is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* 	GNU Lesser General Public License for more details.
+*
+*	You should have received a copy of the GNU Lesser General Public
+*	License along with FIFE. If not, see http://www.gnu.org/licenses/.
+***********************************************************************/
 
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-#include <gl/glu.h>
-#include <gl/gl.h>
+// TODO - this is temporary
+#include <iostream>
 
+#include "glee/GLee.h"
 #include "OpenglRenderer.h"
+
+// useful macro to help with offsets in buffer objects
+#define BUFFER_OFFSET(i) ((char*)NULL + (i))
 
 // TODO - this is temporary, should be removed
 void DrawBox()
@@ -30,9 +52,9 @@ OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
 : m_settings(settings), m_viewport(Viewport()),
   m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
   m_projectionMatrix(Matrix4::Identity()), m_modelMatrixUpdate(false), m_viewMatrixUpdate(false),
-  m_projectionMatrixUpdate(false), m_activeTexture(0)
+  m_projectionMatrixUpdate(false), m_activeTexture(0), m_vboSupport(false)
 {
-
+    m_vboSupport = (GLEE_ARB_vertex_buffer_object == GL_TRUE);
 }
 
 OpenglRenderer::~OpenglRenderer()
@@ -106,5 +128,4 @@ void OpenglRenderer::Render()
     }
 
     DrawBox();
-	//glTranslatef(0, 0, -10);
 }

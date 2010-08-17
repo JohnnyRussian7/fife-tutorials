@@ -2,7 +2,7 @@
 #ifndef AXIS_ALIGNED_BOUNDING_BOX_H_
 #define AXIS_ALIGNED_BOUNDING_BOX_H_
 
-#include "Vector.h"
+#include "Vector3.h"
 
 class AxisAlignedBoundingBox
 {

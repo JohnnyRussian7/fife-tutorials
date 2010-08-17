@@ -3,7 +3,7 @@
 #define CAMERA_SCENE_NODE_H_
 
 #include "SceneNode.h"
-#include "Vector.h"
+#include "Vector3.h"
 #include "Quaternion.h"
 
 class Camera;

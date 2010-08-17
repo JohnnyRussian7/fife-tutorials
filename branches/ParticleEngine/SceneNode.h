@@ -25,9 +25,9 @@
 #include <vector>
 #include <string>
 
-#include "Vector.h"
+#include "Vector3.h"
 #include "Quaternion.h"
-#include "Matrix.h"
+#include "Matrix4.h"
 
 class SceneManager;
 class Entity;

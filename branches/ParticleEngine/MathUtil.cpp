@@ -1,7 +1,7 @@
 
 #include "MathUtil.h"
-#include "Vector.h"
-#include "Matrix.h"
+#include "Vector3.h"
+#include "Matrix4.h"
 #include "Quaternion.h"
 
 Matrix4 MakeTransform(const Vector3& scale, const Vector3& position, const Quaternion& orientation)

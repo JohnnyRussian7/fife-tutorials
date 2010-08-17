@@ -5,7 +5,7 @@
 #include "IRenderSystem.h"
 
 #include "RendererEnums.h"
-#include "Matrix.h"
+#include "Matrix4.h"
 #include "Opengltexture.h"
 #include "Viewport.h"
 
@@ -41,6 +41,8 @@ private:
     bool m_projectionMatrixUpdate;
 
 	OpenglTexture* m_activeTexture;
+
+    bool m_vboSupport;
 };
 
 #endif

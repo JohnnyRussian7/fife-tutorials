@@ -2,7 +2,7 @@
 #ifndef PARTICLE_H_
 #define PARTICLE_H_
 
-#include "Vector.h"
+#include "Vector3.h"
 #include "Color.h"
 
 struct Particle

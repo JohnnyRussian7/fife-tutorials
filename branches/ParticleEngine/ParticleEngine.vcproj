@@ -199,7 +199,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Matrix.cpp"
+				RelativePath=".\Matrix4.cpp"
 				>
 			</File>
 			<File
@@ -251,7 +251,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Vector.cpp"
+				RelativePath=".\Vector2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Vector3.cpp"
 				>
 			</File>
 			<File
@@ -345,7 +349,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Matrix.h"
+				RelativePath=".\Matrix4.h"
 				>
 			</File>
 			<File
@@ -409,7 +413,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Vector.h"
+				RelativePath=".\Vector2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Vector3.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Vertex.h"
 				>
 			</File>
 			<File
@@ -663,6 +675,18 @@
 				</File>
 				<File
 					RelativePath=".\tinyxml\tinyxmlparser.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="glee"
+				>
+				<File
+					RelativePath=".\glee\GLee.c"
+					>
+				</File>
+				<File
+					RelativePath=".\glee\GLee.h"
 					>
 				</File>
 			</Filter>

@@ -3,7 +3,7 @@
 #include "ParticleEmitter.h"
 #include "Particle.h"
 #include "Camera.h"
-#include "Matrix.h"
+#include "Matrix4.h"
 
 #ifdef WIN32
 #include <windows.h>

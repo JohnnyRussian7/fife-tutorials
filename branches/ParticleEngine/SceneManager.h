@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-#include "Vector.h"
+#include "Vector3.h"
 #include "Quaternion.h"
 
 class SceneNode;

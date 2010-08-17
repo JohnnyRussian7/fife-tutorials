@@ -4,8 +4,8 @@
 
 #include <string>
 
-#include "Vector.h"
-#include "Matrix.h"
+#include "Vector3.h"
+#include "Matrix4.h"
 #include "Quaternion.h"
 
 class Camera

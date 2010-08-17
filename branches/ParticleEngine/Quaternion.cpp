@@ -2,8 +2,8 @@
 #include <cmath>
 
 #include "Quaternion.h"
-#include "Vector.h"
-#include "Matrix.h"
+#include "Vector3.h"
+#include "Matrix4.h"
 #include "MathUtil.h"
 
 Quaternion operator*(const Quaternion& q1, const Quaternion& q2)

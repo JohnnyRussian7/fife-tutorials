@@ -1,6 +1,6 @@
 
-#include "Matrix.h"
-#include "Vector.h"
+#include "Matrix4.h"
+#include "Vector3.h"
 
 Matrix4 operator*(const Matrix4& lhs, const Matrix4& rhs)
 {

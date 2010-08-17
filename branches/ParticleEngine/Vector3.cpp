@@ -1,7 +1,7 @@
 
 #include <cmath>
 
-#include "Vector.h"
+#include "Vector3.h"
 #include "Quaternion.h"
 
 Vector3 operator+(const Vector3& vector1, const Vector3& vector2)

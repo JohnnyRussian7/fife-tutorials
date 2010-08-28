@@ -183,6 +183,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IndexData.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\IRenderSystem.cpp"
 				>
 			</File>
@@ -259,6 +263,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\VertexData.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Viewport.cpp"
 				>
 			</File>
@@ -282,6 +290,10 @@
 			>
 			<File
 				RelativePath=".\AxisAlignedBoundingBox.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BillboardGroup.h"
 				>
 			</File>
 			<File
@@ -313,6 +325,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HwBuffer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IFileSystem.h"
 				>
 			</File>
@@ -322,6 +338,10 @@
 			</File>
 			<File
 				RelativePath=".\IMaterial.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IndexData.h"
 				>
 			</File>
 			<File
@@ -389,6 +409,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Renderable.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RenderData.h"
+				>
+			</File>
+			<File
 				RelativePath=".\RendererEnums.h"
 				>
 			</File>
@@ -422,6 +450,10 @@
 			</File>
 			<File
 				RelativePath=".\Vertex.h"
+				>
+			</File>
+			<File
+				RelativePath=".\VertexData.h"
 				>
 			</File>
 			<File

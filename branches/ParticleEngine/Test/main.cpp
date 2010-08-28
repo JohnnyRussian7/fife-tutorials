@@ -15,8 +15,8 @@ int main()
 	
     SceneManager* sceneManager = engine.GetSceneManager();
     Camera* camera = sceneManager->CreateCamera();
-    camera->Rotate(Vector3(0,1,0), DegToRad(45));
-    camera->Rotate(Vector3(1,0,0), DegToRad(35));
+	camera->Rotate(Vector3(1,0,0), DegToRad(30));		// pitch
+    camera->Rotate(Vector3(0,1,0), DegToRad(45));		// yaw
     camera->Translate(Vector3(0, 0, 50));
     camera->LookAt(Vector3(0, 0, 0));
 

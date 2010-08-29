@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.h
+*	Filename: HwBuffer.cpp
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,25 +19,26 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
 
-class OpenglVertexBuffer;
-class OpenglIndexBuffer;
+#include "HwBuffer.h"
 
-class Renderable
+HwBuffer::HwBuffer(uint32_t dataLength, uint32_t dataElementSize, HwBufferUsage::Enum usage)
+: m_bufferId(0), m_bufferSize(dataLength*dataElementSize), m_usage(usage)
 {
-public:
-    Renderable(OpenglVertexBuffer* vertexBuffer = 0, OpenglIndexBuffer* indexBuffer = 0);
-	OpenglVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(OpenglVertexBuffer* vertexBuffer);
 
-    OpenglIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(OpenglIndexBuffer* indexBuffer);
+}
 
-private:
-    OpenglVertexBuffer* m_vertexBuffer;
-    OpenglIndexBuffer* m_indexBuffer;
-};
+HwBuffer::~HwBuffer()
+{
 
-#endif
+}
+
+uint32_t HwBuffer::GetBufferId() const
+{
+    return m_bufferId;
+}
+
+uint32_t HwBuffer::GetBufferSize() const
+{
+    return m_bufferSize;
+}

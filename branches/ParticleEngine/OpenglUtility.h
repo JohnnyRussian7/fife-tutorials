@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.h
+*	Filename: OpenglUtility.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,25 +19,17 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
+#ifndef OPENGLUTILITY_H_
+#define OPENGLUTILITY_H_
 
-class OpenglVertexBuffer;
-class OpenglIndexBuffer;
+#include "glee/GLee.h"
 
-class Renderable
-{
-public:
-    Renderable(OpenglVertexBuffer* vertexBuffer = 0, OpenglIndexBuffer* indexBuffer = 0);
-	OpenglVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(OpenglVertexBuffer* vertexBuffer);
+#include "HwBuffer.h"
 
-    OpenglIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(OpenglIndexBuffer* indexBuffer);
-
-private:
-    OpenglVertexBuffer* m_vertexBuffer;
-    OpenglIndexBuffer* m_indexBuffer;
-};
+namespace opengl { namespace utility {
+    
+    GLenum ConvertToOpenglBufferUsage(HwBufferUsage::Enum usage);
+    
+}}
 
 #endif

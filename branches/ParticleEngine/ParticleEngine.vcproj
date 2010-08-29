@@ -175,6 +175,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HwBuffer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\IFileSystem.cpp"
 				>
 			</File>
@@ -207,11 +211,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OpenglIndexBuffer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\OpenglRenderer.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\OpenglTexture.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\OpenglUtility.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\OpenglVertexBuffer.cpp"
 				>
 			</File>
 			<File
@@ -240,6 +256,10 @@
 			</File>
 			<File
 				RelativePath=".\Randomizer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Renderable.cpp"
 				>
 			</File>
 			<File
@@ -373,11 +393,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OpenglIndexBuffer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\OpenglRenderer.h"
 				>
 			</File>
 			<File
 				RelativePath=".\OpenglTexture.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OpenglUtility.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OpenglVertexBuffer.h"
 				>
 			</File>
 			<File

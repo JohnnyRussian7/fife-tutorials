@@ -127,5 +127,8 @@ void OpenglRenderer::Render()
         glMultMatrixf(m_modelMatrix.matrix);
     }
 
+    // draw all renderables
+
+
     DrawBox();
 }

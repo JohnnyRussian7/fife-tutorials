@@ -22,6 +22,8 @@
 #ifndef HWBUFFER_H_
 #define HWBUFFER_H_
 
+#include "stdint.h"
+
 struct HwBufferAccess
 {
 	enum Enum
@@ -32,7 +34,7 @@ struct HwBufferAccess
 	};
 };
 
-struct HwBufferHint
+struct HwBufferUsage
 {
 	enum Enum
 	{
@@ -45,8 +47,18 @@ struct HwBufferHint
 class HwBuffer
 {
 public:
-	HwBuffer();
+    HwBuffer(uint32_t dataLength, uint32_t dataElementSize, HwBufferUsage::Enum usage);
+    virtual ~HwBuffer();
 
+    uint32_t GetBufferId() const;
+    uint32_t GetBufferSize() const;
+
+    virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0);
+
+protected:
+    uint32_t m_bufferId;
+    uint32_t m_bufferSize;
+    HwBufferUsage::Enum m_usage;
 };
 
 #endif

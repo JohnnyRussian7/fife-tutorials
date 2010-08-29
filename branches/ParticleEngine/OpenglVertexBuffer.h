@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.h
+*	Filename: OpenglVertexBuffer.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,25 +19,23 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
+#ifndef OPENGLVERTEXBUFFER_H_
+#define OPENGLVERTEXBUFFER_H_
 
-class OpenglVertexBuffer;
-class OpenglIndexBuffer;
+#include "stdint.h"
+#include "HwBuffer.h"
 
-class Renderable
+class OpenglVertexBuffer : public HwBuffer
 {
 public:
-    Renderable(OpenglVertexBuffer* vertexBuffer = 0, OpenglIndexBuffer* indexBuffer = 0);
-	OpenglVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(OpenglVertexBuffer* vertexBuffer);
+    OpenglVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage);
+    ~OpenglVertexBuffer();
 
-    OpenglIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(OpenglIndexBuffer* indexBuffer);
+    virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0); 
 
 private:
-    OpenglVertexBuffer* m_vertexBuffer;
-    OpenglIndexBuffer* m_indexBuffer;
+    uint32_t m_numVertices;
+    uint32_t m_vertexSize;
 };
 
 #endif

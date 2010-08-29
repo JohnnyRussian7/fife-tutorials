@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.h
+*	Filename: Renderable.cpp
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,25 +19,33 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
 
-class OpenglVertexBuffer;
-class OpenglIndexBuffer;
+#include "Renderable.h"
+#include "OpenglVertexBuffer.h"
+#include "OpenglIndexBuffer.h"
 
-class Renderable
+Renderable::Renderable(OpenglVertexBuffer* vertexBuffer, OpenglIndexBuffer* indexBuffer)
+: m_vertexBuffer(vertexBuffer), m_indexBuffer(indexBuffer)
 {
-public:
-    Renderable(OpenglVertexBuffer* vertexBuffer = 0, OpenglIndexBuffer* indexBuffer = 0);
-	OpenglVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(OpenglVertexBuffer* vertexBuffer);
 
-    OpenglIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(OpenglIndexBuffer* indexBuffer);
+}
 
-private:
-    OpenglVertexBuffer* m_vertexBuffer;
-    OpenglIndexBuffer* m_indexBuffer;
-};
+OpenglVertexBuffer* Renderable::GetVertexBuffer() const
+{
+    return m_vertexBuffer;
+}
 
-#endif
+void Renderable::SetVertexBuffer(OpenglVertexBuffer* vertexBuffer)
+{
+    m_vertexBuffer = vertexBuffer;
+}
+
+OpenglIndexBuffer* Renderable::GetIndexBuffer() const
+{
+    return m_indexBuffer;
+}
+
+void Renderable::SetIndexBuffer(OpenglIndexBuffer* indexBuffer)
+{
+    m_indexBuffer = indexBuffer;
+}

@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.h
+*	Filename: OpenglUtility.cpp
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,25 +19,23 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
 
-class OpenglVertexBuffer;
-class OpenglIndexBuffer;
+#include "OpenglUtility.h"
 
-class Renderable
-{
-public:
-    Renderable(OpenglVertexBuffer* vertexBuffer = 0, OpenglIndexBuffer* indexBuffer = 0);
-	OpenglVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(OpenglVertexBuffer* vertexBuffer);
+namespace opengl { namespace utility {
 
-    OpenglIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(OpenglIndexBuffer* indexBuffer);
+    GLenum ConvertToOpenglBufferUsage(HwBufferUsage::Enum usage)
+    {
+        switch (usage)
+        {
+        case HwBufferUsage::Static:
+            return GL_STATIC_DRAW_ARB;
+        case HwBufferUsage::Dynamic:
+            return GL_DYNAMIC_DRAW_ARB;
+        case HwBufferUsage::Stream:
+            return GL_STREAM_DRAW_ARB;
+        }
 
-private:
-    OpenglVertexBuffer* m_vertexBuffer;
-    OpenglIndexBuffer* m_indexBuffer;
-};
-
-#endif
+        return GL_DYNAMIC_DRAW_ARB;
+    }
+}}

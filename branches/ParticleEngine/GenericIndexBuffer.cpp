@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: HwBuffer.cpp
+*	Filename: GenericIndexBuffer.cpp
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -20,25 +20,31 @@
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
 
-#include "HwBuffer.h"
+#include "GenericIndexBuffer.h"
 
-HwBuffer::HwBuffer(uint32_t dataLength, uint32_t dataElementSize, HwBufferUsage::Enum usage)
-: m_bufferId(0), m_bufferSize(dataLength*dataElementSize), m_usage(usage)
+
+GenericIndexBuffer::GenericIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType)
+: m_numIndices(numIndices), m_indexType(indexType), m_indexSize(IndexBufferDataType::GetIndexDataSize(indexType))
+{
+    m_bufferSize = m_numIndices * m_indexSize;
+}
+
+GenericIndexBuffer::~GenericIndexBuffer()
 {
 
 }
 
-HwBuffer::~HwBuffer()
+uint32_t GenericIndexBuffer::GetBufferId() const
 {
-
+    return 0;
 }
 
-uint32_t HwBuffer::GetBufferId() const
-{
-    return m_bufferId;
-}
-
-uint32_t HwBuffer::GetBufferSize() const
+uint32_t GenericIndexBuffer::GetBufferSize() const
 {
     return m_bufferSize;
+}
+
+void GenericIndexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)
+{
+    // TODO - implement
 }

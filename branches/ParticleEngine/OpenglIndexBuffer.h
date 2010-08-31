@@ -22,29 +22,28 @@
 #ifndef OPENGLINDEXBUFFER_H_
 #define OPENGLINDEXBUFFER_H_
 
-#include "HwBuffer.h"
+#include "stdint.h"
+#include "BufferEnums.h"
+#include "IIndexBuffer.h"
 
-struct IndexDataType
-{
-    enum Enum
-    {
-        _16bit = 0,
-        _32bit
-    };
-};
-
-class OpenglIndexBuffer : public HwBuffer
+class OpenglIndexBuffer : public IIndexBuffer
 {
 public:
-    OpenglIndexBuffer(uint32_t numIndices, IndexDataType::Enum indexType, HwBufferUsage::Enum usage);
+    OpenglIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage);
     ~OpenglIndexBuffer();
+
+    virtual uint32_t GetBufferId() const;
+    virtual uint32_t GetBufferSize() const;
 
     virtual void WriteData(void* data, uint32_t numElements, uint32_t offset = 0);
 
 private:
     uint32_t m_numIndices;
-    IndexDataType::Enum m_indexType;
+    IndexBufferDataType::Enum m_indexType;
     uint32_t m_indexSize;
+    uint32_t m_bufferSize;
+    HwBufferUsage::Enum m_usage;
+    uint32_t m_bufferId;
 };
 
 #endif

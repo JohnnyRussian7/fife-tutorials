@@ -24,20 +24,29 @@
 
 #include <vector>
 
+#include "stdint.h"
 #include "Vector2.h"
 #include "Vector3.h"
+
+class VertexData;
+class IndexData;
 
 class BillboardGroup
 {
 public:
-	BillboardGroup();
+	BillboardGroup(uint32_t numBillboards = 0);
+
+    void SetNumberOfBillboards(uint32_t numBillboards);
+    uint32_t GetNumberOfBillboards() const;
 
 	void SetPosition(uint32_t billBoardIndex, const Vector3& position);
 	const Vector3& GetPosition(uint32_t billBoardIndex) const;
 
-
 private:
+    uint32_t m_numBillboards;
 	std::vector<Vector3> m_position;
+    VertexData* m_vertexData;
+    IndexData* m_indexData;
 };
 
 #endif

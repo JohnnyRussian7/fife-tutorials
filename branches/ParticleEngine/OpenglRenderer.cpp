@@ -25,6 +25,11 @@
 
 #include "glee/GLee.h"
 #include "OpenglRenderer.h"
+#include "OpenglVertexBuffer.h"
+#include "GenericVertexBuffer.h"
+#include "OpenglIndexBuffer.h"
+#include "GenericIndexBuffer.h"
+
 
 // useful macro to help with offsets in buffer objects
 #define BUFFER_OFFSET(i) ((char*)NULL + (i))
@@ -113,6 +118,25 @@ void OpenglRenderer::SetTransform(TransformType::Enum type, const Matrix4& mat)
 		}
 		break;
 	}
+}
+IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
+{
+    if (m_vboSupport)
+    {
+        return new OpenglVertexBuffer(numVertices, vertexSize, usage);
+    }
+
+    return new GenericVertexBuffer(numVertices, vertexSize);
+}
+
+IIndexBuffer* OpenglRenderer::CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage)
+{
+    if (m_vboSupport)
+    {
+        return new OpenglIndexBuffer(numIndices, indexType, usage);
+    }
+
+    return new GenericIndexBuffer(numIndices, indexType);
 }
 
 void OpenglRenderer::Render()

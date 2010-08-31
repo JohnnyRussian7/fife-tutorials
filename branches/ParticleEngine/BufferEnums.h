@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: OpenglUtility.h
+*	Filename: BufferEnums.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,17 +19,51 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef OPENGLUTILITY_H_
-#define OPENGLUTILITY_H_
+#ifndef BUFFERENUMS_H_
+#define BUFFERENUMS_H_
 
-#include "glee/GLee.h"
+#include "stdint.h"
 
-#include "BufferEnums.h"
+struct HwBufferAccess
+{
+	enum Enum
+	{
+		ReadOnly = 0,
+		WriteOnly,
+		ReadWrite
+	};
+};
 
-namespace opengl { namespace utility {
-    
-    GLenum ConvertToOpenglBufferUsage(HwBufferUsage::Enum usage);
-    
-}}
+struct HwBufferUsage
+{
+	enum Enum
+	{
+		Static,
+		Dynamic,
+		Stream
+	};
+};
+
+struct IndexBufferDataType
+{
+    enum Enum
+    {
+        _16bit = 0,
+        _32bit
+    };
+
+    static uint32_t GetIndexDataSize(IndexBufferDataType::Enum indexType)
+    {
+        switch (indexType)
+        {
+        case IndexBufferDataType::_16bit:
+            return sizeof(uint16_t);
+        case IndexBufferDataType::_32bit:
+            return sizeof(uint32_t);
+        }
+
+        return sizeof(uint16_t);
+    }
+};
 
 #endif

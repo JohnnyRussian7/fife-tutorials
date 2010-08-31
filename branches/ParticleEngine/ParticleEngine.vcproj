@@ -155,6 +155,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BillboardGroup.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Camera.cpp"
 				>
 			</File>
@@ -175,7 +179,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\HwBuffer.cpp"
+				RelativePath=".\GenericIndexBuffer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GenericVertexBuffer.cpp"
 				>
 			</File>
 			<File
@@ -317,6 +325,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BufferEnums.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Camera.h"
 				>
 			</File>
@@ -345,11 +357,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\HwBuffer.h"
+				RelativePath=".\GenericIndexBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GenericVertexBuffer.h"
 				>
 			</File>
 			<File
 				RelativePath=".\IFileSystem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IIndexBuffer.h"
 				>
 			</File>
 			<File
@@ -370,6 +390,10 @@
 			</File>
 			<File
 				RelativePath=".\ITexture.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IVertexBuffer.h"
 				>
 			</File>
 			<File

@@ -25,7 +25,7 @@
 #include "OpenglUtility.h"
 
 OpenglVertexBuffer::OpenglVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
-: HwBuffer(numVertices, vertexSize, usage), m_numVertices(numVertices), m_vertexSize(vertexSize)
+: m_numVertices(numVertices), m_vertexSize(vertexSize), m_bufferSize(numVertices*vertexSize), m_usage(usage)
 {
     // request buffer allocation
     glGenBuffersARB(1, reinterpret_cast<GLuint*>(&m_bufferId));
@@ -48,6 +48,16 @@ OpenglVertexBuffer::~OpenglVertexBuffer()
     {
         glDeleteBuffersARB(1, reinterpret_cast<GLuint*>(&m_bufferId));
     }
+}
+
+uint32_t OpenglVertexBuffer::GetBufferId() const
+{
+    return m_bufferId;
+}
+
+uint32_t OpenglVertexBuffer::GetBufferSize() const
+{
+    return m_bufferSize;
 }
 
 void OpenglVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)

@@ -24,25 +24,11 @@
 #include "OpenglIndexBuffer.h"
 #include "OpenglUtility.h"
 
-namespace 
+OpenglIndexBuffer::OpenglIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage)
+: m_numIndices(numIndices), m_indexType(indexType), m_indexSize(IndexBufferDataType::GetIndexDataSize(indexType)), m_usage(usage)
 {
-    uint32_t GetIndexDataSize(IndexDataType::Enum indexType)
-    {
-        switch (indexType)
-        {
-        case IndexDataType::_16bit:
-            return sizeof(uint16_t);
-        case IndexDataType::_32bit:
-            return sizeof(uint32_t);
-        }
+    m_bufferSize = m_numIndices*m_indexSize;
 
-        return sizeof(uint16_t);
-    }
-}
-
-OpenglIndexBuffer::OpenglIndexBuffer(uint32_t numIndices, IndexDataType::Enum indexType, HwBufferUsage::Enum usage)
-: HwBuffer(numIndices, GetIndexDataSize(indexType), usage), m_numIndices(numIndices), m_indexType(indexType), m_indexSize(GetIndexDataSize(indexType))
-{
     // request buffer allocation
     glGenBuffersARB(1, reinterpret_cast<GLuint*>(&m_bufferId));
 
@@ -61,6 +47,16 @@ OpenglIndexBuffer::OpenglIndexBuffer(uint32_t numIndices, IndexDataType::Enum in
 OpenglIndexBuffer::~OpenglIndexBuffer()
 {
     glDeleteBuffersARB(1, reinterpret_cast<GLuint*>(&m_bufferId));
+}
+
+uint32_t OpenglIndexBuffer::GetBufferId() const
+{
+    return m_bufferId;
+}
+
+uint32_t OpenglIndexBuffer::GetBufferSize() const
+{
+    return m_bufferSize;
 }
 
 void OpenglIndexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)

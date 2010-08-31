@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: HwBuffer.h
+*	Filename: GenericVertexBuffer.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,46 +19,27 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef HWBUFFER_H_
-#define HWBUFFER_H_
+#ifndef GENERICVERTEXBUFFER_H_
+#define GENERICVERTEXBUFFER_H_
 
 #include "stdint.h"
+#include "IVertexBuffer.h"
 
-struct HwBufferAccess
-{
-	enum Enum
-	{
-		ReadOnly = 0,
-		WriteOnly,
-		ReadWrite
-	};
-};
-
-struct HwBufferUsage
-{
-	enum Enum
-	{
-		Static,
-		Dynamic,
-		Stream
-	};
-};
-
-class HwBuffer
+class GenericVertexBuffer : public IVertexBuffer
 {
 public:
-    HwBuffer(uint32_t dataLength, uint32_t dataElementSize, HwBufferUsage::Enum usage);
-    virtual ~HwBuffer();
+    GenericVertexBuffer(uint32_t numVertices, uint32_t vertexSize);
+    ~GenericVertexBuffer();
 
-    uint32_t GetBufferId() const;
-    uint32_t GetBufferSize() const;
+    virtual uint32_t GetBufferId() const;
+    virtual uint32_t GetBufferSize() const;
 
     virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0);
-
-protected:
-    uint32_t m_bufferId;
+    
+private:
+    uint32_t m_numVertices;
+    uint32_t m_vertexSize;
     uint32_t m_bufferSize;
-    HwBufferUsage::Enum m_usage;
 };
 
 #endif

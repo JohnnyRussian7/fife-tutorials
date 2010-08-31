@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: OpenglUtility.h
+*	Filename: IIndexBuffer.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,17 +19,20 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef OPENGLUTILITY_H_
-#define OPENGLUTILITY_H_
+#ifndef IINDEXBUFFER_H_
+#define IINDEXBUFFER_H_
 
-#include "glee/GLee.h"
+#include "stdint.h"
 
-#include "BufferEnums.h"
+class IIndexBuffer
+{
+public:
+    virtual ~IIndexBuffer() { }
 
-namespace opengl { namespace utility {
-    
-    GLenum ConvertToOpenglBufferUsage(HwBufferUsage::Enum usage);
-    
-}}
+    virtual uint32_t GetBufferId() const = 0;
+    virtual uint32_t GetBufferSize() const = 0;
+
+    virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0) = 0;
+};
 
 #endif

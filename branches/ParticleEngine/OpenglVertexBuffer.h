@@ -23,19 +23,26 @@
 #define OPENGLVERTEXBUFFER_H_
 
 #include "stdint.h"
-#include "HwBuffer.h"
+#include "IVertexBuffer.h"
+#include "BufferEnums.h"
 
-class OpenglVertexBuffer : public HwBuffer
+class OpenglVertexBuffer : public IVertexBuffer
 {
 public:
     OpenglVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage);
     ~OpenglVertexBuffer();
+
+    virtual uint32_t GetBufferId() const;
+    virtual uint32_t GetBufferSize() const;
 
     virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0); 
 
 private:
     uint32_t m_numVertices;
     uint32_t m_vertexSize;
+    uint32_t m_bufferSize;
+    HwBufferUsage::Enum m_usage;
+    uint32_t m_bufferId;
 };
 
 #endif

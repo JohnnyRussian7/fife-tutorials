@@ -12,6 +12,10 @@ class SceneNode;
 class Camera;
 class Entity;
 class IRenderSystem;
+class IVertexBuffer;
+class IIndexBuffer;
+
+#include "BufferEnums.h"
 
 struct SceneManagerType
 {
@@ -48,10 +52,16 @@ public:
 
 	SceneNode* GetRootSceneNode() const;
 	SceneNode* CreateSceneNode(const char* name = 0);
+
 	void DestroySceneNode(const char* name);
 	void DestroySceneNode(SceneNode* node);
+
 	SceneNode* GetSceneNode(const char* name) const;
 	Entity* CreateEntity(const char* name = 0) const;
+    
+    IVertexBuffer* CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage);
+
+    IIndexBuffer* CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage);
 
     void UpdateScene();
     void RenderScene();

@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: OpenglUtility.h
+*	Filename: GenericVertexBuffer.cpp
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,17 +19,32 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef OPENGLUTILITY_H_
-#define OPENGLUTILITY_H_
 
-#include "glee/GLee.h"
+#include "GenericVertexBuffer.h"
 
-#include "BufferEnums.h"
 
-namespace opengl { namespace utility {
-    
-    GLenum ConvertToOpenglBufferUsage(HwBufferUsage::Enum usage);
-    
-}}
+GenericVertexBuffer::GenericVertexBuffer(uint32_t numVertices, uint32_t vertexSize)
+: m_numVertices(numVertices), m_vertexSize(vertexSize), m_bufferSize(numVertices*vertexSize)
+{
 
-#endif
+}
+
+GenericVertexBuffer::~GenericVertexBuffer()
+{
+
+}
+
+uint32_t GenericVertexBuffer::GetBufferId() const
+{
+    return 0;
+}
+
+uint32_t GenericVertexBuffer::GetBufferSize() const
+{
+    return m_bufferSize;
+}
+
+void GenericVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)
+{
+    // TODO - implement
+}

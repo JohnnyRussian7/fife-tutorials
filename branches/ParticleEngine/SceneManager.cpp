@@ -98,6 +98,16 @@ Entity* SceneManager::CreateEntity(const char* name) const
 	return new Entity(name);
 }
 
+IVertexBuffer* SceneManager::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
+{
+    return m_renderSystem->CreateVertexBuffer(numVertices, vertexSize, usage);
+}
+
+IIndexBuffer* SceneManager::CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage)
+{
+    return m_renderSystem->CreateIndexBuffer(numIndices, indexType, usage);
+}
+
 void SceneManager::UpdateScene()
 {
     // start the cascading update calls to all scene nodes

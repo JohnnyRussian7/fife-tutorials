@@ -98,6 +98,11 @@ Entity* SceneManager::CreateEntity(const char* name) const
 	return new Entity(name);
 }
 
+void SceneManager::DestroyEntity(Entity* entity)
+{
+    delete entity;
+}
+
 IVertexBuffer* SceneManager::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
 {
     return m_renderSystem->CreateVertexBuffer(numVertices, vertexSize, usage);
@@ -119,6 +124,8 @@ void SceneManager::RenderScene()
     // update the scene graph information before rendering
     UpdateScene();
 
+    m_renderSystem->ClearBuffers();
+
     // push data to render system
     if (m_camera)
     {
@@ -134,6 +141,7 @@ void SceneManager::RenderScene()
 //         node = node->
 //     }
 
-    // render the scene now that all data is pushed to renderer
-    m_renderSystem->Render();
+    // TODO - remove this renderable, and use real ones when ready
+    Renderable* renderable;
+    m_renderSystem->Render(renderable);
 }

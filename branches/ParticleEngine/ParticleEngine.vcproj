@@ -155,6 +155,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Billboard.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\BillboardGroup.cpp"
 				>
 			</File>
@@ -318,6 +322,10 @@
 			>
 			<File
 				RelativePath=".\AxisAlignedBoundingBox.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Billboard.h"
 				>
 			</File>
 			<File

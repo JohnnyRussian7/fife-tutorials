@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Material.h
+*	Filename: Billboard.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,34 +19,40 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef MATERIAL_H_
-#define MATERIAL_H_
+#ifndef BILLBOARD_H_
+#define BILLBOARD_H_
+
+#include <vector>
 
 #include "stdint.h"
-#include "Color.h"
+#include "Vector3.h"
+#include "Renderable.h"
+#include "Vertex.h"
 
-class ITexture;
+class SceneManager;
+class BillboardGroup;
 
-class Material
+class Billboard : public Renderable
 {
 public:
-	Material();
-	~Material();
+    Billboard(SceneManager* sceneManager);
+    Billboard(SceneManager* sceneManager, const Vector3& position);
+    Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position = Vector3::Zero());
 
-	virtual void SetTexture(ITexture* texture);
-	virtual void SetAmbientColor(const Color& color);
-	virtual void SetDiffuseColor(const Color& color);
-	virtual void SetSpecularColor(const Color& color);
-	virtual void SetShininess(uint8_t shininess);
-	virtual void SetEmissiveColor(const Color& color);
+    void SetPosition(const Vector3& position);
+    const Vector3& GetPosition() const;
+
+    uint32_t GetNumberOfVertices() const;
 
 private:
-	ITexture* m_texture;
-	Color m_ambient;
-	Color m_diffuse;
-	Color m_specular;
-	uint8_t m_shininess;
-	Color m_emissive;
+    void GenerateVertices();
+    void GenerateIndices();
+
+private:
+    SceneManager* m_sceneManager;
+    BillboardGroup* m_owner;
+    Vector3 m_position;
+    std::vector<Vertex> m_vertices;
 };
 
 #endif

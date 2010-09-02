@@ -22,22 +22,29 @@
 #ifndef RENDERABLE_H_
 #define RENDERABLE_H_
 
-class OpenglVertexBuffer;
-class OpenglIndexBuffer;
+class IVertexBuffer;
+class IIndexBuffer;
+class Material;
 
 class Renderable
 {
 public:
-    Renderable(OpenglVertexBuffer* vertexBuffer = 0, OpenglIndexBuffer* indexBuffer = 0);
-	OpenglVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(OpenglVertexBuffer* vertexBuffer);
+    Renderable();
+	~Renderable();
 
-    OpenglIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(OpenglIndexBuffer* indexBuffer);
+    IVertexBuffer* GetVertexBuffer() const;
+    void SetVertexBuffer(IVertexBuffer* vertexBuffer);
 
-private:
-    OpenglVertexBuffer* m_vertexBuffer;
-    OpenglIndexBuffer* m_indexBuffer;
+    IIndexBuffer* GetIndexBuffer() const;
+    void SetIndexBuffer(IIndexBuffer* indexBuffer);
+
+    Material* GetMaterial() const;
+    void SetMaterial(Material* material);
+    
+protected:
+    IVertexBuffer* m_vertexBuffer;
+    IIndexBuffer* m_indexBuffer;
+    Material* m_material;
 };
 
 #endif

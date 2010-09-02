@@ -21,31 +21,47 @@
 ***********************************************************************/
 
 #include "Renderable.h"
-#include "OpenglVertexBuffer.h"
-#include "OpenglIndexBuffer.h"
+#include "IVertexBuffer.h"
+#include "IIndexBuffer.h"
+#include "Material.h"
 
-Renderable::Renderable(OpenglVertexBuffer* vertexBuffer, OpenglIndexBuffer* indexBuffer)
-: m_vertexBuffer(vertexBuffer), m_indexBuffer(indexBuffer)
+Renderable::Renderable()
+: m_vertexBuffer(0), m_indexBuffer(0), m_material(0)
 {
 
 }
 
-OpenglVertexBuffer* Renderable::GetVertexBuffer() const
+Renderable::~Renderable()
+{
+
+}
+
+IVertexBuffer* Renderable::GetVertexBuffer() const
 {
     return m_vertexBuffer;
 }
 
-void Renderable::SetVertexBuffer(OpenglVertexBuffer* vertexBuffer)
+void Renderable::SetVertexBuffer(IVertexBuffer* vertexBuffer)
 {
     m_vertexBuffer = vertexBuffer;
 }
 
-OpenglIndexBuffer* Renderable::GetIndexBuffer() const
+IIndexBuffer* Renderable::GetIndexBuffer() const
 {
     return m_indexBuffer;
 }
 
-void Renderable::SetIndexBuffer(OpenglIndexBuffer* indexBuffer)
+void Renderable::SetIndexBuffer(IIndexBuffer* indexBuffer)
 {
     m_indexBuffer = indexBuffer;
+}
+
+Material* Renderable::GetMaterial() const
+{
+    return m_material;
+}
+
+void Renderable::SetMaterial(Material* material)
+{
+    m_material = material;
 }

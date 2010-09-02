@@ -52,10 +52,8 @@ public:
     virtual IVertexBuffer* CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage);
     virtual IIndexBuffer* CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage);
 
-	virtual void Render();
-
-private:
-	void ClearBuffers();
+    virtual void ClearBuffers(bool colorBuffer=true, bool depthBuffer=true);
+	virtual void Render(Renderable* renderable);
 
 private:
     RenderSystemSettings m_settings;

@@ -29,6 +29,7 @@
 #include "GenericVertexBuffer.h"
 #include "OpenglIndexBuffer.h"
 #include "GenericIndexBuffer.h"
+#include "Renderable.h"
 
 
 // useful macro to help with offsets in buffer objects
@@ -139,20 +140,43 @@ IIndexBuffer* OpenglRenderer::CreateIndexBuffer(uint32_t numIndices, IndexBuffer
     return new GenericIndexBuffer(numIndices, indexType);
 }
 
-void OpenglRenderer::Render()
+void OpenglRenderer::ClearBuffers(bool colorBuffer, bool depthBuffer)
 {
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+    GLbitfield buffers = 0;
 
-    if (m_viewMatrixUpdate || m_modelMatrixUpdate)
+    if (colorBuffer)
     {
-        glLoadMatrixf(m_viewMatrix.matrix);
-        glMultMatrixf(m_modelMatrix.matrix);
+        buffers |= GL_COLOR_BUFFER_BIT;
+    }
+    if (depthBuffer)
+    {
+        buffers |= GL_DEPTH_BUFFER_BIT;
     }
 
-    // draw all renderables
+    glClear(buffers);
+}
 
+void OpenglRenderer::Render(Renderable* renderable)
+{
+    if (m_projectionMatrixUpdate)
+    {
+        glMatrixMode(GL_PROJECTION);
+        glLoadMatrixf(m_projectionMatrix.matrix);
+        m_projectionMatrixUpdate = false;
+    }
+
+	glMatrixMode(GL_MODELVIEW);
+    if (m_viewMatrixUpdate)
+    {
+        glLoadMatrixf(m_viewMatrix.matrix);
+        m_viewMatrixUpdate = false;
+    }
+
+    if (m_modelMatrixUpdate)
+    {
+        glMultMatrixf(m_modelMatrix.matrix);
+        m_modelMatrixUpdate = false;
+    }
 
     DrawBox();
 }

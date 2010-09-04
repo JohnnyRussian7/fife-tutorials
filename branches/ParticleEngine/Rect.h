@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: GenericVertexBuffer.h
+*	Filename: Rect.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,29 +19,29 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef GENERICVERTEXBUFFER_H_
-#define GENERICVERTEXBUFFER_H_
+#ifndef RECT_H_
+#define RECT_H_
 
 #include "stdint.h"
-#include "IVertexBuffer.h"
 
-class GenericVertexBuffer : public IVertexBuffer
+template <typename T>
+struct Rect
 {
-public:
-    GenericVertexBuffer(uint32_t numVertices, uint32_t vertexSize);
-    ~GenericVertexBuffer();
+    Rect() : m_left(T()), m_top(T()), m_right(T()), m_bottom(T()) { }
+    Rect(T left, T top, T right, T bottom)
+    : m_left(left), m_top(top), m_right(right), m_bottom(bottom)
+    {
 
-    virtual uint32_t GetBufferId() const;
-    virtual uint32_t GetBufferSize() const;
-    virtual uint32_t GetStride() const;
-    virtual uint32_t GetNumVertices() const;
+    }
 
-    virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0);
-    
-private:
-    uint32_t m_numVertices;
-    uint32_t m_vertexSize;
-    uint32_t m_bufferSize;
+    T m_left;
+    T m_top;
+    T m_right;
+    T m_bottom;
 };
+
+typedef Rect<float> FloatRect;
+typedef Rect<uint32_t> UintRect;
+typedef Rect<int32_t> IntRect;
 
 #endif

@@ -473,6 +473,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Rect.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Renderable.h"
 				>
 			</File>

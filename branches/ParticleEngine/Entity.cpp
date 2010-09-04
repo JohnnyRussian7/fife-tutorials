@@ -56,3 +56,13 @@ IMaterial* Entity::GetMaterial() const
 {
     return m_material;
 }
+
+Renderable* Entity::GetRenderable()
+{
+    return 0;
+}
+
+void Entity::Update()
+{
+
+}

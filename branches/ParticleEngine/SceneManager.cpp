@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Entity.h"
 #include "IRenderSystem.h"
+#include "Billboard.h"
 
 SceneManager::SceneManager(const SceneManagerSettings& settings, IRenderSystem* renderSystem)
 : m_settings(settings), m_rootSceneNode(0), m_renderSystem(renderSystem)
@@ -103,6 +104,21 @@ void SceneManager::DestroyEntity(Entity* entity)
     delete entity;
 }
 
+Billboard* SceneManager::CreateBillboard(uint32_t width, uint32_t height, const Vector3& position, const Color& color, const FloatRect& texCoords)
+{
+    Billboard* b = new Billboard(this, position);
+    b->SetDimensions(width, height);
+    b->SetColor(color);
+    b->SetTextureCoordinates(texCoords);
+
+    return b;
+}
+
+void SceneManager::DestroyBillboard(Billboard* billboard)
+{
+    delete billboard;
+}
+
 IVertexBuffer* SceneManager::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
 {
     return m_renderSystem->CreateVertexBuffer(numVertices, vertexSize, usage);
@@ -141,9 +157,14 @@ void SceneManager::RenderScene()
 //         node = node->
 //     }
 
-    // TODO - remove this renderable, and use real ones when ready
-    Renderable* renderable;
-    //Billboard* b = new Billboard(this, Vector3())
-
-    m_renderSystem->Render(renderable);
+    // get all the renderables in the scene
+    std::vector<Renderable*> renderables;
+    GetRootSceneNode()->GetRenderables(renderables);
+    
+    // pass each renderable to the render system
+    std::vector<Renderable*>::iterator iter;
+    for (iter = renderables.begin(); iter != renderables.end(); ++iter)
+    {
+        m_renderSystem->Render(*iter);
+    }
 }

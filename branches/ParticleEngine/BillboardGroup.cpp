@@ -50,10 +50,5 @@ void BillboardGroup::SetPosition(uint32_t billBoardIndex, const Vector3& positio
 
 const Vector3& BillboardGroup::GetPosition(uint32_t billBoardIndex) const
 {
-    if (billBoardIndex < m_position.size())
-    {
-        return m_position[billBoardIndex];
-    }
-
-    return Vector3::Zero();
+    return m_position[billBoardIndex];
 }

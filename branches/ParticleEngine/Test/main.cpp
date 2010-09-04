@@ -8,6 +8,7 @@
 #include "../SceneNode.h"
 #include "../MathUtil.h"
 #include "../Quaternion.h"
+#include "../Billboard.h"
 
 int main()
 {
@@ -23,11 +24,14 @@ int main()
     sceneManager->AddCamera(camera);   
 
     // TODO - more development needed to work properly
-    Entity* entity = sceneManager->CreateEntity();
-    SceneNode* node = sceneManager->CreateSceneNode();
+    //Entity* entity = sceneManager->CreateEntity();
+    //SceneNode* node = sceneManager->CreateSceneNode();
     //node->SetOrientation(FromAxisAngle(Vector3(0, 1, 0), DegToRad(30)));
-    node->AddEntity(entity);
-    sceneManager->GetRootSceneNode()->AddChild(node);
+    //node->AddEntity(entity);
+    //sceneManager->GetRootSceneNode()->AddChild(node);
+
+    Billboard* b = sceneManager->CreateBillboard(32, 32);
+    sceneManager->GetRootSceneNode()->AddEntity(b);
 
 	while (engine.Run())
 	{

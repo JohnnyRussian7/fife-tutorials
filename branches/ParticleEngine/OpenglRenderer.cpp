@@ -30,6 +30,7 @@
 #include "OpenglIndexBuffer.h"
 #include "GenericIndexBuffer.h"
 #include "Renderable.h"
+#include "Color.h"
 
 
 // useful macro to help with offsets in buffer objects
@@ -178,5 +179,41 @@ void OpenglRenderer::Render(Renderable* renderable)
         m_modelMatrixUpdate = false;
     }
 
-    DrawBox();
+    IVertexBuffer* vertexBuffer = renderable->GetVertexBuffer();
+
+    if (vertexBuffer)
+    {
+        if (m_vboSupport)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
+        }
+        else
+        {
+            // TODO - implement code for non vbo support
+        }
+
+        glVertexPointer(3, GL_FLOAT, vertexBuffer->GetStride(), BUFFER_OFFSET(0));
+        glEnableClientState(GL_VERTEX_ARRAY);
+
+        glColorPointer(4, GL_FLOAT, vertexBuffer->GetStride(), BUFFER_OFFSET(24));
+        glEnableClientState(GL_COLOR_ARRAY);
+
+        glTexCoordPointer(2, GL_FLOAT, vertexBuffer->GetStride(), BUFFER_OFFSET(24+sizeof(Color)));
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glDrawArrays(GL_TRIANGLES, 0, vertexBuffer->GetNumVertices());
+
+        // disable client state
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        if (m_vboSupport)
+        {
+            // unbind the buffer
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+    }
+
+    //DrawBox();
 }

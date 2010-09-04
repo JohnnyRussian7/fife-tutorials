@@ -44,6 +44,16 @@ uint32_t GenericVertexBuffer::GetBufferSize() const
     return m_bufferSize;
 }
 
+uint32_t GenericVertexBuffer::GetStride() const
+{
+    return m_vertexSize;
+}
+
+uint32_t GenericVertexBuffer::GetNumVertices() const
+{
+    return m_numVertices;
+}
+
 void GenericVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)
 {
     // TODO - implement

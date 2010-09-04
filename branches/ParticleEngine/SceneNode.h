@@ -31,6 +31,7 @@
 
 class SceneManager;
 class Entity;
+class Renderable;
 
 class SceneNode
 {
@@ -52,6 +53,8 @@ public:
     void RemoveEntity(Entity* entity, bool shouldDeleteEntity = true);
     void RemoveEntity(const char* name, bool shouldDeleteChild);
     void RemoveAllEntities();
+
+    void GetRenderables(std::vector<Renderable*>& renderables);
 
 	const Vector3& GetScale() const;
 	const Vector3& GetPosition() const;

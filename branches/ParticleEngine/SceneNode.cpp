@@ -201,6 +201,27 @@ void SceneNode::RemoveAllEntities()
     m_entities.clear();
 }
 
+void SceneNode::GetRenderables(std::vector<Renderable*>& renderables)
+{
+    // add all of this scene nodes renderables
+    EntityContainer::iterator entityIter;
+    for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)
+    {
+        Renderable* renderable = (*entityIter)->GetRenderable();
+        if (renderable)
+        {
+            renderables.push_back(renderable);
+        }
+    }
+
+    // now for each child scene node allow them to add their renderables
+    std::vector<SceneNode*>::iterator sceneNodeIter;
+    for (sceneNodeIter = m_childNodes.begin(); sceneNodeIter != m_childNodes.end(); ++sceneNodeIter)
+    {
+        (*sceneNodeIter)->GetRenderables(renderables);
+    }
+}
+
 const Vector3& SceneNode::GetScale() const
 {
 	return m_scale;
@@ -351,11 +372,17 @@ void SceneNode::Update()
         m_updateTransform = true;
     }
 
-    // give children chance to update
-    std::vector<SceneNode*>::iterator iter;
-    for (iter = m_childNodes.begin(); iter != m_childNodes.end(); ++iter)
+    EntityContainer::iterator entityIter;
+    for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)
     {
-        (*iter)->Update();
+        (*entityIter)->Update();
+    }
+    
+        // give children chance to update
+    std::vector<SceneNode*>::iterator nodeIter;
+    for (nodeIter = m_childNodes.begin(); nodeIter != m_childNodes.end(); ++nodeIter)
+    {
+        (*nodeIter)->Update();
     }
 }
 

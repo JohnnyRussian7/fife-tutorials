@@ -7,6 +7,8 @@
 
 #include "Vector3.h"
 #include "Quaternion.h"
+#include "Rect.h"
+#include "Color.h"
 
 class SceneNode;
 class Camera;
@@ -14,6 +16,7 @@ class Entity;
 class IRenderSystem;
 class IVertexBuffer;
 class IIndexBuffer;
+class Billboard;
 
 #include "BufferEnums.h"
 
@@ -61,8 +64,11 @@ public:
     Entity* CreateEntity(const char* name = 0) const;
     void DestroyEntity(Entity* entity);
 
-    IVertexBuffer* CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage);
+    Billboard* CreateBillboard(uint32_t width=1, uint32_t height=1, const Vector3& position=Vector3::Zero(), const Color& color=ColorWhite(), const FloatRect& texCoords=FloatRect(0.f, 1.f, 1.f, 0.f));
+    void DestroyBillboard(Billboard* billboard);
 
+    // for internal use only
+    IVertexBuffer* CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage);
     IIndexBuffer* CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage);
 
     void UpdateScene();

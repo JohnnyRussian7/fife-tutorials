@@ -34,8 +34,12 @@ public:
 
     virtual uint32_t GetBufferId() const;
     virtual uint32_t GetBufferSize() const;
+    virtual uint32_t GetStride() const;
+    virtual uint32_t GetNumVertices() const;
 
     virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0); 
+
+    // virtual void* GetData() const;
 
 private:
     uint32_t m_numVertices;

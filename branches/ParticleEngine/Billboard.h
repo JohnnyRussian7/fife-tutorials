@@ -30,11 +30,13 @@
 #include "Vector3.h"
 #include "Renderable.h"
 #include "Vertex.h"
+#include "Rect.h"
+#include "Entity.h"
 
 class SceneManager;
 class BillboardGroup;
 
-class Billboard : public Renderable
+class Billboard : public Renderable, public Entity
 {
 public:
     Billboard(SceneManager* sceneManager);
@@ -53,11 +55,14 @@ public:
     void SetColor(const Color& color);
     const Color& GetColor() const;
 
-    void SetTextureCoordinates(const Vector2& texCoords);
-    void SetTextureCoordinates(float u, float v);
-    const Vector2& GetTextureCoordinates() const;
+    void SetTextureCoordinates(const FloatRect& texCoords);
+    void SetTextureCoordinates(float left, float top, float right, float bottom);
+    const FloatRect& GetTextureCoordinates() const;
 
     uint32_t GetNumberOfVertices() const;
+    
+    virtual Renderable* GetRenderable();
+    virtual void Update();
 
 private:
     void GenerateVertices();
@@ -70,8 +75,9 @@ private:
     uint32_t m_height;
     Vector3 m_position;
     Color m_color;
-    Vector2 m_textureCoords;
+    FloatRect m_textureCoords;
     std::vector<Vertex> m_vertices;
+    bool m_verticsGenerated;
 };
 
 #endif

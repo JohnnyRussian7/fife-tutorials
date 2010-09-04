@@ -60,6 +60,16 @@ uint32_t OpenglVertexBuffer::GetBufferSize() const
     return m_bufferSize;
 }
 
+uint32_t OpenglVertexBuffer::GetStride() const
+{
+    return m_vertexSize;
+}
+
+uint32_t OpenglVertexBuffer::GetNumVertices() const
+{
+    return m_numVertices;
+}
+
 void OpenglVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)
 {
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_bufferId);

@@ -143,5 +143,7 @@ void SceneManager::RenderScene()
 
     // TODO - remove this renderable, and use real ones when ready
     Renderable* renderable;
+    //Billboard* b = new Billboard(this, Vector3())
+
     m_renderSystem->Render(renderable);
 }

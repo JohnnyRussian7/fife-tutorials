@@ -25,21 +25,26 @@
 #include "Billboard.h"
 #include "BufferEnums.h"
 #include "SceneManager.h"
+#include "IVertexBuffer.h"
+#include "IIndexBuffer.h"
 
 Billboard::Billboard(SceneManager* sceneManager)
-: m_sceneManager(sceneManager), m_owner(0), m_position(Vector3::Zero())
+: m_sceneManager(sceneManager), m_owner(0), m_width(1), m_height(1),
+m_position(Vector3::Zero()), m_color(ColorWhite())
 {
     assert(m_sceneManager);
 }
 
 Billboard::Billboard(SceneManager* sceneManager, const Vector3& position)
-: m_sceneManager(sceneManager),m_owner(0), m_position(position)
+: m_sceneManager(sceneManager),m_owner(0), m_width(1), m_height(1),
+m_position(position), m_color(ColorWhite())
 {
     assert(m_sceneManager);
 }
 
 Billboard::Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position)
-: m_sceneManager(sceneManager), m_owner(owner), m_position(position)
+: m_sceneManager(sceneManager), m_owner(owner), m_width(1), m_height(1),
+m_position(position), m_color(ColorWhite())
 {
     assert(m_sceneManager);
 }
@@ -59,8 +64,29 @@ void Billboard::GenerateVertices()
 
     if (m_vertexBuffer)
     {
-        Vertex v0;
+        const float halfWidth = m_width/2.f;
+        const float halfHeight = m_height/2.f;
 
+        std::vector<Vertex> vertices;
+        vertices.reserve(GetNumberOfVertices());
+
+        // first vertex (0)
+        Vector3 position = m_position - Vector3(-halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(m_position, Vector3(0,0,0), m_color, m_textureCoords));
+
+        // second vertex (1)
+        position = m_position - Vector3(halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(m_position, Vector3(0,0,0), m_color, m_textureCoords));
+
+        // third vertex (2)
+        position = m_position - Vector3(-halfWidth, -halfHeight, 0); 
+        vertices.push_back(Vertex(m_position, Vector3(0,0,0), m_color, m_textureCoords));
+
+        // fourth vertex (3)
+        position = m_position - Vector3(halfWidth, -halfHeight, 0); 
+        vertices.push_back(Vertex(m_position, Vector3(0,0,0), m_color, m_textureCoords));
+
+        m_vertexBuffer->WriteData(static_cast<void *>(&vertices[0]), vertices.size());
     }
 
 }
@@ -73,6 +99,56 @@ void Billboard::SetPosition(const Vector3& position)
 const Vector3& Billboard::GetPosition() const
 {
     return m_position;
+}
+void Billboard::SetDimensions(uint32_t width, uint32_t height)
+{
+    SetWidth(width);
+    SetHeight(height);
+}
+
+void Billboard::SetWidth(uint32_t width)
+{
+    m_width = width;
+}
+
+void Billboard::SetHeight(uint32_t height)
+{
+    m_height = height;
+}
+
+uint32_t Billboard::GetWidth(uint32_t width) const
+{
+    return m_width;
+}
+
+uint32_t Billboard::GetHeight(uint32_t height) const
+{
+    return m_height;
+}
+
+void Billboard::SetColor(const Color& color)
+{
+    m_color = color;
+}
+
+const Color& Billboard::GetColor() const
+{
+    return m_color;
+}
+
+void Billboard::SetTextureCoordinates(const Vector2& texCoords)
+{
+    m_textureCoords = texCoords;
+}
+
+void Billboard::SetTextureCoordinates(float u, float v)
+{
+    SetTextureCoordinates(Vector2(u,v));
+}
+
+const Vector2& Billboard::GetTextureCoordinates() const
+{
+    return m_textureCoords;
 }
 
 uint32_t Billboard::GetNumberOfVertices() const

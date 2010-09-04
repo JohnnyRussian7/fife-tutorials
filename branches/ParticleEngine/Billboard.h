@@ -25,6 +25,8 @@
 #include <vector>
 
 #include "stdint.h"
+#include "Color.h"
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Renderable.h"
 #include "Vertex.h"
@@ -39,8 +41,21 @@ public:
     Billboard(SceneManager* sceneManager, const Vector3& position);
     Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position = Vector3::Zero());
 
+    void SetDimensions(uint32_t width, uint32_t height);
+    void SetWidth(uint32_t width);
+    void SetHeight(uint32_t height);
+    uint32_t GetWidth(uint32_t width) const;
+    uint32_t GetHeight(uint32_t height) const;
+
     void SetPosition(const Vector3& position);
     const Vector3& GetPosition() const;
+
+    void SetColor(const Color& color);
+    const Color& GetColor() const;
+
+    void SetTextureCoordinates(const Vector2& texCoords);
+    void SetTextureCoordinates(float u, float v);
+    const Vector2& GetTextureCoordinates() const;
 
     uint32_t GetNumberOfVertices() const;
 
@@ -51,7 +66,11 @@ private:
 private:
     SceneManager* m_sceneManager;
     BillboardGroup* m_owner;
+    uint32_t m_width;
+    uint32_t m_height;
     Vector3 m_position;
+    Color m_color;
+    Vector2 m_textureCoords;
     std::vector<Vertex> m_vertices;
 };
 

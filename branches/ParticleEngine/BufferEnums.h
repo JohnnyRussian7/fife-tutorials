@@ -44,6 +44,45 @@ struct HwBufferUsage
 	};
 };
 
+struct VertexParamType
+{
+    enum Enum
+    {
+        Position,
+        Normal,
+        Color,
+        Texture
+    };
+};
+
+struct VertexParamSizeType
+{
+    enum Enum
+    {
+        Float1,
+        Float2,
+        Float3,
+        Float4,
+    };
+
+    static uint32_t GetSize(VertexParamSizeType::Enum type)
+    {
+        switch (type)
+        {
+        case Float1:
+            return sizeof(float);
+        case Float2:
+            return sizeof(float) * 2;
+        case Float3:
+            return sizeof(float) * 3;
+        case Float4:
+            return sizeof(float) * 4;
+        default:
+            return 0;
+        }
+    }
+};
+
 struct IndexBufferDataType
 {
     enum Enum
@@ -52,7 +91,7 @@ struct IndexBufferDataType
         _32bit
     };
 
-    static uint32_t GetIndexDataSize(IndexBufferDataType::Enum indexType)
+    static uint32_t GetSize(IndexBufferDataType::Enum indexType)
     {
         switch (indexType)
         {

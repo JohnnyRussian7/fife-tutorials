@@ -25,6 +25,8 @@
 
 #include "glee/GLee.h"
 #include "OpenglRenderer.h"
+#include "BufferEnums.h"
+#include "OpenglUtility.h"
 #include "OpenglVertexBuffer.h"
 #include "GenericVertexBuffer.h"
 #include "OpenglIndexBuffer.h"
@@ -192,13 +194,22 @@ void OpenglRenderer::Render(Renderable* renderable)
             // TODO - implement code for non vbo support
         }
 
-        glVertexPointer(3, GL_FLOAT, vertexBuffer->GetStride(), BUFFER_OFFSET(0));
+        glVertexPointer(3, 
+            opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float3), 
+            vertexBuffer->GetStride(), 
+            BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Position)));
         glEnableClientState(GL_VERTEX_ARRAY);
 
-        glColorPointer(4, GL_FLOAT, vertexBuffer->GetStride(), BUFFER_OFFSET(24));
+        glColorPointer(4, 
+            opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float4), 
+            vertexBuffer->GetStride(), 
+            BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Color)));
         glEnableClientState(GL_COLOR_ARRAY);
 
-        glTexCoordPointer(2, GL_FLOAT, vertexBuffer->GetStride(), BUFFER_OFFSET(24+sizeof(Color)));
+        glTexCoordPointer(2, 
+            opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float2), 
+            vertexBuffer->GetStride(), 
+            BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Texture))); 
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
         glDrawArrays(GL_TRIANGLES, 0, vertexBuffer->GetNumVertices());

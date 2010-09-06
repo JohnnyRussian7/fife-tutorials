@@ -70,6 +70,55 @@ uint32_t OpenglVertexBuffer::GetNumVertices() const
     return m_numVertices;
 }
 
+uint32_t OpenglVertexBuffer::GetOffset(VertexParamType::Enum paramType) const
+{
+    switch(paramType)
+    {
+    case VertexParamType::Position:
+        return 0;
+    case VertexParamType::Normal:
+        return GetOffset(VertexParamType::Position) + VertexParamSizeType::GetSize(VertexParamSizeType::Float3);
+    case VertexParamType::Color:
+        return GetOffset(VertexParamType::Normal) + VertexParamSizeType::GetSize(VertexParamSizeType::Float3);
+    case VertexParamType::Texture:
+        return GetOffset(VertexParamType::Color) + VertexParamSizeType::GetSize(VertexParamSizeType::Float4);
+    default:
+        return 0;
+    }
+}
+
+void OpenglVertexBuffer::WriteData(const std::vector<Vertex>& vertices, uint32_t offset)
+{
+    //float position[3];
+    //float normal[3];
+    //float color[4];
+    //float texture[2];
+    float values[12] = {0};
+    std::vector<Vertex>::const_iterator iter;
+    for (iter = vertices.begin(); iter != vertices.end(); ++iter)
+    {
+        values[0] = iter->m_position.x;
+        values[1] = iter->m_position.y;
+        values[2] = iter->m_position.z;
+        values[3] = iter->m_normal.x;
+        values[4] = iter->m_normal.y;
+        values[5] = iter->m_normal.z;
+        values[6] = iter->m_color.r;
+        values[7] = iter->m_color.g;
+        values[8] = iter->m_color.b;
+        values[9] = iter->m_color.a;
+        values[10] = iter->m_texture.x;
+        values[11] = iter->m_texture.y;
+
+        WriteData(&values, 12, offset);
+    }
+}
+
+void OpenglVertexBuffer::WriteData(const Vertex& vertex, uint32_t offset)
+{
+
+}
+
 void OpenglVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)
 {
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_bufferId);

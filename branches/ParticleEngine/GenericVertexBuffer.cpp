@@ -54,6 +54,33 @@ uint32_t GenericVertexBuffer::GetNumVertices() const
     return m_numVertices;
 }
 
+uint32_t GenericVertexBuffer::GetOffset(VertexParamType::Enum paramType) const
+{
+    switch(paramType)
+    {
+    case VertexParamType::Position:
+        return 0;
+    case VertexParamType::Normal:
+        return GetOffset(VertexParamType::Position) + VertexParamSizeType::GetSize(VertexParamSizeType::Float3);
+    case VertexParamType::Color:
+        return GetOffset(VertexParamType::Normal) + VertexParamSizeType::GetSize(VertexParamSizeType::Float3);
+    case VertexParamType::Texture:
+        return GetOffset(VertexParamType::Color) + VertexParamSizeType::GetSize(VertexParamSizeType::Float4);
+    default:
+        return 0;
+    }
+}
+
+void GenericVertexBuffer::WriteData(const std::vector<Vertex>& vertices, uint32_t offset)
+{
+    // TODO - implement
+}
+
+void GenericVertexBuffer::WriteData(const Vertex& vertex, uint32_t offset)
+{
+    // TODO - implement
+}
+
 void GenericVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)
 {
     // TODO - implement

@@ -60,7 +60,7 @@ void Billboard::GenerateVertices()
     //     |  /   |
     //  (2)|/_____| (3)
     
-    m_vertexBuffer = m_sceneManager->CreateVertexBuffer(GetNumberOfVertices(), sizeof(Vertex), HwBufferUsage::Dynamic);
+    m_vertexBuffer = m_sceneManager->CreateVertexBuffer(GetNumberOfVertices(), 12*sizeof(float), HwBufferUsage::Dynamic);
 
     if (m_vertexBuffer)
     {
@@ -86,7 +86,7 @@ void Billboard::GenerateVertices()
         position = m_position - Vector3(halfWidth, -halfHeight, 0); 
         vertices.push_back(Vertex(m_position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
 
-        m_vertexBuffer->WriteData(static_cast<void*>(&vertices[0]), vertices.size());
+        m_vertexBuffer->WriteData(vertices);
 //         m_vertexBuffer->WriteData(static_cast<void *>(&vertices[0]), 1);
 //         m_vertexBuffer->WriteData(static_cast<void*>(&vertices[1]), 1, sizeof(Vertex));
 //         m_vertexBuffer->WriteData(static_cast<void*>(&vertices[2]), 1, sizeof(Vertex)*2);

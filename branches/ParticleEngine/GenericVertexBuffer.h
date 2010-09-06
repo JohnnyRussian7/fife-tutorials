@@ -22,8 +22,11 @@
 #ifndef GENERICVERTEXBUFFER_H_
 #define GENERICVERTEXBUFFER_H_
 
+#include <vector>
+
 #include "stdint.h"
 #include "IVertexBuffer.h"
+#include "Vertex.h"
 
 class GenericVertexBuffer : public IVertexBuffer
 {
@@ -35,7 +38,10 @@ public:
     virtual uint32_t GetBufferSize() const;
     virtual uint32_t GetStride() const;
     virtual uint32_t GetNumVertices() const;
+    virtual uint32_t GetOffset(VertexParamType::Enum paramType) const;
 
+    virtual void WriteData(const std::vector<Vertex>& vertices, uint32_t offset=0);
+    virtual void WriteData(const Vertex& vertex, uint32_t offset=0);
     virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0);
     
 private:

@@ -38,4 +38,18 @@ namespace opengl { namespace utility {
 
         return GL_DYNAMIC_DRAW_ARB;
     }
+
+    GLenum ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Enum type)
+    {
+        switch (type)
+        {
+        case VertexParamSizeType::Float1:
+        case VertexParamSizeType::Float2:
+        case VertexParamSizeType::Float3:
+        case VertexParamSizeType::Float4:
+            return GL_FLOAT;
+        default:
+            return 0;
+        }
+    }
 }}

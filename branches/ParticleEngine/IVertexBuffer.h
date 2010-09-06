@@ -22,7 +22,11 @@
 #ifndef IVERTEXBUFFER_H_
 #define IVERTEXBUFFER_H_
 
+#include <vector>
+
 #include "stdint.h"
+#include "BufferEnums.h"
+#include "Vertex.h"
 
 class IVertexBuffer
 {
@@ -33,7 +37,10 @@ public:
     virtual uint32_t GetBufferSize() const = 0;
     virtual uint32_t GetStride() const = 0;
     virtual uint32_t GetNumVertices() const = 0;
+    virtual uint32_t GetOffset(VertexParamType::Enum paramType) const = 0;
 
+    virtual void WriteData(const std::vector<Vertex>& vertices, uint32_t offset=0) = 0;
+    virtual void WriteData(const Vertex& vertex, uint32_t offset=0) = 0;
     virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0) = 0;
 
     //virtual void* GetData() const = 0;

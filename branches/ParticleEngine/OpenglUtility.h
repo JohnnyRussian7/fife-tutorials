@@ -29,7 +29,7 @@
 namespace opengl { namespace utility {
     
     GLenum ConvertToOpenglBufferUsage(HwBufferUsage::Enum usage);
-    
+    GLenum ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Enum type);
 }}
 
 #endif

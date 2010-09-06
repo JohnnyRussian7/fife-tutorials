@@ -25,7 +25,7 @@
 #include "OpenglUtility.h"
 
 OpenglIndexBuffer::OpenglIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage)
-: m_numIndices(numIndices), m_indexType(indexType), m_indexSize(IndexBufferDataType::GetIndexDataSize(indexType)), m_usage(usage)
+: m_numIndices(numIndices), m_indexType(indexType), m_indexSize(IndexBufferDataType::GetSize(indexType)), m_usage(usage)
 {
     m_bufferSize = m_numIndices*m_indexSize;
 

@@ -33,16 +33,16 @@
 #include "GenericIndexBuffer.h"
 #include "Renderable.h"
 #include "Color.h"
+#include "IMaterial.h"
 
 
 // useful macro to help with offsets in buffer objects
 #define BUFFER_OFFSET(i) ((char*)NULL + (i))
 
-// TODO - this is temporary, should be removed
 void DrawBox()
 {
     glBegin(GL_TRIANGLE_STRIP);
-    glColor3f(255, 0, 0);
+    //glColor3f(255, 0, 0);
     glTexCoord2f(0.0, 0.0);			// left bottom
     glVertex3f(-2.0, -2.0, -2.0);
 
@@ -181,6 +181,21 @@ void OpenglRenderer::Render(Renderable* renderable)
         m_modelMatrixUpdate = false;
     }
 
+    ITexture* texture = renderable->GetMaterial()->GetTexture();
+
+    if (texture)
+    {
+         glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+//         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
+//         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+//         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+//         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+// 
+//         glActiveTextureARB(GL_TEXTURE0);
+        glEnable(opengl::utility::ConvertToOpenglTextureType(texture->GetType()));    
+        glBindTexture(opengl::utility::ConvertToOpenglTextureType(texture->GetType()), texture->GetId());
+    }
+
     IVertexBuffer* vertexBuffer = renderable->GetVertexBuffer();
 
     if (vertexBuffer)
@@ -188,31 +203,47 @@ void OpenglRenderer::Render(Renderable* renderable)
         if (m_vboSupport)
         {
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
+
+            glVertexPointer(3, 
+                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float3), 
+                vertexBuffer->GetStride(), 
+                BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Position)));
+            glEnableClientState(GL_VERTEX_ARRAY);
+
+            glColorPointer(4, 
+                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float4), 
+                vertexBuffer->GetStride(), 
+                BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Color)));
+            glEnableClientState(GL_COLOR_ARRAY);
+
+            glTexCoordPointer(2, 
+                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float2), 
+                vertexBuffer->GetStride(), 
+                BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Texture))); 
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         }
         else
         {
-            // TODO - implement code for non vbo support
+            glVertexPointer(3, 
+                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float3), 
+                vertexBuffer->GetStride(), 
+                vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Position)));
+            glEnableClientState(GL_VERTEX_ARRAY);
+
+            glColorPointer(4, 
+                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float4), 
+                vertexBuffer->GetStride(), 
+                vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Color)));
+            glEnableClientState(GL_COLOR_ARRAY);
+
+            glTexCoordPointer(2, 
+                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float2), 
+                vertexBuffer->GetStride(), 
+                vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Texture))); 
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         }
 
-        glVertexPointer(3, 
-            opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float3), 
-            vertexBuffer->GetStride(), 
-            BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Position)));
-        glEnableClientState(GL_VERTEX_ARRAY);
-
-        glColorPointer(4, 
-            opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float4), 
-            vertexBuffer->GetStride(), 
-            BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Color)));
-        glEnableClientState(GL_COLOR_ARRAY);
-
-        glTexCoordPointer(2, 
-            opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float2), 
-            vertexBuffer->GetStride(), 
-            BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Texture))); 
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-        glDrawArrays(GL_TRIANGLES, 0, vertexBuffer->GetNumVertices());
+       glDrawArrays(GL_TRIANGLE_STRIP, 0, vertexBuffer->GetNumVertices());
 
         // disable client state
         glDisableClientState(GL_VERTEX_ARRAY);

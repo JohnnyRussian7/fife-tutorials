@@ -41,11 +41,9 @@ public:
     virtual uint32_t GetNumVertices() const;
     virtual uint32_t GetOffset(VertexParamType::Enum paramType) const;
 
-    virtual void WriteData(const std::vector<Vertex>& vertices, uint32_t offset=0);
-    virtual void WriteData(const Vertex& vertex, uint32_t offset=0);
     virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0); 
 
-    // virtual void* GetData() const;
+    virtual void* GetData(uint32_t offset=0) const;
 
 private:
     uint32_t m_numVertices;

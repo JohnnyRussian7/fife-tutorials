@@ -26,6 +26,8 @@
 #include "Vector2.h"
 #include "Color.h"
 
+// make sure Vertex has no extra padding
+#pragma pack(push, 1)
 struct Vertex
 {
     Vertex() 
@@ -51,5 +53,6 @@ struct Vertex
     Color m_color;
     Vector2 m_texture;
 };
+#pragma pack(pop)
 
 #endif

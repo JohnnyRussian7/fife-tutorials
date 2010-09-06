@@ -56,12 +56,12 @@ void Renderable::SetIndexBuffer(IIndexBuffer* indexBuffer)
     m_indexBuffer = indexBuffer;
 }
 
-Material* Renderable::GetMaterial() const
+IMaterial* Renderable::GetMaterial() const
 {
     return m_material;
 }
 
-void Renderable::SetMaterial(Material* material)
+void Renderable::SetMaterial(IMaterial* material)
 {
     m_material = material;
 }

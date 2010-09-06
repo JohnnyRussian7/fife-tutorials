@@ -23,7 +23,7 @@ namespace
 }
 
 Entity::Entity(const char* name)
-: m_name(""), m_material(0)
+: m_name("")
 {
 	if (name)
 	{
@@ -37,24 +37,12 @@ Entity::Entity(const char* name)
 
 Entity::~Entity()
 {
-    // TODO - does this need to be here?
-    delete m_material;
-    m_material = 0;
+
 }
 
 const char* Entity::GetName() const
 {
 	return m_name.c_str();
-}
-
-void Entity::SetMaterial(IMaterial* material)
-{
-    m_material = material;
-}
-
-IMaterial* Entity::GetMaterial() const
-{
-    return m_material;
 }
 
 Renderable* Entity::GetRenderable()

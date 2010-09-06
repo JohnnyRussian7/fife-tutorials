@@ -9,6 +9,12 @@
 #include "../MathUtil.h"
 #include "../Quaternion.h"
 #include "../Billboard.h"
+#include "../PngLoader.h"
+#include "../Image.h"
+#include "../IMaterial.h"
+#include "../Material.h"
+#include "../ITexture.h"
+#include "../OpenglTexture.h"
 
 int main()
 {
@@ -30,7 +36,22 @@ int main()
     //node->AddEntity(entity);
     //sceneManager->GetRootSceneNode()->AddChild(node);
 
-    Billboard* b = sceneManager->CreateBillboard(32, 32);
+    PngLoader loader;
+    Image* image = loader.Load("..\\data\\fireparticle.png");
+
+    Billboard* b = sceneManager->CreateBillboard(4, 4, Vector3::Zero());
+    IMaterial* m = new Material();
+    
+    if (image)
+    {
+        if (m)
+        {
+            ITexture* texture = new OpenglTexture(TextureType::_2d, image);
+            m->SetTexture(texture);
+        }
+        b->SetMaterial(m);
+    }
+
     sceneManager->GetRootSceneNode()->AddEntity(b);
 
 	while (engine.Run())

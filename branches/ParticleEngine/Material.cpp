@@ -16,6 +16,11 @@ void Material::SetTexture(ITexture* texture)
 	m_texture = texture;
 }
 
+ITexture* Material::GetTexture() const
+{
+    return m_texture;
+}
+
 void Material::SetAmbientColor(const Color& color)
 {
 	m_ambient = color;

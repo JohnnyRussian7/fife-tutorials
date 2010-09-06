@@ -23,17 +23,19 @@
 #define MATERIAL_H_
 
 #include "stdint.h"
+#include "IMaterial.h"
 #include "Color.h"
 
 class ITexture;
 
-class Material
+class Material : public IMaterial
 {
 public:
 	Material();
 	~Material();
 
 	virtual void SetTexture(ITexture* texture);
+    virtual ITexture* GetTexture() const;
 	virtual void SetAmbientColor(const Color& color);
 	virtual void SetDiffuseColor(const Color& color);
 	virtual void SetSpecularColor(const Color& color);

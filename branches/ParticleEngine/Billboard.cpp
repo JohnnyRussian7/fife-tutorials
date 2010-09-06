@@ -60,7 +60,7 @@ void Billboard::GenerateVertices()
     //     |  /   |
     //  (2)|/_____| (3)
     
-    m_vertexBuffer = m_sceneManager->CreateVertexBuffer(GetNumberOfVertices(), 12*sizeof(float), HwBufferUsage::Dynamic);
+    m_vertexBuffer = m_sceneManager->CreateVertexBuffer(GetNumberOfVertices(), sizeof(Vertex), HwBufferUsage::Dynamic);
 
     if (m_vertexBuffer)
     {
@@ -71,26 +71,22 @@ void Billboard::GenerateVertices()
         vertices.reserve(GetNumberOfVertices());
 
         // first vertex (0)
-        Vector3 position = m_position - Vector3(-halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(m_position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
+        Vector3 position = m_position + Vector3(-halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
 
         // second vertex (1)
-        position = m_position - Vector3(halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(m_position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
+        position = m_position + Vector3(halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
 
         // third vertex (2)
-        position = m_position - Vector3(-halfWidth, -halfHeight, 0); 
-        vertices.push_back(Vertex(m_position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
+        position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
 
         // fourth vertex (3)
-        position = m_position - Vector3(halfWidth, -halfHeight, 0); 
-        vertices.push_back(Vertex(m_position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
+        position = m_position + Vector3(halfWidth, -halfHeight, 0); 
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
 
-        m_vertexBuffer->WriteData(vertices);
-//         m_vertexBuffer->WriteData(static_cast<void *>(&vertices[0]), 1);
-//         m_vertexBuffer->WriteData(static_cast<void*>(&vertices[1]), 1, sizeof(Vertex));
-//         m_vertexBuffer->WriteData(static_cast<void*>(&vertices[2]), 1, sizeof(Vertex)*2);
-//         m_vertexBuffer->WriteData(static_cast<void*>(&vertices[3]), 1, sizeof(Vertex)*3);
+        m_vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
     }
 
     m_verticsGenerated = true;

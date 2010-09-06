@@ -24,6 +24,23 @@
 
 namespace opengl { namespace utility {
 
+    GLenum ConvertToOpenglTextureType(TextureType::Enum type)
+    {
+        switch (type)
+        {
+        case TextureType::_1d:
+            return GL_TEXTURE_1D;
+        case TextureType::_2d:
+            return GL_TEXTURE_2D;
+        case TextureType::_3d:
+            return GL_TEXTURE_3D;
+        case TextureType::Cube:
+            return GL_TEXTURE_CUBE_MAP;
+        default:
+            return GL_TEXTURE_2D;
+        }
+    }
+
     GLenum ConvertToOpenglBufferUsage(HwBufferUsage::Enum usage)
     {
         switch (usage)

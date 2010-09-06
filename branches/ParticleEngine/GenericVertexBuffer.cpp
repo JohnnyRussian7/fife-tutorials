@@ -24,14 +24,14 @@
 
 
 GenericVertexBuffer::GenericVertexBuffer(uint32_t numVertices, uint32_t vertexSize)
-: m_numVertices(numVertices), m_vertexSize(vertexSize), m_bufferSize(numVertices*vertexSize)
+: m_data(0), m_numVertices(numVertices), m_vertexSize(vertexSize), m_bufferSize(numVertices*vertexSize)
 {
-
+    m_data = static_cast<uint8_t*>(malloc(m_bufferSize));
 }
 
 GenericVertexBuffer::~GenericVertexBuffer()
 {
-
+    free(m_data);
 }
 
 uint32_t GenericVertexBuffer::GetBufferId() const
@@ -71,17 +71,20 @@ uint32_t GenericVertexBuffer::GetOffset(VertexParamType::Enum paramType) const
     }
 }
 
-void GenericVertexBuffer::WriteData(const std::vector<Vertex>& vertices, uint32_t offset)
-{
-    // TODO - implement
-}
-
-void GenericVertexBuffer::WriteData(const Vertex& vertex, uint32_t offset)
-{
-    // TODO - implement
-}
-
 void GenericVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)
 {
-    // TODO - implement
+    if (offset < m_bufferSize)
+    {
+        memcpy(m_data+offset, data, numElements*m_vertexSize);
+    }
+}
+
+void* GenericVertexBuffer::GetData(uint32_t offset) const
+{
+    if (offset < m_bufferSize)
+    {
+        return m_data + offset;
+    }
+
+    return 0;
 }

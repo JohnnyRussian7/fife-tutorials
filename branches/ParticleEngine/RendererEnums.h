@@ -23,17 +23,4 @@ struct TransformType
 	};
 };
 
-struct TextureType
-{
-	enum Enum
-	{
-		_1d = 0,
-		_2d,
-		_3d,
-		Cube,
-
-		Num
-	};
-};
-
 #endif

@@ -4,7 +4,7 @@
 
 #include "stdint.h"
 #include "ITexture.h"
-#include "RendererEnums.h"
+#include "TextureEnums.h"
 
 class Image;
 
@@ -14,10 +14,12 @@ public:
 	OpenglTexture(TextureType::Enum type, Image* image);
 	~OpenglTexture();
 
-	uint32_t GetTextureId() const;
-	void Upload();
+	virtual uint32_t GetId() const;
+    virtual TextureType::Enum GetType() const;
+	virtual void Upload();
 
 private:
+    TextureType::Enum m_type;
 	uint32_t m_textureId;
 	Image* m_image;
 };

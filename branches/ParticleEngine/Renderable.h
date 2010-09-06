@@ -24,7 +24,7 @@
 
 class IVertexBuffer;
 class IIndexBuffer;
-class Material;
+class IMaterial;
 
 class Renderable
 {
@@ -38,13 +38,13 @@ public:
     IIndexBuffer* GetIndexBuffer() const;
     void SetIndexBuffer(IIndexBuffer* indexBuffer);
 
-    Material* GetMaterial() const;
-    void SetMaterial(Material* material);
+    IMaterial* GetMaterial() const;
+    void SetMaterial(IMaterial* material);
     
 protected:
     IVertexBuffer* m_vertexBuffer;
     IIndexBuffer* m_indexBuffer;
-    Material* m_material;
+    IMaterial* m_material;
 };
 
 #endif

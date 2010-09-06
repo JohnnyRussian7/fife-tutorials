@@ -14,15 +14,12 @@ public:
 	~Entity();
 
 	const char* GetName() const;
-    void SetMaterial(IMaterial* material);
-    IMaterial* GetMaterial() const;
 
     virtual Renderable* GetRenderable();
     virtual void Update();
 
 private:
 	std::string m_name;
-    IMaterial* m_material;
 };
 
 #endif

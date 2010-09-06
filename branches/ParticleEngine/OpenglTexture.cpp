@@ -1,20 +1,24 @@
 
 #include "Opengltexture.h"
 #include "Image.h"
+#include "OpenglUtility.h"
 
 #include <windows.h>
 #include <gl/gl.h>			// OpenGL headers
 #include <gl/glu.h>
 
 OpenglTexture::OpenglTexture(TextureType::Enum type, Image *image)
-: m_image(image)
+: m_type(type), m_textureId(0), m_image(image)
 {
 	if (image)
 	{
 		glGenTextures(1, reinterpret_cast<GLuint*>(&m_textureId));
 
-		// push texture to GPU
-		Upload();
+        if (m_textureId)
+        {
+            // push texture to GPU
+		    Upload();
+        }
 	}
 }
 
@@ -28,31 +32,38 @@ OpenglTexture::~OpenglTexture()
 	delete m_image;
 }
 
-uint32_t OpenglTexture::GetTextureId() const
+uint32_t OpenglTexture::GetId() const
 {
 	return m_textureId;
+}
+
+TextureType::Enum OpenglTexture::GetType() const
+{
+    return m_type;
 }
 
 void OpenglTexture::Upload()
 {
 	if (m_image)
 	{
+        GLenum textureType = opengl::utility::ConvertToOpenglTextureType(m_type);
+
 		// enable 2d textures and bind to the current texture
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, m_textureId);
+		glEnable(textureType);
+		glBindTexture(textureType, m_textureId);
 
 		// enable filters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		if (m_image->GetColorFormat() == ColorFormat::R8G8B8)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_image->GetWidth(), m_image->GetHeight(),
+			glTexImage2D(textureType, 0, GL_RGB, m_image->GetWidth(), m_image->GetHeight(),
 				0, GL_RGB, GL_UNSIGNED_BYTE, m_image->GetData());
 		}
 		else if (m_image->GetColorFormat() == ColorFormat::R8G8B8A8)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_image->GetWidth(), m_image->GetHeight(),
+			glTexImage2D(textureType, 0, GL_RGBA, m_image->GetWidth(), m_image->GetHeight(),
 				0, GL_RGBA, GL_UNSIGNED_BYTE, m_image->GetData());
 		}
 	}

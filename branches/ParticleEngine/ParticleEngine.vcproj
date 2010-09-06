@@ -505,6 +505,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TextureEnums.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Timer.h"
 				>
 			</File>

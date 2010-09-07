@@ -61,9 +61,10 @@ OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
 : m_settings(settings), m_viewport(Viewport()),
   m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
   m_projectionMatrix(Matrix4::Identity()), m_modelMatrixUpdate(false), m_viewMatrixUpdate(false),
-  m_projectionMatrixUpdate(false), m_activeTexture(0), m_vboSupport(false)
+  m_projectionMatrixUpdate(false), m_activeTexture(0), m_vboSupport(false), m_nonPowerOfTwoTextureSupport(false)
 {
     m_vboSupport = (GLEE_ARB_vertex_buffer_object == GL_TRUE);
+    m_nonPowerOfTwoTextureSupport = (GLEE_ARB_texture_non_power_of_two == GL_TRUE);
 }
 
 OpenglRenderer::~OpenglRenderer()

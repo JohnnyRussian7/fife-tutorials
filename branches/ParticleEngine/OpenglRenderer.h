@@ -70,6 +70,7 @@ private:
 	OpenglTexture* m_activeTexture;
 
     bool m_vboSupport;
+    bool m_nonPowerOfTwoTextureSupport;
 };
 
 #endif

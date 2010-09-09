@@ -32,12 +32,12 @@ namespace
 {
 	std::string CreateUniqueSceneNodeName()
 	{
-		// automated counting for scene node name generation, in case the user doesn't provide a name
+		// automated counting for name generation, in case the user doesn't provide a name
 		static uint32_t uniqueNumber = 0;
-		static std::string sceneNodeBaseName = "SceneNode";
+        static std::string baseName = "SceneNode";
 
 		std::ostringstream oss;
-		oss << sceneNodeBaseName << "_" << uniqueNumber;
+		oss << baseName << "_" << uniqueNumber;
 		
 		const std::string name = oss.str();
 		++uniqueNumber;

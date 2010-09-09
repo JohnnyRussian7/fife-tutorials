@@ -151,6 +151,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\AnimatedEntity.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\AnimatedFrame.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\AxisAlignedBoundingBox.cpp"
 				>
 			</File>
@@ -321,6 +329,14 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\AnimatedEntity.h"
+				>
+			</File>
+			<File
+				RelativePath=".\AnimatedFrame.h"
+				>
+			</File>
+			<File
 				RelativePath=".\AxisAlignedBoundingBox.h"
 				>
 			</File>
@@ -370,6 +386,18 @@
 			</File>
 			<File
 				RelativePath=".\GenericVertexBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IAnimatedEntity.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IAnimatedFrame.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IEntity.h"
 				>
 			</File>
 			<File

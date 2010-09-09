@@ -201,7 +201,7 @@ void OpenglRenderer::Render(Renderable* renderable)
 
     if (vertexBuffer)
     {
-        if (m_vboSupport)
+        if (m_vboSupport && m_settings.useVbo)
         {
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
 
@@ -251,7 +251,7 @@ void OpenglRenderer::Render(Renderable* renderable)
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-        if (m_vboSupport)
+        if (m_vboSupport && m_settings.useVbo)
         {
             // unbind the buffer
             glBindBuffer(GL_ARRAY_BUFFER, 0);

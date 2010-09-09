@@ -4,10 +4,11 @@
 
 #include <string>
 
-class IMaterial;
+#include "IEntity.h"
+
 class Renderable;
 
-class Entity
+class Entity : public IEntity
 {
 public:
 	Entity(const char* name=0);

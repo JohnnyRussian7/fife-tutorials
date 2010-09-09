@@ -9,12 +9,12 @@ namespace
 {
     std::string CreateUniqueCameraName()
     {
-        // automated counting for camera name generation, in case the user doesn't provide a name
+        // automated counting for name generation, in case the user doesn't provide a name
         static uint32_t uniqueNumber = 0;
-        static std::string cameraBaseName = "Camera";
+        static std::string baseName = "Camera";
 
         std::ostringstream oss;
-        oss << cameraBaseName << "_" << uniqueNumber;
+        oss << baseName << "_" << uniqueNumber;
 
         const std::string name = oss.str();
         ++uniqueNumber;

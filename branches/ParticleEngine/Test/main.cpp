@@ -37,9 +37,9 @@ int main()
     //sceneManager->GetRootSceneNode()->AddChild(node);
 
     PngLoader loader;
-    Image* image = loader.Load("..\\data\\fireparticle.png");
+    Image* image = loader.Load("..\\data\\grassalpha.png");
 
-    Billboard* b = sceneManager->CreateBillboard(4, 4, Vector3::Zero());
+    Billboard* b = sceneManager->CreateBillboard(16, 16, Vector3::Zero());
     IMaterial* m = new Material();
     
     if (image)
@@ -51,7 +51,7 @@ int main()
         }
         b->SetMaterial(m);
     }
-
+    
     sceneManager->GetRootSceneNode()->AddEntity(b);
 
 	while (engine.Run())

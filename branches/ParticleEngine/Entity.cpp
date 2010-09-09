@@ -8,12 +8,12 @@ namespace
 {
     std::string CreateUniqueEntityName()
     {
-        // automated counting for entity name generation, in case the user doesn't provide a name
+        // automated counting for name generation, in case the user doesn't provide a name
         static uint32_t uniqueNumber = 0;
-        static std::string entityBaseName = "Entity";
+        static std::string baseName = "Entity";
 
         std::ostringstream oss;
-        oss << entityBaseName << "_" << uniqueNumber;
+        oss << baseName << "_" << uniqueNumber;
 
         const std::string name = oss.str();
         ++uniqueNumber;

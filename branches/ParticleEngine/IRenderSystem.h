@@ -36,12 +36,13 @@ class Renderable;
 struct RenderSystemSettings
 {
     RenderSystemSettings()
-    : renderSystemType(RenderSystemType::Opengl)
+    : renderSystemType(RenderSystemType::Opengl), useVbo(true)
     {
 
     }
 
     RenderSystemType::Enum renderSystemType;
+    bool useVbo;
 
 
 };

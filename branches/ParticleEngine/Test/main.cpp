@@ -18,8 +18,10 @@
 
 int main()
 {
-	Engine engine;
-	
+    EngineSettings settings;
+    settings.renderSystemSettings.useVbo = true;
+	Engine engine(settings);
+
     SceneManager* sceneManager = engine.GetSceneManager();
     Camera* camera = sceneManager->CreateCamera();
 	camera->Rotate(Vector3(1,0,0), DegToRad(30));		// pitch

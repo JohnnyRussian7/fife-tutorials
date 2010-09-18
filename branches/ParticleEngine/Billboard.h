@@ -65,7 +65,7 @@ public:
     virtual void Update();
 
 private:
-    void GenerateVertices();
+    void GenerateBuffers();
     void GenerateIndices();
 
 private:
@@ -77,7 +77,7 @@ private:
     Color m_color;
     FloatRect m_textureCoords;
     std::vector<Vertex> m_vertices;
-    bool m_verticsGenerated;
+    bool m_buffersGenerated;
 };
 
 #endif

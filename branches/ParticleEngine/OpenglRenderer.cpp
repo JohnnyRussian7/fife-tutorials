@@ -126,7 +126,7 @@ void OpenglRenderer::SetTransform(TransformType::Enum type, const Matrix4& mat)
 }
 IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
 {
-    if (m_vboSupport)
+    if (m_vboSupport && m_settings.useVbo)
     {
         return new OpenglVertexBuffer(numVertices, vertexSize, usage);
     }
@@ -136,7 +136,7 @@ IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t
 
 IIndexBuffer* OpenglRenderer::CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage)
 {
-    if (m_vboSupport)
+    if (m_vboSupport && m_settings.useVbo)
     {
         return new OpenglIndexBuffer(numIndices, indexType, usage);
     }
@@ -193,11 +193,13 @@ void OpenglRenderer::Render(Renderable* renderable)
 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 // 
 //         glActiveTextureARB(GL_TEXTURE0);
-        glEnable(opengl::utility::ConvertToOpenglTextureType(texture->GetType()));    
-        glBindTexture(opengl::utility::ConvertToOpenglTextureType(texture->GetType()), texture->GetId());
+        glEnable(opengl::utility::ConvertTextureType(texture->GetType()));    
+        glBindTexture(opengl::utility::ConvertTextureType(texture->GetType()), texture->GetId());
     }
 
     IVertexBuffer* vertexBuffer = renderable->GetVertexBuffer();
+    IIndexBuffer* indexBuffer = renderable->GetIndexBuffer();
+    void* indexData = 0;
 
     if (vertexBuffer)
     {
@@ -206,19 +208,19 @@ void OpenglRenderer::Render(Renderable* renderable)
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
 
             glVertexPointer(3, 
-                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float3), 
+                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
                 vertexBuffer->GetStride(), 
                 BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Position)));
             glEnableClientState(GL_VERTEX_ARRAY);
 
             glColorPointer(4, 
-                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float4), 
+                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
                 vertexBuffer->GetStride(), 
                 BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Color)));
             glEnableClientState(GL_COLOR_ARRAY);
 
             glTexCoordPointer(2, 
-                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float2), 
+                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
                 vertexBuffer->GetStride(), 
                 BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Texture))); 
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -226,25 +228,46 @@ void OpenglRenderer::Render(Renderable* renderable)
         else
         {
             glVertexPointer(3, 
-                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float3), 
+                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
                 vertexBuffer->GetStride(), 
                 vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Position)));
             glEnableClientState(GL_VERTEX_ARRAY);
 
             glColorPointer(4, 
-                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float4), 
+                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
                 vertexBuffer->GetStride(), 
                 vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Color)));
             glEnableClientState(GL_COLOR_ARRAY);
 
             glTexCoordPointer(2, 
-                opengl::utility::ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Float2), 
+                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
                 vertexBuffer->GetStride(), 
                 vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Texture))); 
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         }
 
-       glDrawArrays(GL_TRIANGLE_STRIP, 0, vertexBuffer->GetNumVertices());
+        if (indexBuffer)
+        {
+            // TODO - this should be programmable
+            uint32_t indexStart = 0;
+            void *indexData = 0;
+            if (m_vboSupport && m_settings.useVbo)
+            {
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->GetBufferId());
+                indexData = BUFFER_OFFSET(indexStart * indexBuffer->GetStride());
+            }
+            else
+            {
+                indexData = indexBuffer->GetData(indexStart);
+            }
+
+            glDrawElements(GL_TRIANGLE_STRIP, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
+            //glDrawRangeElements(GL_TRIANGLE_STRIP, 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
+        }
+        else
+        {
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, vertexBuffer->GetNumVertices());
+        }
 
         // disable client state
         glDisableClientState(GL_VERTEX_ARRAY);
@@ -253,8 +276,9 @@ void OpenglRenderer::Render(Renderable* renderable)
 
         if (m_vboSupport && m_settings.useVbo)
         {
-            // unbind the buffer
+            // unbind the buffers
             glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
     }
 

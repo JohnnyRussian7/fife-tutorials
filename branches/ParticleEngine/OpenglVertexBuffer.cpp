@@ -39,7 +39,7 @@ OpenglVertexBuffer::OpenglVertexBuffer(uint32_t numVertices, uint32_t vertexSize
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_bufferId);
 
     // set the initial size and usage
-    glBufferDataARB(GL_ARRAY_BUFFER_ARB, m_bufferSize, 0, opengl::utility::ConvertToOpenglBufferUsage(m_usage));
+    glBufferDataARB(GL_ARRAY_BUFFER_ARB, m_bufferSize, 0, opengl::utility::ConvertBufferUsage(m_usage));
 }
 
 OpenglVertexBuffer::~OpenglVertexBuffer()
@@ -93,7 +93,7 @@ void OpenglVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t of
 
     if (offset == 0 && (numElements*m_vertexSize == m_bufferSize))
     {
-        glBufferDataARB(GL_ARRAY_BUFFER_ARB, m_bufferSize, data, opengl::utility::ConvertToOpenglBufferUsage(m_usage));
+        glBufferDataARB(GL_ARRAY_BUFFER_ARB, m_bufferSize, data, opengl::utility::ConvertBufferUsage(m_usage));
     }
     else
     {

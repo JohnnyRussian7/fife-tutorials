@@ -41,7 +41,7 @@ OpenglIndexBuffer::OpenglIndexBuffer(uint32_t numIndices, IndexBufferDataType::E
     glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, m_bufferId);
 
     // set initial size and usage
-    glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, m_bufferSize, 0, opengl::utility::ConvertToOpenglBufferUsage(m_usage));
+    glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, m_bufferSize, 0, opengl::utility::ConvertBufferUsage(m_usage));
 }
 
 OpenglIndexBuffer::~OpenglIndexBuffer()
@@ -59,13 +59,30 @@ uint32_t OpenglIndexBuffer::GetBufferSize() const
     return m_bufferSize;
 }
 
+IndexBufferDataType::Enum OpenglIndexBuffer::GetType() const
+{
+    return m_indexType;
+}
+
+uint32_t OpenglIndexBuffer::GetStride() const
+{
+    return m_indexSize;
+}
+
+void* OpenglIndexBuffer::GetData(uint32_t offset) const
+{
+    // for an index buffer object no data needs to be returned
+    // the renderer should use offsets instead
+    return 0;
+}
+
 void OpenglIndexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)
 {
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_bufferId);
 
     if (offset == 0 && (numElements*m_indexSize == m_bufferSize))
     {
-        glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, m_bufferSize, data, opengl::utility::ConvertToOpenglBufferUsage(m_usage));
+        glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, m_bufferSize, data, opengl::utility::ConvertBufferUsage(m_usage));
     }
     else
     {

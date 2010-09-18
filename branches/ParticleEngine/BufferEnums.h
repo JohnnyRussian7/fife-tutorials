@@ -87,7 +87,8 @@ struct IndexBufferDataType
 {
     enum Enum
     {
-        _16bit = 0,
+        _8bit = 0,
+        _16bit,
         _32bit
     };
 

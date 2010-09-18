@@ -23,6 +23,7 @@
 #define IINDEXBUFFER_H_
 
 #include "stdint.h"
+#include "BufferEnums.h"
 
 class IIndexBuffer
 {
@@ -31,6 +32,9 @@ public:
 
     virtual uint32_t GetBufferId() const = 0;
     virtual uint32_t GetBufferSize() const = 0;
+    virtual IndexBufferDataType::Enum GetType() const = 0;
+    virtual uint32_t GetStride() const = 0;
+    virtual void* GetData(uint32_t offset=0) const = 0;
 
     virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0) = 0;
 };

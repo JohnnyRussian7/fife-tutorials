@@ -29,9 +29,10 @@
 
 namespace opengl { namespace utility {
     
-    GLenum ConvertToOpenglTextureType(TextureType::Enum type);
-    GLenum ConvertToOpenglBufferUsage(HwBufferUsage::Enum usage);
-    GLenum ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Enum type);
+    GLenum ConvertTextureType(TextureType::Enum type);
+    GLenum ConvertBufferUsage(HwBufferUsage::Enum usage);
+    GLenum ConvertVertexBufferParamSizeType(VertexParamSizeType::Enum type);
+    GLenum ConvertIndexBufferType(IndexBufferDataType::Enum type);
 }}
 
 #endif

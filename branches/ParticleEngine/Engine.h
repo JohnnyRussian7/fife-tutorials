@@ -30,8 +30,7 @@ struct EngineSettings
 class Engine : public IWindowSystemEventListener
 {
 public:
-    Engine();
-    Engine(const EngineSettings& settings);
+    Engine(const EngineSettings& settings = EngineSettings());
 
     ~Engine();
 

@@ -8,8 +8,8 @@
 #include <cassert>
 #include <cmath>
 
-Engine::Engine()
-: m_settings(EngineSettings()), m_windowSystem(0), m_renderSystem(0), m_fileSystem(0),
+Engine::Engine(const EngineSettings& settings)
+: m_settings(settings), m_windowSystem(0), m_renderSystem(0), m_fileSystem(0),
   m_sceneManager(0), m_fps(30), m_fpsFrameCount(0), m_fpsStartTime(0)
 {
     m_windowSystem = CreateWindowSystem(m_settings.windowSettings);
@@ -22,14 +22,6 @@ Engine::Engine()
 
 	// TODO - this needs to be moved elsewhere
 	m_renderSystem->SetViewPort(Viewport(0, 0, m_settings.windowSettings.width, m_settings.windowSettings.height));
-}
-
-Engine::Engine(const EngineSettings& settings)
-: m_settings(settings), m_windowSystem(0), m_renderSystem(0), m_fileSystem(0)
-{
-    m_windowSystem = CreateWindowSystem(m_settings.windowSettings);
-    m_renderSystem = CreateRenderSystem(m_settings.renderSystemSettings);
-    m_fileSystem = CreateFileSystem(m_settings.fileSystemSettings);
 }
 
 Engine::~Engine()

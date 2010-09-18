@@ -34,9 +34,13 @@ public:
 
     virtual uint32_t GetBufferId() const;
     virtual uint32_t GetBufferSize() const;
+    virtual IndexBufferDataType::Enum GetType() const;
+    virtual uint32_t GetStride() const;
+    virtual void* GetData(uint32_t offset=0) const;
 
     virtual void WriteData(void* data, uint32_t numElements, uint32_t offset=0);
 private:
+    uint8_t* m_data;
     uint32_t m_numIndices;
     IndexBufferDataType::Enum m_indexType;
     uint32_t m_indexSize;

@@ -24,7 +24,7 @@
 
 namespace opengl { namespace utility {
 
-    GLenum ConvertToOpenglTextureType(TextureType::Enum type)
+    GLenum ConvertTextureType(TextureType::Enum type)
     {
         switch (type)
         {
@@ -41,7 +41,7 @@ namespace opengl { namespace utility {
         }
     }
 
-    GLenum ConvertToOpenglBufferUsage(HwBufferUsage::Enum usage)
+    GLenum ConvertBufferUsage(HwBufferUsage::Enum usage)
     {
         switch (usage)
         {
@@ -56,7 +56,7 @@ namespace opengl { namespace utility {
         return GL_DYNAMIC_DRAW_ARB;
     }
 
-    GLenum ConvertToOpenglVertexBufferParamSizeType(VertexParamSizeType::Enum type)
+    GLenum ConvertVertexBufferParamSizeType(VertexParamSizeType::Enum type)
     {
         switch (type)
         {
@@ -67,6 +67,19 @@ namespace opengl { namespace utility {
             return GL_FLOAT;
         default:
             return 0;
+        }
+    }
+
+    GLenum ConvertIndexBufferType(IndexBufferDataType::Enum type)
+    {
+        switch (type)
+        {
+        case IndexBufferDataType::_8bit:
+            return GL_UNSIGNED_SHORT;
+        case IndexBufferDataType::_16bit:
+            return GL_UNSIGNED_SHORT;
+        case IndexBufferDataType::_32bit:
+            return GL_UNSIGNED_INT;
         }
     }
 }}

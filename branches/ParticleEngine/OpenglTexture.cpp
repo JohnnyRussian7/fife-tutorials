@@ -46,7 +46,7 @@ void OpenglTexture::Upload()
 {
 	if (m_image)
 	{
-        GLenum textureType = opengl::utility::ConvertToOpenglTextureType(m_type);
+        GLenum textureType = opengl::utility::ConvertTextureType(m_type);
 
 		// enable 2d textures and bind to the current texture
 		glEnable(textureType);

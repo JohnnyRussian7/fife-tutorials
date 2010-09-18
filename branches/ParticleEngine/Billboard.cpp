@@ -30,26 +30,26 @@
 
 Billboard::Billboard(SceneManager* sceneManager)
 : m_sceneManager(sceneManager), m_owner(0), m_width(1), m_height(1),
-m_position(Vector3::Zero()), m_color(ColorWhite()), m_verticsGenerated(false)
+m_position(Vector3::Zero()), m_color(ColorWhite()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
 }
 
 Billboard::Billboard(SceneManager* sceneManager, const Vector3& position)
 : m_sceneManager(sceneManager),m_owner(0), m_width(1), m_height(1),
-m_position(position), m_color(ColorWhite()), m_verticsGenerated(false)
+m_position(position), m_color(ColorWhite()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
 }
 
 Billboard::Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position)
 : m_sceneManager(sceneManager), m_owner(owner), m_width(1), m_height(1),
-m_position(position), m_color(ColorWhite()), m_verticsGenerated(false)
+m_position(position), m_color(ColorWhite()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
 }
 
-void Billboard::GenerateVertices()
+void Billboard::GenerateBuffers()
 {
     // 4 vertices per billboard
     // split into 2 triangles with 
@@ -89,7 +89,21 @@ void Billboard::GenerateVertices()
         m_vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
     }
 
-    m_verticsGenerated = true;
+    m_indexBuffer = m_sceneManager->CreateIndexBuffer(6, IndexBufferDataType::_16bit, HwBufferUsage::Static);
+
+    if (m_indexBuffer)
+    {
+        uint16_t indexData[6];
+        indexData[0] = uint16_t(0);
+        indexData[1] = uint16_t(2);
+        indexData[2] = uint16_t(1);
+        indexData[3] = uint16_t(1);
+        indexData[4] = uint16_t(2);
+        indexData[5] = uint16_t(3);
+        m_indexBuffer->WriteData(indexData, 6, 0);
+    }
+
+    m_buffersGenerated = true;
 }
 
 void Billboard::SetPosition(const Vector3& position)
@@ -165,8 +179,8 @@ Renderable* Billboard::GetRenderable()
 
 void Billboard::Update()
 {
-    if (!m_verticsGenerated)
+    if (!m_buffersGenerated)
     {
-        GenerateVertices();
+        GenerateBuffers();
     }
 }

@@ -25,34 +25,10 @@
 #include "AnimatedFrame.h"
 #include "IAnimatedEntity.h"
 
-namespace
+AnimatedFrame::AnimatedFrame(IAnimatedEntity* owner, uint32_t frameNumber) 
+: m_owner(owner), m_frameNumber(frameNumber), m_textureCoords(FloatRect(0.0, 1.0, 1.0, 0.0)), m_texture(0)
 {
-    std::string CreateUniqueFrameName()
-    {
-        // automated counting for name generation, in case the user doesn't provide a name
-        static uint32_t uniqueNumber = 0;
-        static std::string baseName = "Frame";
 
-        std::ostringstream oss;
-        oss << baseName << "_" << uniqueNumber;
-
-        const std::string name = oss.str();
-        ++uniqueNumber;
-
-        return name;
-    }
-}
-
-AnimatedFrame::AnimatedFrame(IAnimatedEntity* owner, uint32_t frameNumber, const char* name) : m_owner(owner), m_frameNumber(frameNumber)
-{
-    if (!name)
-    {
-        m_name = CreateUniqueFrameName();
-    }
-    else
-    {
-        m_name = name;
-    }
 }
 
 const char* AnimatedFrame::GetName() const
@@ -63,4 +39,24 @@ const char* AnimatedFrame::GetName() const
 uint32_t AnimatedFrame::GetFrameNumber() const
 {
     return m_frameNumber;
+}
+
+ITexture* AnimatedFrame::GetTexture() const
+{
+    return m_texture;
+}
+
+const FloatRect& AnimatedFrame::GetTextureCoordinates() const
+{
+    return m_textureCoords;
+}
+
+void AnimatedFrame::SetTextureCoordinates(const FloatRect& texCoords)
+{
+    m_textureCoords = texCoords;
+}
+
+void AnimatedFrame::SetTextureCoordinates(float left, float top, float right, float bottom)
+{
+    SetTextureCoordinates(FloatRect(left, top, right, bottom));
 }

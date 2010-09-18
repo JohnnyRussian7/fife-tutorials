@@ -48,16 +48,15 @@ public:
     virtual bool IsLooping() const;
     virtual void SetLooping(bool looping);
 
-    virtual void AddFrame(Image* image, const char* name=0);
+    virtual void AddFrame(Image* image);
     virtual void RemoveFrame(uint32_t index);
-    virtual void RemoveFrame(const char* name);
 
     virtual void Start();
     virtual void Stop();
     virtual void Pause();
     virtual void Reset();
 
-    virtual void Animate();
+    virtual void Animate(uint32_t time);
 
 private:
     uint32_t m_numFrames;
@@ -65,6 +64,7 @@ private:
     bool m_looping;
     uint32_t m_currentIndex;
     bool m_running;
+    uint32_t m_lastUpdateTime;
     
     typedef std::vector<IAnimatedFrame*> FrameContainer;
     FrameContainer m_frames;

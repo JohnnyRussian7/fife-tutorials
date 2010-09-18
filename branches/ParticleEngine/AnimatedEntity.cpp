@@ -25,7 +25,7 @@
 
 
 AnimatedEntity::AnimatedEntity()
-: m_numFrames(0), m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true)
+: m_numFrames(0), m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), m_lastUpdateTime(0)
 {
 
 }
@@ -80,11 +80,11 @@ void AnimatedEntity::SetLooping(bool looping)
     m_looping = looping;
 }
 
-void AnimatedEntity::AddFrame(Image* image, const char* name)
+void AnimatedEntity::AddFrame(Image* image)
 {
     uint32_t m_frameNumber = m_frames.size();
 
-    m_frames.push_back(new AnimatedFrame(this, m_frameNumber, name));
+    m_frames.push_back(new AnimatedFrame(this, m_frameNumber));
 }
 
 void AnimatedEntity::RemoveFrame(uint32_t index)
@@ -95,20 +95,6 @@ void AnimatedEntity::RemoveFrame(uint32_t index)
         delete frame;
 
         m_frames.erase(m_frames.begin()+index);
-    }
-}
-
-void AnimatedEntity::RemoveFrame(const char* name)
-{
-    FrameContainer::iterator iter;
-    for (iter = m_frames.begin(); iter != m_frames.end(); ++iter)
-    {
-        if (strcmp((*iter)->GetName(), name) == 0)
-        {
-            delete *iter;
-            m_frames.erase(iter);
-            break;
-        }
     }
 }
 
@@ -131,4 +117,17 @@ void AnimatedEntity::Pause()
 void AnimatedEntity::Reset()
 {
     m_currentIndex = 0;
+}
+
+void AnimatedEntity::Animate(uint32_t time)
+{
+    if (m_running)
+    {
+        uint32_t deltaTime = m_lastUpdateTime - time;
+
+        // compute the animation frame
+        m_currentIndex = deltaTime / GetTotalRunTime() * GetNumFrames();
+
+        m_lastUpdateTime = time;
+    }
 }

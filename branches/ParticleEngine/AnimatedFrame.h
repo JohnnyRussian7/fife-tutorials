@@ -25,6 +25,7 @@
 #include <string>
 
 #include "stdint.h"
+#include "Rect.h"
 #include "IAnimatedFrame.h"
 
 class IAnimatedEntity;
@@ -32,15 +33,21 @@ class IAnimatedEntity;
 class AnimatedFrame : public IAnimatedFrame
 {
 public:
-    AnimatedFrame(IAnimatedEntity* owner, uint32_t frameNumber, const char* name=0);
+    AnimatedFrame(IAnimatedEntity* owner, uint32_t frameNumber);
     
     virtual const char* GetName() const;
     virtual uint32_t GetFrameNumber() const;
+    virtual ITexture* GetTexture() const;
+    virtual const FloatRect& GetTextureCoordinates() const;
+    virtual void SetTextureCoordinates(const FloatRect& texCoords);
+    virtual void SetTextureCoordinates(float left, float top, float right, float bottom);
 
 private:
     IAnimatedEntity* m_owner;
     std::string m_name;
     uint32_t m_frameNumber;
+    ITexture* m_texture;
+    FloatRect m_textureCoords;
 };
 
 #endif

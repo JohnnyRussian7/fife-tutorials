@@ -22,6 +22,9 @@
 #ifndef IANIMATEDFRAME_H_
 #define IANIMATEDFRAME_H_
 
+template <typename T> struct Rect;
+class ITexture;
+
 class IAnimatedFrame
 {
 public:
@@ -29,6 +32,10 @@ public:
 
     virtual const char* GetName() const = 0;
     virtual uint32_t GetFrameNumber() const = 0;
+    virtual ITexture* GetTexture() const = 0;
+    virtual const FloatRect& GetTextureCoordinates() const = 0;
+    virtual void SetTextureCoordinates(const FloatRect& texCoords) = 0;
+    virtual void SetTextureCoordinates(float left, float top, float right, float bottom) = 0;
 };
 
 #endif

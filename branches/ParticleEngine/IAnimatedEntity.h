@@ -49,7 +49,7 @@ public:
     virtual void Pause() = 0;
     virtual void Reset() = 0;
 
-    virtual void Animate() = 0;
+    virtual void Animate(uint32_t time) = 0;
 };
 
 #endif

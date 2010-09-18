@@ -24,6 +24,35 @@
 
 namespace opengl { namespace utility {
 
+    GLenum ConvertPrimitiveType(PrimitiveType::Enum type)
+    {
+        switch (type)
+        {
+        case PrimitiveType::Points:
+            return GL_POINTS;
+        case PrimitiveType::Line:
+            return GL_LINE;
+        case PrimitiveType::LineStrip:
+            return GL_LINE_STRIP;
+        case PrimitiveType::LineLoop:
+            return GL_LINE_LOOP;
+        case PrimitiveType::Triangles:
+            return GL_TRIANGLES;
+        case PrimitiveType::TriangleStrip:
+            return GL_TRIANGLE_STRIP;
+        case PrimitiveType::TriangleFan:
+            return GL_TRIANGLE_FAN;
+        case PrimitiveType::Quads:
+            return GL_QUADS;
+        case PrimitiveType::QuadStrip:
+            return GL_QUAD_STRIP;
+        case PrimitiveType::Polygon:
+            return GL_POLYGON;
+        default:
+            return GL_TRIANGLES;
+        }
+    }
+
     GLenum ConvertTextureType(TextureType::Enum type)
     {
         switch (type)
@@ -75,11 +104,13 @@ namespace opengl { namespace utility {
         switch (type)
         {
         case IndexBufferDataType::_8bit:
-            return GL_UNSIGNED_SHORT;
+            return GL_UNSIGNED_BYTE;
         case IndexBufferDataType::_16bit:
             return GL_UNSIGNED_SHORT;
         case IndexBufferDataType::_32bit:
             return GL_UNSIGNED_INT;
+        default:
+            return GL_UNSIGNED_SHORT;
         }
     }
 }}

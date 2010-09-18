@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.h
+*	Filename: Frustrum.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,38 +19,32 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
+#ifndef FRUSTRUM_H_
+#define FRUSTRUM_H_
 
-#include "RendererEnums.h"
+include <vector>
 
-class IVertexBuffer;
-class IIndexBuffer;
-class IMaterial;
+struct FrustrumSides
+{
+    enum Enum
+    {
+        Near = 0,
+        Far,
+        Left,
+        Right,
+        Top,
+        Bottom
+    };
+};
 
-class Renderable
+class Frustrum
 {
 public:
-    Renderable();
-	~Renderable();
+    Frustrum(const Plane& near, const Plane& far, const Plane& left, const Plane& right, const Plane& top, const Plane& bottom);
 
-    IVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(IVertexBuffer* vertexBuffer);
+private:
+    std::vector<Plane> m_sides;
 
-    IIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(IIndexBuffer* indexBuffer);
-
-    IMaterial* GetMaterial() const;
-    void SetMaterial(IMaterial* material);
-    
-    void SetPrimitiveType(PrimitiveType::Enum type);
-    PrimitiveType::Enum GetPrimitiveType() const;
-
-protected:
-    IVertexBuffer* m_vertexBuffer;
-    IIndexBuffer* m_indexBuffer;
-    IMaterial* m_material;
-    PrimitiveType::Enum m_primitiveType;
 };
 
 #endif

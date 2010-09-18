@@ -9,6 +9,7 @@
 #include "Quaternion.h"
 #include "Rect.h"
 #include "Color.h"
+#include "BufferEnums.h"
 
 class SceneNode;
 class Camera;
@@ -17,8 +18,6 @@ class IRenderSystem;
 class IVertexBuffer;
 class IIndexBuffer;
 class Billboard;
-
-#include "BufferEnums.h"
 
 struct SceneManagerType
 {

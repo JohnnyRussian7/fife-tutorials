@@ -263,6 +263,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Plane.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PngLoader.cpp"
 				>
 			</File>
@@ -381,6 +385,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Frustrum.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GenericIndexBuffer.h"
 				>
 			</File>
@@ -490,6 +498,10 @@
 			</File>
 			<File
 				RelativePath=".\ParticleRenderer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Plane.h"
 				>
 			</File>
 			<File

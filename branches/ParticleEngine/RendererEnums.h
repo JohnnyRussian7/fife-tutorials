@@ -23,4 +23,21 @@ struct TransformType
 	};
 };
 
+struct PrimitiveType
+{
+    enum Enum
+    {
+        Points = 0,
+        Line,
+        LineStrip,
+        LineLoop,
+        Triangles,
+        TriangleStrip,
+        TriangleFan,
+        Quads,
+        QuadStrip,
+        Polygon
+    };
+};
+
 #endif

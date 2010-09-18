@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.h
+*	Filename: Plane.cpp
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,38 +19,48 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
 
-#include "RendererEnums.h"
+#include "Plane.h"
 
-class IVertexBuffer;
-class IIndexBuffer;
-class IMaterial;
-
-class Renderable
+Plane::Plane()
+: normal(Vector3::Zero()), distance(0)
 {
-public:
-    Renderable();
-	~Renderable();
 
-    IVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(IVertexBuffer* vertexBuffer);
+}
 
-    IIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(IIndexBuffer* indexBuffer);
+Plane::Plane(const Vector3& n, const float d)
+: normal(n), distance(d)
+{
 
-    IMaterial* GetMaterial() const;
-    void SetMaterial(IMaterial* material);
-    
-    void SetPrimitiveType(PrimitiveType::Enum type);
-    PrimitiveType::Enum GetPrimitiveType() const;
+}
 
-protected:
-    IVertexBuffer* m_vertexBuffer;
-    IIndexBuffer* m_indexBuffer;
-    IMaterial* m_material;
-    PrimitiveType::Enum m_primitiveType;
-};
+Plane::Plane(const Vector3& norm, Vector3& point)
+: normal(norm)
+{
+    distance = -Dot(normal, point);
+}
 
-#endif
+Plane::Plane(const Vector3& point0, const Vector3& point1, const Vector3& point2)
+{
+    Vector3 edge0 = point1 - point0;
+    Vector3 edge1 = point2 - point0;
+
+    normal = Normalize(Cross(edge0, edge1));
+    distance = -Dot(normal, point0);
+}
+
+Plane Normalize(const Plane& p)
+{
+    const float tolerance = 0.000001f;
+
+    float length = Magnitude(p.normal);
+
+    if (length < tolerance)
+    {
+        return p;
+    }
+
+    float inverseLength = 1.f/length;
+
+    return Plane(p.normal*inverseLength, p.distance*inverseLength);
+}

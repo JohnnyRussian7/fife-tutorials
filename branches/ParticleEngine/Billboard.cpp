@@ -103,6 +103,9 @@ void Billboard::GenerateBuffers()
         m_indexBuffer->WriteData(indexData, 6, 0);
     }
 
+    // set the primitive type
+    SetPrimitiveType(PrimitiveType::TriangleStrip);
+
     m_buffersGenerated = true;
 }
 

@@ -26,7 +26,7 @@
 #include "Material.h"
 
 Renderable::Renderable()
-: m_vertexBuffer(0), m_indexBuffer(0), m_material(0)
+: m_vertexBuffer(0), m_indexBuffer(0), m_material(0), m_primitiveType(PrimitiveType::Triangles)
 {
 
 }
@@ -64,4 +64,14 @@ IMaterial* Renderable::GetMaterial() const
 void Renderable::SetMaterial(IMaterial* material)
 {
     m_material = material;
+}
+
+void Renderable::SetPrimitiveType(PrimitiveType::Enum type)
+{
+    m_primitiveType = type;
+}
+
+PrimitiveType::Enum Renderable::GetPrimitiveType() const
+{
+    return m_primitiveType;
 }

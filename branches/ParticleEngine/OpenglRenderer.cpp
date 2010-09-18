@@ -261,12 +261,12 @@ void OpenglRenderer::Render(Renderable* renderable)
                 indexData = indexBuffer->GetData(indexStart);
             }
 
-            glDrawElements(GL_TRIANGLE_STRIP, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
-            //glDrawRangeElements(GL_TRIANGLE_STRIP, 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
+            glDrawElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
+            //glDrawRangeElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
         }
         else
         {
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, vertexBuffer->GetNumVertices());
+            glDrawArrays(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, vertexBuffer->GetNumVertices());
         }
 
         // disable client state

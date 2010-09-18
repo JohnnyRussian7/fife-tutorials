@@ -50,8 +50,8 @@ Vector3 Normalize(const Vector3& vector)
         return vector;
     }
 
-	float inverseMag = 1.f/length;
-	return Vector3(vector.x*inverseMag, vector.y*inverseMag, vector.z*inverseMag);
+	float inverseLength = 1.f/length;
+	return Vector3(vector.x*inverseLength, vector.y*inverseLength, vector.z*inverseLength);
 }
 
 float Dot(const Vector3& vector1, const Vector3& vector2)

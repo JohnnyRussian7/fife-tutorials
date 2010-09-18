@@ -24,11 +24,13 @@
 
 #include "glee/GLee.h"
 
+#include "RendererEnums.h"
 #include "TextureEnums.h"
 #include "BufferEnums.h"
 
 namespace opengl { namespace utility {
     
+    GLenum ConvertPrimitiveType(PrimitiveType::Enum type);
     GLenum ConvertTextureType(TextureType::Enum type);
     GLenum ConvertBufferUsage(HwBufferUsage::Enum usage);
     GLenum ConvertVertexBufferParamSizeType(VertexParamSizeType::Enum type);

@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.h
+*	Filename: Plane.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,38 +19,23 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
+#ifndef PLANE_H_
+#define PLANE_H_
 
-#include "RendererEnums.h"
+#include "Vector3.h"
 
-class IVertexBuffer;
-class IIndexBuffer;
-class IMaterial;
-
-class Renderable
+class Plane
 {
 public:
-    Renderable();
-	~Renderable();
+    Plane();
+    Plane(const Vector3& n, const float d);
+    Plane(const Vector3& norm, Vector3& point);
+    Plane(const Vector3& point0, const Vector3& point1, const Vector3& point2);
 
-    IVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(IVertexBuffer* vertexBuffer);
-
-    IIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(IIndexBuffer* indexBuffer);
-
-    IMaterial* GetMaterial() const;
-    void SetMaterial(IMaterial* material);
-    
-    void SetPrimitiveType(PrimitiveType::Enum type);
-    PrimitiveType::Enum GetPrimitiveType() const;
-
-protected:
-    IVertexBuffer* m_vertexBuffer;
-    IIndexBuffer* m_indexBuffer;
-    IMaterial* m_material;
-    PrimitiveType::Enum m_primitiveType;
+    Vector3 normal;
+    float distance;
 };
+
+Plane Normalize(const Plane& p);
 
 #endif

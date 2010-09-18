@@ -22,7 +22,7 @@
 #ifndef FRUSTRUM_H_
 #define FRUSTRUM_H_
 
-include <vector>
+#include <vector>
 
 struct FrustrumSides
 {
@@ -44,7 +44,6 @@ public:
 
 private:
     std::vector<Plane> m_sides;
-
 };
 
 #endif

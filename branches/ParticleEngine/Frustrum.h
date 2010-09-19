@@ -24,7 +24,12 @@
 
 #include <vector>
 
-struct FrustrumSides
+#include "Plane.h"
+
+class AxisAlignedBoundingBox;
+class Sphere;
+
+struct FrustrumPlanes
 {
     enum Enum
     {
@@ -40,10 +45,37 @@ struct FrustrumSides
 class Frustrum
 {
 public:
-    Frustrum(const Plane& near, const Plane& far, const Plane& left, const Plane& right, const Plane& top, const Plane& bottom);
+    Frustrum();
+
+    void SetFov(float fov);
+    float GetFov() const;
+    
+    void SetAspectRatio(float aspect);
+    float GetAspectRatio() const;
+
+    void SetNearDistance(float nearDistance);
+    float GetNearDistance() const;
+
+    void SetFarDistance(float farDistance);
+    float GetFarDistance() const;
+    
+    const Plane& GetPlane(FrustrumPlanes::Enum plane) const;
+
+    bool IsVisible(const AxisAlignedBoundingBox& aabb) const;
+    bool IsVisible(const Sphere& sphere) const;
+
+    void Update();
+
+private:
+    void MarkDirty();
 
 private:
     std::vector<Plane> m_sides;
+    float m_fov;
+    float m_aspectRatio;
+    float m_nearDistance;
+    float m_farDistance;
+    bool m_needsUpdate;
 };
 
 #endif

@@ -191,6 +191,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Frustrum.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\GenericIndexBuffer.cpp"
 				>
 			</File>
@@ -292,6 +296,10 @@
 			</File>
 			<File
 				RelativePath=".\SceneNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Sphere.cpp"
 				>
 			</File>
 			<File
@@ -538,6 +546,10 @@
 			</File>
 			<File
 				RelativePath=".\SceneNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Sphere.h"
 				>
 			</File>
 			<File

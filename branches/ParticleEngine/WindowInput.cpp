@@ -6,6 +6,8 @@
 #include "Camera.h"
 #include "MathUtil.h"
 
+const float pi = 3.14159f;
+
 WindowInput::WindowInput(int windowWidth, int windowHeight, Camera& camera)
 : camera(camera), centerX(windowWidth/2), centerY(windowHeight/2), mouseX(0), mouseY(0), 
   m_angleX(0.f), m_angleY(0.f), m_mouseSensitivity(100)

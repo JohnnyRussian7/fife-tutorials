@@ -4,6 +4,34 @@
 #include "Matrix4.h"
 #include "Quaternion.h"
 
+const float Pi = 3.14159f;
+const float Rad2Deg = 180.f/Pi;
+const float Deg2Rad = Pi/180.f;
+
+
+float RadToDeg(float rad)
+{
+    return rad * Rad2Deg;
+}
+
+float DegToRad(float deg)
+{
+    return deg * Deg2Rad;
+}
+
+uint32_t ComputeNextPowerOf2(uint32_t n)
+{
+    --n;
+    n |= n >> 16;
+    n |= n >> 8;
+    n |= n >> 4;
+    n |= n >> 2;
+    n |= n >> 1;
+    ++n;
+
+    return n;
+}
+
 Matrix4 MakeTransform(const Vector3& scale, const Vector3& position, const Quaternion& orientation)
 {
 	// convert orientation to rotation matrix

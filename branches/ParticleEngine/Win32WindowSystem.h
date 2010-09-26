@@ -11,6 +11,7 @@
 #include "IWindowSystem.h"
 
 class IWindowSystemEventListener;
+class IInputSystem;
 
 class Win32WindowSystem : public IWindowSystem
 {
@@ -36,6 +37,7 @@ public:
 	virtual void SwapBuffers();
 	virtual void AddListener(IWindowSystemEventListener* listener);
 	virtual void RemoveListener(IWindowSystemEventListener* listener);
+    virtual void SetInputSystem(IInputSystem* inputSystem);
 
 private:
 	void Resize();
@@ -53,6 +55,8 @@ private:
 
 	typedef std::vector<IWindowSystemEventListener*> Listeners;
 	Listeners m_listeners;
+
+    IInputSystem* m_inputSystem;
 };
 
 #endif

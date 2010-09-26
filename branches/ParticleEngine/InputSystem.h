@@ -51,8 +51,6 @@ public:
     virtual void OnMousePressed(const IMouseEvent& event);
     virtual void OnMouseReleased(const IMouseEvent& event);
 
-    virtual void CaptureInput() = 0;
-
 private:
     InputSystemSettings m_settings;
     

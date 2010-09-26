@@ -8,7 +8,9 @@
 #include "IWindowSystem.h"
 #include "IRenderSystem.h"
 #include "IFilesystem.h"
+#include "IInputSystem.h"
 #include "SceneManager.h"
+
 #include "Timer.h"
 #include "stdint.h"
 #include "IWindowSystemEventListener.h"
@@ -17,6 +19,7 @@
 class IWindowSystem;
 class IRenderSystem;
 class IFileSystem;
+class IInputSystem;
 class SceneManager;
 
 struct EngineSettings
@@ -24,6 +27,7 @@ struct EngineSettings
     WindowSystemSettings windowSettings;
     RenderSystemSettings renderSystemSettings;
     FileSystemSettings fileSystemSettings;
+    InputSystemSettings inputSystemSettings;
 	SceneManagerSettings sceneManagerSettings;
 };
 
@@ -37,11 +41,13 @@ public:
     void SetWindowSystem(IWindowSystem* windowSystem);
     void SetRenderSystem(IRenderSystem* renderSystem);
     void SetFileSystem(IFileSystem* fileSystem);
+    void SetInputSystem(IInputSystem* inputSystem);
 	void SetSceneManager(SceneManager* sceneManager);
 
     IWindowSystem* GetWindowSystem() const;
     IRenderSystem* GetRenderSystem() const;
     IFileSystem* GetFileSystem() const;
+    IInputSystem* GetInputSystem() const;
 	SceneManager* GetSceneManager() const;
 
 	uint32_t GetFps() const;
@@ -62,6 +68,7 @@ private:
     IWindowSystem* m_windowSystem;
     IRenderSystem* m_renderSystem;
     IFileSystem* m_fileSystem;
+    IInputSystem* m_inputSystem;
 	SceneManager* m_sceneManager;
 
     Timer m_timer;

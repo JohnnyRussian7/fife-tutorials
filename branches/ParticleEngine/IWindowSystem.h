@@ -5,8 +5,8 @@
 #include "stdint.h"
 #include "WindowSystemTypes.h"
 
-class IRenderSystem;
 class IWindowSystemEventListener;
+class IInputSystem;
 
 struct WindowSystemSettings
 {
@@ -59,6 +59,7 @@ public:
 	virtual void SwapBuffers() = 0;
 	virtual void AddListener(IWindowSystemEventListener* listener) = 0;
 	virtual void RemoveListener(IWindowSystemEventListener* listener) = 0;
+    virtual void SetInputSystem(IInputSystem* inputSystem) = 0;
 };
 
 IWindowSystem* CreateWindowSystem(const WindowSystemSettings& settings);

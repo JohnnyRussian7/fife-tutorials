@@ -58,8 +58,6 @@ public:
     virtual void OnMouseMoved(const IMouseEvent& event) = 0;
     virtual void OnMousePressed(const IMouseEvent& event) = 0;
     virtual void OnMouseReleased(const IMouseEvent& event) = 0;
-
-    virtual void CaptureInput() = 0;
 };
 
 #endif

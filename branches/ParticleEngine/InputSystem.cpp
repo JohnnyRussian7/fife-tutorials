@@ -26,6 +26,12 @@
 #include "IKeyEvent.h"
 #include "IMouseEvent.h"
 
+InputSystem::InputSystem(const InputSystemSettings& settings)
+: m_settings(settings)
+{
+
+}
+
 void InputSystem::AddKeyListener(IKeyListener* listener)
 {
     KeyListenerContainer::iterator iter;

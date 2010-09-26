@@ -5,6 +5,7 @@
 #include "Win32WindowSystem.h"
 #include "IRenderSystem.h"
 #include "IWindowSystemEventListener.h"
+#include "IInputSystem.h"
 
 // these may not be defined, so define them here if not
 #ifndef WM_MOUSEWHEEL
@@ -74,7 +75,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_KEYDOWN:
 	case WM_KEYUP:
-		bool allKeys[256];
+		BYTE allKeys[256];
+        GetKeyboardState(allKeys);
 	
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
@@ -458,4 +460,9 @@ void Win32WindowSystem::Resize()
 			(*iter)->OnResize(static_cast<uint32_t>(r.right), static_cast<uint32_t>(r.bottom));
 		}
 	}
+}
+
+void Win32WindowSystem::SetInputSystem(IInputSystem* inputSystem)
+{
+    m_inputSystem = inputSystem;
 }

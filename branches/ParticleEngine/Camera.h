@@ -7,6 +7,7 @@
 #include "Vector3.h"
 #include "Matrix4.h"
 #include "Quaternion.h"
+#include "Frustum.h"
 
 class Camera
 {
@@ -19,6 +20,7 @@ public:
     const Vector3& GetPosition() const;
     const Quaternion& GetOrientation() const;
 	const Matrix4& GetViewMatrix();
+    const Frustum& GetFrustum();
 
 	Vector3 GetUp() const;
 	Vector3 GetRight() const;
@@ -37,10 +39,16 @@ public:
 	void UpdateView();
 
 private:
+    void MarkDirty();
+    void ResetDirty();
+
+private:
     std::string m_name;
 	Vector3 m_position;
 	Quaternion m_orientation;
     Matrix4 m_viewMatrix;
+    Frustum m_frustum;
+    bool m_needsUpdate;
 };
 
 #endif

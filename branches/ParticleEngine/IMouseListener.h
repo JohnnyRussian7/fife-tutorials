@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Plane.h
+*	Filename: IMouseListener.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,39 +19,23 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef PLANE_H_
-#define PLANE_H_
+#ifndef IMOUSELISTENER_H_
+#define IMOUSELISTENER_H_
 
-#include "Vector3.h"
+#include <string>
 
-class AxisAlignedBoundingBox;
+class IMouseEvent;
 
-struct PlaneSide
-{
-    enum Enum
-    {
-        Front=0,    // on side where normal points
-        Back,       // opposite side of normal
-        Intersects  // intersects the plane
-    };
-};
-
-class Plane
+class IMouseListener
 {
 public:
-    Plane();
-    Plane(const Vector3& n, const float d);
-    Plane(const Vector3& norm, Vector3& point);
-    Plane(const Vector3& point0, const Vector3& point1, const Vector3& point2);
+    virtual ~IMouseListener() { }
 
-    float GetDistance(const Vector3& point) const;
-    PlaneSide::Enum GetSide(const Vector3& point) const;
-    PlaneSide::Enum GetSide(const AxisAlignedBoundingBox& box) const;
+    virtual const std::string& GetName() = 0;
 
-    Vector3 m_normal;
-    float m_distance;
+    virtual bool OnMouseMoved(const IMouseEvent& event) = 0;
+    virtual bool OnMousePressed(const IMouseEvent& event) = 0;
+    virtual bool OnMouseReleased(const IMouseEvent& event) = 0;
 };
-
-Plane Normalize(const Plane& p);
 
 #endif

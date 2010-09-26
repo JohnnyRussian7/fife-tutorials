@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Plane.h
+*	Filename: IKeyEvent.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,39 +19,13 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef PLANE_H_
-#define PLANE_H_
+#ifndef IKEYEVENT_H_
+#define IKEYEVENT_H_
 
-#include "Vector3.h"
-
-class AxisAlignedBoundingBox;
-
-struct PlaneSide
-{
-    enum Enum
-    {
-        Front=0,    // on side where normal points
-        Back,       // opposite side of normal
-        Intersects  // intersects the plane
-    };
-};
-
-class Plane
+class IKeyEvent
 {
 public:
-    Plane();
-    Plane(const Vector3& n, const float d);
-    Plane(const Vector3& norm, Vector3& point);
-    Plane(const Vector3& point0, const Vector3& point1, const Vector3& point2);
-
-    float GetDistance(const Vector3& point) const;
-    PlaneSide::Enum GetSide(const Vector3& point) const;
-    PlaneSide::Enum GetSide(const AxisAlignedBoundingBox& box) const;
-
-    Vector3 m_normal;
-    float m_distance;
+    virtual ~IKeyEvent() = 0 { };
 };
-
-Plane Normalize(const Plane& p);
 
 #endif

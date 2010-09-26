@@ -24,7 +24,8 @@ namespace
 }
 
 Camera::Camera(const char* name, const Vector3& position, const Quaternion& orientation)
-: m_position(position), m_orientation(orientation), m_viewMatrix(Matrix4::Identity())
+: m_position(position), m_orientation(orientation), m_viewMatrix(Matrix4::Identity()), 
+  m_needsUpdate(true)
 {
     if (name)
     {
@@ -59,6 +60,14 @@ const Matrix4& Camera::GetViewMatrix()
 	return m_viewMatrix;
 }
 
+const Frustum& Camera::GetFrustum()
+{
+    // update view if needed
+    UpdateView();
+
+    return m_frustum;
+}
+
 Vector3 Camera::GetUp() const
 {
 	return m_orientation * Vector3::UnitY();
@@ -82,6 +91,8 @@ void Camera::Translate(const Vector3& translation)
 
 	// TODO - implement translate in local space, using algorithm below 
 	//m_position += m_orientation * translation;
+
+    MarkDirty();
 }
 
 void Camera::LookAt(const Vector3& target)
@@ -105,42 +116,56 @@ void Camera::LookAt(const Vector3& target)
 	Quaternion rotation = GetRotationTo(zAxis, normDirection);
 
 	m_orientation = rotation * m_orientation;
+
+    MarkDirty();
 }
 
 void Camera::Pitch(float angle)
 {
 	Vector3 xaxis = m_orientation * Vector3::UnitX();
 	Rotate(xaxis, angle);
+
+    MarkDirty();
 }
 
 void Camera::Yaw(float angle)
 {
 	Vector3 yaxis = m_orientation * Vector3::UnitY();
 	Rotate(yaxis, angle);
+
+    MarkDirty();
 }
 
 void Camera::Roll(float angle)
 {
 	Vector3 zaxis = m_orientation * Vector3::UnitZ();
 	Rotate(zaxis, angle);
+
+    MarkDirty();
 }
 
 void Camera::Rotate(const Vector3& axis, float angle)
 {
 	Quaternion rotQ = FromAxisAngle(axis, angle);
 	Rotate(rotQ);
+
+    MarkDirty();
 }
 
 void Camera::Rotate(const Quaternion& rotation)
 {
 	Quaternion normQ = Normalize(rotation);
 	m_orientation = normQ * m_orientation;
+
+    MarkDirty();
 }
 
 void Camera::UpdateView()
 {
-	// TODO - this should check whether the view needs to be updated
-	//		  before performing update
+    if (!m_needsUpdate)
+    {
+        return;
+    }
 
 	// create matrix for position
 	Matrix4 posMatrix = Matrix4::Identity();
@@ -152,5 +177,20 @@ void Camera::UpdateView()
 	Matrix4 conjRotMatrix = ToMatrix(Conjugate(m_orientation));
 
 	m_viewMatrix = posMatrix * conjRotMatrix;
+
+    // update frustum
+    m_frustum.Update(m_viewMatrix);
+
+    // reset dirty flag
+    ResetDirty();
 }
 
+void Camera::MarkDirty()
+{
+    m_needsUpdate = true;
+}
+
+void Camera::ResetDirty()
+{
+    m_needsUpdate = false;
+}

@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Frustrum.h
+*	Filename: Frustum.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,8 +19,8 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef FRUSTRUM_H_
-#define FRUSTRUM_H_
+#ifndef FRUSTUM_H_
+#define FRUSTUM_H_
 
 #include <vector>
 
@@ -28,8 +28,9 @@
 
 class AxisAlignedBoundingBox;
 class Sphere;
+struct Matrix4;
 
-struct FrustrumPlanes
+struct FrustumPlanes
 {
     enum Enum
     {
@@ -38,14 +39,17 @@ struct FrustrumPlanes
         Left,
         Right,
         Top,
-        Bottom
+        Bottom,
+
+        Max,
+        Invalid = -1
     };
 };
 
-class Frustrum
+class Frustum
 {
 public:
-    Frustrum();
+    Frustum();
 
     void SetFov(float fov);
     float GetFov() const;
@@ -59,17 +63,20 @@ public:
     void SetFarDistance(float farDistance);
     float GetFarDistance() const;
     
-    const Plane& GetPlane(FrustrumPlanes::Enum plane) const;
+    const Plane& GetPlane(FrustumPlanes::Enum plane) const;
 
-    bool IsVisible(const AxisAlignedBoundingBox& aabb) const;
-    bool IsVisible(const Sphere& sphere) const;
+    bool IsVisible(const AxisAlignedBoundingBox& aabb);
+    bool IsVisible(const Sphere& sphere);
 
-    void Update();
+    void Update(const Matrix4& m);
 
 private:
     void MarkDirty();
+    void ResetDirty();
+    void CalculateProjection();
 
 private:
+    typedef std::vector<Plane> PlaneContainer;
     std::vector<Plane> m_sides;
     float m_fov;
     float m_aspectRatio;

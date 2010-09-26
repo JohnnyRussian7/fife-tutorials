@@ -85,7 +85,7 @@ void OpenglRenderer::SetViewPort(const Viewport& viewport)
 	glViewport(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
 
 	// TODO - this should be done elsewhere
-	// setup the frustrum
+	// setup the frustum
 	int aspectRatio = viewport.GetWidth() / viewport.GetHeight();
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

@@ -191,7 +191,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Frustrum.cpp"
+				RelativePath=".\Frustum.cpp"
 				>
 			</File>
 			<File
@@ -212,6 +212,10 @@
 			</File>
 			<File
 				RelativePath=".\IndexData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\InputSystem.cpp"
 				>
 			</File>
 			<File
@@ -393,7 +397,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Frustrum.h"
+				RelativePath=".\Frustum.h"
 				>
 			</File>
 			<File
@@ -425,6 +429,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IInputSystem.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IKeyEvent.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IKeyListener.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Image.h"
 				>
 			</File>
@@ -433,7 +449,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IMouseEvent.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IMouseListener.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IndexData.h"
+				>
+			</File>
+			<File
+				RelativePath=".\InputSystem.h"
 				>
 			</File>
 			<File

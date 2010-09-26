@@ -148,15 +148,6 @@ void SceneManager::RenderScene()
         m_renderSystem->SetTransform(TransformType::View, m_camera->GetViewMatrix());
     }
 
-//     SceneNode* node = GetRootSceneNode();
-//     while (node)
-//     {
-//         m_renderSystem->SetTransform(TransformType::Model, node->GetRelativeTransform());
-//         m_renderSystem->Render();
-// 
-//         node = node->
-//     }
-
     // get all the renderables in the scene
     std::vector<Renderable*> renderables;
     GetRootSceneNode()->GetRenderables(renderables);
@@ -164,7 +155,7 @@ void SceneManager::RenderScene()
     // pass each renderable to the render system
     std::vector<Renderable*>::iterator iter;
     for (iter = renderables.begin(); iter != renderables.end(); ++iter)
-    {
+    { 
         m_renderSystem->Render(*iter);
     }
 }

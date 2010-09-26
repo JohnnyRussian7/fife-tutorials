@@ -20,24 +20,27 @@
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
 
+#include <cmath>
+
 #include "Plane.h"
+#include "AxisAlignedBoundingBox.h"
 
 Plane::Plane()
-: normal(Vector3::Zero()), distance(0)
+: m_normal(Vector3::Zero()), m_distance(0)
 {
 
 }
 
 Plane::Plane(const Vector3& n, const float d)
-: normal(n), distance(d)
+: m_normal(n), m_distance(d)
 {
 
 }
 
 Plane::Plane(const Vector3& norm, Vector3& point)
-: normal(norm)
+: m_normal(norm)
 {
-    distance = -Dot(normal, point);
+    m_distance = -Dot(m_normal, point);
 }
 
 Plane::Plane(const Vector3& point0, const Vector3& point1, const Vector3& point2)
@@ -45,15 +48,54 @@ Plane::Plane(const Vector3& point0, const Vector3& point1, const Vector3& point2
     Vector3 edge0 = point1 - point0;
     Vector3 edge1 = point2 - point0;
 
-    normal = Normalize(Cross(edge0, edge1));
-    distance = -Dot(normal, point0);
+    m_normal = Normalize(Cross(edge0, edge1));
+    m_distance = -Dot(m_normal, point0);
+}
+
+float Plane::GetDistance(const Vector3& point) const
+{
+    return (Dot(m_normal, point) + m_distance);   
+}
+
+PlaneSide::Enum Plane::GetSide(const Vector3& point) const
+{
+    float distance = GetDistance(point);
+    if (distance < 0.f)
+    {
+        return PlaneSide::Back;
+    }
+    else if (distance > 0.f)
+    {
+        return PlaneSide::Front;
+    }
+
+    return PlaneSide::Intersects;
+}
+
+PlaneSide::Enum Plane::GetSide(const AxisAlignedBoundingBox& aabb) const
+{
+    float distance = GetDistance(aabb.GetCenter());
+    Vector3& halfSize = aabb.GetExtent() * 0.5f;
+
+    float absNorm = std::abs(halfSize.x*halfSize.x) + std::abs(halfSize.y*halfSize.y) + std::abs(halfSize.z*halfSize.z);
+
+    if (distance < -absNorm)
+    {
+        return PlaneSide::Back;
+    }
+    else if (distance > absNorm)
+    {
+        return PlaneSide::Front;
+    }
+
+    return PlaneSide::Intersects;
 }
 
 Plane Normalize(const Plane& p)
 {
     const float tolerance = 0.000001f;
 
-    float length = Magnitude(p.normal);
+    float length = Magnitude(p.m_normal);
 
     if (length < tolerance)
     {
@@ -62,5 +104,5 @@ Plane Normalize(const Plane& p)
 
     float inverseLength = 1.f/length;
 
-    return Plane(p.normal*inverseLength, p.distance*inverseLength);
+    return Plane(p.m_normal*inverseLength, p.m_distance*inverseLength);
 }

@@ -22,6 +22,8 @@ Engine::Engine(const EngineSettings& settings)
     m_inputSystem = new InputSystem(m_settings.inputSystemSettings);
 	m_sceneManager = new SceneManager(m_settings.sceneManagerSettings, m_renderSystem);
 
+    m_windowSystem->SetInputSystem(m_inputSystem);
+
 	// TODO - this needs to be moved elsewhere
 	m_renderSystem->SetViewPort(Viewport(0, 0, m_settings.windowSettings.width, m_settings.windowSettings.height));
 }

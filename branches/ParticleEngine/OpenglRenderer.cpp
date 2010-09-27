@@ -261,8 +261,8 @@ void OpenglRenderer::Render(Renderable* renderable)
                 indexData = indexBuffer->GetData(indexStart);
             }
 
-            glDrawElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
-            //glDrawRangeElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
+            //glDrawElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
+            glDrawRangeElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
         }
         else
         {

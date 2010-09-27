@@ -50,7 +50,7 @@ float Timer::TimerImpl::GetMultiplier() const
 
 void Timer::TimerImpl::SetMultiplier(float multiplier)
 {
-    m_multiplier = m_multiplier;
+    m_multiplier = multiplier;
 }
 
 bool Timer::TimerImpl::IsRunning()

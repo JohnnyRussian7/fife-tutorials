@@ -127,6 +127,35 @@ void InputSystem::RemoveAllListeners()
     m_mouseListeners.clear();
 }
 
+void InputSystem::InjectKeyEvent(const IKeyEvent& event)
+{
+    if (event.IsKeyPressed())
+    {
+        OnKeyPressed(event);
+    }
+    else
+    {
+        OnKeyReleased(event);
+    }
+}
+
+void InputSystem::InjectMouseEvent(const IMouseEvent& event)
+{
+    // TODO - still need implementation for these
+//     if (event.IsButtonPressed())
+//     {
+//         OnMousePressed(event);
+//     }
+//     else if (event.GetType() == MouseEventType::MouseMoved)
+//     {
+//         OnMouseMoved(event);
+//     }
+//     else
+//     {
+//         OnMouseReleased(event);
+//     }
+}
+
 void InputSystem::OnKeyPressed(const IKeyEvent& event)
 {
     KeyListenerContainer::iterator iter;

@@ -44,9 +44,13 @@ public:
 
     virtual void RemoveAllListeners();
 
+    virtual void InjectKeyEvent(const IKeyEvent& event);
+    virtual void InjectMouseEvent(const IMouseEvent& event);
+
+protected:
     virtual void OnKeyPressed(const IKeyEvent& event);
     virtual void OnKeyReleased(const IKeyEvent& event);
-
+ 
     virtual void OnMouseMoved(const IMouseEvent& event);
     virtual void OnMousePressed(const IMouseEvent& event);
     virtual void OnMouseReleased(const IMouseEvent& event);

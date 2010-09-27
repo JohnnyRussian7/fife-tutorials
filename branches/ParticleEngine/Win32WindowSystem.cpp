@@ -6,6 +6,9 @@
 #include "IRenderSystem.h"
 #include "IWindowSystemEventListener.h"
 #include "IInputSystem.h"
+#include "KeyCodes.h"
+#include "IKeyEvent.h"
+#include "KeyEvent.h"
 
 // these may not be defined, so define them here if not
 #ifndef WM_MOUSEWHEEL
@@ -75,9 +78,102 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_KEYDOWN:
 	case WM_KEYUP:
-		BYTE allKeys[256];
-        GetKeyboardState(allKeys);
-	
+    case WM_SYSKEYDOWN:
+    case WM_SYSKEYUP:
+        BYTE allKeys[256];
+
+        // get current state of keys
+        if (GetKeyboardState(allKeys))
+        {
+            KeyEvent keyEvent;
+
+            // save key pressed state
+            keyEvent.SetKeyPressed((message == WM_KEYDOWN || message == WM_SYSKEYDOWN));
+
+            // get current keyboard layout
+            HKL layout = GetKeyboardLayout(0);
+
+            KeyCodes::Enum keyCode = static_cast<KeyCodes::Enum>(wParam);
+            
+            // get the virtual key from the scan code, lParam bits 16-23 contain the scan code
+            uint32_t virtualKey = MapVirtualKeyEx((lParam & 0x00FF0000), MAPVK_VSC_TO_VK_EX, layout);
+
+            // save the key scan code
+            keyEvent.SetKeyCode(keyCode);
+
+            if (keyCode == KeyCodes::Shift)
+            {
+                // figure out which shift, lParam bits 16-23 contain scan code
+                keyEvent.SetKeyCode(static_cast<KeyCodes::Enum>(virtualKey));
+            }
+            else if (keyCode == KeyCodes::Ctrl)
+            {
+                // check the extended key bit (bit 24) 
+                if (lParam & 0x01000000)
+                {
+                    keyEvent.SetKeyCode(KeyCodes::RCtrl);
+                }
+                else
+                {
+                    keyEvent.SetKeyCode(static_cast<KeyCodes::Enum>(virtualKey));
+                }
+            }
+            else if (keyCode == KeyCodes::Alt)
+            {
+                // check the extended key bit (bit 24)
+                if (lParam & 0x01000000)
+                {
+                    keyEvent.SetKeyCode(KeyCodes::RAlt);
+                }
+                else
+                {
+                    keyEvent.SetKeyCode(static_cast<KeyCodes::Enum>(virtualKey));
+                }
+            }
+
+            // save modifiers
+            if (allKeys[KeyCodes::Shift] & 0x80)
+            {
+                keyEvent.SetModifier(KeyModifiers::Shift);
+            }
+
+            if (allKeys[KeyCodes::Ctrl] & 0x80)
+            {
+                keyEvent.SetModifier(KeyModifiers::Ctrl);
+            }
+
+            if (allKeys[KeyCodes::Alt] & 0x80)
+            {
+                keyEvent.SetModifier(KeyModifiers::Alt);
+            }
+
+            // translate virtual key to unicode character(s); could be more than 1
+            WCHAR characters[3] = {0};
+            uint32_t ret = ToUnicodeEx(virtualKey, HIWORD(lParam), allKeys, characters, 3, 0, layout);
+
+            // default the text to nothing
+            keyEvent.SetText(0);
+
+            if (ret == 1)
+            {
+                // single character case
+                keyEvent.SetText(characters[0]);
+            }
+            else if (ret > 1)
+            {
+                // TODO - support dead keys and multiple characters
+            }
+
+            // call into the window class to handle keyboard input
+            window->OnKeyboardInput(keyEvent);
+
+            if (message == WM_SYSKEYDOWN || message == WM_SYSKEYUP)
+                return DefWindowProc(hWnd, message, wParam, lParam);
+            else
+                return 0;
+        }
+        break;
+			
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
 	case WM_MBUTTONDOWN:
@@ -97,7 +193,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 : m_settings(settings), m_externalWindow(settings.useExternalWindow), m_hwnd(0), m_quit(false),
-  m_shouldResize(false)
+  m_shouldResize(false), m_inputSystem(0)
 {
 	
 }
@@ -390,6 +486,22 @@ bool Win32WindowSystem::IsMaximized() const
 void Win32WindowSystem::OnResize()
 {
 	m_shouldResize = true;
+}
+
+void Win32WindowSystem::OnKeyboardInput(const IKeyEvent& event)
+{
+    if (m_inputSystem)
+    {
+        m_inputSystem->InjectKeyEvent(event);
+    }
+}
+
+void Win32WindowSystem::OnMouseInput(const IMouseEvent& event)
+{
+    if (m_inputSystem)
+    {
+        m_inputSystem->InjectMouseEvent(event);
+    }
 }
 
 bool Win32WindowSystem::Run()

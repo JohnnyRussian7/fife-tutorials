@@ -12,6 +12,8 @@
 
 class IWindowSystemEventListener;
 class IInputSystem;
+class IKeyEvent;
+class IMouseEvent;
 
 class Win32WindowSystem : public IWindowSystem
 {
@@ -32,6 +34,8 @@ public:
 	virtual bool IsMinimized() const;
 	virtual bool IsMaximized() const;
 	virtual void OnResize();
+    virtual void OnKeyboardInput(const IKeyEvent& event);
+    virtual void OnMouseInput(const IMouseEvent& event);
 	virtual bool Run();
 	virtual void Update();
 	virtual void SwapBuffers();

@@ -22,6 +22,28 @@
 #ifndef KEYCODES_H_
 #define KEYCODES_H_
 
+// enumeration for mouse modifiers
+struct MouseModifiers
+{
+    enum Enum
+    {
+        Ctrl = 1 << 0,
+        Shift = 1 << 1
+    };
+};
+
+struct MouseButtons
+{
+    enum Enum
+    {
+        LeftButton = 1 << 0,    // MK_LBUTTON The left mouse button is down.
+        RightButton = 1 << 1,   // MK_RBUTTON The right mouse button is down. 
+        MiddleButton = 1 << 2,  // MK_MBUTTON The middle mouse button is down.
+        ExtraButton1 = 1 << 3,  // MK_XBUTTON1 The first X button is down.
+        ExtraButton2 = 1 << 4   // MK_XBUTTON2 The second X button is down.
+    };
+};
+
 // enumeration of key modifiers
 struct KeyModifiers
 {

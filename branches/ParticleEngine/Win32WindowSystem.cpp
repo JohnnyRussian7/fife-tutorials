@@ -9,6 +9,8 @@
 #include "KeyCodes.h"
 #include "IKeyEvent.h"
 #include "KeyEvent.h"
+#include "IMouseEvent.h"
+#include "MouseEvent.h"
 
 // these may not be defined, so define them here if not
 #ifndef WM_MOUSEWHEEL
@@ -177,14 +179,75 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONDOWN:
 	case WM_RBUTTONDOWN:
 	case WM_MBUTTONDOWN:
-
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
 	case WM_MBUTTONUP:
-
 	case WM_MOUSEMOVE:
-
 	case WM_MOUSEWHEEL:
+        MouseEvent event;
+        event.SetXPos(static_cast<int32_t>(LOWORD(lParam)));
+        event.SetYPos(static_cast<int32_t>(HIWORD(lParam)));
+
+        WPARAM mouseState = wParam;
+        if (message == WM_MOUSEWHEEL)
+        {
+            mouseState = GET_KEYSTATE_WPARAM(wParam);
+        }
+
+        if (mouseState & MK_LBUTTON)
+        {
+            event.SetButtonPressed(MouseButtons::LeftButton);
+        }
+        if (mouseState & MK_RBUTTON)
+        {
+            event.SetButtonPressed(MouseButtons::RightButton);
+        }
+        if (mouseState & MK_MBUTTON)
+        {
+            event.SetButtonPressed(MouseButtons::MiddleButton);
+        }
+        if (mouseState & MK_XBUTTON1)
+        {
+            event.SetButtonPressed(MouseButtons::ExtraButton1);
+        }
+        if (mouseState & MK_XBUTTON2)
+        {
+            event.SetButtonPressed(MouseButtons::ExtraButton2);
+        }
+
+        if (mouseState & MK_CONTROL)
+        {
+            event.SetModifier(MouseModifiers::Ctrl);
+        }
+        if (mouseState & MK_SHIFT)
+        {
+            event.SetModifier(MouseModifiers::Shift);
+        }
+
+        if (message == WM_LBUTTONDOWN ||
+            message == WM_RBUTTONDOWN ||
+            message == WM_MBUTTONDOWN ||
+            message == WM_LBUTTONUP ||
+            message == WM_RBUTTONUP ||
+            message == WM_MBUTTONUP)
+        {
+            event.SetEventType(MouseEventType::ButtonPress);
+        }
+        else if (message == WM_MOUSEMOVE)
+        {
+            event.SetEventType(MouseEventType::MouseMoved);
+        }
+        else if (message == WM_MOUSEWHEEL)
+
+        {
+            event.SetEventType(MouseEventType::MouseWheel);
+
+            // TODO - handle wheel delta properly
+            int16_t wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+        }
+
+        return 0;
+
 		break;
 	}
 

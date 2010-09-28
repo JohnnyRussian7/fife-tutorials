@@ -12,7 +12,7 @@ typedef signed char int8_t;
 
 // 16-bit types
 typedef unsigned short uint16_t;
-typedef signed char int16_t;
+typedef signed short int16_t;
 
 // 32-bit types
 # if ULONG_MAX == 0xffffffff

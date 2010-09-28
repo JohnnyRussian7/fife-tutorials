@@ -22,10 +22,33 @@
 #ifndef IMOUSEEVENT_H_
 #define IMOUSEEVENT_H_
 
+#include "stdint.h"
+#include "KeyCodes.h"
+
+struct MouseEventType
+{
+    enum Enum
+    {
+        ButtonPress = 0,
+        MouseMoved,
+        MouseWheel,
+
+        Max,
+        Invalid = -1
+    };
+};
+
 class IMouseEvent
 {
 public:
     virtual ~IMouseEvent() = 0 { };
+
+    virtual MouseEventType::Enum GetEventType() = 0;
+    virtual int32_t GetXPos() const = 0;
+    virtual int32_t GetYPos() const = 0;
+    virtual float GetWheelDelta() const = 0;
+    virtual bool IsButtonPressed(MouseButtons::Enum button) const = 0;
+    virtual bool IsModifierEnabled(MouseModifiers::Enum modifier) const = 0;
 };
 
 #endif

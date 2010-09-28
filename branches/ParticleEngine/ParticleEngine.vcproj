@@ -243,6 +243,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MouseEvent.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\OpenglIndexBuffer.cpp"
 				>
 			</File>
@@ -502,6 +506,10 @@
 			</File>
 			<File
 				RelativePath=".\Matrix4.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MouseEvent.h"
 				>
 			</File>
 			<File

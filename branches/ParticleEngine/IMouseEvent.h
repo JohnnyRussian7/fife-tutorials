@@ -43,7 +43,7 @@ class IMouseEvent
 public:
     virtual ~IMouseEvent() = 0 { };
 
-    virtual MouseEventType::Enum GetEventType() = 0;
+    virtual MouseEventType::Enum GetEventType() const = 0;
     virtual int32_t GetXPos() const = 0;
     virtual int32_t GetYPos() const = 0;
     virtual float GetWheelDelta() const = 0;

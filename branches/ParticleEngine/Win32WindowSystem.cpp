@@ -245,6 +245,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // TODO - handle wheel delta properly
             int16_t wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
         }
+        
+        // call into the window class to handle mouse input
+        window->OnMouseInput(event);
 
         return 0;
 
@@ -627,14 +630,19 @@ void Win32WindowSystem::Resize()
 
 	m_shouldResize = false;
 
-	// alert listeners of resize
-	for (Listeners::iterator iter = m_listeners.begin(); iter != m_listeners.end(); ++iter)
-	{
-		if (*iter)
-		{
-			(*iter)->OnResize(static_cast<uint32_t>(r.right), static_cast<uint32_t>(r.bottom));
-		}
-	}
+    // only resize if the size is above 1, otherwise this will cause
+    // a problem with recalculating the aspect ratio
+    if (r.right > 1 || r.bottom > 1)
+    {
+	    // alert listeners of resize
+	    for (Listeners::iterator iter = m_listeners.begin(); iter != m_listeners.end(); ++iter)
+	    {
+		    if (*iter)
+		    {
+			    (*iter)->OnResize(static_cast<uint32_t>(r.right), static_cast<uint32_t>(r.bottom));
+		    }
+	    }
+    }
 }
 
 void Win32WindowSystem::SetInputSystem(IInputSystem* inputSystem)

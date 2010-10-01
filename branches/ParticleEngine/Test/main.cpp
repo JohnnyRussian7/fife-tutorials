@@ -15,6 +15,99 @@
 #include "../Material.h"
 #include "../ITexture.h"
 #include "../OpenglTexture.h"
+#include "../KeyCodes.h"
+#include "../IKeyListener.h"
+#include "../IKeyEvent.h"
+#include "../IInputSystem.h"
+#include "../IMouseListener.h"
+#include "../IMouseEvent.h"
+
+class TestKeyListener : public IKeyListener
+{
+public:
+    TestKeyListener(Camera* cam) : m_name("TestKeyListener"), m_cam(cam) { };
+
+    virtual const std::string& GetName() { return m_name; };
+
+    virtual bool OnKeyPressed(const IKeyEvent& event) 
+    { 
+        if (event.GetKeyCode() == KeyCodes::Left)
+        {
+            m_yawAngle += 0.1f; 
+
+            if (m_yawAngle > 360.f)
+            {
+                m_yawAngle = 0.f;
+            }
+
+            m_cam->Yaw(DegToRad(m_yawAngle));
+        }
+        else if (event.GetKeyCode() == KeyCodes::Right)
+        {
+            m_yawAngle -= 0.1f;
+
+            if (m_yawAngle < -360.f)
+            {
+                m_yawAngle = 0.f;
+            }
+
+            m_cam->Yaw(DegToRad(m_yawAngle));
+        }
+
+        return true;
+    }
+
+    virtual bool OnKeyReleased(const IKeyEvent& event) { return true; };
+
+private:
+    Camera* m_cam;
+    float m_yawAngle;
+    std::string m_name;
+};
+
+class TestMouseListener : public IMouseListener
+{
+public:
+    TestMouseListener(Camera* cam) : m_name("TestMouseListener"), m_cam(cam) { };
+
+    virtual const std::string& GetName() { return m_name; };
+
+    virtual bool OnMousePressed(const IMouseEvent& event) 
+    { 
+        if (event.IsButtonPressed(MouseButtons::LeftButton))
+        {
+            m_yawAngle += 0.1f; 
+
+            if (m_yawAngle > 360.f)
+            {
+                m_yawAngle = 0.f;
+            }
+
+            m_cam->Yaw(DegToRad(m_yawAngle));
+        }
+        else if (event.IsButtonPressed(MouseButtons::RightButton))
+        {
+            m_yawAngle -= 0.1f;
+
+            if (m_yawAngle < -360.f)
+            {
+                m_yawAngle = 0.f;
+            }
+
+            m_cam->Yaw(DegToRad(m_yawAngle));
+        }
+
+        return true;
+    }
+
+    virtual bool OnMouseMoved(const IMouseEvent& event) { return true; };
+    virtual bool OnMouseReleased(const IMouseEvent& event) { return true; } ;
+
+private:
+    Camera* m_cam;
+    float m_yawAngle;
+    std::string m_name;
+};
 
 int main()
 {
@@ -30,6 +123,11 @@ int main()
     camera->LookAt(Vector3(0, 0, 0));
 
     sceneManager->AddCamera(camera);   
+
+    TestKeyListener* keyListener = new TestKeyListener(camera);
+    TestMouseListener* mouseListener = new TestMouseListener(camera);
+    engine.GetInputSystem()->AddKeyListener(keyListener);
+    engine.GetInputSystem()->AddMouseListener(mouseListener);
 
     // TODO - more development needed to work properly
     //Entity* entity = sceneManager->CreateEntity();

@@ -19,7 +19,7 @@ float DegToRad(float deg)
     return deg * Deg2Rad;
 }
 
-uint32_t ComputeNextPowerOf2(uint32_t n)
+uint32_t NextPowerOf2(uint32_t n)
 {
     --n;
     n |= n >> 16;

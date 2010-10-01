@@ -157,7 +157,7 @@ bool Engine::Run()
 
 void Engine::OnResize(uint32_t width, uint32_t height)
 {
-	m_renderSystem->SetViewPort(Viewport(0, 0, width, height));
+    m_renderSystem->SetViewPort(Viewport(0, 0, width, height));
 }
 
 void Engine::ComputeFps()

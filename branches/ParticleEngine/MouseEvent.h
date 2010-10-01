@@ -38,7 +38,7 @@ public:
     void SetButtonPressed(MouseButtons::Enum button);
     void SetModifier(MouseModifiers::Enum modifier);
 
-    virtual MouseEventType::Enum GetEventType();
+    virtual MouseEventType::Enum GetEventType() const;
     virtual int32_t GetXPos() const;
     virtual int32_t GetYPos() const;
     virtual float GetWheelDelta() const;

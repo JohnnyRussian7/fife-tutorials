@@ -29,7 +29,7 @@ class IMouseEvent;
 class IMouseListener
 {
 public:
-    virtual ~IMouseListener() { }
+    virtual ~IMouseListener() { };
 
     virtual const std::string& GetName() = 0;
 

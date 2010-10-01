@@ -64,7 +64,7 @@ void MouseEvent::SetModifier(MouseModifiers::Enum modifier)
     m_modifierStates |= modifier;
 }
 
-MouseEventType::Enum MouseEvent::GetEventType()
+MouseEventType::Enum MouseEvent::GetEventType() const
 {
     return m_eventType;
 }

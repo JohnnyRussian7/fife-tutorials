@@ -22,7 +22,7 @@ bool IsPowerOf2(T n)
 }
 
 // finds next highest power of 2 for an unsigned 32-bit number
-uint32_t ComputeNextPowerOf2(uint32_t n);
+uint32_t NextPowerOf2(uint32_t n);
 
 // creates a transform matrix based on scale, position, and orientation
 // the applied ordering is (1) scale, (2) orientation, (3) translation

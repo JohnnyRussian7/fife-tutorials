@@ -142,18 +142,18 @@ void InputSystem::InjectKeyEvent(const IKeyEvent& event)
 void InputSystem::InjectMouseEvent(const IMouseEvent& event)
 {
     // TODO - still need implementation for these
-//     if (event.IsButtonPressed())
-//     {
-//         OnMousePressed(event);
-//     }
-//     else if (event.GetType() == MouseEventType::MouseMoved)
-//     {
-//         OnMouseMoved(event);
-//     }
-//     else
-//     {
-//         OnMouseReleased(event);
-//     }
+    if (event.GetEventType() == MouseEventType::ButtonPress)
+    {
+        OnMousePressed(event);
+    }
+    else if (event.GetEventType() == MouseEventType::MouseMoved)
+    {
+        OnMouseMoved(event);
+    }
+    else
+    {
+        OnMouseReleased(event);
+    }
 }
 
 void InputSystem::OnKeyPressed(const IKeyEvent& event)

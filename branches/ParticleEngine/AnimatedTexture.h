@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: AnimatedEntity.h
+*	Filename: AnimatedTexture.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,28 +19,25 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef ANIMATEDENTITY_H_
-#define ANIMATEDENTITY_H_
+#ifndef ANIMATEDTEXTURE_H_
+#define ANIMATEDTEXTURE_H_
 
 #include <vector>
 
-#include "stdint.h"
-#include "Entity.h"
 #include "IAnimation.h"
+#include "Rect.h"
 
-class Image;
 class IAnimatedFrame;
 
-class AnimatedEntity : public IAnimation, public Entity
+class AnimatedTexture : public IAnimation
 {
 public:
-    AnimatedEntity();
-    AnimatedEntity(char* filepath);
-    AnimatedEntity(Image* image);
-    ~AnimatedEntity();
+    AnimatedTexture();
+    AnimatedTexture(char* filepath);
+    AnimatedTexture(Image* image);
+    ~AnimatedTexture();
 
     virtual uint32_t GetNumFrames() const;
-    virtual void SetNumFrames(uint32_t numFrames);
 
     virtual uint32_t GetTotalRunTime() const;
     virtual void SetTotalRunTime(uint32_t runTimeInMs);
@@ -49,6 +46,7 @@ public:
     virtual void SetLooping(bool looping);
 
     virtual void AddFrame(Image* image, char* name);
+    virtual void AddFrame(char* name, const FloatRect& texCoords);
     virtual void RemoveFrame(uint32_t index);
 
     virtual void Start();
@@ -64,7 +62,7 @@ private:
     uint32_t m_currentIndex;
     bool m_running;
     uint32_t m_lastUpdateTime;
-    
+
     typedef std::vector<IAnimatedFrame*> FrameContainer;
     FrameContainer m_frames;
 };

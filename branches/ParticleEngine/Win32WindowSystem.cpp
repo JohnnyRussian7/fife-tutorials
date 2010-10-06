@@ -65,8 +65,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		bool active = (LOWORD(wParam) != WA_INACTIVE);
 		//window->SetFullScreen(active);
-		break;
+		
+        return 0;
 	}
+
+    case WM_ACTIVATEAPP:
+        if (wParam == TRUE)
+        {
+            // regained focus, recapture mouse if needed
+            if (window->IsMouseCaptured())
+            {
+                SetCapture(hWnd);
+            }
+        }
+        return 0;
 
 	case WM_GETMINMAXINFO:
 		// default to a minimum size
@@ -184,6 +196,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_MBUTTONUP:
 	case WM_MOUSEMOVE:
 	case WM_MOUSEWHEEL:
+
+        if (message == WM_LBUTTONDOWN ||
+            message == WM_RBUTTONDOWN ||
+            message == WM_MBUTTONDOWN)
+        {
+            // capture the mouse 
+            SetCapture(hWnd);
+
+            window->SetMouseCaptured(true);
+        }
+        else if (message == WM_LBUTTONUP ||
+                message == WM_RBUTTONUP ||
+                message == WM_MBUTTONUP)
+        {
+            // release the mouse capture
+            ReleaseCapture();
+
+            window->SetMouseCaptured(false);
+        }
+
         MouseEvent event;
         event.SetXPos(static_cast<int32_t>(LOWORD(lParam)));
         event.SetYPos(static_cast<int32_t>(HIWORD(lParam)));
@@ -231,7 +263,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             message == WM_RBUTTONUP ||
             message == WM_MBUTTONUP)
         {
-            event.SetEventType(MouseEventType::ButtonPress);
+            event.SetEventType(MouseEventType::MouseClick);
         }
         else if (message == WM_MOUSEMOVE)
         {
@@ -242,8 +274,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             event.SetEventType(MouseEventType::MouseWheel);
 
-            // TODO - handle wheel delta properly
-            int16_t wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+            int16_t wheelValue = GET_WHEEL_DELTA_WPARAM(wParam);
+            event.SetWheelDelta(static_cast<float>(wheelValue)/WHEEL_DELTA);
         }
         
         // call into the window class to handle mouse input
@@ -259,7 +291,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 Win32WindowSystem::Win32WindowSystem(const WindowSystemSettings& settings)
 : m_settings(settings), m_externalWindow(settings.useExternalWindow), m_hwnd(0), m_quit(false),
-  m_shouldResize(false), m_inputSystem(0)
+  m_mouseCaptured(false), m_shouldResize(false), m_inputSystem(0)
 {
 	
 }
@@ -547,6 +579,16 @@ bool Win32WindowSystem::IsMaximized() const
 	}
 
 	return ret;
+}
+
+void Win32WindowSystem::SetMouseCaptured(bool captured)
+{
+    m_mouseCaptured = captured;
+}
+
+bool Win32WindowSystem::IsMouseCaptured()
+{
+    return m_mouseCaptured;
 }
 
 void Win32WindowSystem::OnResize()

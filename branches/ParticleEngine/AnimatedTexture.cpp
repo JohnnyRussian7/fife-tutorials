@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: AnimatedEntity.cpp
+*	Filename: AnimatedTexture.cpp
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -20,27 +20,27 @@
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
 
-#include "AnimatedEntity.h"
+#include "AnimatedTexture.h"
+#include "IAnimatedFrame.h"
 #include "AnimatedFrame.h"
 
-
-AnimatedEntity::AnimatedEntity()
+AnimatedTexture::AnimatedTexture()
 : m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), m_lastUpdateTime(0)
 {
 
 }
 
-AnimatedEntity::AnimatedEntity(char* filepath)
+AnimatedTexture::AnimatedTexture(char* filepath)
 {
 
 }
 
-AnimatedEntity::AnimatedEntity(Image* image)
+AnimatedTexture::AnimatedTexture(Image* image)
 {
 
 }
 
-AnimatedEntity::~AnimatedEntity()
+AnimatedTexture::~AnimatedTexture()
 {
     FrameContainer::iterator iter;
     for (iter = m_frames.begin(); iter != m_frames.end(); ++iter)
@@ -50,39 +50,47 @@ AnimatedEntity::~AnimatedEntity()
     m_frames.clear();
 }
 
-uint32_t AnimatedEntity::GetNumFrames() const
+uint32_t AnimatedTexture::GetNumFrames() const
 {
     return m_frames.size();
 }
 
-uint32_t AnimatedEntity::GetTotalRunTime() const
+uint32_t AnimatedTexture::GetTotalRunTime() const
 {
     return m_totalRunTimeInMs;
 }
 
-void AnimatedEntity::SetTotalRunTime(uint32_t runTimeInMs)
+void AnimatedTexture::SetTotalRunTime(uint32_t runTimeInMs)
 {
     m_totalRunTimeInMs = runTimeInMs;
 }
 
-bool AnimatedEntity::IsLooping() const
+bool AnimatedTexture::IsLooping() const
 {
     return m_looping;
 }
 
-void AnimatedEntity::SetLooping(bool looping)
+void AnimatedTexture::SetLooping(bool looping)
 {
     m_looping = looping;
 }
 
-void AnimatedEntity::AddFrame(Image* image, char* name)
+void AnimatedTexture::AddFrame(Image* image, char* name)
 {
     uint32_t frameNumber = m_frames.size();
-
     m_frames.push_back(new AnimatedFrame(this, name, frameNumber));
 }
 
-void AnimatedEntity::RemoveFrame(uint32_t index)
+void AnimatedTexture::AddFrame(char* name, const FloatRect& texCoords)
+{
+    uint32_t frameNumber = m_frames.size();
+    AnimatedFrame* frame = new AnimatedFrame(this, name, frameNumber);
+    frame->SetTextureCoordinates(texCoords);
+
+    m_frames.push_back(frame);
+}
+
+void AnimatedTexture::RemoveFrame(uint32_t index)
 {
     if (index < m_frames.size())
     {
@@ -94,28 +102,28 @@ void AnimatedEntity::RemoveFrame(uint32_t index)
     }
 }
 
-void AnimatedEntity::Start()
+void AnimatedTexture::Start()
 {
     m_running = true;
 }
 
-void AnimatedEntity::Stop()
+void AnimatedTexture::Stop()
 {
     m_running = false;
     Reset();
 }
 
-void AnimatedEntity::Pause()
+void AnimatedTexture::Pause()
 {
     m_running = false;
 }
 
-void AnimatedEntity::Reset()
+void AnimatedTexture::Reset()
 {
     m_currentIndex = 0;
 }
 
-void AnimatedEntity::Animate(uint32_t time)
+void AnimatedTexture::Animate(uint32_t time)
 {
     if (m_running)
     {

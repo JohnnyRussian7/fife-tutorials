@@ -29,7 +29,7 @@ struct MouseEventType
 {
     enum Enum
     {
-        ButtonPress = 0,
+        MouseClick = 0,
         MouseMoved,
         MouseWheel,
 

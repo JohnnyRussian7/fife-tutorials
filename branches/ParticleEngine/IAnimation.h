@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: IAnimatedEntity.h
+*	Filename: IAnimation.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,20 +19,18 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef IANIMATEDENTITY_H_
-#define IANIMATEDENTITY_H_
+#ifndef IANIMATION_H_
+#define IANIMATION_H_
 
 #include "stdint.h"
 #include "Image.h"
-#include "IEntity.h"
 
-class IAnimatedEntity : public IEntity
+class IAnimation
 {
 public:
-    virtual ~IAnimatedEntity() { };
+    virtual ~IAnimation() { };
     
     virtual uint32_t GetNumFrames() const = 0;
-    virtual void SetNumFrames(uint32_t numFrames) = 0;
 
     virtual uint32_t GetTotalRunTime() const = 0;
     virtual void SetTotalRunTime(uint32_t runTimeInMs) = 0;

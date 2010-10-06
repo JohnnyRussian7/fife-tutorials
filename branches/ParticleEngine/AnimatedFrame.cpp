@@ -20,15 +20,16 @@
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
 
-#include <sstream>
-
 #include "AnimatedFrame.h"
-#include "IAnimatedEntity.h"
+#include "IAnimation.h"
 
-AnimatedFrame::AnimatedFrame(IAnimatedEntity* owner, uint32_t frameNumber) 
-: m_owner(owner), m_frameNumber(frameNumber), m_textureCoords(FloatRect(0.0, 1.0, 1.0, 0.0)), m_texture(0)
+AnimatedFrame::AnimatedFrame(IAnimation* owner, char* name, uint32_t frameNumber) 
+: m_owner(owner), m_name(""), m_frameNumber(frameNumber), m_textureCoords(FloatRect(0.0, 1.0, 1.0, 0.0)), m_texture(0)
 {
-
+    if (name)
+    {
+        m_name = std::string(name);
+    }
 }
 
 const char* AnimatedFrame::GetName() const

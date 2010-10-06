@@ -36,6 +36,7 @@ public:
     virtual bool OnMouseMoved(const IMouseEvent& event) = 0;
     virtual bool OnMousePressed(const IMouseEvent& event) = 0;
     virtual bool OnMouseReleased(const IMouseEvent& event) = 0;
+    virtual bool OnMouseWheel(const IMouseEvent& event) = 0;
 };
 
 #endif

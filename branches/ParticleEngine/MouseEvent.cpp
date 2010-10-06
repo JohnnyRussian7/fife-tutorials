@@ -86,6 +86,11 @@ float MouseEvent::GetWheelDelta() const
 
 bool MouseEvent::IsButtonPressed(MouseButtons::Enum button) const
 {
+    if (button == MouseButtons::Any)
+    {
+        return (m_buttonStates != 0);
+    }
+
     return (m_buttonStates & button ? true : false);
 }
 

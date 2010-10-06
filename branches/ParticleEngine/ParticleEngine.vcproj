@@ -159,6 +159,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\AnimatedTexture.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\AxisAlignedBoundingBox.cpp"
 				>
 			</File>
@@ -357,6 +361,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\AnimatedTexture.h"
+				>
+			</File>
+			<File
 				RelativePath=".\AxisAlignedBoundingBox.h"
 				>
 			</File>
@@ -413,11 +421,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IAnimatedEntity.h"
+				RelativePath=".\IAnimatedFrame.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IAnimatedFrame.h"
+				RelativePath=".\IAnimation.h"
 				>
 			</File>
 			<File

@@ -72,7 +72,7 @@ public:
 
     virtual const std::string& GetName() { return m_name; };
 
-    virtual bool OnMousePressed(const IMouseEvent& event) 
+    virtual bool OnMouseMoved(const IMouseEvent& event) 
     { 
         if (event.IsButtonPressed(MouseButtons::LeftButton))
         {
@@ -100,8 +100,9 @@ public:
         return true;
     }
 
-    virtual bool OnMouseMoved(const IMouseEvent& event) { return true; };
-    virtual bool OnMouseReleased(const IMouseEvent& event) { return true; } ;
+    virtual bool OnMousePressed(const IMouseEvent& event) { return true; };
+    virtual bool OnMouseReleased(const IMouseEvent& event) { return true; };
+    virtual bool OnMouseWheel(const IMouseEvent& event) { return true; };
 
 private:
     Camera* m_cam;

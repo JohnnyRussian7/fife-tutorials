@@ -28,12 +28,12 @@
 #include "Rect.h"
 #include "IAnimatedFrame.h"
 
-class IAnimatedEntity;
+class IAnimation;
 
 class AnimatedFrame : public IAnimatedFrame
 {
 public:
-    AnimatedFrame(IAnimatedEntity* owner, uint32_t frameNumber);
+    AnimatedFrame(IAnimation* owner, char* name, uint32_t frameNumber);
     
     virtual const char* GetName() const;
     virtual uint32_t GetFrameNumber() const;
@@ -43,7 +43,7 @@ public:
     virtual void SetTextureCoordinates(float left, float top, float right, float bottom);
 
 private:
-    IAnimatedEntity* m_owner;
+    IAnimation* m_owner;
     std::string m_name;
     uint32_t m_frameNumber;
     ITexture* m_texture;

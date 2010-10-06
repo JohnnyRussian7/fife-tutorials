@@ -141,18 +141,24 @@ void InputSystem::InjectKeyEvent(const IKeyEvent& event)
 
 void InputSystem::InjectMouseEvent(const IMouseEvent& event)
 {
-    // TODO - still need implementation for these
-    if (event.GetEventType() == MouseEventType::ButtonPress)
+    if (event.GetEventType() == MouseEventType::MouseClick)
     {
-        OnMousePressed(event);
+        if (event.IsButtonPressed(MouseButtons::Any))
+        {
+            OnMousePressed(event);
+        }
+        else
+        {
+            OnMouseReleased(event);
+        }
     }
     else if (event.GetEventType() == MouseEventType::MouseMoved)
     {
         OnMouseMoved(event);
     }
-    else
+    else if (event.GetEventType() == MouseEventType::MouseWheel)
     {
-        OnMouseReleased(event);
+        OnMouseWheel(event);
     }
 }
 
@@ -214,6 +220,19 @@ void InputSystem::OnMouseReleased(const IMouseEvent& event)
     for (iter = m_mouseListeners.begin(); iter != m_mouseListeners.end(); ++iter)
     {
         if ((*iter)->OnMouseReleased(event))
+        {
+            // event consumed, do not continue
+            break;
+        }
+    }
+}
+
+void InputSystem::OnMouseWheel(const IMouseEvent& event)
+{
+    MouseListenerContainer::iterator iter;
+    for (iter = m_mouseListeners.begin(); iter != m_mouseListeners.end(); ++iter)
+    {
+        if ((*iter)->OnMouseWheel(event))
         {
             // event consumed, do not continue
             break;

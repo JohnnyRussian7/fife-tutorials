@@ -33,6 +33,8 @@ public:
 	virtual bool HasFocus() const;
 	virtual bool IsMinimized() const;
 	virtual bool IsMaximized() const;
+    void SetMouseCaptured(bool captured);
+    bool IsMouseCaptured();
 	virtual void OnResize();
     virtual void OnKeyboardInput(const IKeyEvent& event);
     virtual void OnMouseInput(const IMouseEvent& event);
@@ -52,7 +54,7 @@ private:
 	bool m_fullScreen;
 	bool m_shouldResize;
 	bool m_quit;
-
+    bool m_mouseCaptured;
 	HWND m_hwnd;
 	HDC m_hdc;
 	HGLRC m_hglrc;

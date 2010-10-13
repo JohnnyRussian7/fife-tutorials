@@ -138,7 +138,7 @@ int main()
     //sceneManager->GetRootSceneNode()->AddChild(node);
 
     PngLoader loader;
-    Image* image = loader.Load("..\\data\\grassalpha.png");
+    Image* image = loader.Load("..\\data\\torch_animation.png");
 
     Billboard* b = sceneManager->CreateBillboard(16, 16, Vector3::Zero());
     IMaterial* m = new Material();

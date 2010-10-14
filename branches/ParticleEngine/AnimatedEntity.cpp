@@ -30,16 +30,6 @@ AnimatedEntity::AnimatedEntity()
 
 }
 
-AnimatedEntity::AnimatedEntity(char* filepath)
-{
-
-}
-
-AnimatedEntity::AnimatedEntity(Image* image)
-{
-
-}
-
 AnimatedEntity::~AnimatedEntity()
 {
     FrameContainer::iterator iter;
@@ -75,11 +65,11 @@ void AnimatedEntity::SetLooping(bool looping)
     m_looping = looping;
 }
 
-void AnimatedEntity::AddFrame(Image* image, char* name)
+void AnimatedEntity::AddFrame(ITexture* texture, char* name)
 {
     uint32_t frameNumber = m_frames.size();
 
-    m_frames.push_back(new AnimatedFrame(this, name, frameNumber));
+    m_frames.push_back(new AnimatedFrame(this, texture, name, frameNumber));
 }
 
 void AnimatedEntity::RemoveFrame(uint32_t index)

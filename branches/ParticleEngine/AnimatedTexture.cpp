@@ -20,9 +20,13 @@
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
 
+#include <string>
+#include <sstream>
+
 #include "AnimatedTexture.h"
 #include "IAnimatedFrame.h"
 #include "AnimatedFrame.h"
+#include "ISpriteSheet.h"
 
 AnimatedTexture::AnimatedTexture()
 : m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), m_lastUpdateTime(0)
@@ -30,14 +34,19 @@ AnimatedTexture::AnimatedTexture()
 
 }
 
-AnimatedTexture::AnimatedTexture(char* filepath)
+AnimatedTexture::AnimatedTexture(ISpriteSheet* spriteSheet)
+: m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), m_lastUpdateTime(0)
 {
-
-}
-
-AnimatedTexture::AnimatedTexture(Image* image)
-{
-
+    if (spriteSheet)
+    {
+        std::string name = "Frame_";
+        for (uint32_t i=0; i < spriteSheet->GetNumTiles(); ++i)
+        {
+            std::ostringstream oss;
+            oss << name << i;
+            AddFrame((char*)oss.str().c_str(), spriteSheet->GetTileCoords(i));
+        }
+    }
 }
 
 AnimatedTexture::~AnimatedTexture()
@@ -75,10 +84,15 @@ void AnimatedTexture::SetLooping(bool looping)
     m_looping = looping;
 }
 
-void AnimatedTexture::AddFrame(Image* image, char* name)
+void AnimatedTexture::AddFrame(IAnimatedFrame* frame)
+{
+    m_frames.push_back(frame);
+}
+
+void AnimatedTexture::AddFrame(ITexture* texture, char* name)
 {
     uint32_t frameNumber = m_frames.size();
-    m_frames.push_back(new AnimatedFrame(this, name, frameNumber));
+    m_frames.push_back(new AnimatedFrame(this, texture, name, frameNumber));
 }
 
 void AnimatedTexture::AddFrame(char* name, const FloatRect& texCoords)

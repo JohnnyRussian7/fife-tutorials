@@ -28,13 +28,15 @@
 #include "Rect.h"
 
 class IAnimatedFrame;
+class ITexture;
+class ISpriteSheet;
 
 class AnimatedTexture : public IAnimation
 {
 public:
     AnimatedTexture();
-    AnimatedTexture(char* filepath);
-    AnimatedTexture(Image* image);
+    AnimatedTexture(ISpriteSheet* spriteSheet);
+
     ~AnimatedTexture();
 
     virtual uint32_t GetNumFrames() const;
@@ -45,7 +47,8 @@ public:
     virtual bool IsLooping() const;
     virtual void SetLooping(bool looping);
 
-    virtual void AddFrame(Image* image, char* name);
+    virtual void AddFrame(IAnimatedFrame* frame);
+    virtual void AddFrame(ITexture* image, char* name);
     virtual void AddFrame(char* name, const FloatRect& texCoords);
     virtual void RemoveFrame(uint32_t index);
 

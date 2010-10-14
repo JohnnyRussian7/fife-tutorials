@@ -489,6 +489,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ISpriteSheet.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ITexture.h"
 				>
 			</File>

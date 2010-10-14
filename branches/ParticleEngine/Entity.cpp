@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "IMaterial.h"
+#include "IAnimation.h"
 
 namespace
 {
@@ -23,7 +24,7 @@ namespace
 }
 
 Entity::Entity(const char* name)
-: m_name("")
+: m_name(""), m_animation(0)
 {
 	if (name)
 	{
@@ -50,7 +51,20 @@ Renderable* Entity::GetRenderable()
     return 0;
 }
 
-void Entity::Update()
+void Entity::SetAnimation(IAnimation* animation)
 {
+    m_animation = animation;
+}
 
+IAnimation* Entity::GetAnimation() const
+{
+    return m_animation;
+}
+
+void Entity::Update(uint32_t time)
+{
+    if (m_animation)
+    {
+        m_animation->Animate(time);
+    }
 }

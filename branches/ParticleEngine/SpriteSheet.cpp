@@ -98,7 +98,7 @@ FloatRect SpriteSheet::GetTileCoords(uint32_t index) const
         col = index / m_numCols;
     }
 
-    // calculate uv coordinates based on row and cow
+    // calculate uv coordinates based on row and col
     FloatRect rect;
     rect.m_left = static_cast<float>((row+1) * m_tileSize.m_height + col * m_tileSize.m_width);
     rect.m_top = static_cast<float>(row * m_tileSize.m_height + col * m_tileSize.m_width);

@@ -25,6 +25,7 @@
 #include <vector>
 #include <string>
 
+#include "stdint.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix4.h"
@@ -87,7 +88,7 @@ public:
 
     bool IsDirty();
 
-    void Update();
+    void Update(uint32_t time);
 
 private:
     void SetDirtyFlag(bool setChildren = true);

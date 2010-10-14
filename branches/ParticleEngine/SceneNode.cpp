@@ -347,7 +347,7 @@ bool SceneNode::IsDirty()
     return m_requiresUpdate;
 }
 
-void SceneNode::Update()
+void SceneNode::Update(uint32_t time)
 {
     if (IsDirty())
     {
@@ -375,14 +375,14 @@ void SceneNode::Update()
     EntityContainer::iterator entityIter;
     for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)
     {
-        (*entityIter)->Update();
+        (*entityIter)->Update(time);
     }
     
         // give children chance to update
     std::vector<SceneNode*>::iterator nodeIter;
     for (nodeIter = m_childNodes.begin(); nodeIter != m_childNodes.end(); ++nodeIter)
     {
-        (*nodeIter)->Update();
+        (*nodeIter)->Update(time);
     }
 }
 

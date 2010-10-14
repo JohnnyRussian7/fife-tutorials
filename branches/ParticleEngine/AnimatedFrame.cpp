@@ -32,6 +32,16 @@ AnimatedFrame::AnimatedFrame(IAnimation* owner, char* name, uint32_t frameNumber
     }
 }
 
+AnimatedFrame::AnimatedFrame(IAnimation* owner, ITexture* texture, char* name, uint32_t frameNumber)
+: m_owner(owner), m_name(""), m_frameNumber(frameNumber), m_textureCoords(FloatRect(0.0, 1.0, 1.0, 0.0)),
+  m_texture(texture)
+{
+    if (name)
+    {
+        m_name = std::string(name);
+    }
+}
+
 const char* AnimatedFrame::GetName() const
 {
     return m_name.c_str();

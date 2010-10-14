@@ -62,7 +62,7 @@ public:
     uint32_t GetNumberOfVertices() const;
     
     virtual Renderable* GetRenderable();
-    virtual void Update();
+    virtual void Update(uint32_t time);
 
 private:
     void GenerateBuffers();

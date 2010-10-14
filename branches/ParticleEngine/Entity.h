@@ -4,9 +4,11 @@
 
 #include <string>
 
+#include "stdint.h"
 #include "IEntity.h"
 
 class Renderable;
+class IAnimation;
 
 class Entity : public IEntity
 {
@@ -17,10 +19,15 @@ public:
 	const char* GetName() const;
 
     virtual Renderable* GetRenderable();
-    virtual void Update();
+
+    virtual void SetAnimation(IAnimation* animation);
+    virtual IAnimation* GetAnimation() const;
+
+    virtual void Update(uint32_t time);
 
 private:
 	std::string m_name;
+    IAnimation* m_animation;
 };
 
 #endif

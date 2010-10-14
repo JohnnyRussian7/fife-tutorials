@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 
+#include "stdint.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Rect.h"
@@ -70,8 +71,8 @@ public:
     IVertexBuffer* CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage);
     IIndexBuffer* CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage);
 
-    void UpdateScene();
-    void RenderScene();
+    void UpdateScene(uint32_t time);
+    void RenderScene(uint32_t time);
 
 private:
     SceneManagerSettings m_settings;

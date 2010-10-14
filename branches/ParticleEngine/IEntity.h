@@ -22,7 +22,10 @@
 #ifndef IENTITY_H_
 #define IENTITY_H_
 
+#include "stdint.h"
+
 class Renderable;
+class IAnimation;
 
 class IEntity
 {
@@ -32,10 +35,11 @@ public:
     virtual const char* GetName() const = 0;
 
     virtual Renderable* GetRenderable() = 0;
-    virtual void Update() = 0;
 
-private:
-    std::string m_name;
+    virtual void SetAnimation(IAnimation* animation) = 0;
+    virtual IAnimation* GetAnimation() const = 0;
+
+    virtual void Update(uint32_t time) = 0;
 };
 
 #endif

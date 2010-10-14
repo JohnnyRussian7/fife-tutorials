@@ -180,8 +180,10 @@ Renderable* Billboard::GetRenderable()
     return this;
 }
 
-void Billboard::Update()
+void Billboard::Update(uint32_t time)
 {
+    Entity::Update(time);
+
     if (!m_buffersGenerated)
     {
         GenerateBuffers();

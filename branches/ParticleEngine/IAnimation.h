@@ -24,6 +24,10 @@
 
 #include "stdint.h"
 #include "Image.h"
+#include "Rect.h"
+
+class IAnimatedFrame;
+class ITexture;
 
 class IAnimation
 {
@@ -38,9 +42,10 @@ public:
     virtual bool IsLooping() const = 0;
     virtual void SetLooping(bool looping) = 0;
 
-    virtual void AddFrame(Image* image, const char* name=0) = 0;
+    virtual void AddFrame(IAnimatedFrame* frame) = 0;
+    virtual void AddFrame(ITexture* texture, const char* name=0) = 0;
+    virtual void AddFrame(char* name, const FloatRect& texCoords);
     virtual void RemoveFrame(uint32_t index) = 0;
-    virtual void RemoveFrame(const char* name) = 0;
 
     virtual void Start() = 0;
     virtual void Stop() = 0;

@@ -140,7 +140,7 @@ void Engine::EndScene()
 
 void Engine::Render()
 {
-    m_sceneManager->RenderScene();
+    m_sceneManager->RenderScene(m_timer.GetTime());
     m_windowSystem->SwapBuffers();
 }
 

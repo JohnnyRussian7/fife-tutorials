@@ -129,16 +129,16 @@ IIndexBuffer* SceneManager::CreateIndexBuffer(uint32_t numIndices, IndexBufferDa
     return m_renderSystem->CreateIndexBuffer(numIndices, indexType, usage);
 }
 
-void SceneManager::UpdateScene()
+void SceneManager::UpdateScene(uint32_t time)
 {
     // start the cascading update calls to all scene nodes
-    GetRootSceneNode()->Update();
+    GetRootSceneNode()->Update(time);
 }
 
-void SceneManager::RenderScene()
+void SceneManager::RenderScene(uint32_t time)
 {
     // update the scene graph information before rendering
-    UpdateScene();
+    UpdateScene(time);
 
     m_renderSystem->ClearBuffers();
 

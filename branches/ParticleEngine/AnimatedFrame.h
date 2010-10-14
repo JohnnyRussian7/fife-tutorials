@@ -29,12 +29,13 @@
 #include "IAnimatedFrame.h"
 
 class IAnimation;
+class ITexture;
 
 class AnimatedFrame : public IAnimatedFrame
 {
 public:
     AnimatedFrame(IAnimation* owner, char* name, uint32_t frameNumber);
-    
+    AnimatedFrame(IAnimation* owner, ITexture* texture, char* name, uint32_t frameNumber);
     virtual const char* GetName() const;
     virtual uint32_t GetFrameNumber() const;
     virtual ITexture* GetTexture() const;

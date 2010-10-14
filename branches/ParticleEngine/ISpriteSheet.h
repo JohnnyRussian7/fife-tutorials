@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: SpriteSheet.h
+*	Filename: ISpriteSheet.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,44 +19,45 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef SPRITESHEET_H_
-#define SPRITESHEET_H_
+#ifndef ISPRITESHEET_H_
+#define ISPRITESHEET_H_
 
 #include "stdint.h"
-#include "ISpriteSheet.h"
 #include "Dimension.h"
 #include "Rect.h"
 
 class Image;
 
-class SpriteSheet : public ISpriteSheet
+struct StorageType
+{
+    enum Enum
+    {
+        RowMajor = 0,
+        ColMajor
+    };
+};
+
+class ISpriteSheet
 {
 public:
-    SpriteSheet(Image* image);
 
-    virtual Image* GetImage() const;
+    virtual ~ISpriteSheet() { };
 
-    virtual void SetNumTiles(uint32_t numTiles);
-    virtual uint32_t GetNumTiles() const;
+    virtual Image* GetImage() const = 0;
 
-    virtual void SetNumRows(uint32_t numRows);
-    virtual uint32_t GetNumRows() const;
+    virtual void SetNumTiles(uint32_t numTiles) = 0;
+    virtual uint32_t GetNumTiles() const = 0;
 
-    virtual void SetNumCols(uint32_t numCols);
-    virtual uint32_t GetNumCols() const;
+    virtual void SetNumRows(uint32_t numRows) = 0;
+    virtual uint32_t GetNumRows() const = 0;
 
-    virtual void SetTileSize(uint32_t width, uint32_t height);
-    virtual void SetTileSize(const u32Dimension& size);
+    virtual void SetNumCols(uint32_t numCols) = 0;
+    virtual uint32_t GetNumCols() const = 0;
 
-    virtual FloatRect GetTileCoords(uint32_t index) const;
+    virtual void SetTileSize(uint32_t width, uint32_t height) = 0;
+    virtual void SetTileSize(const u32Dimension& size) = 0;
 
-private:
-    Image* m_image;
-    uint32_t m_numTiles;
-    uint32_t m_numRows;
-    uint32_t m_numCols;
-    u32Dimension m_tileSize;
-    StorageType::Enum m_storageType;
+    virtual FloatRect GetTileCoords(uint32_t index) const = 0;
 };
 
 #endif

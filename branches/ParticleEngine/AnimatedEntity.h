@@ -28,15 +28,13 @@
 #include "Entity.h"
 #include "IAnimation.h"
 
-class Image;
+class ITexture;
 class IAnimatedFrame;
 
 class AnimatedEntity : public IAnimation, public Entity
 {
 public:
     AnimatedEntity();
-    AnimatedEntity(char* filepath);
-    AnimatedEntity(Image* image);
     ~AnimatedEntity();
 
     virtual uint32_t GetNumFrames() const;
@@ -48,7 +46,7 @@ public:
     virtual bool IsLooping() const;
     virtual void SetLooping(bool looping);
 
-    virtual void AddFrame(Image* image, char* name);
+    virtual void AddFrame(ITexture* texture, char* name);
     virtual void RemoveFrame(uint32_t index);
 
     virtual void Start();

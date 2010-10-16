@@ -32,6 +32,7 @@ public:
 
     virtual const char* GetName() const = 0;
     virtual uint32_t GetFrameNumber() const = 0;
+    virtual void SetTexture(ITexture* texture) = 0;
     virtual ITexture* GetTexture() const = 0;
     virtual const FloatRect& GetTextureCoordinates() const = 0;
     virtual void SetTextureCoordinates(const FloatRect& texCoords) = 0;

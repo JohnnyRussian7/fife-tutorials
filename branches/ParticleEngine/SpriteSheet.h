@@ -28,13 +28,16 @@
 #include "Rect.h"
 
 class Image;
+class ITexture;
 
 class SpriteSheet : public ISpriteSheet
 {
 public:
     SpriteSheet(Image* image);
+    ~SpriteSheet();
 
     virtual Image* GetImage() const;
+    virtual ITexture* GetTexture() const;
 
     virtual void SetNumTiles(uint32_t numTiles);
     virtual uint32_t GetNumTiles() const;
@@ -45,17 +48,15 @@ public:
     virtual void SetNumCols(uint32_t numCols);
     virtual uint32_t GetNumCols() const;
 
-    virtual void SetTileSize(uint32_t width, uint32_t height);
-    virtual void SetTileSize(const u32Dimension& size);
-
     virtual FloatRect GetTileCoords(uint32_t index) const;
 
 private:
     Image* m_image;
+    ITexture* m_texture;
     uint32_t m_numTiles;
     uint32_t m_numRows;
     uint32_t m_numCols;
-    u32Dimension m_tileSize;
+    floatDimension m_tileSize;
     StorageType::Enum m_storageType;
 };
 

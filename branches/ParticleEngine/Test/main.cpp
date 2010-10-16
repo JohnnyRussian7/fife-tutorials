@@ -1,4 +1,5 @@
 
+#include <string>
 #include <sstream>
 
 #include "../Engine.h"
@@ -21,6 +22,10 @@
 #include "../IInputSystem.h"
 #include "../IMouseListener.h"
 #include "../IMouseEvent.h"
+#include "../IAnimation.h"
+#include "../AnimatedTexture.h"
+#include "../ISpriteSheet.h"
+#include "../SpriteSheet.h"
 
 class TestKeyListener : public IKeyListener
 {
@@ -138,22 +143,48 @@ int main()
     //sceneManager->GetRootSceneNode()->AddChild(node);
 
     PngLoader loader;
-    Image* image = loader.Load("..\\data\\torch_animation.png");
+    Image* image1 = loader.Load("..\\data\\grassalpha.png");
+    Image* image2 = loader.Load("..\\data\\torch_animation.png");
 
-    Billboard* b = sceneManager->CreateBillboard(16, 16, Vector3::Zero());
-    IMaterial* m = new Material();
+    Billboard* b1 = sceneManager->CreateBillboard(16, 16, Vector3::Zero());
+    IMaterial* m1 = new Material();
     
-    if (image)
+    if (image1)
     {
-        if (m)
+        if (m1)
         {
-            ITexture* texture = new OpenglTexture(TextureType::_2d, image);
-            m->SetTexture(texture);
+            ITexture* texture = new OpenglTexture(TextureType::_2d, image1);
+            m1->SetTexture(texture);
         }
-        b->SetMaterial(m);
+        b1->SetMaterial(m1);
+    }
+
+    Billboard* b2 = sceneManager->CreateBillboard(16, 16, Vector3(10, 10, 0));
+    IMaterial* m2 = new Material();
+    if (image2)
+    {
+        if (m2)
+        {
+            ISpriteSheet* spriteSheet = new SpriteSheet(image2);
+            spriteSheet->SetNumRows(1);
+            spriteSheet->SetNumCols(24);
+            spriteSheet->SetNumTiles(24);
+            IAnimation* animation = new AnimatedTexture(spriteSheet);
+            animation->SetLooping(true);
+            animation->SetTotalRunTime(20000);
+            for (uint32_t i=0; i < spriteSheet->GetNumTiles(); ++i)
+            {
+                std::ostringstream oss;
+                oss << "Frame_" << i;
+                animation->AddFrame((char*)oss.str().c_str(), spriteSheet->GetTileCoords(i));
+            }
+            b2->SetAnimation(animation);
+        }
+        b2->SetMaterial(m2);
     }
     
-    sceneManager->GetRootSceneNode()->AddEntity(b);
+    sceneManager->GetRootSceneNode()->AddEntity(b1);
+    sceneManager->GetRootSceneNode()->AddEntity(b2);
 
 	while (engine.Run())
 	{

@@ -38,6 +38,7 @@ public:
     AnimatedFrame(IAnimation* owner, ITexture* texture, char* name, uint32_t frameNumber);
     virtual const char* GetName() const;
     virtual uint32_t GetFrameNumber() const;
+    virtual void SetTexture(ITexture* texture);
     virtual ITexture* GetTexture() const;
     virtual const FloatRect& GetTextureCoordinates() const;
     virtual void SetTextureCoordinates(const FloatRect& texCoords);

@@ -25,7 +25,7 @@ public:
 
     virtual void Update(uint32_t time);
 
-private:
+protected:
 	std::string m_name;
     IAnimation* m_animation;
 };

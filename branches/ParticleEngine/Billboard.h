@@ -46,8 +46,8 @@ public:
     void SetDimensions(uint32_t width, uint32_t height);
     void SetWidth(uint32_t width);
     void SetHeight(uint32_t height);
-    uint32_t GetWidth(uint32_t width) const;
-    uint32_t GetHeight(uint32_t height) const;
+    uint32_t GetWidth() const;
+    uint32_t GetHeight() const;
 
     void SetPosition(const Vector3& position);
     const Vector3& GetPosition() const;
@@ -66,7 +66,7 @@ public:
 
 private:
     void GenerateBuffers();
-    void GenerateIndices();
+    void UpdateBuffers();
 
 private:
     SceneManager* m_sceneManager;

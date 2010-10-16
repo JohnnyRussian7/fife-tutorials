@@ -42,9 +42,11 @@ public:
     virtual bool IsLooping() const = 0;
     virtual void SetLooping(bool looping) = 0;
 
+    virtual bool IsDirty() const = 0;
+
     virtual void AddFrame(IAnimatedFrame* frame) = 0;
-    virtual void AddFrame(ITexture* texture, const char* name=0) = 0;
-    virtual void AddFrame(char* name, const FloatRect& texCoords);
+    virtual void AddFrame(ITexture* texture, char* name=0) = 0;
+    virtual void AddFrame(char* name, const FloatRect& texCoords) = 0;
     virtual void RemoveFrame(uint32_t index) = 0;
 
     virtual void Start() = 0;
@@ -53,6 +55,9 @@ public:
     virtual void Reset() = 0;
 
     virtual void Animate(uint32_t time) = 0;
+
+    virtual ITexture* GetTexture() const = 0;
+    virtual const FloatRect& GetTextureCoords() const = 0;
 };
 
 #endif

@@ -24,17 +24,32 @@
 
 #include "SpriteSheet.h"
 #include "Image.h"
+#include "OpenglTexture.h"
 
 SpriteSheet::SpriteSheet(Image* image)
-: m_image(image), m_numTiles(0), m_numRows(0), m_numCols(0), m_tileSize(0, 0),
+: m_image(image), m_texture(0), m_numTiles(0), m_numRows(0), m_numCols(0), m_tileSize(0, 0),
   m_storageType(StorageType::RowMajor)
 {
     assert(m_image);
+
+    // TODO - this should use a TextureManager::createTexture(...) function at some point
+    m_texture = new OpenglTexture(TextureType::_2d, m_image);
+}
+
+SpriteSheet::~SpriteSheet()
+{
+    delete m_texture;
+    m_texture = 0;
 }
 
 Image* SpriteSheet::GetImage() const
 {
     return m_image;
+}
+
+ITexture* SpriteSheet::GetTexture() const
+{
+    return m_texture;
 }
 
 void SpriteSheet::SetNumTiles(uint32_t numTiles)
@@ -67,16 +82,6 @@ uint32_t SpriteSheet::GetNumCols() const
     return m_numCols;
 }
 
-void SpriteSheet::SetTileSize(uint32_t width, uint32_t height)
-{
-    SetTileSize(u32Dimension(width, height));
-}
-
-void SpriteSheet::SetTileSize(const u32Dimension& size)
-{
-    m_tileSize = size;
-}
-
 FloatRect SpriteSheet::GetTileCoords(uint32_t index) const
 {
     if (index >= GetNumTiles())
@@ -98,11 +103,13 @@ FloatRect SpriteSheet::GetTileCoords(uint32_t index) const
         col = index / m_numCols;
     }
 
+    floatDimension m_tileSize(1.f/(GetNumCols()*m_image->GetWidth()), 1.f/(GetNumRows()*m_image->GetHeight()));
+
     // calculate uv coordinates based on row and col
     FloatRect rect;
-    rect.m_left = static_cast<float>((row+1) * m_tileSize.m_height + col * m_tileSize.m_width);
+    rect.m_left = static_cast<float>((row) * m_tileSize.m_height + col * m_tileSize.m_width);
     rect.m_top = static_cast<float>(row * m_tileSize.m_height + col * m_tileSize.m_width);
-    rect.m_right = static_cast<float>(row * m_tileSize.m_height + (col+1) * m_tileSize.m_width);
+    rect.m_right = static_cast<float>((row+1) * m_tileSize.m_height + (col+1) * m_tileSize.m_width);
     rect.m_bottom = static_cast<float>((row+1) * m_tileSize.m_height + (col+1) * m_tileSize.m_width);
 
     return rect;

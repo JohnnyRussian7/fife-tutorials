@@ -21,6 +21,7 @@
 ***********************************************************************/
 
 #include "AnimatedFrame.h"
+#include "ITexture.h"
 #include "IAnimation.h"
 
 AnimatedFrame::AnimatedFrame(IAnimation* owner, char* name, uint32_t frameNumber) 
@@ -50,6 +51,17 @@ const char* AnimatedFrame::GetName() const
 uint32_t AnimatedFrame::GetFrameNumber() const
 {
     return m_frameNumber;
+}
+
+void AnimatedFrame::SetTexture(ITexture* texture)
+{
+    if (m_texture)
+    {
+        delete m_texture;
+        m_texture = 0;
+    }
+
+    m_texture = texture;
 }
 
 ITexture* AnimatedFrame::GetTexture() const

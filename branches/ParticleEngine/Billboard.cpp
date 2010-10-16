@@ -27,6 +27,8 @@
 #include "SceneManager.h"
 #include "IVertexBuffer.h"
 #include "IIndexBuffer.h"
+#include "IAnimation.h"
+#include "IMaterial.h"
 
 Billboard::Billboard(SceneManager* sceneManager)
 : m_sceneManager(sceneManager), m_owner(0), m_width(1), m_height(1),
@@ -109,6 +111,36 @@ void Billboard::GenerateBuffers()
     m_buffersGenerated = true;
 }
 
+void Billboard::UpdateBuffers()
+{
+    if (m_vertexBuffer)
+    {
+        const float halfWidth = m_width/2.f;
+        const float halfHeight = m_height/2.f;
+
+        std::vector<Vertex> vertices;
+        vertices.reserve(GetNumberOfVertices());
+
+        // first vertex (0)
+        Vector3 position = m_position + Vector3(-halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
+
+        // second vertex (1)
+        position = m_position + Vector3(halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
+
+        // third vertex (2)
+        position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
+
+        // fourth vertex (3)
+        position = m_position + Vector3(halfWidth, -halfHeight, 0); 
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
+
+        m_vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
+    }
+}
+
 void Billboard::SetPosition(const Vector3& position)
 {
     m_position = position;
@@ -135,12 +167,12 @@ void Billboard::SetHeight(uint32_t height)
     m_height = height;
 }
 
-uint32_t Billboard::GetWidth(uint32_t width) const
+uint32_t Billboard::GetWidth() const
 {
     return m_width;
 }
 
-uint32_t Billboard::GetHeight(uint32_t height) const
+uint32_t Billboard::GetHeight() const
 {
     return m_height;
 }
@@ -184,8 +216,21 @@ void Billboard::Update(uint32_t time)
 {
     Entity::Update(time);
 
+    bool animationDirty = false;
+    if (m_animation && m_animation->IsDirty())
+    {
+        GetMaterial()->SetTexture(m_animation->GetTexture());
+        SetTextureCoordinates(m_animation->GetTextureCoords());
+
+        animationDirty = true;
+    }
+
     if (!m_buffersGenerated)
     {
         GenerateBuffers();
+    }
+    else if (animationDirty)
+    {
+        UpdateBuffers();
     }
 }

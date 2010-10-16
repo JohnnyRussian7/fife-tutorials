@@ -27,6 +27,7 @@
 #include "Rect.h"
 
 class Image;
+class ITexture;
 
 struct StorageType
 {
@@ -44,6 +45,7 @@ public:
     virtual ~ISpriteSheet() { };
 
     virtual Image* GetImage() const = 0;
+    virtual ITexture* GetTexture() const = 0;
 
     virtual void SetNumTiles(uint32_t numTiles) = 0;
     virtual uint32_t GetNumTiles() const = 0;
@@ -53,9 +55,6 @@ public:
 
     virtual void SetNumCols(uint32_t numCols) = 0;
     virtual uint32_t GetNumCols() const = 0;
-
-    virtual void SetTileSize(uint32_t width, uint32_t height) = 0;
-    virtual void SetTileSize(const u32Dimension& size) = 0;
 
     virtual FloatRect GetTileCoords(uint32_t index) const = 0;
 };

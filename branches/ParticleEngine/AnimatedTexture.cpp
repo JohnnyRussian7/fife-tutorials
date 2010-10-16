@@ -22,6 +22,8 @@
 
 #include <string>
 #include <sstream>
+#include <iostream>
+#include <cassert>
 
 #include "AnimatedTexture.h"
 #include "IAnimatedFrame.h"
@@ -29,24 +31,17 @@
 #include "ISpriteSheet.h"
 
 AnimatedTexture::AnimatedTexture()
-: m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), m_lastUpdateTime(0)
+: m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), 
+  m_lastUpdateTime(0), m_spriteSheet(0), m_dirty(true)
 {
 
 }
 
 AnimatedTexture::AnimatedTexture(ISpriteSheet* spriteSheet)
-: m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), m_lastUpdateTime(0)
+: m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), 
+  m_lastUpdateTime(0), m_spriteSheet(spriteSheet), m_dirty(true)
 {
-    if (spriteSheet)
-    {
-        std::string name = "Frame_";
-        for (uint32_t i=0; i < spriteSheet->GetNumTiles(); ++i)
-        {
-            std::ostringstream oss;
-            oss << name << i;
-            AddFrame((char*)oss.str().c_str(), spriteSheet->GetTileCoords(i));
-        }
-    }
+
 }
 
 AnimatedTexture::~AnimatedTexture()
@@ -57,6 +52,12 @@ AnimatedTexture::~AnimatedTexture()
         delete *iter;
     }
     m_frames.clear();
+
+    if (m_spriteSheet)
+    {
+        delete m_spriteSheet;
+        m_spriteSheet = 0;
+    }
 }
 
 uint32_t AnimatedTexture::GetNumFrames() const
@@ -84,6 +85,11 @@ void AnimatedTexture::SetLooping(bool looping)
     m_looping = looping;
 }
 
+bool AnimatedTexture::IsDirty() const
+{
+    return m_dirty;
+}
+
 void AnimatedTexture::AddFrame(IAnimatedFrame* frame)
 {
     m_frames.push_back(frame);
@@ -97,8 +103,11 @@ void AnimatedTexture::AddFrame(ITexture* texture, char* name)
 
 void AnimatedTexture::AddFrame(char* name, const FloatRect& texCoords)
 {
+    assert(m_spriteSheet);
+
     uint32_t frameNumber = m_frames.size();
     AnimatedFrame* frame = new AnimatedFrame(this, name, frameNumber);
+    frame->SetTexture(m_spriteSheet->GetTexture());
     frame->SetTextureCoordinates(texCoords);
 
     m_frames.push_back(frame);
@@ -139,18 +148,73 @@ void AnimatedTexture::Reset()
 
 void AnimatedTexture::Animate(uint32_t time)
 {
+    if (m_lastUpdateTime == 0)
+    {
+        m_dirty = true;
+    }
+    else
+    {
+        m_dirty = false;
+    }
+
     if (m_running)
     {
-        uint32_t deltaTime = m_lastUpdateTime - time;
+        m_currentRunTime += time - m_lastUpdateTime;
 
-        if (deltaTime > GetTotalRunTime())
+        if (m_currentRunTime > GetTotalRunTime())
         {
-            deltaTime -= GetTotalRunTime();
+            if (IsLooping())
+            {
+                // reset current running time
+                while (m_currentRunTime > GetTotalRunTime())
+                {
+                    m_currentRunTime -= GetTotalRunTime();
+                }
+
+                // compute the animation frame
+                uint32_t newIndex = static_cast<uint32_t>(static_cast<float>(m_currentRunTime) / GetTotalRunTime() * GetNumFrames() - 1);
+
+                if (newIndex != m_currentIndex)
+                {
+                    m_currentIndex = newIndex;
+                    m_dirty = true;
+                }
+            }
+            else
+            {
+                // end of animation and not looping so just show the last frame and pause
+                uint32_t newIndex = GetNumFrames()-1;
+                Pause();
+
+                if (newIndex != m_currentIndex)
+                {
+                    m_currentIndex = newIndex;
+                    m_dirty = true;
+                }
+            }
         }
+        else
+        {
+            // compute the animation frame
+            uint32_t newIndex = static_cast<uint32_t>(static_cast<float>(m_currentRunTime) / GetTotalRunTime() * GetNumFrames() - 1);
 
-        // compute the animation frame
-        m_currentIndex = deltaTime / GetTotalRunTime() * GetNumFrames();
-
-        m_lastUpdateTime = time;
+            if (newIndex != m_currentIndex)
+            {
+                m_currentIndex = newIndex;
+                m_dirty = true;
+            }
+        }
     }
+
+    m_lastUpdateTime = time;
+}
+
+ITexture* AnimatedTexture::GetTexture() const
+{
+    return m_frames[m_currentIndex]->GetTexture();
+}
+
+const FloatRect& AnimatedTexture::GetTextureCoords() const
+{
+    return m_frames[m_currentIndex]->GetTextureCoordinates();
 }

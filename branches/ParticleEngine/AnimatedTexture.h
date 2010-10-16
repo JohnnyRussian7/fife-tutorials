@@ -47,6 +47,8 @@ public:
     virtual bool IsLooping() const;
     virtual void SetLooping(bool looping);
 
+    virtual bool IsDirty() const;
+
     virtual void AddFrame(IAnimatedFrame* frame);
     virtual void AddFrame(ITexture* image, char* name);
     virtual void AddFrame(char* name, const FloatRect& texCoords);
@@ -59,12 +61,18 @@ public:
 
     virtual void Animate(uint32_t time);
 
+    virtual ITexture* GetTexture() const;
+    virtual const FloatRect& GetTextureCoords() const;
+
 private:
     uint32_t m_totalRunTimeInMs;
     bool m_looping;
     uint32_t m_currentIndex;
     bool m_running;
     uint32_t m_lastUpdateTime;
+    uint32_t m_currentRunTime;
+    ISpriteSheet* m_spriteSheet;
+    bool m_dirty;
 
     typedef std::vector<IAnimatedFrame*> FrameContainer;
     FrameContainer m_frames;

@@ -104,7 +104,7 @@ void Timer::TimerImpl::Tick()
         m_realTime = QueryRealTime();
 
         // update the virtual time based on the real time
-        m_virtualTime = m_virtualTime + static_cast<uint32_t>((m_realTime - m_realTimeStart) * m_multiplier);
+        m_virtualTime += static_cast<uint32_t>((m_realTime - m_realTimeStart) * m_multiplier);
     }
 }
 
@@ -114,7 +114,7 @@ uint32_t Timer::TimerImpl::QueryRealTime()
     {
         // high performance counter has known issues with multi-core processors
         // so temporarily disable multi-core to get around these problems
-        DWORD_PTR affinityMask;
+        DWORD_PTR affinityMask = 1;
         if (m_hasMultiCore)
         {
             affinityMask = SetThreadAffinityMask(GetCurrentThread(), 1);

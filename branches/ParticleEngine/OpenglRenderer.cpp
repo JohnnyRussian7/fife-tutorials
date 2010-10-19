@@ -186,7 +186,12 @@ void OpenglRenderer::Render(Renderable* renderable)
 
     if (texture)
     {
-         glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+        // TODO - this should be settable outside of renderer
+        // enable blending
+        glEnable(GL_BLEND); 
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
@@ -199,7 +204,6 @@ void OpenglRenderer::Render(Renderable* renderable)
 
     IVertexBuffer* vertexBuffer = renderable->GetVertexBuffer();
     IIndexBuffer* indexBuffer = renderable->GetIndexBuffer();
-    void* indexData = 0;
 
     if (vertexBuffer)
     {

@@ -104,7 +104,7 @@ void Timer::TimerImpl::Tick()
         m_realTime = QueryRealTime();
 
         // update the virtual time based on the real time
-        m_virtualTime += static_cast<uint32_t>((m_realTime - m_realTimeStart) * m_multiplier);
+        m_virtualTime = static_cast<uint32_t>((m_realTime - m_realTimeStart) * m_multiplier);
     }
 }
 

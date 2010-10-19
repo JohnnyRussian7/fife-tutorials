@@ -103,14 +103,14 @@ FloatRect SpriteSheet::GetTileCoords(uint32_t index) const
         col = index / m_numCols;
     }
 
-    floatDimension m_tileSize(1.f/(GetNumCols()*m_image->GetWidth()), 1.f/(GetNumRows()*m_image->GetHeight()));
+    floatDimension cellSize(1.f/GetNumCols(), 1.f/GetNumRows());
 
     // calculate uv coordinates based on row and col
     FloatRect rect;
-    rect.m_left = static_cast<float>((row) * m_tileSize.m_height + col * m_tileSize.m_width);
-    rect.m_top = static_cast<float>(row * m_tileSize.m_height + col * m_tileSize.m_width);
-    rect.m_right = static_cast<float>((row+1) * m_tileSize.m_height + (col+1) * m_tileSize.m_width);
-    rect.m_bottom = static_cast<float>((row+1) * m_tileSize.m_height + (col+1) * m_tileSize.m_width);
+    rect.m_left = index * cellSize.m_width;
+    rect.m_top = index * cellSize.m_height;
+    rect.m_right = index * cellSize.m_width + cellSize.m_width;
+    rect.m_bottom = index * cellSize.m_height + cellSize.m_height;
 
     return rect;
 }

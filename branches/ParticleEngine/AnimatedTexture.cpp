@@ -32,14 +32,14 @@
 
 AnimatedTexture::AnimatedTexture()
 : m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), 
-  m_lastUpdateTime(0), m_spriteSheet(0), m_dirty(true)
+  m_lastUpdateTime(0), m_currentRunTime(0), m_spriteSheet(0), m_dirty(true)
 {
 
 }
 
 AnimatedTexture::AnimatedTexture(ISpriteSheet* spriteSheet)
 : m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), 
-  m_lastUpdateTime(0), m_spriteSheet(spriteSheet), m_dirty(true)
+  m_lastUpdateTime(0), m_currentRunTime(0), m_spriteSheet(spriteSheet), m_dirty(true)
 {
 
 }
@@ -108,7 +108,12 @@ void AnimatedTexture::AddFrame(char* name, const FloatRect& texCoords)
     uint32_t frameNumber = m_frames.size();
     AnimatedFrame* frame = new AnimatedFrame(this, name, frameNumber);
     frame->SetTexture(m_spriteSheet->GetTexture());
-    frame->SetTextureCoordinates(texCoords);
+
+    // TODO - move this elsewhere it is opengl specific
+    // must invert coordinates for opengl
+    FloatRect invertCoords(texCoords.m_right, texCoords.m_bottom, texCoords.m_left, texCoords.m_top);
+
+    frame->SetTextureCoordinates(invertCoords);
 
     m_frames.push_back(frame);
 }
@@ -148,6 +153,8 @@ void AnimatedTexture::Reset()
 
 void AnimatedTexture::Animate(uint32_t time)
 {
+    const uint32_t FrameTimeInMs = GetTotalRunTime()/(GetNumFrames()-1);
+
     if (m_lastUpdateTime == 0)
     {
         m_dirty = true;
@@ -155,52 +162,36 @@ void AnimatedTexture::Animate(uint32_t time)
     else
     {
         m_dirty = false;
-    }
 
-    if (m_running)
-    {
-        m_currentRunTime += time - m_lastUpdateTime;
-
-        if (m_currentRunTime > GetTotalRunTime())
+        if (m_running)
         {
-            if (IsLooping())
+            m_currentRunTime += time - m_lastUpdateTime;
+
+            if (m_currentIndex >= GetNumFrames()-1)
             {
-                // reset current running time
-                while (m_currentRunTime > GetTotalRunTime())
+                if (IsLooping())
                 {
-                    m_currentRunTime -= GetTotalRunTime();
-                }
-
-                // compute the animation frame
-                uint32_t newIndex = static_cast<uint32_t>(static_cast<float>(m_currentRunTime) / GetTotalRunTime() * GetNumFrames() - 1);
-
-                if (newIndex != m_currentIndex)
-                {
-                    m_currentIndex = newIndex;
+                    m_currentRunTime = 0;
+                    m_currentIndex = 0;
                     m_dirty = true;
                 }
-            }
-            else
-            {
-                // end of animation and not looping so just show the last frame and pause
-                uint32_t newIndex = GetNumFrames()-1;
-                Pause();
-
-                if (newIndex != m_currentIndex)
+                else
                 {
-                    m_currentIndex = newIndex;
-                    m_dirty = true;
+                    // end of animation and not looping so just show the last frame and pause
+                    uint32_t newIndex = GetNumFrames()-1;
+                    Pause();
+
+                    if (newIndex != m_currentIndex)
+                    {
+                        m_currentIndex = newIndex;
+                        m_dirty = true;
+                    } 
                 }
             }
-        }
-        else
-        {
-            // compute the animation frame
-            uint32_t newIndex = static_cast<uint32_t>(static_cast<float>(m_currentRunTime) / GetTotalRunTime() * GetNumFrames() - 1);
-
-            if (newIndex != m_currentIndex)
+            else if (m_currentRunTime >= FrameTimeInMs)
             {
-                m_currentIndex = newIndex;
+                ++m_currentIndex;
+                m_currentRunTime = 0;
                 m_dirty = true;
             }
         }

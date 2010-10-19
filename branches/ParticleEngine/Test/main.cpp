@@ -30,7 +30,7 @@
 class TestKeyListener : public IKeyListener
 {
 public:
-    TestKeyListener(Camera* cam) : m_name("TestKeyListener"), m_cam(cam) { };
+    TestKeyListener(Camera* cam) : m_yawAngle(0.f), m_pitchAngle(0.f), m_name("TestKeyListener"), m_cam(cam) { };
 
     virtual const std::string& GetName() { return m_name; };
 
@@ -58,6 +58,28 @@ public:
 
             m_cam->Yaw(DegToRad(m_yawAngle));
         }
+        else if (event.GetKeyCode() == KeyCodes::Up)
+        {
+            m_pitchAngle += 0.1f;
+
+            if (m_pitchAngle > 360.f)
+            {
+                m_pitchAngle = 0.f;
+            }
+
+            m_cam->Pitch(DegToRad(m_pitchAngle));
+        }
+        else if (event.GetKeyCode() == KeyCodes::Down)
+        {
+            m_pitchAngle -= 0.1f;
+
+            if (m_pitchAngle < -360.f)
+            {
+                m_pitchAngle = 0.f;
+            }
+
+            m_cam->Pitch(DegToRad(m_pitchAngle));
+        }
 
         return true;
     }
@@ -67,6 +89,7 @@ public:
 private:
     Camera* m_cam;
     float m_yawAngle;
+    float m_pitchAngle;
     std::string m_name;
 };
 
@@ -107,7 +130,14 @@ public:
 
     virtual bool OnMousePressed(const IMouseEvent& event) { return true; };
     virtual bool OnMouseReleased(const IMouseEvent& event) { return true; };
-    virtual bool OnMouseWheel(const IMouseEvent& event) { return true; };
+    virtual bool OnMouseWheel(const IMouseEvent& event) 
+    {
+        static float ZoomAmount = 10;
+
+        m_cam->Translate(Vector3(0.f, 0.f, -ZoomAmount*event.GetWheelDelta()));
+
+        return true;
+    }
 
 private:
     Camera* m_cam;
@@ -123,8 +153,8 @@ int main()
 
     SceneManager* sceneManager = engine.GetSceneManager();
     Camera* camera = sceneManager->CreateCamera();
-	camera->Rotate(Vector3(1,0,0), DegToRad(30));		// pitch
-    camera->Rotate(Vector3(0,1,0), DegToRad(45));		// yaw
+	//camera->Rotate(Vector3(1,0,0), DegToRad(30));		// pitch
+    //camera->Rotate(Vector3(0,1,0), DegToRad(45));		// yaw
     camera->Translate(Vector3(0, 0, 50));
     camera->LookAt(Vector3(0, 0, 0));
 
@@ -135,31 +165,29 @@ int main()
     engine.GetInputSystem()->AddKeyListener(keyListener);
     engine.GetInputSystem()->AddMouseListener(mouseListener);
 
-    // TODO - more development needed to work properly
-    //Entity* entity = sceneManager->CreateEntity();
-    //SceneNode* node = sceneManager->CreateSceneNode();
-    //node->SetOrientation(FromAxisAngle(Vector3(0, 1, 0), DegToRad(30)));
-    //node->AddEntity(entity);
-    //sceneManager->GetRootSceneNode()->AddChild(node);
-
     PngLoader loader;
-    Image* image1 = loader.Load("..\\data\\grassalpha.png");
+
+//     Image* image1 = loader.Load("..\\data\\grassalpha.png");
+//     Billboard* b1 = sceneManager->CreateBillboard(16, 16, Vector3::Zero());
+//     IMaterial* m1 = new Material();
+//     
+//     if (image1)
+//     {
+//         if (m1)
+//         {
+//             ITexture* texture = new OpenglTexture(TextureType::_2d, image1);
+//             m1->SetTexture(texture);
+//         }
+//         b1->SetMaterial(m1);
+//     }
+//
+    // create scene node for first object
+//     SceneNode* grassNode = sceneManager->CreateSceneNode("grass_1");
+//     grassNode->AddEntity(b1);
+//    sceneManager->GetRootSceneNode()->AddChild(grassNode);
+
     Image* image2 = loader.Load("..\\data\\torch_animation.png");
-
-    Billboard* b1 = sceneManager->CreateBillboard(16, 16, Vector3::Zero());
-    IMaterial* m1 = new Material();
-    
-    if (image1)
-    {
-        if (m1)
-        {
-            ITexture* texture = new OpenglTexture(TextureType::_2d, image1);
-            m1->SetTexture(texture);
-        }
-        b1->SetMaterial(m1);
-    }
-
-    Billboard* b2 = sceneManager->CreateBillboard(16, 16, Vector3(10, 10, 0));
+    Billboard* b2 = sceneManager->CreateBillboard(16, 16, Vector3(0, 0, 0));
     IMaterial* m2 = new Material();
     if (image2)
     {
@@ -171,7 +199,7 @@ int main()
             spriteSheet->SetNumTiles(24);
             IAnimation* animation = new AnimatedTexture(spriteSheet);
             animation->SetLooping(true);
-            animation->SetTotalRunTime(20000);
+            animation->SetTotalRunTime(2000);
             for (uint32_t i=0; i < spriteSheet->GetNumTiles(); ++i)
             {
                 std::ostringstream oss;
@@ -183,8 +211,10 @@ int main()
         b2->SetMaterial(m2);
     }
     
-    sceneManager->GetRootSceneNode()->AddEntity(b1);
-    sceneManager->GetRootSceneNode()->AddEntity(b2);
+    SceneNode* fireNode = sceneManager->CreateSceneNode("fire_1");
+    fireNode->AddEntity(b2);
+
+    sceneManager->GetRootSceneNode()->AddChild(fireNode);
 
 	while (engine.Run())
 	{

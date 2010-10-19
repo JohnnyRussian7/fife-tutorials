@@ -37,11 +37,19 @@ AnimatedTexture::AnimatedTexture()
 
 }
 
-AnimatedTexture::AnimatedTexture(ISpriteSheet* spriteSheet)
+AnimatedTexture::AnimatedTexture(ISpriteSheet* spriteSheet, bool autoFillFrames)
 : m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), 
   m_lastUpdateTime(0), m_currentRunTime(0), m_spriteSheet(spriteSheet), m_dirty(true)
 {
-
+    if (m_spriteSheet && autoFillFrames)
+    {
+        for (uint32_t i=0; i < m_spriteSheet->GetNumTiles(); ++i)
+        {
+            std::ostringstream oss;
+            oss << "Frame_" << i;
+            AddFrame((char*)oss.str().c_str(), m_spriteSheet->GetTileCoords(i));
+        }
+    }
 }
 
 AnimatedTexture::~AnimatedTexture()

@@ -197,7 +197,7 @@ int main()
             spriteSheet->SetNumRows(1);
             spriteSheet->SetNumCols(24);
             spriteSheet->SetNumTiles(24);
-            IAnimation* animation = new AnimatedTexture(spriteSheet);
+            IAnimation* animation = new AnimatedTexture(spriteSheet, false);
             animation->SetLooping(true);
             animation->SetTotalRunTime(2000);
             for (uint32_t i=0; i < spriteSheet->GetNumTiles(); ++i)

@@ -35,7 +35,7 @@ class AnimatedTexture : public IAnimation
 {
 public:
     AnimatedTexture();
-    AnimatedTexture(ISpriteSheet* spriteSheet);
+    AnimatedTexture(ISpriteSheet* spriteSheet, bool autoFillFrames=true);
 
     ~AnimatedTexture();
 

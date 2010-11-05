@@ -182,24 +182,34 @@ void OpenglRenderer::Render(Renderable* renderable)
         m_modelMatrixUpdate = false;
     }
 
-    ITexture* texture = renderable->GetMaterial()->GetTexture();
-
-    if (texture)
+    if (!renderable)
     {
-        // TODO - this should be settable outside of renderer
-        // enable blending
-        glEnable(GL_BLEND); 
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        return;
+    }
 
-        glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-//         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
-//         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-//         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-//         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-// 
-//         glActiveTextureARB(GL_TEXTURE0);
-        glEnable(opengl::utility::ConvertTextureType(texture->GetType()));    
-        glBindTexture(opengl::utility::ConvertTextureType(texture->GetType()), texture->GetId());
+    IMaterial* material = renderable->GetMaterial();
+
+    if (material)
+    {
+        ITexture* texture = renderable->GetMaterial()->GetTexture();
+
+        if (texture)
+        {
+            // TODO - this should be settable outside of renderer
+            // enable blending
+            glEnable(GL_BLEND); 
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+    //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
+    //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    // 
+    //         glActiveTextureARB(GL_TEXTURE0);
+            glEnable(opengl::utility::ConvertTextureType(texture->GetType()));    
+            glBindTexture(opengl::utility::ConvertTextureType(texture->GetType()), texture->GetId());
+        }
     }
 
     IVertexBuffer* vertexBuffer = renderable->GetVertexBuffer();
@@ -285,6 +295,7 @@ void OpenglRenderer::Render(Renderable* renderable)
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
     }
+
 
     //DrawBox();
 }

@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.cpp
+*	Filename: Visual.cpp
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -20,65 +20,71 @@
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
 
-#include "Renderable.h"
 #include "Visual.h"
-#include "IVertexBuffer.h"
-#include "IIndexBuffer.h"
-#include "Material.h"
+#include "IEntity.h"
+#include "Renderable.h"
+#include "IAnimation.h"
 #include "Matrix4.h"
 
-Renderable::Renderable(Visual* visual)
-: m_parent(visual), m_vertexBuffer(0), m_indexBuffer(0), m_material(0), m_primitiveType(PrimitiveType::Triangles)
+Visual::Visual(IEntity* entity)
+: m_parent(entity), m_renderable(0), m_animation(0)
+{
+    m_renderable = new Renderable(this);
+}
+
+Visual::Visual(Renderable* renderable, IAnimation* animation)
+: m_renderable(renderable), m_animation(animation)
 {
 
 }
 
-Renderable::~Renderable()
+Visual::~Visual()
 {
+    delete m_animation;
+    m_animation = 0;
 
+    delete m_renderable;
+    m_renderable = 0;
 }
 
-IVertexBuffer* Renderable::GetVertexBuffer() const
+void Visual::SetParent(IEntity* entity)
 {
-    return m_vertexBuffer;
+    m_parent = entity;
 }
 
-void Renderable::SetVertexBuffer(IVertexBuffer* vertexBuffer)
+void Visual::SetAnimation(IAnimation* animation)
 {
-    m_vertexBuffer = vertexBuffer;
+    delete m_animation;
+
+    m_animation = animation;
 }
 
-IIndexBuffer* Renderable::GetIndexBuffer() const
+IAnimation* Visual::GetAnimation() const
 {
-    return m_indexBuffer;
+    return m_animation;
 }
 
-void Renderable::SetIndexBuffer(IIndexBuffer* indexBuffer)
+void Visual::SetRenderable(Renderable* renderable)
 {
-    m_indexBuffer = indexBuffer;
+    delete m_renderable;
+
+    m_renderable = renderable;
 }
 
-IMaterial* Renderable::GetMaterial() const
+Renderable* Visual::GetRenderable()
 {
-    return m_material;
+    return m_renderable;
 }
 
-void Renderable::SetMaterial(IMaterial* material)
+void Visual::Update(uint32_t time)
 {
-    m_material = material;
+    if (m_animation)
+    {
+        m_animation->Animate(time);
+    }
 }
 
-void Renderable::SetPrimitiveType(PrimitiveType::Enum type)
-{
-    m_primitiveType = type;
-}
-
-PrimitiveType::Enum Renderable::GetPrimitiveType() const
-{
-    return m_primitiveType;
-}
-
-Matrix4 Renderable::GetTransform()
+Matrix4 Visual::GetTransform()
 {
     if (m_parent)
     {

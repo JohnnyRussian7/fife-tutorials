@@ -8,7 +8,7 @@
 
 const int PNG_SIG_SIZE = 8;
 
-static void png_error(png_structp pngPtr, png_const_charp msg)
+static void png_error(png_structp pngPtr, png_const_charp /*msg*/)
 {
 	longjmp(pngPtr->jmpbuf, 1);
 }
@@ -33,8 +33,6 @@ bool PngLoader::IsLoadable(std::istream& source)
 	png_byte pngsig[PNG_SIG_SIZE];
 
 	source.read((char*)pngsig, PNG_SIG_SIZE);
-
-	int blah = source.gcount();
 
 	if (source.gcount() != PNG_SIG_SIZE)
 	{
@@ -77,7 +75,7 @@ Image* PngLoader::Load(const char* filename)
 
 	if (setjmp(png_jmpbuf(pngPtr)))
 	{
-		// error occured during parsing need to clean up
+		// error occurred during parsing need to clean up
 		png_destroy_read_struct(&pngPtr, &infoPtr, NULL);
 		
 		if (rowPtrs)
@@ -161,8 +159,7 @@ Image* PngLoader::Load(const char* filename)
 	uint8_t* data = img->GetData();
 	for (std::size_t i=0; i < height; ++i)
 	{
-		png_uint_32 dataPtr = (height - i - 1) * img->GetStride();
-		rowPtrs[i] = (png_bytep)data + dataPtr;
+        rowPtrs[height-i-1] = (png_bytep)data + i*img->GetStride();
 	}
 
 	// read image data

@@ -25,7 +25,8 @@
 #include "stdint.h"
 #include "SceneNode.h"
 #include "SceneManager.h"
-#include "Entity.h"
+#include "IEntity.h"
+#include "Visual.h"
 #include "MathUtil.h"
 
 namespace
@@ -146,15 +147,16 @@ void SceneNode::RemoveAllChildren()
 	m_childNodes.clear();
 }
 
-void SceneNode::AddEntity(Entity* entity)
+void SceneNode::AddEntity(IEntity* entity)
 {
     if (entity)
     {
+        entity->SetParent(this);
         m_entities.push_back(entity);
     }
 }
 
-void SceneNode::RemoveEntity(Entity* entity, bool shouldDeleteEntity)
+void SceneNode::RemoveEntity(IEntity* entity, bool shouldDeleteEntity)
 {
     if (entity)
     {
@@ -207,10 +209,14 @@ void SceneNode::GetRenderables(std::vector<Renderable*>& renderables)
     EntityContainer::iterator entityIter;
     for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)
     {
-        Renderable* renderable = (*entityIter)->GetRenderable();
-        if (renderable)
+        Visual* visual = (*entityIter)->GetVisual();
+        if (visual)
         {
-            renderables.push_back(renderable);
+            Renderable* renderable = visual->GetRenderable();
+            if (renderable)
+            {
+                renderables.push_back(renderable);
+            }
         }
     }
 

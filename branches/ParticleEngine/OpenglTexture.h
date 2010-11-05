@@ -16,12 +16,19 @@ public:
 
 	virtual uint32_t GetId() const;
     virtual TextureType::Enum GetType() const;
+    virtual uint32_t GetSourceImageWidth() const;
+    virtual uint32_t GetSourceImageHeight() const;
+    virtual uint32_t GetWidth() const;
+    virtual uint32_t GetHeight() const;
+
 	virtual void Upload();
 
 private:
     TextureType::Enum m_type;
 	uint32_t m_textureId;
 	Image* m_image;
+    uint32_t m_width;
+    uint32_t m_height;
 };
 
 #endif

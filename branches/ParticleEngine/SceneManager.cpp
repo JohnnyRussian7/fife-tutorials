@@ -2,7 +2,7 @@
 #include "SceneManager.h"
 #include "SceneNode.h"
 #include "Camera.h"
-#include "Entity.h"
+#include "IEntity.h"
 #include "IRenderSystem.h"
 #include "Billboard.h"
 
@@ -94,12 +94,12 @@ SceneNode* SceneManager::GetSceneNode(const char* name) const
 	return 0;
 }
 
-Entity* SceneManager::CreateEntity(const char* name) const
+IEntity* SceneManager::CreateEntity(const char* name) const
 {
 	return new Entity(name);
 }
 
-void SceneManager::DestroyEntity(Entity* entity)
+void SceneManager::DestroyEntity(IEntity* entity)
 {
     delete entity;
 }
@@ -156,6 +156,10 @@ void SceneManager::RenderScene(uint32_t time)
     std::vector<Renderable*>::iterator iter;
     for (iter = renderables.begin(); iter != renderables.end(); ++iter)
     { 
+        // set the transform
+        m_renderSystem->SetTransform(TransformType::Model, (*iter)->GetTransform());
+
+        // render the object
         m_renderSystem->Render(*iter);
     }
 }

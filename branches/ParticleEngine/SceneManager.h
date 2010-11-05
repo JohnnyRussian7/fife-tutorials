@@ -14,7 +14,7 @@
 
 class SceneNode;
 class Camera;
-class Entity;
+class IEntity;
 class IRenderSystem;
 class IVertexBuffer;
 class IIndexBuffer;
@@ -61,8 +61,8 @@ public:
     void DestroySceneNode(SceneNode* node);
 
     // entity functions
-    Entity* CreateEntity(const char* name = 0) const;
-    void DestroyEntity(Entity* entity);
+    IEntity* CreateEntity(const char* name = 0) const;
+    void DestroyEntity(IEntity* entity);
 
     Billboard* CreateBillboard(uint32_t width=1, uint32_t height=1, const Vector3& position=Vector3::Zero(), const Color& color=ColorWhite(), const FloatRect& texCoords=FloatRect(0.f, 1.f, 1.f, 0.f));
     void DestroyBillboard(Billboard* billboard);

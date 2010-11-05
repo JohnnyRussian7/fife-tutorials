@@ -99,18 +99,20 @@ FloatRect SpriteSheet::GetTileCoords(uint32_t index) const
     }
     else
     {
-        row = index % m_numCols;
-        col = index / m_numCols;
+        row = index / m_numCols;
+        col = index % m_numCols;
     }
 
     floatDimension cellSize(1.f/GetNumCols(), 1.f/GetNumRows());
 
     // calculate uv coordinates based on row and col
     FloatRect rect;
-    rect.m_left = index * cellSize.m_width;
-    rect.m_top = index * cellSize.m_height;
-    rect.m_right = index * cellSize.m_width + cellSize.m_width;
-    rect.m_bottom = index * cellSize.m_height + cellSize.m_height;
+    rect.m_left = col * cellSize.m_width;
+    rect.m_top = 1.f - (row * cellSize.m_height);
+    //rect.m_top = (row * cellSize.m_height);
+    rect.m_right = col * cellSize.m_width + cellSize.m_width;
+    rect.m_bottom = 1.f - (row * cellSize.m_height + cellSize.m_height);
+    //rect.m_bottom = (row * cellSize.m_height + cellSize.m_height);
 
     return rect;
 }

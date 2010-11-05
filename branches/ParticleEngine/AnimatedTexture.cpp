@@ -119,7 +119,7 @@ void AnimatedTexture::AddFrame(char* name, const FloatRect& texCoords)
 
     // TODO - move this elsewhere it is opengl specific
     // must invert coordinates for opengl
-    FloatRect invertCoords(texCoords.m_right, texCoords.m_bottom, texCoords.m_left, texCoords.m_top);
+    FloatRect invertCoords(texCoords.m_right, texCoords.m_top, texCoords.m_left, texCoords.m_bottom);
 
     frame->SetTextureCoordinates(invertCoords);
 
@@ -161,6 +161,11 @@ void AnimatedTexture::Reset()
 
 void AnimatedTexture::Animate(uint32_t time)
 {
+    if (GetNumFrames() <= 1)
+    {
+        return;
+    }
+
     const uint32_t FrameTimeInMs = GetTotalRunTime()/(GetNumFrames()-1);
 
     if (m_lastUpdateTime == 0)
@@ -175,7 +180,14 @@ void AnimatedTexture::Animate(uint32_t time)
         {
             m_currentRunTime += time - m_lastUpdateTime;
 
-            if (m_currentIndex >= GetNumFrames()-1)
+            if (m_currentRunTime >= FrameTimeInMs)
+            {
+                ++m_currentIndex;
+                m_currentRunTime = 0;
+                m_dirty = true;
+            }
+
+            if (m_currentIndex == GetNumFrames())
             {
                 if (IsLooping())
                 {
@@ -195,12 +207,6 @@ void AnimatedTexture::Animate(uint32_t time)
                         m_dirty = true;
                     } 
                 }
-            }
-            else if (m_currentRunTime >= FrameTimeInMs)
-            {
-                ++m_currentIndex;
-                m_currentRunTime = 0;
-                m_dirty = true;
             }
         }
     }

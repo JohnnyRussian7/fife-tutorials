@@ -17,12 +17,12 @@ Image::Image(const Image& rhs)
   m_colorFormat(rhs.m_colorFormat), m_stride(rhs.m_stride)
 {
 	m_data = new uint8_t[m_width*m_stride];
-	memcpy(m_data, rhs.m_data, sizeof(m_data));
+	memcpy(m_data, rhs.m_data, sizeof(m_width*m_stride));
 }
 
 Image::~Image()
 {
-	delete m_data;
+	delete [] m_data;
 	m_data = 0;
 }
 
@@ -49,4 +49,9 @@ ColorFormat::Enum Image::GetColorFormat() const
 uint8_t* Image::GetData()
 {
 	return m_data;
+}
+
+uint32_t Image::GetDataSize() const
+{
+    return m_width*m_stride;
 }

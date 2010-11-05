@@ -31,7 +31,7 @@
 #include "Matrix4.h"
 
 class SceneManager;
-class Entity;
+class IEntity;
 class Renderable;
 
 class SceneNode
@@ -50,8 +50,8 @@ public:
 	void RemoveChild(SceneNode* child, bool shouldDeleteChild = true);
 	void RemoveAllChildren();
 
-    void AddEntity(Entity* entity);
-    void RemoveEntity(Entity* entity, bool shouldDeleteEntity = true);
+    void AddEntity(IEntity* entity);
+    void RemoveEntity(IEntity* entity, bool shouldDeleteEntity = true);
     void RemoveEntity(const char* name, bool shouldDeleteChild);
     void RemoveAllEntities();
 
@@ -100,7 +100,7 @@ private:
 	SceneNode* m_parent;
 	std::vector<SceneNode*> m_childNodes;
 
-    typedef std::vector<Entity*> EntityContainer;
+    typedef std::vector<IEntity*> EntityContainer;
     EntityContainer m_entities;
 
 	Vector3 m_scale;

@@ -29,6 +29,7 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Renderable.h"
+#include "Visual.h"
 #include "Vertex.h"
 #include "Rect.h"
 #include "Entity.h"
@@ -36,7 +37,7 @@
 class SceneManager;
 class BillboardGroup;
 
-class Billboard : public Renderable, public Entity
+class Billboard : public Visual
 {
 public:
     Billboard(SceneManager* sceneManager);

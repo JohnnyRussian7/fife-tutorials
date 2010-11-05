@@ -167,7 +167,7 @@ int main()
 
     PngLoader loader;
 
-//     Image* image1 = loader.Load("..\\data\\grassalpha.png");
+//     Image* image1 = loader.Load("..\\data\\brick27_pot.png");
 //     Billboard* b1 = sceneManager->CreateBillboard(16, 16, Vector3::Zero());
 //     IMaterial* m1 = new Material();
 //     
@@ -180,14 +180,20 @@ int main()
 //         }
 //         b1->SetMaterial(m1);
 //     }
-//
-    // create scene node for first object
+// 
+//     // create scene node for first object
 //     SceneNode* grassNode = sceneManager->CreateSceneNode("grass_1");
 //     grassNode->AddEntity(b1);
 //    sceneManager->GetRootSceneNode()->AddChild(grassNode);
 
+    //Image* image2 = loader.Load("..\\data\\fireparticle.png");
     Image* image2 = loader.Load("..\\data\\torch_animation.png");
+    //Image* image2 = loader.Load("..\\data\\finalfantasy5_pot.png");
+    //Image* image2 = loader.Load("..\\data\\explosions_pot.png");
+    IEntity* e2 = sceneManager->CreateEntity("e2");
     Billboard* b2 = sceneManager->CreateBillboard(16, 16, Vector3(0, 0, 0));
+
+    e2->SetVisual(b2);
     IMaterial* m2 = new Material();
     if (image2)
     {
@@ -197,24 +203,46 @@ int main()
             spriteSheet->SetNumRows(1);
             spriteSheet->SetNumCols(24);
             spriteSheet->SetNumTiles(24);
-            IAnimation* animation = new AnimatedTexture(spriteSheet, false);
+//             spriteSheet->SetNumRows(5);
+//             spriteSheet->SetNumCols(5);
+//             spriteSheet->SetNumTiles(25);
+//             spriteSheet->SetNumRows(1);
+//             spriteSheet->SetNumCols(8);
+//             spriteSheet->SetNumTiles(8);
+            IAnimation* animation = new AnimatedTexture(spriteSheet);
             animation->SetLooping(true);
             animation->SetTotalRunTime(2000);
-            for (uint32_t i=0; i < spriteSheet->GetNumTiles(); ++i)
-            {
-                std::ostringstream oss;
-                oss << "Frame_" << i;
-                animation->AddFrame((char*)oss.str().c_str(), spriteSheet->GetTileCoords(i));
-            }
             b2->SetAnimation(animation);
         }
-        b2->SetMaterial(m2);
+        b2->GetRenderable()->SetMaterial(m2);
     }
     
     SceneNode* fireNode = sceneManager->CreateSceneNode("fire_1");
-    fireNode->AddEntity(b2);
-
+    fireNode->AddEntity(e2);
     sceneManager->GetRootSceneNode()->AddChild(fireNode);
+
+//     IEntity* e3 = sceneManager->CreateEntity("e3");
+//     Billboard* b3 = sceneManager->CreateBillboard(16, 16, Vector3(0, 0, 0));
+//     e3->SetVisual(b3);
+//     IMaterial* m3 = new Material();
+//     if (m3)
+//     {
+//         IAnimation* animation = new AnimatedTexture();
+//         animation->SetLooping(true);
+//         animation->SetTotalRunTime(2000);
+//         Image* img = loader.Load("..\\data\\animation_1\\000.png");
+//         Image* img2 = loader.Load("..\\data\\animation_1\\045.png");
+//         ITexture *texture = new OpenglTexture(TextureType::_2d, img);
+//         ITexture *texture2 = new OpenglTexture(TextureType::_2d, img2);
+//         animation->AddFrame(texture);
+//         animation->AddFrame(texture2);
+//         b3->SetAnimation(animation);
+//     }
+//     b3->GetRenderable()->SetMaterial(m3);
+// 
+//     SceneNode* maleNode = sceneManager->CreateSceneNode("anim_1");
+//     maleNode->AddEntity(e3);
+//     sceneManager->GetRootSceneNode()->AddChild(maleNode);
 
 	while (engine.Run())
 	{

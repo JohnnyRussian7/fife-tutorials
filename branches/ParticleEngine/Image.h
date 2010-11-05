@@ -42,6 +42,7 @@ public:
 	ColorFormat::Enum GetColorFormat() const;
 
 	uint8_t* GetData();
+    uint32_t GetDataSize() const;
 
 private:
 	uint32_t m_width;

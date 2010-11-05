@@ -62,9 +62,11 @@ void Billboard::GenerateBuffers()
     //     |  /   |
     //  (2)|/_____| (3)
     
-    m_vertexBuffer = m_sceneManager->CreateVertexBuffer(GetNumberOfVertices(), sizeof(Vertex), HwBufferUsage::Dynamic);
+    m_renderable->SetVertexBuffer(m_sceneManager->CreateVertexBuffer(GetNumberOfVertices(), sizeof(Vertex), HwBufferUsage::Dynamic));
 
-    if (m_vertexBuffer)
+    IVertexBuffer* vertexBuffer = m_renderable->GetVertexBuffer();
+
+    if (vertexBuffer)
     {
         const float halfWidth = m_width/2.f;
         const float halfHeight = m_height/2.f;
@@ -88,12 +90,14 @@ void Billboard::GenerateBuffers()
         position = m_position + Vector3(halfWidth, -halfHeight, 0); 
         vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
 
-        m_vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
+        vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
     }
 
-    m_indexBuffer = m_sceneManager->CreateIndexBuffer(6, IndexBufferDataType::_16bit, HwBufferUsage::Static);
+    m_renderable->SetIndexBuffer(m_sceneManager->CreateIndexBuffer(6, IndexBufferDataType::_16bit, HwBufferUsage::Static));
 
-    if (m_indexBuffer)
+    IIndexBuffer* indexBuffer = m_renderable->GetIndexBuffer();
+
+    if (indexBuffer)
     {
         uint16_t indexData[6];
         indexData[0] = uint16_t(0);
@@ -102,18 +106,21 @@ void Billboard::GenerateBuffers()
         indexData[3] = uint16_t(1);
         indexData[4] = uint16_t(2);
         indexData[5] = uint16_t(3);
-        m_indexBuffer->WriteData(indexData, 6, 0);
+
+        indexBuffer->WriteData(indexData, 6, 0);
     }
 
     // set the primitive type
-    SetPrimitiveType(PrimitiveType::TriangleStrip);
+    m_renderable->SetPrimitiveType(PrimitiveType::TriangleStrip);
 
     m_buffersGenerated = true;
 }
 
 void Billboard::UpdateBuffers()
 {
-    if (m_vertexBuffer)
+    IVertexBuffer* vertexBuffer = m_renderable->GetVertexBuffer();
+
+    if (vertexBuffer)
     {
         const float halfWidth = m_width/2.f;
         const float halfHeight = m_height/2.f;
@@ -137,7 +144,7 @@ void Billboard::UpdateBuffers()
         position = m_position + Vector3(halfWidth, -halfHeight, 0); 
         vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
 
-        m_vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
+        vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
     }
 }
 
@@ -209,17 +216,17 @@ uint32_t Billboard::GetNumberOfVertices() const
 
 Renderable* Billboard::GetRenderable()
 {
-    return this;
+    return m_renderable;
 }
 
 void Billboard::Update(uint32_t time)
 {
-    Entity::Update(time);
+    Visual::Update(time);
 
     bool animationDirty = false;
     if (m_animation && m_animation->IsDirty())
     {
-        GetMaterial()->SetTexture(m_animation->GetTexture());
+        m_renderable->GetMaterial()->SetTexture(m_animation->GetTexture());
         SetTextureCoordinates(m_animation->GetTextureCoords());
 
         animationDirty = true;

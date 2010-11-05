@@ -2,8 +2,9 @@
 #include <sstream>
 
 #include "Entity.h"
-#include "IMaterial.h"
-#include "IAnimation.h"
+#include "SceneNode.h"
+#include "Visual.h"
+#include "Matrix4.h"
 
 namespace
 {
@@ -24,7 +25,7 @@ namespace
 }
 
 Entity::Entity(const char* name)
-: m_name(""), m_animation(0)
+: m_name("")
 {
 	if (name)
 	{
@@ -34,11 +35,14 @@ Entity::Entity(const char* name)
     {
         m_name = CreateUniqueEntityName();
     }
+
+    m_visual = new Visual(this);
 }
 
 Entity::~Entity()
 {
-
+    delete m_visual;
+    m_visual = 0;
 }
 
 const char* Entity::GetName() const
@@ -46,25 +50,47 @@ const char* Entity::GetName() const
 	return m_name.c_str();
 }
 
-Renderable* Entity::GetRenderable()
+void Entity::SetParent(SceneNode* node)
 {
-    return 0;
+    m_parent = node;
 }
 
-void Entity::SetAnimation(IAnimation* animation)
+SceneNode* Entity::GetParent() const
 {
-    m_animation = animation;
+    return m_parent;
 }
 
-IAnimation* Entity::GetAnimation() const
+void Entity::SetVisual(Visual* visual)
 {
-    return m_animation;
+    delete m_visual;
+
+    m_visual = visual;
+    
+    if (m_visual)
+    {
+        m_visual->SetParent(this);
+    }
+}
+
+Visual* Entity::GetVisual() const
+{
+    return m_visual;
 }
 
 void Entity::Update(uint32_t time)
 {
-    if (m_animation)
+    if (m_visual)
     {
-        m_animation->Animate(time);
+        m_visual->Update(time);
     }
+}
+
+Matrix4 Entity::GetTransform()
+{
+    if (m_parent)
+    {
+        return m_parent->GetTransform();
+    }
+
+    return Matrix4::Identity();
 }

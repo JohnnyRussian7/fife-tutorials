@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Renderable.h
+*	Filename: Visual.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,43 +19,40 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef RENDERABLE_H_
-#define RENDERABLE_H_
+#ifndef VISUAL_H_
+#define VISUAL_H_
 
-#include "RendererEnums.h"
+#include "stdint.h"
 
-class Visual;
-class IVertexBuffer;
-class IIndexBuffer;
-class IMaterial;
+class IEntity;
+class Renderable;
+class IAnimation;
 struct Matrix4;
 
-class Renderable
+class Visual
 {
 public:
-    Renderable(Visual* visual);
-	~Renderable();
+    Visual(IEntity* entity=0);
+    Visual(Renderable* renderable, IAnimation* animation);
+    virtual ~Visual();
 
-    IVertexBuffer* GetVertexBuffer() const;
-    void SetVertexBuffer(IVertexBuffer* vertexBuffer);
+    virtual void SetParent(IEntity* entity);
 
-    IIndexBuffer* GetIndexBuffer() const;
-    void SetIndexBuffer(IIndexBuffer* indexBuffer);
+    virtual void SetAnimation(IAnimation* animation);
+    virtual IAnimation* GetAnimation() const;
 
-    IMaterial* GetMaterial() const;
-    void SetMaterial(IMaterial* material);
-    
-    void SetPrimitiveType(PrimitiveType::Enum type);
-    PrimitiveType::Enum GetPrimitiveType() const;
+    virtual void SetRenderable(Renderable* renderable);
+    virtual Renderable* GetRenderable();
+
+    virtual void Update(uint32_t time);
 
     Matrix4 GetTransform();
 
 protected:
-    Visual* m_parent;
-    IVertexBuffer* m_vertexBuffer;
-    IIndexBuffer* m_indexBuffer;
-    IMaterial* m_material;
-    PrimitiveType::Enum m_primitiveType;
+    IEntity* m_parent;
+    Renderable* m_renderable;
+    IAnimation* m_animation;
+
 };
 
 #endif

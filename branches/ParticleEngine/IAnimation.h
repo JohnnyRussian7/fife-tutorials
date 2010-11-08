@@ -22,6 +22,8 @@
 #ifndef IANIMATION_H_
 #define IANIMATION_H_
 
+#include <string>
+
 #include "stdint.h"
 #include "Image.h"
 #include "Rect.h"
@@ -34,6 +36,9 @@ class IAnimation
 public:
     virtual ~IAnimation() { };
     
+    virtual std::string GetName() const = 0;
+
+    virtual IAnimatedFrame* GetFrame(uint32_t index) const = 0;
     virtual uint32_t GetNumFrames() const = 0;
 
     virtual uint32_t GetTotalRunTime() const = 0;
@@ -45,8 +50,8 @@ public:
     virtual bool IsDirty() const = 0;
 
     virtual void AddFrame(IAnimatedFrame* frame) = 0;
-    virtual void AddFrame(ITexture* texture, char* name=0) = 0;
-    virtual void AddFrame(char* name, const FloatRect& texCoords) = 0;
+    virtual void AddFrame(ITexture* texture) = 0;
+    virtual void AddFrame(const FloatRect& texCoords) = 0;
     virtual void RemoveFrame(uint32_t index) = 0;
 
     virtual void Start() = 0;

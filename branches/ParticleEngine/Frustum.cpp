@@ -190,6 +190,7 @@ void Frustum::ResetDirty()
     m_needsUpdate = false;
 }
 
+// TODO - need to implement
 void Frustum::CalculateProjection()
 {
     float tangent = std::tan(m_fov * 0.5f);

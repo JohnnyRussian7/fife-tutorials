@@ -5,6 +5,10 @@
 #include "IEntity.h"
 #include "IRenderSystem.h"
 #include "Billboard.h"
+#include "AnimatedTexture.h"
+#include "ISpriteSheet.h"
+#include "SpriteSheet.h"
+#include "Image.h"
 
 SceneManager::SceneManager(const SceneManagerSettings& settings, IRenderSystem* renderSystem)
 : m_settings(settings), m_rootSceneNode(0), m_renderSystem(renderSystem)
@@ -104,6 +108,63 @@ void SceneManager::DestroyEntity(IEntity* entity)
     delete entity;
 }
 
+AnimatedTexture* SceneManager::CreateAnimatedTexture(uint32_t runTimeInMs, bool looping, const char* name)
+{
+    AnimatedTexture* texture = new AnimatedTexture(name);
+    texture->SetTotalRunTime(runTimeInMs);
+    texture->SetLooping(looping);
+
+    return texture;
+}
+
+AnimatedTexture* SceneManager::CreateAnimatedTexture(ISpriteSheet* spriteSheet, uint32_t runTimeInMs, bool looping, const char* name)
+{
+    AnimatedTexture* texture = 0;
+    if (spriteSheet)
+    {
+        texture = new AnimatedTexture(name, spriteSheet);
+        texture->SetTotalRunTime(runTimeInMs);
+        texture->SetLooping(looping);
+    }
+    else
+    {
+        texture = new AnimatedTexture(name);
+        texture->SetTotalRunTime(runTimeInMs);
+        texture->SetLooping(looping);
+    }
+
+    return texture;
+}
+
+AnimatedTexture* SceneManager::CreateAnimatedTexture(Image* image, uint32_t numRows, uint32_t numCols, uint32_t numTiles, uint32_t runTimeInMs, bool looping, const char* name)
+{
+    AnimatedTexture* texture = 0;
+    if (image)
+    {
+        ISpriteSheet* spriteSheet = new SpriteSheet(image);
+        spriteSheet->SetNumRows(numRows);
+        spriteSheet->SetNumCols(numCols);
+        spriteSheet->SetNumTiles(numTiles);
+        texture = new AnimatedTexture(name, spriteSheet);
+        texture->SetTotalRunTime(runTimeInMs);
+        texture->SetLooping(looping);
+    }
+    else
+    {
+        texture = new AnimatedTexture(name);
+        texture->SetTotalRunTime(runTimeInMs);
+        texture->SetLooping(looping);
+    }
+
+    return texture;
+}
+
+void DestroyAnimatedTexture(AnimatedTexture* animatedTexture)
+{
+    delete animatedTexture;
+    animatedTexture = 0;
+}
+
 Billboard* SceneManager::CreateBillboard(uint32_t width, uint32_t height, const Vector3& position, const Color& color, const FloatRect& texCoords)
 {
     Billboard* b = new Billboard(this, position);
@@ -117,6 +178,7 @@ Billboard* SceneManager::CreateBillboard(uint32_t width, uint32_t height, const 
 void SceneManager::DestroyBillboard(Billboard* billboard)
 {
     delete billboard;
+    billboard = 0;
 }
 
 IVertexBuffer* SceneManager::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)

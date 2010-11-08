@@ -40,6 +40,16 @@ float MagnitudeSquare(const Vector3& vector)
 	return (vector.x*vector.x + vector.y*vector.y + vector.z*vector.z);
 }
 
+Vector3 ElemMult(const Vector3& lhs, const Vector3& rhs)
+{
+    return Vector3(lhs.x*rhs.x, lhs.y*rhs.y, lhs.z*rhs.z);
+}
+
+Vector3 ElemDiv(const Vector3& lhs, const Vector3& rhs)
+{
+    return Vector3(lhs.x/rhs.x, lhs.y/rhs.y, lhs.z/rhs.z);
+}
+
 Vector3 Normalize(const Vector3& vector)
 {
     const float tolerance = 0.000001f;

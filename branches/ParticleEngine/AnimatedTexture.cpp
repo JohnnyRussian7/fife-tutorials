@@ -30,24 +30,58 @@
 #include "AnimatedFrame.h"
 #include "ISpriteSheet.h"
 
-AnimatedTexture::AnimatedTexture()
+namespace
+{
+    std::string CreateUniqueAnimatedTextureName()
+    {
+        // automated counting for name generation, in case the user doesn't provide a name
+        static uint32_t uniqueNumber = 0;
+        static std::string baseName = "AnimatedTexture";
+
+        std::ostringstream oss;
+        oss << baseName << "_" << uniqueNumber;
+
+        const std::string name = oss.str();
+        ++uniqueNumber;
+
+        return name;
+    }
+}
+
+AnimatedTexture::AnimatedTexture(const char* name)
 : m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), 
   m_lastUpdateTime(0), m_currentRunTime(0), m_spriteSheet(0), m_dirty(true)
 {
-
+    if (!name)
+    {
+        // no user provided name so we create a unique one
+        m_name = CreateUniqueAnimatedTextureName();
+    }
+    else
+    {
+        m_name = std::string(name);
+    }
 }
 
-AnimatedTexture::AnimatedTexture(ISpriteSheet* spriteSheet, bool autoFillFrames)
+AnimatedTexture::AnimatedTexture(const char* name, ISpriteSheet* spriteSheet, bool autoFillFrames)
 : m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), 
   m_lastUpdateTime(0), m_currentRunTime(0), m_spriteSheet(spriteSheet), m_dirty(true)
 {
+    if (!name)
+    {
+        // no user provided name so we create a unique one
+        m_name = CreateUniqueAnimatedTextureName();
+    }
+    else
+    {
+        m_name = std::string(name);
+    }
+
     if (m_spriteSheet && autoFillFrames)
     {
         for (uint32_t i=0; i < m_spriteSheet->GetNumTiles(); ++i)
         {
-            std::ostringstream oss;
-            oss << "Frame_" << i;
-            AddFrame((char*)oss.str().c_str(), m_spriteSheet->GetTileCoords(i));
+            AddFrame(m_spriteSheet->GetTileCoords(i));
         }
     }
 }
@@ -66,6 +100,21 @@ AnimatedTexture::~AnimatedTexture()
         delete m_spriteSheet;
         m_spriteSheet = 0;
     }
+}
+
+std::string AnimatedTexture::GetName() const
+{
+    return m_name;
+}
+
+IAnimatedFrame* AnimatedTexture::GetFrame(uint32_t index) const
+{
+    if (index < m_frames.size())
+    {
+        return m_frames[index];
+    }
+
+    return 0;
 }
 
 uint32_t AnimatedTexture::GetNumFrames() const
@@ -103,18 +152,18 @@ void AnimatedTexture::AddFrame(IAnimatedFrame* frame)
     m_frames.push_back(frame);
 }
 
-void AnimatedTexture::AddFrame(ITexture* texture, char* name)
+void AnimatedTexture::AddFrame(ITexture* texture)
 {
     uint32_t frameNumber = m_frames.size();
-    m_frames.push_back(new AnimatedFrame(this, texture, name, frameNumber));
+    m_frames.push_back(new AnimatedFrame(this, texture, frameNumber));
 }
 
-void AnimatedTexture::AddFrame(char* name, const FloatRect& texCoords)
+void AnimatedTexture::AddFrame(const FloatRect& texCoords)
 {
     assert(m_spriteSheet);
 
     uint32_t frameNumber = m_frames.size();
-    AnimatedFrame* frame = new AnimatedFrame(this, name, frameNumber);
+    AnimatedFrame* frame = new AnimatedFrame(this, frameNumber);
     frame->SetTexture(m_spriteSheet->GetTexture());
 
     // TODO - move this elsewhere it is opengl specific

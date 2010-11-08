@@ -131,6 +131,8 @@ Vector3 operator/(const Vector3& vector, float value);
 // free functions for vector math
 float Magnitude(const Vector3& vector);
 float MagnitudeSquare(const Vector3& vector);
+Vector3 ElemMult(const Vector3& lhs, const Vector3& rhs);
+Vector3 ElemDiv(const Vector3& lhs, const Vector3& rhs);
 Vector3 Normalize(const Vector3& vector);
 float Dot(const Vector3& vector1, const Vector3& vector2);
 Vector3 Cross(const Vector3& vector1, const Vector3& vector2);

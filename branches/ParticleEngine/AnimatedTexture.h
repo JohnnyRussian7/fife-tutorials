@@ -34,11 +34,14 @@ class ISpriteSheet;
 class AnimatedTexture : public IAnimation
 {
 public:
-    AnimatedTexture();
-    AnimatedTexture(ISpriteSheet* spriteSheet, bool autoFillFrames=true);
+    AnimatedTexture(const char* name);
+    AnimatedTexture(const char* name, ISpriteSheet* spriteSheet, bool autoFillFrames=true);
 
     ~AnimatedTexture();
 
+    virtual std::string GetName() const;
+
+    virtual IAnimatedFrame* GetFrame(uint32_t index) const;
     virtual uint32_t GetNumFrames() const;
 
     virtual uint32_t GetTotalRunTime() const;
@@ -50,8 +53,8 @@ public:
     virtual bool IsDirty() const;
 
     virtual void AddFrame(IAnimatedFrame* frame);
-    virtual void AddFrame(ITexture* image, char* name);
-    virtual void AddFrame(char* name, const FloatRect& texCoords);
+    virtual void AddFrame(ITexture* image);
+    virtual void AddFrame(const FloatRect& texCoords);
     virtual void RemoveFrame(uint32_t index);
 
     virtual void Start();
@@ -65,6 +68,7 @@ public:
     virtual const FloatRect& GetTextureCoords() const;
 
 private:
+    std::string m_name;
     uint32_t m_totalRunTimeInMs;
     bool m_looping;
     uint32_t m_currentIndex;

@@ -1,5 +1,24 @@
-
-#include <iostream>
+/**********************************************************************
+*	Filename: OpenglTexture.cpp
+*	
+*	Copyright (C) 2010, FIFE team
+*	http://www.fifengine.net
+*
+*	This file is part of FIFE.
+*
+*	FIFE is free software: you can redistribute it and/or modify it
+*	under the terms of the GNU Lesser General Public License as
+*	published by the Free Software Foundation, either version 3 of
+*	the License, or any later version.
+*
+*	FIFE is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* 	GNU Lesser General Public License for more details.
+*
+*	You should have received a copy of the GNU Lesser General Public
+*	License along with FIFE. If not, see http://www.gnu.org/licenses/.
+***********************************************************************/
 
 #include "Opengltexture.h"
 #include "Image.h"
@@ -10,8 +29,8 @@
 #include <gl/gl.h>			// OpenGL headers
 #include <gl/glu.h>
 
-OpenglTexture::OpenglTexture(TextureType::Enum type, Image *image)
-: m_type(type), m_textureId(0), m_image(image), m_width(0), m_height(0)
+OpenglTexture::OpenglTexture(TextureType::Enum type, Image *image, const char* name)
+: Texture(type, name), m_image(image), m_width(0), m_height(0)
 {
 	if (m_image)
 	{
@@ -28,9 +47,9 @@ OpenglTexture::OpenglTexture(TextureType::Enum type, Image *image)
             m_height = NextPowerOf2(m_height);
         }
 
-		glGenTextures(1, reinterpret_cast<GLuint*>(&m_textureId));
+		glGenTextures(1, reinterpret_cast<GLuint*>(&m_id));
 
-        if (m_textureId)
+        if (m_id)
         {
             // push texture to GPU
 		    Upload();
@@ -40,22 +59,12 @@ OpenglTexture::OpenglTexture(TextureType::Enum type, Image *image)
 
 OpenglTexture::~OpenglTexture()
 {
-	if (m_textureId)
+	if (m_id)
 	{
-		glDeleteTextures(1, reinterpret_cast<GLuint*>(&m_textureId));
+		glDeleteTextures(1, reinterpret_cast<GLuint*>(&m_id));
 	}
 
 	delete m_image;
-}
-
-uint32_t OpenglTexture::GetId() const
-{
-	return m_textureId;
-}
-
-TextureType::Enum OpenglTexture::GetType() const
-{
-    return m_type;
 }
 
 uint32_t OpenglTexture::GetSourceImageWidth() const
@@ -86,7 +95,7 @@ void OpenglTexture::Upload()
 
 		// enable texture type and bind to the current texture
 		glEnable(textureType);
-		glBindTexture(textureType, m_textureId);
+		glBindTexture(textureType, m_id);
 
 		// enable filters
 		glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -97,7 +106,6 @@ void OpenglTexture::Upload()
 
         if (m_width != m_image->GetWidth() || m_height != m_image->GetHeight())
         {
-            uint32_t widthDiff = m_width - m_image->GetWidth();
             data = new uint8_t[m_width*m_image->GetStride()];
             memset(&data[0], uint8_t(0), m_width*m_image->GetStride());
             memcpy(&data[0], m_image->GetData(), m_image->GetDataSize());

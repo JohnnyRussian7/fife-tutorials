@@ -75,7 +75,7 @@ PlaneSide::Enum Plane::GetSide(const Vector3& point) const
 PlaneSide::Enum Plane::GetSide(const AxisAlignedBoundingBox& aabb) const
 {
     float distance = GetDistance(aabb.GetCenter());
-    Vector3& halfSize = aabb.GetExtent() * 0.5f;
+    Vector3 halfSize = aabb.GetExtent() * 0.5f;
 
     float absNorm = std::abs(halfSize.x*halfSize.x) + std::abs(halfSize.y*halfSize.y) + std::abs(halfSize.z*halfSize.z);
 

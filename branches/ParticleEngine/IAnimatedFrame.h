@@ -30,7 +30,6 @@ class IAnimatedFrame
 public:
     virtual ~IAnimatedFrame() { };
 
-    virtual const char* GetName() const = 0;
     virtual uint32_t GetFrameNumber() const = 0;
     virtual void SetTexture(ITexture* texture) = 0;
     virtual ITexture* GetTexture() const = 0;

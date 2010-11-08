@@ -19,6 +19,9 @@ class IRenderSystem;
 class IVertexBuffer;
 class IIndexBuffer;
 class Billboard;
+class AnimatedTexture;
+class ISpriteSheet;
+class Image;
 
 struct SceneManagerType
 {
@@ -63,6 +66,11 @@ public:
     // entity functions
     IEntity* CreateEntity(const char* name = 0) const;
     void DestroyEntity(IEntity* entity);
+
+    AnimatedTexture* CreateAnimatedTexture(uint32_t runTimeInMs=0, bool looping=true, const char* name=0);
+    AnimatedTexture* CreateAnimatedTexture(ISpriteSheet* spriteSheet, uint32_t runTimeInMs=0, bool looping=true, const char* name=0);
+    AnimatedTexture* CreateAnimatedTexture(Image* image, uint32_t numRows=1, uint32_t numCols=1, uint32_t numTiles=1, uint32_t runTimeInMs=0, bool looping=true, const char* name=0);
+    void DestroyAnimatedTexture(AnimatedTexture* animatedTexture);
 
     Billboard* CreateBillboard(uint32_t width=1, uint32_t height=1, const Vector3& position=Vector3::Zero(), const Color& color=ColorWhite(), const FloatRect& texCoords=FloatRect(0.f, 1.f, 1.f, 0.f));
     void DestroyBillboard(Billboard* billboard);

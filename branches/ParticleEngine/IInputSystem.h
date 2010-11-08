@@ -54,13 +54,6 @@ public:
     
     virtual void InjectKeyEvent(const IKeyEvent& event) = 0;
     virtual void InjectMouseEvent(const IMouseEvent& event) = 0;
-
-//     virtual void OnKeyPressed(const IKeyEvent& event) = 0;
-//     virtual void OnKeyReleased(const IKeyEvent& event) = 0;
-// 
-//     virtual void OnMouseMoved(const IMouseEvent& event) = 0;
-//     virtual void OnMousePressed(const IMouseEvent& event) = 0;
-//     virtual void OnMouseReleased(const IMouseEvent& event) = 0;
 };
 
 #endif

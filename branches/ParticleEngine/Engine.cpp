@@ -20,7 +20,9 @@ Engine::Engine(const EngineSettings& settings)
     m_renderSystem = CreateRenderSystem(m_settings.renderSystemSettings);
     m_fileSystem = CreateFileSystem(m_settings.fileSystemSettings);
     m_inputSystem = new InputSystem(m_settings.inputSystemSettings);
-	m_sceneManager = new SceneManager(m_settings.sceneManagerSettings, m_renderSystem);
+	
+    m_sceneManager = new SceneManager(m_settings.sceneManagerSettings, m_renderSystem);
+    m_textureManager = new TextureManager(m_settings.renderSystemSettings.renderSystemType);
 
     m_windowSystem->SetInputSystem(m_inputSystem);
 
@@ -121,6 +123,11 @@ IInputSystem* Engine::GetInputSystem() const
 SceneManager* Engine::GetSceneManager() const
 {
 	return m_sceneManager;
+}
+
+TextureManager* Engine::GetTextureManager() const
+{
+    return m_textureManager;
 }
 
 uint32_t Engine::GetFps() const

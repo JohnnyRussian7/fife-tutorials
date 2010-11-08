@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: OpenglTexture.h
+*	Filename: Texture.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,32 +19,28 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef OPENGL_TEXTURE_H_
-#define OPENGL_TEXTURE_H_
+#ifndef TEXTURE_H_
+#define TEXTURE_H_
+
+#include <string>
 
 #include "stdint.h"
-#include "Texture.h"
+#include "ITexture.h"
 #include "TextureEnums.h"
 
-class Image;
-
-class OpenglTexture : public Texture
+class Texture : public ITexture
 {
 public:
-	OpenglTexture(TextureType::Enum type, Image* image, const char* name=0);
-	~OpenglTexture();
+    Texture(TextureType::Enum type=TextureType::_2d, const char* name=0);
 
-    uint32_t GetSourceImageWidth() const;
-    uint32_t GetSourceImageHeight() const;
-    uint32_t GetWidth() const;
-    uint32_t GetHeight() const;
+    std::string GetName() const;
+    virtual uint32_t GetId() const;
+    virtual TextureType::Enum GetType() const;
 
-	virtual void Upload();
-
-private:
-	Image* m_image;
-    uint32_t m_width;
-    uint32_t m_height;
+protected:
+    std::string m_name;
+    uint32_t  m_id;
+    TextureType::Enum m_type;
 };
 
 #endif

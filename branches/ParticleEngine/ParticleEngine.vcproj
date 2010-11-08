@@ -151,10 +151,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\AnimatedEntity.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\AnimatedFrame.cpp"
 				>
 			</File>
@@ -319,6 +315,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Texture.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TextureManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Timer.cpp"
 				>
 			</File>
@@ -350,20 +354,12 @@
 				RelativePath=".\Win32WindowSystem.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\WindowInput.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\AnimatedEntity.h"
-				>
-			</File>
 			<File
 				RelativePath=".\AnimatedFrame.h"
 				>
@@ -621,6 +617,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SharedPtr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SharedPtrForward.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Sphere.h"
 				>
 			</File>
@@ -633,7 +637,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Texture.h"
+				>
+			</File>
+			<File
 				RelativePath=".\TextureEnums.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TextureManager.h"
 				>
 			</File>
 			<File
@@ -925,6 +937,374 @@
 					RelativePath=".\glee\GLee.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="boost"
+				>
+				<File
+					RelativePath=".\shared_ptr\assert.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shared_ptr\checked_delete.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shared_ptr\config.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shared_ptr\shared_ptr.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\shared_ptr\throw_exception.hpp"
+					>
+				</File>
+				<Filter
+					Name="config"
+					>
+					<File
+						RelativePath=".\shared_ptr\config\abi_prefix.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\abi_suffix.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\auto_link.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\posix_features.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\requires_threads.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\select_compiler_config.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\select_platform_config.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\select_stdlib_config.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\suffix.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\user.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\config\warning_disable.hpp"
+						>
+					</File>
+					<Filter
+						Name="abi"
+						>
+						<File
+							RelativePath=".\shared_ptr\config\abi\borland_prefix.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\abi\borland_suffix.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\abi\msvc_prefix.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\abi\msvc_suffix.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="compiler"
+						>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\borland.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\codegear.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\comeau.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\common_edg.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\compaq_cxx.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\digitalmars.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\gcc.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\gcc_xml.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\greenhills.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\hp_acc.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\intel.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\kai.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\metrowerks.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\mpw.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\pgi.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\sgi_mipspro.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\sunpro_cc.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\vacpp.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\compiler\visualc.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="no_tr1"
+						>
+						<File
+							RelativePath=".\shared_ptr\config\no_tr1\cmath.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\no_tr1\complex.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\no_tr1\functional.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\no_tr1\memory.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\no_tr1\utility.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="platform"
+						>
+						<File
+							RelativePath=".\shared_ptr\config\platform\aix.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\amigaos.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\beos.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\bsd.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\cygwin.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\hpux.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\irix.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\linux.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\macos.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\qnxnto.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\solaris.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\platform\win32.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="stdlib"
+						>
+						<File
+							RelativePath=".\shared_ptr\config\stdlib\dinkumware.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\stdlib\libcomo.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\stdlib\libstdcpp3.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\stdlib\modena.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\stdlib\msl.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\stdlib\roguewave.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\stdlib\sgi.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\stdlib\stlport.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\shared_ptr\config\stdlib\vacpp.hpp"
+							>
+						</File>
+					</Filter>
+				</Filter>
+				<Filter
+					Name="detail"
+					>
+					<File
+						RelativePath=".\shared_ptr\detail\bad_weak_ptr.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\interlocked.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\shared_count.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_acc_ia64.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_cw_ppc.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_cw_x86.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_gcc_ia64.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_gcc_ppc.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_gcc_sparc.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_gcc_x86.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_nt.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_pt.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_solaris.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_spin.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_sync.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_base_w32.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\sp_counted_impl.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\shared_ptr\detail\workaround.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>

@@ -16,11 +16,7 @@ Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
 
 Vector3 operator*(const Quaternion& q, const Vector3& v)
 {
-	Vector3 normVector = Normalize(v);
-
-	Quaternion normVectorQuaternion(normVector.x, normVector.y, normVector.z, 0.f);
-
-	Quaternion result = q * normVectorQuaternion * Conjugate(q);
+	Quaternion result = q * Quaternion(v.x, v.y, v.z, 0.f) * Conjugate(q);
 
 	return Vector3(result.x, result.y, result.z);
 }

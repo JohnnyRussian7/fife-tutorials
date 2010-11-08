@@ -61,8 +61,7 @@ m_relativeOrientation(Quaternion::Identity()), m_requiresUpdate(false)
 		m_name = CreateUniqueSceneNodeName();
 	}
 
-    // TODO - does this need to be here
-    SetDirtyFlag(true);
+    SetDirtyFlag();
 }
 
 SceneNode::~SceneNode()
@@ -92,7 +91,6 @@ void SceneNode::SetParent(SceneNode* parent)
 	}
 
 	m_parent = parent;
-    m_parent->AddChild(this);
 
     SetDirtyFlag();
 }
@@ -112,6 +110,7 @@ void SceneNode::AddChild(SceneNode* child)
 {
 	if (child)
 	{
+        child->SetParent(this);
 		m_childNodes.push_back(child);
 	}
 }
@@ -309,7 +308,16 @@ Matrix4 SceneNode::GetTransform()
 
 void SceneNode::Translate(const Vector3& translation)
 {
-    m_position += translation;
+    m_position += m_orientation * translation;
+//     if (m_parent)
+//     {
+//         // relative to parent
+//         m_position += ElemDiv((Inverse(m_parent->GetRelativeOrientation()) * translation), m_parent->GetRelativeScale());
+//     }
+//     else
+//     {
+//         m_position += translation;
+//     }
 
     SetDirtyFlag();
 }
@@ -384,7 +392,7 @@ void SceneNode::Update(uint32_t time)
         (*entityIter)->Update(time);
     }
     
-        // give children chance to update
+    // give children chance to update
     std::vector<SceneNode*>::iterator nodeIter;
     for (nodeIter = m_childNodes.begin(); nodeIter != m_childNodes.end(); ++nodeIter)
     {

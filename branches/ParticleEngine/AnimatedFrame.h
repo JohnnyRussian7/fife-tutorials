@@ -34,9 +34,8 @@ class ITexture;
 class AnimatedFrame : public IAnimatedFrame
 {
 public:
-    AnimatedFrame(IAnimation* owner, char* name, uint32_t frameNumber);
-    AnimatedFrame(IAnimation* owner, ITexture* texture, char* name, uint32_t frameNumber);
-    virtual const char* GetName() const;
+    AnimatedFrame(IAnimation* owner, uint32_t frameNumber);
+    AnimatedFrame(IAnimation* owner, ITexture* texture, uint32_t frameNumber);
     virtual uint32_t GetFrameNumber() const;
     virtual void SetTexture(ITexture* texture);
     virtual ITexture* GetTexture() const;
@@ -46,7 +45,6 @@ public:
 
 private:
     IAnimation* m_owner;
-    std::string m_name;
     uint32_t m_frameNumber;
     ITexture* m_texture;
     FloatRect m_textureCoords;

@@ -10,6 +10,7 @@
 #include "IFilesystem.h"
 #include "IInputSystem.h"
 #include "SceneManager.h"
+#include "TextureManager.h"
 
 #include "Timer.h"
 #include "stdint.h"
@@ -48,7 +49,9 @@ public:
     IRenderSystem* GetRenderSystem() const;
     IFileSystem* GetFileSystem() const;
     IInputSystem* GetInputSystem() const;
+
 	SceneManager* GetSceneManager() const;
+    TextureManager* GetTextureManager() const;
 
 	uint32_t GetFps() const;
 
@@ -70,6 +73,7 @@ private:
     IFileSystem* m_fileSystem;
     IInputSystem* m_inputSystem;
 	SceneManager* m_sceneManager;
+    TextureManager* m_textureManager;
 
     Timer m_timer;
 

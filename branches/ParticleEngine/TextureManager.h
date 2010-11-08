@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: OpenglTexture.h
+*	Filename: TextureManager.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,32 +19,31 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef OPENGL_TEXTURE_H_
-#define OPENGL_TEXTURE_H_
+#ifndef TEXTUREMANAGER_H_
+#define TEXTUREMANAGER_H_
 
-#include "stdint.h"
-#include "Texture.h"
+#include <map>
+#include <string>
+
+#include "SharedPtr.h"
 #include "TextureEnums.h"
+#include "RenderSystemTypes.h"
 
 class Image;
+class ITexture;
 
-class OpenglTexture : public Texture
+class TextureManager
 {
 public:
-	OpenglTexture(TextureType::Enum type, Image* image, const char* name=0);
-	~OpenglTexture();
-
-    uint32_t GetSourceImageWidth() const;
-    uint32_t GetSourceImageHeight() const;
-    uint32_t GetWidth() const;
-    uint32_t GetHeight() const;
-
-	virtual void Upload();
+    TextureManager(RenderSystemType::Enum type);
+    ITexture* CreateTexture(TextureType::Enum type, Image* image, const char* name=0);
+    bool AddTexture(ITexture* texture);
 
 private:
-	Image* m_image;
-    uint32_t m_width;
-    uint32_t m_height;
+    RenderSystemType::Enum m_type;
+    typedef std::map<std::string, SharedPtr<ITexture> > TextureContainer;
+    TextureContainer m_textures;
 };
+
 
 #endif

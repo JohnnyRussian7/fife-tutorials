@@ -25,12 +25,12 @@
 #include "IAnimation.h"
 
 AnimatedFrame::AnimatedFrame(IAnimation* owner, uint32_t frameNumber) 
-: m_owner(owner), m_frameNumber(frameNumber), m_textureCoords(FloatRect(0.0, 1.0, 1.0, 0.0)), m_texture(0)
+: m_owner(owner), m_frameNumber(frameNumber), m_textureCoords(FloatRect(0.0, 1.0, 1.0, 0.0)), m_texture()
 {
 
 }
 
-AnimatedFrame::AnimatedFrame(IAnimation* owner, ITexture* texture, uint32_t frameNumber)
+AnimatedFrame::AnimatedFrame(IAnimation* owner, const TexturePtr& texture, uint32_t frameNumber)
 : m_owner(owner), m_frameNumber(frameNumber), m_textureCoords(FloatRect(0.0, 1.0, 1.0, 0.0)),
   m_texture(texture)
 {
@@ -42,18 +42,12 @@ uint32_t AnimatedFrame::GetFrameNumber() const
     return m_frameNumber;
 }
 
-void AnimatedFrame::SetTexture(ITexture* texture)
+void AnimatedFrame::SetTexture(const TexturePtr& texture)
 {
-    if (m_texture)
-    {
-        delete m_texture;
-        m_texture = 0;
-    }
-
     m_texture = texture;
 }
 
-ITexture* AnimatedFrame::GetTexture() const
+const TexturePtr& AnimatedFrame::GetTexture() const
 {
     return m_texture;
 }

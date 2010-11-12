@@ -26,9 +26,9 @@
 #include "ISpriteSheet.h"
 #include "Dimension.h"
 #include "Rect.h"
+#include "TextureFwd.h"
 
 class Image;
-class ITexture;
 
 class SpriteSheet : public ISpriteSheet
 {
@@ -37,7 +37,6 @@ public:
     ~SpriteSheet();
 
     virtual Image* GetImage() const;
-    virtual ITexture* GetTexture() const;
 
     virtual void SetNumTiles(uint32_t numTiles);
     virtual uint32_t GetNumTiles() const;
@@ -52,7 +51,7 @@ public:
 
 private:
     Image* m_image;
-    ITexture* m_texture;
+    TexturePtr m_texture;
     uint32_t m_numTiles;
     uint32_t m_numRows;
     uint32_t m_numCols;

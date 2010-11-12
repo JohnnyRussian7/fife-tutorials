@@ -23,15 +23,15 @@
 #define IMATERIAL_H_
 
 #include "stdint.h"
+#include "TextureFwd.h"
 
 struct Color;
-class ITexture;
 
 class IMaterial
 {
 public:
-    virtual void SetTexture(ITexture* texture) = 0;
-    virtual ITexture* GetTexture() const = 0;
+    virtual void SetTexture(const TexturePtr& texture) = 0;
+    virtual const TexturePtr& GetTexture() const = 0;
     virtual void SetAmbientColor(const Color& color) = 0;
     virtual void SetDiffuseColor(const Color& color) = 0;
     virtual void SetSpecularColor(const Color& color) = 0;

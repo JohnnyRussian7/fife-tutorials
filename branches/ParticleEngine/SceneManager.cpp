@@ -1,5 +1,6 @@
 
 #include "SceneManager.h"
+#include "Engine.h"
 #include "SceneNode.h"
 #include "Camera.h"
 #include "IEntity.h"
@@ -9,9 +10,10 @@
 #include "ISpriteSheet.h"
 #include "SpriteSheet.h"
 #include "Image.h"
+#include "TextureManager.h"
 
-SceneManager::SceneManager(const SceneManagerSettings& settings, IRenderSystem* renderSystem)
-: m_settings(settings), m_rootSceneNode(0), m_renderSystem(renderSystem)
+SceneManager::SceneManager(Engine* engine, const SceneManagerSettings& settings, IRenderSystem* renderSystem)
+: m_engine(engine), m_settings(settings), m_rootSceneNode(0), m_renderSystem(renderSystem)
 {
 	if (m_settings.rootNodeName == "")
 	{
@@ -119,44 +121,51 @@ AnimatedTexture* SceneManager::CreateAnimatedTexture(uint32_t runTimeInMs, bool 
 
 AnimatedTexture* SceneManager::CreateAnimatedTexture(ISpriteSheet* spriteSheet, uint32_t runTimeInMs, bool looping, const char* name)
 {
-    AnimatedTexture* texture = 0;
+    AnimatedTexture* animTexture = 0;
     if (spriteSheet)
     {
-        texture = new AnimatedTexture(name, spriteSheet);
-        texture->SetTotalRunTime(runTimeInMs);
-        texture->SetLooping(looping);
+        // create texture from sprite sheet image
+        Image* image = spriteSheet->GetImage();
+        if (image)
+        {
+            TexturePtr texture = m_engine->GetTextureManager()->CreateTexture(TextureType::_2d, image);
+            animTexture = new AnimatedTexture(name, spriteSheet, texture);
+            animTexture->SetTotalRunTime(runTimeInMs);
+            animTexture->SetLooping(looping);
+        }
     }
     else
     {
-        texture = new AnimatedTexture(name);
-        texture->SetTotalRunTime(runTimeInMs);
-        texture->SetLooping(looping);
+        animTexture = new AnimatedTexture(name);
+        animTexture->SetTotalRunTime(runTimeInMs);
+        animTexture->SetLooping(looping);
     }
 
-    return texture;
+    return animTexture;
 }
 
 AnimatedTexture* SceneManager::CreateAnimatedTexture(Image* image, uint32_t numRows, uint32_t numCols, uint32_t numTiles, uint32_t runTimeInMs, bool looping, const char* name)
 {
-    AnimatedTexture* texture = 0;
+    AnimatedTexture* animTexture = 0;
     if (image)
     {
         ISpriteSheet* spriteSheet = new SpriteSheet(image);
+        TexturePtr texture = m_engine->GetTextureManager()->CreateTexture(TextureType::_2d, image);
         spriteSheet->SetNumRows(numRows);
         spriteSheet->SetNumCols(numCols);
         spriteSheet->SetNumTiles(numTiles);
-        texture = new AnimatedTexture(name, spriteSheet);
-        texture->SetTotalRunTime(runTimeInMs);
-        texture->SetLooping(looping);
+        animTexture = new AnimatedTexture(name, spriteSheet, texture);
+        animTexture->SetTotalRunTime(runTimeInMs);
+        animTexture->SetLooping(looping);
     }
     else
     {
-        texture = new AnimatedTexture(name);
-        texture->SetTotalRunTime(runTimeInMs);
-        texture->SetLooping(looping);
+        animTexture = new AnimatedTexture(name);
+        animTexture->SetTotalRunTime(runTimeInMs);
+        animTexture->SetLooping(looping);
     }
 
-    return texture;
+    return animTexture;
 }
 
 void DestroyAnimatedTexture(AnimatedTexture* animatedTexture)

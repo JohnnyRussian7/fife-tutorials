@@ -25,23 +25,24 @@
 #include <map>
 #include <string>
 
-#include "SharedPtr.h"
+#include "TextureFwd.h"
 #include "TextureEnums.h"
 #include "RenderSystemTypes.h"
 
 class Image;
-class ITexture;
 
 class TextureManager
 {
 public:
-    TextureManager(RenderSystemType::Enum type);
-    ITexture* CreateTexture(TextureType::Enum type, Image* image, const char* name=0);
+    TextureManager(RenderSystemType::Enum renderSystemType);
+    TexturePtr CreateTexture(TextureType::Enum type, Image* image, const char* name=0);
     bool AddTexture(ITexture* texture);
+    void RemoveTexture(const char* name);
+    void RemoveAllTextures();
 
 private:
     RenderSystemType::Enum m_type;
-    typedef std::map<std::string, SharedPtr<ITexture> > TextureContainer;
+    typedef std::map<std::string, TexturePtr> TextureContainer;
     TextureContainer m_textures;
 };
 

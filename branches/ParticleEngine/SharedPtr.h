@@ -48,21 +48,21 @@ public:
     : m_ptr(rhs.m_ptr), m_refCount(rhs.m_refCount)
     {
         // increase reference count
-        incRefCount();
+        IncRefCount();
     }
 
     template <typename U>
     SharedPtr(const SharedPtr<U>& rhs)
     {
-        m_ptr = rhs.get();
-        m_refCount = rhs.useCountPtr();
-        incRefCount();
+        m_ptr = rhs.Get();
+        m_refCount = rhs.UseCountPtr();
+        IncRefCount();
     }
 
     ~SharedPtr()
     {
         // decrement reference count
-        decRefCount();
+        DecRefCount();
 
         // check to see if we need to delete
         if (m_refCount && m_refCount == 0)
@@ -86,7 +86,7 @@ public:
         // store in temporary (which causes a ref count increase
         // and swap with this object
         SharedPtr<T> temp(rhs);
-        swap(temp);
+        Swap(temp);
         return *this;
     }
 
@@ -102,7 +102,7 @@ public:
         // store in temporary (which causes a ref count increase
         // and swap with this object
         SharedPtr<T> temp(rhs);
-        swap(temp);
+        Swap(temp);
         return *this;
     }
 
@@ -118,28 +118,28 @@ public:
         return m_ptr;
     }
 
-    inline T* get() const
+    inline T* Get() const
     {
         return m_ptr;
     }
 
-    inline void reset()
+    inline void Reset()
     {
-        SharedPtr<T>().swap(*this);
+        SharedPtr<T>().Swap(*this);
     }
 
-    inline uint32_t useCount() const
+    inline uint32_t UseCount() const
     {
         assert(m_refCount);
         return *m_refCount;
     }
 
-    inline uint32_t* useCountPtr() const
+    inline uint32_t* UseCountPtr() const
     {
         return m_refCount;
     }
 
-    inline bool unique() const
+    inline bool Unique() const
     {
         assert(m_refCount);
         return (*m_refCount == 1);
@@ -157,13 +157,13 @@ public:
 
 private:
 
-    inline void swap(SharedPtr<T>& rhs)
+    inline void Swap(SharedPtr<T>& rhs)
     {
         std::swap(m_ptr, rhs.m_ptr);
         std::swap(m_refCount, rhs.m_refCount);
     }
 
-    inline void incRefCount()
+    inline void IncRefCount()
     {
         if (m_refCount)
         {
@@ -171,7 +171,7 @@ private:
         }
     }
 
-    inline void decRefCount()
+    inline void DecRefCount()
     {
         if (m_refCount)
         {
@@ -187,21 +187,20 @@ private:
 template <typename T, typename U>
 inline bool operator==(const SharedPtr<T>& lhs, const SharedPtr<U>& rhs)
 {
-    return (lhs.get() == rhs.get());
+    return (lhs.Get() == rhs.Get());
 }
 
 template <typename T, typename U>
 inline bool operator!=(const SharedPtr<T>& lhs, const SharedPtr<U>& rhs)
 {
-    return (lhs.get() != rhs.get());
+    return (lhs.Get() != rhs.Get());
 }
 
 template<class T, class U> 
 inline bool operator<(SharedPtr<T> const& lhs, SharedPtr<U> const& rhs)
 {
-    return std::less<const void*>()(lhs.get(), rhs.get());
+    return std::less<const void*>()(lhs.Get(), rhs.Get());
 }
-
 // convenience function for creating a SharedPtr
 template <typename T>
 SharedPtr<T> make_shared(T* ptr)

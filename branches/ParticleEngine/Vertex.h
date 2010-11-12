@@ -31,19 +31,19 @@
 struct Vertex
 {
     Vertex() 
-    : m_position(Vector3::Zero()), m_normal(Vector3::Zero()), m_color(Color()), m_texture(Vector2::Zero()) 
+    : m_position(Vector3::Zero()), m_normal(Vector3::Zero()), m_color(Color()), m_textureCoords(Vector2::Zero()) 
     { 
     
     }
 
-    Vertex(const Vector3& position, const Vector3& normal, const Color& color, const Vector2& texture)
-    : m_position(position), m_normal(normal), m_color(color), m_texture(texture)
+    Vertex(const Vector3& position, const Vector3& normal, const Color& color, const Vector2& textureCoords)
+    : m_position(position), m_normal(normal), m_color(color), m_textureCoords(textureCoords)
     {
 
     }
 
     Vertex(float x, float y, float z, float normalX, float normalY, float normalZ, const Color& color, float textureU, float textureV)
-    : m_position(x, y, z), m_normal(normalX, normalY, normalZ), m_color(color), m_texture(textureU, textureV)
+    : m_position(x, y, z), m_normal(normalX, normalY, normalZ), m_color(color), m_textureCoords(textureU, textureV)
     {
 
     }
@@ -51,7 +51,7 @@ struct Vertex
     Vector3 m_position;
     Vector3 m_normal;
     Color m_color;
-    Vector2 m_texture;
+    Vector2 m_textureCoords;
 };
 #pragma pack(pop)
 

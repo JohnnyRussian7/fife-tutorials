@@ -26,16 +26,16 @@
 
 #include "IAnimation.h"
 #include "Rect.h"
+#include "TextureFwd.h"
 
 class IAnimatedFrame;
-class ITexture;
 class ISpriteSheet;
 
 class AnimatedTexture : public IAnimation
 {
 public:
     AnimatedTexture(const char* name);
-    AnimatedTexture(const char* name, ISpriteSheet* spriteSheet, bool autoFillFrames=true);
+    AnimatedTexture(const char* name, ISpriteSheet* spriteSheet, const TexturePtr& texture, bool autoFillFrames=true);
 
     ~AnimatedTexture();
 
@@ -53,8 +53,8 @@ public:
     virtual bool IsDirty() const;
 
     virtual void AddFrame(IAnimatedFrame* frame);
-    virtual void AddFrame(ITexture* image);
-    virtual void AddFrame(const FloatRect& texCoords);
+    virtual void AddFrame(const TexturePtr& texture);
+    virtual void AddFrame(const TexturePtr& texture, const FloatRect& texCoords);
     virtual void RemoveFrame(uint32_t index);
 
     virtual void Start();
@@ -64,11 +64,12 @@ public:
 
     virtual void Animate(uint32_t time);
 
-    virtual ITexture* GetTexture() const;
+    virtual const TexturePtr& GetTexture() const;
     virtual const FloatRect& GetTextureCoords() const;
 
 private:
     std::string m_name;
+    TexturePtr m_texture;
     uint32_t m_totalRunTimeInMs;
     bool m_looping;
     uint32_t m_currentIndex;

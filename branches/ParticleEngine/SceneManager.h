@@ -12,6 +12,7 @@
 #include "Color.h"
 #include "BufferEnums.h"
 
+class Engine;
 class SceneNode;
 class Camera;
 class IEntity;
@@ -47,7 +48,7 @@ struct SceneManagerSettings
 class SceneManager
 {
 public:
-    SceneManager(const SceneManagerSettings& settings, IRenderSystem* renderSystem);
+    SceneManager(Engine* engine, const SceneManagerSettings& settings, IRenderSystem* renderSystem);
     ~SceneManager();
 
     Camera* CreateCamera(const char* name = 0, 
@@ -83,6 +84,7 @@ public:
     void RenderScene(uint32_t time);
 
 private:
+    Engine* m_engine;
     SceneManagerSettings m_settings;
     SceneNode* m_rootSceneNode;
     Camera* m_camera;

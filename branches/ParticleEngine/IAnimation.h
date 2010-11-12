@@ -27,9 +27,9 @@
 #include "stdint.h"
 #include "Image.h"
 #include "Rect.h"
+#include "TextureFwd.h"
 
 class IAnimatedFrame;
-class ITexture;
 
 class IAnimation
 {
@@ -50,8 +50,8 @@ public:
     virtual bool IsDirty() const = 0;
 
     virtual void AddFrame(IAnimatedFrame* frame) = 0;
-    virtual void AddFrame(ITexture* texture) = 0;
-    virtual void AddFrame(const FloatRect& texCoords) = 0;
+    virtual void AddFrame(const TexturePtr& texture) = 0;
+    virtual void AddFrame(const TexturePtr& texture, const FloatRect& texCoords) = 0;
     virtual void RemoveFrame(uint32_t index) = 0;
 
     virtual void Start() = 0;
@@ -61,7 +61,7 @@ public:
 
     virtual void Animate(uint32_t time) = 0;
 
-    virtual ITexture* GetTexture() const = 0;
+    virtual const TexturePtr& GetTexture() const = 0;
     virtual const FloatRect& GetTextureCoords() const = 0;
 };
 

@@ -27,29 +27,20 @@
 #include "OpenglTexture.h"
 
 SpriteSheet::SpriteSheet(Image* image)
-: m_image(image), m_texture(0), m_numTiles(0), m_numRows(0), m_numCols(0), m_tileSize(0, 0),
+: m_image(image), m_texture(), m_numTiles(0), m_numRows(0), m_numCols(0), m_tileSize(0, 0),
   m_storageType(StorageType::RowMajor)
 {
     assert(m_image);
-
-    // TODO - this should use a TextureManager::createTexture(...) function at some point
-    m_texture = new OpenglTexture(TextureType::_2d, m_image);
 }
 
 SpriteSheet::~SpriteSheet()
 {
-    delete m_texture;
-    m_texture = 0;
+
 }
 
 Image* SpriteSheet::GetImage() const
 {
     return m_image;
-}
-
-ITexture* SpriteSheet::GetTexture() const
-{
-    return m_texture;
 }
 
 void SpriteSheet::SetNumTiles(uint32_t numTiles)
@@ -109,10 +100,8 @@ FloatRect SpriteSheet::GetTileCoords(uint32_t index) const
     FloatRect rect;
     rect.m_left = col * cellSize.m_width;
     rect.m_top = 1.f - (row * cellSize.m_height);
-    //rect.m_top = (row * cellSize.m_height);
     rect.m_right = col * cellSize.m_width + cellSize.m_width;
     rect.m_bottom = 1.f - (row * cellSize.m_height + cellSize.m_height);
-    //rect.m_bottom = (row * cellSize.m_height + cellSize.m_height);
 
     return rect;
 }

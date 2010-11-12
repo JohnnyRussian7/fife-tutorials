@@ -25,13 +25,13 @@
 #include "OpenglTexture.h"
 #include "Image.h"
 
-TextureManager::TextureManager(RenderSystemType::Enum type)
-: m_type(type)
+TextureManager::TextureManager(RenderSystemType::Enum renderSystemType)
+: m_type(renderSystemType)
 {
 
 }
 
-ITexture* TextureManager::CreateTexture(TextureType::Enum type, Image* image, const char* name)
+TexturePtr TextureManager::CreateTexture(TextureType::Enum type, Image* image, const char* name)
 {
     // if a texture already exists with the same name then it will return that texture
     // otherwise it creates a new texture of returns it
@@ -39,18 +39,18 @@ ITexture* TextureManager::CreateTexture(TextureType::Enum type, Image* image, co
     {
         case RenderSystemType::Opengl:
         {
-            SharedPtr<ITexture> ptr = make_shared(new OpenglTexture(type, image, name));   
+            TexturePtr ptr = make_shared(new OpenglTexture(type, image, name));   
             std::pair<TextureContainer::iterator, bool> retVal = m_textures.insert(std::make_pair(ptr->GetName(), ptr));
-            return retVal.first->second.get();
+            return retVal.first->second;
         }
         case RenderSystemType::Sdl:
         {
             // TODO - fill this out when supported
-            return 0;
+            return TexturePtr();
         }
         default:
         {
-            return 0;
+            return TexturePtr();
         }
     }
 }
@@ -59,11 +59,28 @@ bool TextureManager::AddTexture(ITexture* texture)
 {
     if (texture)
     {
-        SharedPtr<ITexture> sharedTexture(texture);
+        TexturePtr sharedTexture(texture);
         std::pair<TextureContainer::iterator, bool> retVal = m_textures.insert(std::make_pair(sharedTexture->GetName(), sharedTexture));
 
         return retVal.second;
     }
 
     return false;
+}
+
+void TextureManager::RemoveTexture(const char* name)
+{
+    if (name)
+    {
+        TextureContainer::iterator iter = m_textures.find(name);
+        if (iter != m_textures.end())
+        {
+            m_textures.erase(iter);
+        } 
+    }
+}
+
+void TextureManager::RemoveAllTextures()
+{
+    m_textures.clear();
 }

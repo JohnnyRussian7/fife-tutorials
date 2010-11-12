@@ -34,6 +34,7 @@
 #include "Renderable.h"
 #include "Color.h"
 #include "IMaterial.h"
+#include "TextureFwd.h"
 
 
 // useful macro to help with offsets in buffer objects
@@ -191,7 +192,7 @@ void OpenglRenderer::Render(Renderable* renderable)
 
     if (material)
     {
-        ITexture* texture = renderable->GetMaterial()->GetTexture();
+        TexturePtr texture = renderable->GetMaterial()->GetTexture();
 
         if (texture)
         {

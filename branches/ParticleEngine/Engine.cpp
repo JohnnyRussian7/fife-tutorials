@@ -21,7 +21,7 @@ Engine::Engine(const EngineSettings& settings)
     m_fileSystem = CreateFileSystem(m_settings.fileSystemSettings);
     m_inputSystem = new InputSystem(m_settings.inputSystemSettings);
 	
-    m_sceneManager = new SceneManager(m_settings.sceneManagerSettings, m_renderSystem);
+    m_sceneManager = new SceneManager(this, m_settings.sceneManagerSettings, m_renderSystem);
     m_textureManager = new TextureManager(m_settings.renderSystemSettings.renderSystemType);
 
     m_windowSystem->SetInputSystem(m_inputSystem);

@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: ISpriteSheet.h
+*	Filename: TextureFwd.h
 *	
 *	Copyright (C) 2010, FIFE team
 *	http://www.fifengine.net
@@ -19,43 +19,12 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef ISPRITESHEET_H_
-#define ISPRITESHEET_H_
+#ifndef TEXTUREFWD_H_
+#define TEXTUREFWD_H_
 
-#include "stdint.h"
-#include "Dimension.h"
-#include "Rect.h"
-#include "TextureFwd.h"
+#include "SharedPtr.h"
 
-class Image;
-
-struct StorageType
-{
-    enum Enum
-    {
-        RowMajor = 0,
-        ColMajor
-    };
-};
-
-class ISpriteSheet
-{
-public:
-
-    virtual ~ISpriteSheet() { };
-
-    virtual Image* GetImage() const = 0;
-
-    virtual void SetNumTiles(uint32_t numTiles) = 0;
-    virtual uint32_t GetNumTiles() const = 0;
-
-    virtual void SetNumRows(uint32_t numRows) = 0;
-    virtual uint32_t GetNumRows() const = 0;
-
-    virtual void SetNumCols(uint32_t numCols) = 0;
-    virtual uint32_t GetNumCols() const = 0;
-
-    virtual FloatRect GetTileCoords(uint32_t index) const = 0;
-};
+class ITexture;
+typedef SharedPtr<ITexture> TexturePtr;
 
 #endif

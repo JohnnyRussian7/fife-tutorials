@@ -27,18 +27,18 @@
 #include "stdint.h"
 #include "Rect.h"
 #include "IAnimatedFrame.h"
+#include "TextureFwd.h"
 
 class IAnimation;
-class ITexture;
 
 class AnimatedFrame : public IAnimatedFrame
 {
 public:
     AnimatedFrame(IAnimation* owner, uint32_t frameNumber);
-    AnimatedFrame(IAnimation* owner, ITexture* texture, uint32_t frameNumber);
+    AnimatedFrame(IAnimation* owner, const TexturePtr& texture, uint32_t frameNumber);
     virtual uint32_t GetFrameNumber() const;
-    virtual void SetTexture(ITexture* texture);
-    virtual ITexture* GetTexture() const;
+    virtual void SetTexture(const TexturePtr& texture);
+    virtual const TexturePtr& GetTexture() const;
     virtual const FloatRect& GetTextureCoordinates() const;
     virtual void SetTextureCoordinates(const FloatRect& texCoords);
     virtual void SetTextureCoordinates(float left, float top, float right, float bottom);
@@ -46,7 +46,7 @@ public:
 private:
     IAnimation* m_owner;
     uint32_t m_frameNumber;
-    ITexture* m_texture;
+    TexturePtr m_texture;
     FloatRect m_textureCoords;
 };
 

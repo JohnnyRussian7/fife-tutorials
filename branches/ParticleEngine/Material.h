@@ -25,8 +25,7 @@
 #include "stdint.h"
 #include "IMaterial.h"
 #include "Color.h"
-
-class ITexture;
+#include "TextureFwd.h"
 
 class Material : public IMaterial
 {
@@ -34,8 +33,8 @@ public:
 	Material();
 	~Material();
 
-	virtual void SetTexture(ITexture* texture);
-    virtual ITexture* GetTexture() const;
+	virtual void SetTexture(const TexturePtr& texture);
+    virtual const TexturePtr& GetTexture() const;
 	virtual void SetAmbientColor(const Color& color);
 	virtual void SetDiffuseColor(const Color& color);
 	virtual void SetSpecularColor(const Color& color);
@@ -43,7 +42,7 @@ public:
 	virtual void SetEmissiveColor(const Color& color);
 
 private:
-	ITexture* m_texture;
+	TexturePtr m_texture;
 	Color m_ambient;
 	Color m_diffuse;
 	Color m_specular;

@@ -29,6 +29,7 @@
 #include "IAnimatedFrame.h"
 #include "AnimatedFrame.h"
 #include "ISpriteSheet.h"
+#include "ITexture.h"
 
 namespace
 {
@@ -63,7 +64,7 @@ AnimatedTexture::AnimatedTexture(const char* name)
     }
 }
 
-AnimatedTexture::AnimatedTexture(const char* name, ISpriteSheet* spriteSheet, bool autoFillFrames)
+AnimatedTexture::AnimatedTexture(const char* name, ISpriteSheet* spriteSheet, const TexturePtr& texture, bool autoFillFrames)
 : m_totalRunTimeInMs(0), m_looping(false), m_currentIndex(0), m_running(true), 
   m_lastUpdateTime(0), m_currentRunTime(0), m_spriteSheet(spriteSheet), m_dirty(true)
 {
@@ -81,7 +82,7 @@ AnimatedTexture::AnimatedTexture(const char* name, ISpriteSheet* spriteSheet, bo
     {
         for (uint32_t i=0; i < m_spriteSheet->GetNumTiles(); ++i)
         {
-            AddFrame(m_spriteSheet->GetTileCoords(i));
+            AddFrame(texture, m_spriteSheet->GetTileCoords(i));
         }
     }
 }
@@ -152,19 +153,19 @@ void AnimatedTexture::AddFrame(IAnimatedFrame* frame)
     m_frames.push_back(frame);
 }
 
-void AnimatedTexture::AddFrame(ITexture* texture)
+void AnimatedTexture::AddFrame(const TexturePtr& texture)
 {
     uint32_t frameNumber = m_frames.size();
     m_frames.push_back(new AnimatedFrame(this, texture, frameNumber));
 }
 
-void AnimatedTexture::AddFrame(const FloatRect& texCoords)
+void AnimatedTexture::AddFrame(const TexturePtr& texture, const FloatRect& texCoords)
 {
     assert(m_spriteSheet);
 
     uint32_t frameNumber = m_frames.size();
     AnimatedFrame* frame = new AnimatedFrame(this, frameNumber);
-    frame->SetTexture(m_spriteSheet->GetTexture());
+    frame->SetTexture(texture);
 
     // TODO - move this elsewhere it is opengl specific
     // must invert coordinates for opengl
@@ -263,7 +264,7 @@ void AnimatedTexture::Animate(uint32_t time)
     m_lastUpdateTime = time;
 }
 
-ITexture* AnimatedTexture::GetTexture() const
+const TexturePtr& AnimatedTexture::GetTexture() const
 {
     return m_frames[m_currentIndex]->GetTexture();
 }

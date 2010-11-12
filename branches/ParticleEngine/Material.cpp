@@ -1,5 +1,6 @@
 
 #include "Material.h"
+#include "ITexture.h"
 
 Material::Material()
 {
@@ -11,12 +12,12 @@ Material::~Material()
 
 }
 
-void Material::SetTexture(ITexture* texture)
+void Material::SetTexture(const TexturePtr& texture)
 {
 	m_texture = texture;
 }
 
-ITexture* Material::GetTexture() const
+const TexturePtr& Material::GetTexture() const
 {
     return m_texture;
 }

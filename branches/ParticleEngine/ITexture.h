@@ -6,7 +6,6 @@
 
 #include "stdint.h"
 #include "TextureEnums.h"
-#include "SharedPtr.h"
 
 class ITexture
 {

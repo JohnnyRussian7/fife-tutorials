@@ -39,6 +39,7 @@ public:
     bool AddTexture(ITexture* texture);
     void RemoveTexture(const char* name);
     void RemoveAllTextures();
+    void RemoveUnusedTextures();
 
 private:
     RenderSystemType::Enum m_type;

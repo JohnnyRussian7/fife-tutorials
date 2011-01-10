@@ -172,11 +172,6 @@ Matrix4 ToMatrix(const Quaternion& q)
 	mat.matrix[15] = 1.f;						// [3][3]
 
 	return mat;
-
-// 	return Matrix4(1.0f - 2.0f*(y2+z2), 2.0f*(xy-wz), 2.0f*(xz+wy), 0.0f,
-// 		2.0f*(xy+wz), 1.0f - 2.0f*(x2+z2), 2.0f*(yz-wx), 0.0f,
-// 		2.0f*(xz-wy), 2.0f*(yz+wx), 1.0f - 2.0f*(x2+y2), 0.0f,
-// 		0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 Vector3 XAxis(const Quaternion& q)

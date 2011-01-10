@@ -6,6 +6,7 @@
 #include "IEntity.h"
 #include "IRenderSystem.h"
 #include "Billboard.h"
+#include "IAnimation.h"
 #include "AnimatedTexture.h"
 #include "ISpriteSheet.h"
 #include "SpriteSheet.h"
@@ -39,6 +40,11 @@ Camera* SceneManager::CreateCamera(const char* name, const Vector3& position, co
 void SceneManager::AddCamera(Camera* camera)
 {
 	m_camera = camera;
+}
+
+Camera* SceneManager::GetCamera() const
+{
+    return m_camera;
 }
 
 SceneNode* SceneManager::GetRootSceneNode() const
@@ -110,7 +116,7 @@ void SceneManager::DestroyEntity(IEntity* entity)
     delete entity;
 }
 
-AnimatedTexture* SceneManager::CreateAnimatedTexture(uint32_t runTimeInMs, bool looping, const char* name)
+IAnimation* SceneManager::CreateAnimatedTexture(uint32_t runTimeInMs, bool looping, const char* name)
 {
     AnimatedTexture* texture = new AnimatedTexture(name);
     texture->SetTotalRunTime(runTimeInMs);
@@ -119,7 +125,7 @@ AnimatedTexture* SceneManager::CreateAnimatedTexture(uint32_t runTimeInMs, bool 
     return texture;
 }
 
-AnimatedTexture* SceneManager::CreateAnimatedTexture(ISpriteSheet* spriteSheet, uint32_t runTimeInMs, bool looping, const char* name)
+IAnimation* SceneManager::CreateAnimatedTexture(ISpriteSheet* spriteSheet, uint32_t runTimeInMs, bool looping, const char* name)
 {
     AnimatedTexture* animTexture = 0;
     if (spriteSheet)
@@ -144,7 +150,7 @@ AnimatedTexture* SceneManager::CreateAnimatedTexture(ISpriteSheet* spriteSheet, 
     return animTexture;
 }
 
-AnimatedTexture* SceneManager::CreateAnimatedTexture(Image* image, uint32_t numRows, uint32_t numCols, uint32_t numTiles, uint32_t runTimeInMs, bool looping, const char* name)
+IAnimation* SceneManager::CreateAnimatedTexture(Image* image, uint32_t numRows, uint32_t numCols, uint32_t numTiles, uint32_t runTimeInMs, bool looping, const char* name)
 {
     AnimatedTexture* animTexture = 0;
     if (image)
@@ -168,7 +174,7 @@ AnimatedTexture* SceneManager::CreateAnimatedTexture(Image* image, uint32_t numR
     return animTexture;
 }
 
-void DestroyAnimatedTexture(AnimatedTexture* animatedTexture)
+void SceneManager::DestroyAnimatedTexture(IAnimation* animatedTexture)
 {
     delete animatedTexture;
     animatedTexture = 0;

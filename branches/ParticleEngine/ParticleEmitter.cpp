@@ -19,7 +19,7 @@ ParticleEmitter::ParticleEmitter(bool enabled, const AxisAlignedBoundingBox& aab
 	{
 		Particle particle;
 		particle.position = Vector3(0.f, 0.f, 0.f);
-		particle.color = ColorBlack();
+        particle.color = Color::Black();
 		particle.velocity = Vector3(0.f, 0.f, 0.f);
 		particle.lifetime = 0.f;
 		particle.size = 0.f;

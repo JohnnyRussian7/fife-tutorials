@@ -32,21 +32,21 @@
 
 Billboard::Billboard(SceneManager* sceneManager)
 : m_sceneManager(sceneManager), m_owner(0), m_width(1), m_height(1),
-m_position(Vector3::Zero()), m_color(ColorWhite()), m_buffersGenerated(false)
+m_position(Vector3::Zero()), m_color(Color::White()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
 }
 
 Billboard::Billboard(SceneManager* sceneManager, const Vector3& position)
 : m_sceneManager(sceneManager),m_owner(0), m_width(1), m_height(1),
-m_position(position), m_color(ColorWhite()), m_buffersGenerated(false)
+m_position(position), m_color(Color::White()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
 }
 
 Billboard::Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position)
 : m_sceneManager(sceneManager), m_owner(owner), m_width(1), m_height(1),
-m_position(position), m_color(ColorWhite()), m_buffersGenerated(false)
+m_position(position), m_color(Color::White()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
 }

@@ -43,7 +43,7 @@ Matrix4 MakeTransform(const Vector3& scale, const Vector3& position, const Quate
 	//rotMatrix[11] = 0.f;
 	//rotMatrix[15] = 1.f;
 
-	// apply scale and translation
+	// apply scale
 	rotMatrix[0] = scale.x * rotMatrix[0];
 	rotMatrix[1] = scale.y * rotMatrix[1];
 	rotMatrix[2] = scale.z * rotMatrix[2];

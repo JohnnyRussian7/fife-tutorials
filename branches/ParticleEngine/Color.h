@@ -9,6 +9,31 @@ struct Color
 	Color(): r(0.f), g(0.f), b(0.f), a(1.f) { };
 	Color(float r, float g, float b, float a=1.f): r(r), g(g), b(b), a(a) { };
 
+    static Color Black()
+    {
+        return Color(0.f, 0.f, 0.f);
+    }
+
+    static Color White()
+    {
+        return Color(1.f, 1.f, 1.f);
+    }
+
+    static Color Red()
+    {
+        return Color(1.f, 0.f, 0.f);
+    }
+
+    static Color Green()
+    {
+        return Color(0.f, 1.f, 0.f);
+    }
+
+    static Color Blue()
+    {
+        return Color(0.f, 0.f, 1.f);
+    }
+
 	float r;
 	float g;
 	float b;
@@ -29,29 +54,6 @@ inline Color interpolate(const Color& color1, const Color& color2, float scale)
 	return retColor;
 }
 
-inline Color ColorBlack()
-{
-    return Color(0.f, 0.f, 0.f);
-}
 
-inline Color ColorWhite()
-{
-    return Color(1.f, 1.f, 1.f);
-}
-
-inline Color ColorRed()
-{
-    return Color(1.f, 0.f, 0.f);
-}
-
-inline Color ColorGreen()
-{
-    return Color(0.f, 1.f, 0.f);
-}
-
-inline Color ColorBlue()
-{
-    return Color(0.f, 0.f, 1.f);
-}
 
 #endif

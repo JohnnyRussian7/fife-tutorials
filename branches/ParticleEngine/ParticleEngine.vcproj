@@ -573,6 +573,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Path.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Plane.h"
 				>
 			</File>

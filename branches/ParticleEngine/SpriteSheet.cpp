@@ -27,7 +27,7 @@
 #include "OpenglTexture.h"
 
 SpriteSheet::SpriteSheet(Image* image)
-: m_image(image), m_texture(), m_numTiles(0), m_numRows(0), m_numCols(0), m_tileSize(0, 0),
+: m_image(image), m_numTiles(0), m_numRows(0), m_numCols(0), m_tileSize(0, 0),
   m_storageType(StorageType::RowMajor)
 {
     assert(m_image);

@@ -308,16 +308,22 @@ Matrix4 SceneNode::GetTransform()
 
 void SceneNode::Translate(const Vector3& translation)
 {
-    m_position += m_orientation * translation;
-//     if (m_parent)
-//     {
-//         // relative to parent
-//         m_position += ElemDiv((Inverse(m_parent->GetRelativeOrientation()) * translation), m_parent->GetRelativeScale());
-//     }
-//     else
-//     {
-//         m_position += translation;
-//     }
+    // translation with respect to parent
+    m_position += translation;
+
+    // translation with respect to local coordinates
+    // m_position += m_orientation * translation;
+
+    // translation with respect to world coordinates
+    //if (m_parent)
+    //{
+    //    // relative to parent
+    //    m_position += ElemDiv((Inverse(m_parent->GetRelativeOrientation()) * translation), m_parent->GetRelativeScale());
+    //}
+    //else
+    //{
+    //    m_position += translation;
+    //}
 
     SetDirtyFlag();
 }
@@ -331,6 +337,7 @@ void SceneNode::Rotate(const Quaternion& rotation)
 {
     Quaternion normRotation = Normalize(rotation);
 
+    // rotation relative to parent
     m_orientation = normRotation * m_orientation;
 
     SetDirtyFlag();

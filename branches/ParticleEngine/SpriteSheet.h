@@ -26,7 +26,6 @@
 #include "ISpriteSheet.h"
 #include "Dimension.h"
 #include "Rect.h"
-#include "TextureFwd.h"
 
 class Image;
 
@@ -51,7 +50,6 @@ public:
 
 private:
     Image* m_image;
-    TexturePtr m_texture;
     uint32_t m_numTiles;
     uint32_t m_numRows;
     uint32_t m_numCols;

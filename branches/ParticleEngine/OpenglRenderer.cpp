@@ -58,6 +58,30 @@ void DrawBox()
     glEnd();
 }
 
+void DrawAxes()
+{
+    const Vector3 origin = Vector3::Zero();
+    const Vector3 unitx = Vector3::UnitX();
+    const Vector3 unity = Vector3::UnitY();
+    const Vector3 unitz = Vector3::UnitZ();
+
+//     glMatrixMode(GL_MODELVIEW);
+//     glTranslatef (-5, -5, -5);
+    glLineWidth (2.0);
+
+    glBegin (GL_LINES);
+    glColor3f (1,0,0); // X axis is red.
+    glVertex3f(origin.x, origin.y, origin.z);
+    glVertex3f(unitx.x, unitx.y, unitx.z);
+    glColor3f (0,1,0); // Y axis is green.
+    glVertex3f(origin.x, origin.y, origin.z);
+    glVertex3f(unity.x, unity.y, unity.z);
+    glColor3f (0,0,1); // z axis is blue.
+    glVertex3f(origin.x, origin.y, origin.z);
+    glVertex3f(unitz.x, unitz.y, unitz.z);
+    glEnd();
+}
+
 OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
 : m_settings(settings), m_viewport(Viewport()),
   m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
@@ -103,24 +127,31 @@ void OpenglRenderer::SetTransform(TransformType::Enum type, const Matrix4& mat)
 		case TransformType::Model:
 		{
             m_modelMatrix = mat;
-            m_modelMatrixUpdate = true;
+
+            glMatrixMode(GL_MODELVIEW);
+            glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
+            m_modelMatrix = mat;
 		}
 		break;
 		case TransformType::View:
 		{
-           m_viewMatrix = mat;
-           m_viewMatrixUpdate = true;
+            m_viewMatrix = mat;
+
+            glMatrixMode(GL_MODELVIEW);
+            glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
 		}
 		break;
 		case TransformType::Projection:
 		{
             m_projectionMatrix = mat;
-            m_projectionMatrixUpdate = true;
+
+            glMatrixMode(GL_PROJECTION);
+            glLoadMatrixf(m_projectionMatrix.matrix);
 		}
 		break;
 		default:
 		{
-			// TODO - print error here
+            // TODO - print error here
 		}
 		break;
 	}
@@ -163,26 +194,6 @@ void OpenglRenderer::ClearBuffers(bool colorBuffer, bool depthBuffer)
 
 void OpenglRenderer::Render(Renderable* renderable)
 {
-    if (m_projectionMatrixUpdate)
-    {
-        glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(m_projectionMatrix.matrix);
-        m_projectionMatrixUpdate = false;
-    }
-
-	glMatrixMode(GL_MODELVIEW);
-    if (m_viewMatrixUpdate)
-    {
-        glLoadMatrixf(m_viewMatrix.matrix);
-        m_viewMatrixUpdate = false;
-    }
-
-    if (m_modelMatrixUpdate)
-    {
-        glMultMatrixf(m_modelMatrix.matrix);
-        m_modelMatrixUpdate = false;
-    }
-
     if (!renderable)
     {
         return;
@@ -297,6 +308,6 @@ void OpenglRenderer::Render(Renderable* renderable)
         }
     }
 
-
+    //DrawAxes();
     //DrawBox();
 }

@@ -142,13 +142,13 @@ void Engine::BeginScene()
 
 void Engine::EndScene()
 {
+    m_windowSystem->SwapBuffers();
 	ComputeFps();
 }
 
 void Engine::Render()
 {
     m_sceneManager->RenderScene(m_timer.GetTime());
-    m_windowSystem->SwapBuffers();
 }
 
 bool Engine::Run()

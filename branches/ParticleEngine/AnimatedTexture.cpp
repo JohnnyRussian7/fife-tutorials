@@ -168,7 +168,7 @@ void AnimatedTexture::AddFrame(const TexturePtr& texture, const FloatRect& texCo
     frame->SetTexture(texture);
 
     // TODO - move this elsewhere it is opengl specific
-    // must invert coordinates for opengl
+    // must invert (right and left) coordinates for opengl
     FloatRect invertCoords(texCoords.m_right, texCoords.m_top, texCoords.m_left, texCoords.m_bottom);
 
     frame->SetTextureCoordinates(invertCoords);

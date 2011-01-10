@@ -84,3 +84,15 @@ void TextureManager::RemoveAllTextures()
 {
     m_textures.clear();
 }
+
+void TextureManager::RemoveUnusedTextures()
+{
+    TextureContainer::iterator iter = m_textures.begin();
+    for (; iter != m_textures.end(); ++iter)
+    {
+        if (iter->second.Unique())
+        {
+            m_textures.erase(iter);
+        }
+    }
+}

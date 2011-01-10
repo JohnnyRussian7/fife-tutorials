@@ -1,7 +1,9 @@
 
 #include <string>
 #include <sstream>
+#include <cmath>
 
+// Engine includes
 #include "../Engine.h"
 #include "../SceneManager.h"
 #include "../Camera.h"
@@ -40,45 +42,57 @@ public:
     { 
         if (event.GetKeyCode() == KeyCodes::Left)
         {
-            m_yawAngle += 0.1f; 
+            m_yawAngle += 1.0f; 
 
-            if (m_yawAngle > 360.f)
-            {
-                m_yawAngle = 0.f;
-            }
+            m_yawAngle = (uint32_t)m_yawAngle % 360;
+            //m_yawAngle = std::fmod(m_yawAngle, 360.f);
+
+//             if (m_yawAngle > 360.f)
+//             {
+//                 m_yawAngle = 0.f;
+//             }
 
             m_cam->Yaw(DegToRad(m_yawAngle));
         }
         else if (event.GetKeyCode() == KeyCodes::Right)
         {
-            m_yawAngle -= 0.1f;
+            m_yawAngle -= 1.0f;
 
-            if (m_yawAngle < -360.f)
-            {
-                m_yawAngle = 0.f;
-            }
+            m_yawAngle = (uint32_t)m_yawAngle % 360;
+            //m_yawAngle = std::fmod(m_yawAngle, 360.f);
+
+//             if (m_yawAngle < -360.f)
+//             {
+//                 m_yawAngle = 0.f;
+//             }
 
             m_cam->Yaw(DegToRad(m_yawAngle));
         }
         else if (event.GetKeyCode() == KeyCodes::Up)
         {
-            m_pitchAngle += 0.1f;
+            m_pitchAngle += 1.0f;
 
-            if (m_pitchAngle > 360.f)
-            {
-                m_pitchAngle = 0.f;
-            }
+            m_pitchAngle = (uint32_t)m_pitchAngle % 360;
+            //m_pitchAngle = std::fmod(m_pitchAngle, 360.f);
+
+//             if (m_pitchAngle > 360.f)
+//             {
+//                 m_pitchAngle = 0.f;
+//             }
 
             m_cam->Pitch(DegToRad(m_pitchAngle));
         }
         else if (event.GetKeyCode() == KeyCodes::Down)
         {
-            m_pitchAngle -= 0.1f;
+            m_pitchAngle -= 1.0f;
 
-            if (m_pitchAngle < -360.f)
-            {
-                m_pitchAngle = 0.f;
-            }
+            m_pitchAngle = (uint32_t)m_pitchAngle % 360;
+            //m_pitchAngle = std::fmod(m_pitchAngle, 360.f);
+
+//             if (m_pitchAngle < -360.f)
+//             {
+//                 m_pitchAngle = 0.f;
+//             }
 
             m_cam->Pitch(DegToRad(m_pitchAngle));
         }
@@ -154,8 +168,8 @@ int main()
 
     SceneManager* sceneManager = engine.GetSceneManager();
     Camera* camera = sceneManager->CreateCamera();
-	//camera->Rotate(Vector3(1,0,0), DegToRad(30));		// pitch
-    //camera->Rotate(Vector3(0,1,0), DegToRad(45));		// yaw
+//     camera->Pitch(DegToRad(30));
+//     camera->Yaw(DegToRad(45));
     camera->Translate(Vector3(0, 0, 50));
     camera->LookAt(Vector3(0, 0, 0));
 
@@ -182,7 +196,7 @@ int main()
     SceneNode* torchNode = sceneManager->CreateSceneNode("torch");
     torchNode->AddEntity(e1);
     sceneManager->GetRootSceneNode()->AddChild(torchNode);
-    torchNode->Translate(0, 0, 0);
+    torchNode->Translate(0, 0, -5);
 
     Image* image2 = loader.Load("..\\data\\explosions_pot.png");
     IEntity* e2 = sceneManager->CreateEntity("e2");
@@ -198,7 +212,23 @@ int main()
     SceneNode* explosionNode = sceneManager->CreateSceneNode("explosions");
     explosionNode->AddEntity(e2);
     sceneManager->GetRootSceneNode()->AddChild(explosionNode);
-    explosionNode->Translate(4, 0, 0);
+    explosionNode->Translate(4, 0, -5);
+
+    Image* image3 = loader.Load("..\\data\\torch_animation.png");
+    IEntity* e3 = sceneManager->CreateEntity("e3");
+    Billboard* b3 = sceneManager->CreateBillboard(4, 4);
+    e3->SetVisual(b3);
+    if (image3)
+    {
+        b3->SetAnimation(sceneManager->CreateAnimatedTexture(image1, 1, 24, 24, 2500));
+
+        IMaterial* m3 = new Material();
+        b3->GetRenderable()->SetMaterial(m3);
+    }
+    SceneNode* torchNode2 = sceneManager->CreateSceneNode("torchNode2");
+    torchNode2->AddEntity(e3);
+    sceneManager->GetRootSceneNode()->AddChild(torchNode2);
+    torchNode2->Translate(-4, 0, -5);
 
 //     Image* image3 = loader.Load("..\\data\\finalfantasy5_pot.png"); 
 //     IEntity* e3 = sceneManager->CreateEntity("e3");

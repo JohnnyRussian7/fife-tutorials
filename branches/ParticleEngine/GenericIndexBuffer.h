@@ -22,7 +22,8 @@
 #ifndef GENERICINDEXBUFFER_H_
 #define GENERICINDEXBUFFER_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "BufferEnums.h"
 #include "IIndexBuffer.h"
 

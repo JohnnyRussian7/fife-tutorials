@@ -22,7 +22,7 @@
 #ifndef IENTITY_H_
 #define IENTITY_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
 
 class SceneNode;
 class Visual;

@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Timer.h
+*	Filename: PrecompiledIncludes.cpp
 *	
 *	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
@@ -19,37 +19,5 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef TIMER_H_
-#define TIMER_H_
 
-#include "StdIncludes.h"
-
-class Timer
-{
-public:
-    Timer();
-    ~Timer();
-
-    uint32_t GetTime() const;
-    void SetTime(uint32_t time);
-
-    float GetMultiplier() const;
-    void SetMultiplier(float multiplier);
-
-    bool IsRunning();
-
-    void Start();
-    void Stop();
-    void Pause();
-
-    void Reset();
-
-    void Tick();
-
-	uint32_t QueryRealTime() const;
-private:
-    class TimerImpl;
-    TimerImpl* m_impl;
-};
-
-#endif
+#include "PrecompiledIncludes.h"

@@ -2,7 +2,7 @@
 #ifndef STD_INT_H_
 #define STD_INT_H_
 
-#include <limits>
+#include "StdIncludes.h"
 
 // defines for variable types for portability and consistency
 

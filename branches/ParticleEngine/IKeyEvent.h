@@ -22,7 +22,8 @@
 #ifndef IKEYEVENT_H_
 #define IKEYEVENT_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "KeyCodes.h"
 
 class IKeyEvent

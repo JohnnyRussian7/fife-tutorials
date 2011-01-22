@@ -22,9 +22,8 @@
 #ifndef OPENGLVERTEXBUFFER_H_
 #define OPENGLVERTEXBUFFER_H_
 
-#include <vector>
+#include "StdIncludes.h"
 
-#include "stdint.h"
 #include "IVertexBuffer.h"
 #include "BufferEnums.h"
 #include "Vertex.h"

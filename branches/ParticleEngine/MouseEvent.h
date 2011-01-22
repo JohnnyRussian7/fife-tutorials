@@ -22,7 +22,8 @@
 #ifndef MOUSEEVENT_H_
 #define MOUSEEVENT_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "IMouseEvent.h"
 
 class MouseEvent : public IMouseEvent

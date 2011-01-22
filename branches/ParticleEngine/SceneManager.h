@@ -2,10 +2,8 @@
 #ifndef SCENE_MANAGER_H_
 #define SCENE_MANAGER_H_
 
-#include <map>
-#include <string>
+#include "StdIncludes.h"
 
-#include "stdint.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Rect.h"

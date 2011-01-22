@@ -1,7 +1,26 @@
+/**********************************************************************
+*	Filename: Win32WindowSystem.cpp
+*	
+*	Copyright (C) 2011, FIFE team
+*	http://www.fifengine.net
+*
+*	This file is part of FIFE.
+*
+*	FIFE is free software: you can redistribute it and/or modify it
+*	under the terms of the GNU Lesser General Public License as
+*	published by the Free Software Foundation, either version 3 of
+*	the License, or any later version.
+*
+*	FIFE is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* 	GNU Lesser General Public License for more details.
+*
+*	You should have received a copy of the GNU Lesser General Public
+*	License along with FIFE. If not, see http://www.gnu.org/licenses/.
+***********************************************************************/
+#include "PrecompiledIncludes.h"
 
-#include <algorithm>
-
-#include "stdint.h"
 #include "Win32WindowSystem.h"
 #include "IRenderSystem.h"
 #include "IWindowSystemEventListener.h"
@@ -340,8 +359,8 @@ void Win32WindowSystem::Init()
 		DWORD windowStyle = WS_POPUP;
 
 		// get the width and height of the window RECT
-		int actualWidth = 0;
-		int actualHeight = 0;
+		uint32_t actualWidth = 0;
+		uint32_t actualHeight = 0;
 
 		uint32_t windowLeft = 0;
 		uint32_t windowTop = 0;
@@ -425,7 +444,7 @@ void Win32WindowSystem::Init()
 	pfd.iPixelType = PFD_TYPE_RGBA;
 
 	// if these fail, wglCreateContext will also quietly fail
-	int format;
+	int32_t format;
 	if ((format = ChoosePixelFormat(m_hdc, &pfd)) != 0)
 	{
 		SetPixelFormat(m_hdc, format, &pfd);

@@ -22,7 +22,8 @@
 #ifndef IMATERIAL_H_
 #define IMATERIAL_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "TextureFwd.h"
 
 struct Color;

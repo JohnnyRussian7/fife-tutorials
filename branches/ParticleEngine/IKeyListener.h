@@ -22,7 +22,7 @@
 #ifndef IKEYLISTENER_H_
 #define IKEYLISTENER_H_
 
-#include <string>
+#include "StdIncludes.h"
 
 class IKeyEvent;
 

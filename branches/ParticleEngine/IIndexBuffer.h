@@ -22,7 +22,8 @@
 #ifndef IINDEXBUFFER_H_
 #define IINDEXBUFFER_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "BufferEnums.h"
 
 class IIndexBuffer

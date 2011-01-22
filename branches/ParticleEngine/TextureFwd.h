@@ -24,7 +24,12 @@
 
 #include "SharedPtr.h"
 
-class ITexture;
+#include "ITexture.h"
+
+// TODO - look into modifying SharedPtr to be able to handle incomplete types
+//class ITexture;
+
+
 typedef SharedPtr<ITexture> TexturePtr;
 
 #endif

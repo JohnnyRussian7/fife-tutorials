@@ -83,8 +83,8 @@ struct Matrix4
 		return identity;
 	}
 
-	float& operator[](int index) { return matrix[index]; }
-	const float& operator[](int index) const { return matrix[index]; }
+	float& operator[](uint32_t index) { return matrix[index]; }
+	const float& operator[](uint32_t index) const { return matrix[index]; }
 
 	float matrix[16];
 };

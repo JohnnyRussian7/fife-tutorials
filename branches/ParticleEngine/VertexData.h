@@ -22,10 +22,9 @@
 #ifndef VERTEXDATA_H_
 #define VERTEXDATA_H_
 
-#include  <vector>
+#include "StdIncludes.h"
 
 #include "Vertex.h"
-#include "stdint.h"
 
 class VertexData
 {

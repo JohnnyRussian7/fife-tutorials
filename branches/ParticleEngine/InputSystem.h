@@ -22,7 +22,7 @@
 #ifndef INPUTSYSTEM_H_
 #define INPUTSYSTEM_H_
 
-#include <vector>
+#include "StdIncludes.h"
 
 #include "IInputSystem.h"
 

@@ -22,7 +22,7 @@
 #ifndef FRUSTUM_H_
 #define FRUSTUM_H_
 
-#include <vector>
+#include "StdIncludes.h"
 
 #include "Plane.h"
 

@@ -22,7 +22,8 @@
 #ifndef GENERICVERTEXBUFFER_H_
 #define GENERICVERTEXBUFFER_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "IVertexBuffer.h"
 #include "Vertex.h"
 

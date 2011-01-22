@@ -22,9 +22,8 @@
 #ifndef BILLBOARDGROUP_H_
 #define BILLBOARDGROUP_H_
 
-#include <vector>
+#include "StdIncludes.h"
 
-#include "stdint.h"
 #include "Vector2.h"
 #include "Vector3.h"
 

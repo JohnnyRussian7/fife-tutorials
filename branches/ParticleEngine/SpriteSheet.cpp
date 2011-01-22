@@ -19,12 +19,10 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-
-#include <cassert>
+#include "PrecompiledIncludes.h"
 
 #include "SpriteSheet.h"
 #include "Image.h"
-#include "OpenglTexture.h"
 
 SpriteSheet::SpriteSheet(Image* image)
 : m_image(image), m_numTiles(0), m_numRows(0), m_numCols(0), m_tileSize(0, 0),

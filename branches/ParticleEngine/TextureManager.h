@@ -22,8 +22,7 @@
 #ifndef TEXTUREMANAGER_H_
 #define TEXTUREMANAGER_H_
 
-#include <map>
-#include <string>
+#include "StdIncludes.h"
 
 #include "TextureFwd.h"
 #include "TextureEnums.h"

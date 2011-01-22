@@ -22,7 +22,7 @@
 #ifndef IINPUTSYSTEM_H_
 #define IINPUTSYSTEM_H_
 
-#include <string>
+#include "StdIncludes.h"
 
 class IKeyListener;
 class IMouseListener;

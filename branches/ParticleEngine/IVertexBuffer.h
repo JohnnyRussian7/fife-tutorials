@@ -22,9 +22,8 @@
 #ifndef IVERTEXBUFFER_H_
 #define IVERTEXBUFFER_H_
 
-#include <vector>
+#include "StdIncludes.h"
 
-#include "stdint.h"
 #include "BufferEnums.h"
 #include "Vertex.h"
 

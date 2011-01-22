@@ -22,10 +22,8 @@
 #ifndef SCENENODE_H_
 #define SCENENODE_H_
 
-#include <vector>
-#include <string>
+#include "StdIncludes.h"
 
-#include "stdint.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "Matrix4.h"

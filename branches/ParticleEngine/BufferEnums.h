@@ -22,7 +22,7 @@
 #ifndef BUFFERENUMS_H_
 #define BUFFERENUMS_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
 
 struct HwBufferAccess
 {

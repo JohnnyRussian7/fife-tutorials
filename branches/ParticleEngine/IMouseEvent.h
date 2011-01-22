@@ -22,7 +22,8 @@
 #ifndef IMOUSEEVENT_H_
 #define IMOUSEEVENT_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "KeyCodes.h"
 
 struct MouseEventType

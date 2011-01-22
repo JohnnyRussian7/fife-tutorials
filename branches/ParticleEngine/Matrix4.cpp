@@ -1,3 +1,25 @@
+/**********************************************************************
+*	Filename: Matrix4.cpp
+*	
+*	Copyright (C) 2011, FIFE team
+*	http://www.fifengine.net
+*
+*	This file is part of FIFE.
+*
+*	FIFE is free software: you can redistribute it and/or modify it
+*	under the terms of the GNU Lesser General Public License as
+*	published by the Free Software Foundation, either version 3 of
+*	the License, or any later version.
+*
+*	FIFE is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* 	GNU Lesser General Public License for more details.
+*
+*	You should have received a copy of the GNU Lesser General Public
+*	License along with FIFE. If not, see http://www.gnu.org/licenses/.
+***********************************************************************/
+#include "PrecompiledIncludes.h"
 
 #include "Matrix4.h"
 #include "Vector3.h"
@@ -25,16 +47,6 @@ Matrix4 operator*(const Matrix4& lhs, const Matrix4& rhs)
 	result.matrix[13] = lhs.matrix[1]*rhs.matrix[12] + lhs.matrix[5]*rhs.matrix[13] + lhs.matrix[9]*rhs.matrix[14] + lhs.matrix[13]*rhs.matrix[15];
 	result.matrix[14] = lhs.matrix[2]*rhs.matrix[12] + lhs.matrix[6]*rhs.matrix[13] + lhs.matrix[10]*rhs.matrix[14] + lhs.matrix[14]*rhs.matrix[15];
 	result.matrix[15] = lhs.matrix[3]*rhs.matrix[12] + lhs.matrix[7]*rhs.matrix[13] + lhs.matrix[11]*rhs.matrix[14] + lhs.matrix[15]*rhs.matrix[15];
-
-	/*
-	for (int i=0; i < 16; ++i)
-	{
-		for (int j=0; j < 4; ++j)
-		{
-			result.matrix[i] += rhs.matrix[j+4*i] * lhs.matrix[i+j];
-		}
-	}
-	*/
 
 	return result;
 }

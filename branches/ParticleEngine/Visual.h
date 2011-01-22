@@ -22,7 +22,7 @@
 #ifndef VISUAL_H_
 #define VISUAL_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
 
 class IEntity;
 class Renderable;

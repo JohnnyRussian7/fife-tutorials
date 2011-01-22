@@ -22,7 +22,7 @@
 #ifndef IMOUSELISTENER_H_
 #define IMOUSELISTENER_H_
 
-#include <string>
+#include "StdIncludes.h"
 
 class IMouseEvent;
 

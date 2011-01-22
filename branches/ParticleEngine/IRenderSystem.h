@@ -22,7 +22,8 @@
 #ifndef IRENDERSYSTEM_H_
 #define IRENDERSYSTEM_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "RenderSystemTypes.h"
 #include "RendererEnums.h"
 #include "BufferEnums.h"

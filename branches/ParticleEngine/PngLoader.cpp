@@ -1,14 +1,34 @@
+/**********************************************************************
+*	Filename: PngLoader.cpp
+*	
+*	Copyright (C) 2011, FIFE team
+*	http://www.fifengine.net
+*
+*	This file is part of FIFE.
+*
+*	FIFE is free software: you can redistribute it and/or modify it
+*	under the terms of the GNU Lesser General Public License as
+*	published by the Free Software Foundation, either version 3 of
+*	the License, or any later version.
+*
+*	FIFE is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* 	GNU Lesser General Public License for more details.
+*
+*	You should have received a copy of the GNU Lesser General Public
+*	License along with FIFE. If not, see http://www.gnu.org/licenses/.
+***********************************************************************/
+#include "PrecompiledIncludes.h"
 
 #include "PngLoader.h"
 #include "Image.h"
 
 #include "libpng/png.h"
 
-#include <fstream>
-
 const int PNG_SIG_SIZE = 8;
 
-static void png_error(png_structp pngPtr, png_const_charp /*msg*/)
+void png_error_fn(png_structp pngPtr, png_const_charp /*msg*/)
 {
 	longjmp(pngPtr->jmpbuf, 1);
 }
@@ -24,7 +44,7 @@ void PNGAPI userReadData(png_structp pngPtr, png_bytep data, png_size_t length)
 
 	if (numRead != length)
 	{
-		png_error(pngPtr, "Read Error");
+		png_error_fn(pngPtr, "Read Error");
 	}
 }
 
@@ -56,7 +76,7 @@ Image* PngLoader::Load(const char* filename)
 	}
 
 	// create read struct
-	png_structp pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, (png_error_ptr)png_error, NULL);
+	png_structp pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, (png_error_ptr)png_error_fn, NULL);
 	if (!pngPtr)
 	{
 		return 0;

@@ -22,7 +22,8 @@
 #ifndef MATERIAL_H_
 #define MATERIAL_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "IMaterial.h"
 #include "Color.h"
 #include "TextureFwd.h"

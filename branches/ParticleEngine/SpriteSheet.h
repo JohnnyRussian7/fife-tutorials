@@ -22,7 +22,8 @@
 #ifndef SPRITESHEET_H_
 #define SPRITESHEET_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "ISpriteSheet.h"
 #include "Dimension.h"
 #include "Rect.h"

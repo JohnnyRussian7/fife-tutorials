@@ -22,7 +22,7 @@
 #ifndef ANIMATEDTEXTURE_H_
 #define ANIMATEDTEXTURE_H_
 
-#include <vector>
+#include "StdIncludes.h"
 
 #include "IAnimation.h"
 #include "Rect.h"

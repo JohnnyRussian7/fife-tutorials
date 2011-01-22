@@ -22,9 +22,7 @@
 #ifndef INDEXDATA_H_
 #define INDEXDATA_H_
 
-#include <vector>
-
-#include "stdint.h"
+#include "StdIncludes.h"
 
 class IndexData
 {

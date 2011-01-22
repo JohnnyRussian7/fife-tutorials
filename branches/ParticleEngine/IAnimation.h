@@ -22,9 +22,8 @@
 #ifndef IANIMATION_H_
 #define IANIMATION_H_
 
-#include <string>
+#include "StdIncludes.h"
 
-#include "stdint.h"
 #include "Image.h"
 #include "Rect.h"
 #include "TextureFwd.h"

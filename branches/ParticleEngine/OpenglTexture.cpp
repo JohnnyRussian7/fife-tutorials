@@ -19,15 +19,12 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
+#include "PrecompiledIncludes.h"
 
-#include "Opengltexture.h"
+#include "MathUtil.h"
 #include "Image.h"
 #include "OpenglUtility.h"
-#include "MathUtil.h"
-
-#include <windows.h>
-#include <gl/gl.h>			// OpenGL headers
-#include <gl/glu.h>
+#include "Opengltexture.h"
 
 OpenglTexture::OpenglTexture(TextureType::Enum type, Image *image, const char* name)
 : Texture(type, name), m_image(image), m_width(0), m_height(0)

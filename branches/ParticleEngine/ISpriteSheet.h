@@ -22,7 +22,8 @@
 #ifndef ISPRITESHEET_H_
 #define ISPRITESHEET_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "Dimension.h"
 #include "Rect.h"
 #include "TextureFwd.h"

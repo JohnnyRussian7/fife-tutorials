@@ -22,9 +22,8 @@
 #ifndef ANIMATEDFRAME_H_
 #define ANIMATEDFRAME_H_
 
-#include <string>
+#include "StdIncludes.h"
 
-#include "stdint.h"
 #include "Rect.h"
 #include "IAnimatedFrame.h"
 #include "TextureFwd.h"

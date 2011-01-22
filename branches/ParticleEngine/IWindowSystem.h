@@ -1,8 +1,29 @@
-
+/**********************************************************************
+*	Filename: IWindowSystem.h
+*	
+*	Copyright (C) 2011, FIFE team
+*	http://www.fifengine.net
+*
+*	This file is part of FIFE.
+*
+*	FIFE is free software: you can redistribute it and/or modify it
+*	under the terms of the GNU Lesser General Public License as
+*	published by the Free Software Foundation, either version 3 of
+*	the License, or any later version.
+*
+*	FIFE is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* 	GNU Lesser General Public License for more details.
+*
+*	You should have received a copy of the GNU Lesser General Public
+*	License along with FIFE. If not, see http://www.gnu.org/licenses/.
+***********************************************************************/
 #ifndef IWINDOW_SYSTEM_H_
 #define IWINDOW_SYSTEM_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "WindowSystemTypes.h"
 
 class IWindowSystemEventListener;
@@ -15,9 +36,9 @@ struct WindowSystemSettings
 	width(800), height(600), bitsPerPixel(16), useExternalWindow(false), 
 	allowFullScreen(true), useFullScreen(false), allowResizeable(true), windowId(0)
 	{
-#if defined(WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(WIN32) || defined(_MSC_VER)
 		windowSystemType = WindowSystemType::Win32;
-#elif defined(__APPLE__) || defined(MACOSX)
+#elif defined(__APPLE__) || defined(MACOSX) || defined(__APPLE_CC__)
 		windowSystemType = WindowSystemType::MacOsx;
 #else
 		windowSystemType = WindowSystemType::Linux;

@@ -22,7 +22,7 @@
 #ifndef DIMENSION_H_
 #define DIMENSION_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
 
 template <typename T>
 struct Dimension

@@ -22,9 +22,8 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
-#include <string>
+#include "StdIncludes.h"
 
-#include "stdint.h"
 #include "ITexture.h"
 #include "TextureEnums.h"
 

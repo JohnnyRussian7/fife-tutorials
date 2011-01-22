@@ -22,9 +22,8 @@
 #ifndef BILLBOARD_H_
 #define BILLBOARD_H_
 
-#include <vector>
+#include "StdIncludes.h"
 
-#include "stdint.h"
 #include "Color.h"
 #include "Vector2.h"
 #include "Vector3.h"

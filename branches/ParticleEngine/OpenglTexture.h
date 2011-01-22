@@ -22,7 +22,8 @@
 #ifndef OPENGL_TEXTURE_H_
 #define OPENGL_TEXTURE_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "Texture.h"
 #include "TextureEnums.h"
 

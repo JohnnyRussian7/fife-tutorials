@@ -19,11 +19,8 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
+#include "PrecompiledIncludes.h"
 
-// TODO - this is temporary
-#include <iostream>
-
-#include "glee/GLee.h"
 #include "OpenglRenderer.h"
 #include "BufferEnums.h"
 #include "OpenglUtility.h"
@@ -35,7 +32,6 @@
 #include "Color.h"
 #include "IMaterial.h"
 #include "TextureFwd.h"
-
 
 // useful macro to help with offsets in buffer objects
 #define BUFFER_OFFSET(i) ((char*)NULL + (i))
@@ -111,7 +107,7 @@ void OpenglRenderer::SetViewPort(const Viewport& viewport)
 
 	// TODO - this should be done elsewhere
 	// setup the frustum
-	int aspectRatio = viewport.GetWidth() / viewport.GetHeight();
+	int32_t aspectRatio = viewport.GetWidth() / viewport.GetHeight();
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glFrustum(-0.5, 0.5, -aspectRatio*0.5, aspectRatio*0.5, 1, 5000);

@@ -22,7 +22,8 @@
 #ifndef OPENGLINDEXBUFFER_H_
 #define OPENGLINDEXBUFFER_H_
 
-#include "stdint.h"
+#include "StdIncludes.h"
+
 #include "BufferEnums.h"
 #include "IIndexBuffer.h"
 

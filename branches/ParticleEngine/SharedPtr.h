@@ -22,10 +22,7 @@
 #ifndef SHAREDPTR_H_
 #define SHAREDPTR_H_
 
-#include <cassert>
-#include <functional>
-
-#include "stdint.h"
+#include "StdIncludes.h"
 
 template <typename T>
 class SharedPtr

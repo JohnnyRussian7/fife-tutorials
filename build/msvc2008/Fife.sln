@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParticleEngine", "ParticleEngine.vcproj", "{49548258-ED5F-47C3-BACF-269DBB05E0AC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine.vcproj", "{49548258-ED5F-47C3-BACF-269DBB05E0AC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test.vcproj", "{D81C0F97-8AB8-440F-98DC-B6BF8E3528A0}"
 	ProjectSection(ProjectDependencies) = postProject

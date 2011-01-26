@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="ParticleEngine"
+	Name="Engine"
 	ProjectGUID="{49548258-ED5F-47C3-BACF-269DBB05E0AC}"
 	RootNamespace="ParticleEngine"
 	Keyword="Win32Proj"

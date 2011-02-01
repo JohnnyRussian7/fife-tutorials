@@ -24,7 +24,7 @@
 #include "PngLoader.h"
 #include "scene/Image.h"
 
-#include "extern/libpng/png.h"
+#include "../extern/libpng/png.h"
 
 const int PNG_SIG_SIZE = 8;
 

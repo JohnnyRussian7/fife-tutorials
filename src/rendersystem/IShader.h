@@ -1,7 +1,7 @@
 /**********************************************************************
-*	Filename: OpenglUtility.h
+*	Filename: IShader.h
 *	
-*	Copyright (C) 2010, FIFE team
+*	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
 *
 *	This file is part of FIFE.
@@ -19,24 +19,26 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef OPENGLUTILITY_H_
-#define OPENGLUTILITY_H_
+#ifndef ISHADER_H_
+#define ISHADER_H_
 
-#include "StdIncludes.h"
+#include "../StdIncludes.h"
 
-#include "../TextureEnums.h"
-#include "../VertexIndexBufferEnums.h"
-#include "../../rendersystem/RenderEnums.h"
-#include "../../rendersystem/ShaderEnums.h"
+#include "ShaderEnums.h"
 
-namespace opengl { namespace utility {
-    
-    GLenum ConvertPrimitiveType(PrimitiveType::Enum type);
-    GLenum ConvertTextureType(TextureType::Enum type);
-    GLenum ConvertBufferUsage(HwBufferUsage::Enum usage);
-    GLenum ConvertVertexBufferParamSizeType(VertexParamSizeType::Enum type);
-    GLenum ConvertIndexBufferType(IndexBufferDataType::Enum type);
-    GLenum ConvertShaderType(ShaderType::Enum type);
-}}
+class IShader
+{
+public:
+    virtual ~IShader() { }
+
+    virtual ShaderType::Enum GetType() const = 0;
+    virtual const std::string& GetName() const = 0;
+    virtual const uint32_t GetId() const = 0;
+
+    virtual bool Compile() = 0;
+    virtual bool IsCompiled() const = 0;
+
+    virtual bool IsAttached() const = 0;
+};
 
 #endif

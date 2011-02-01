@@ -22,6 +22,8 @@
 #include "PrecompiledIncludes.h"
 
 #include "OpenglRenderer.h"
+#include "OpenglShaderManager.h"
+#include "../IShaderProgram.h"
 #include "../../Color.h"
 #include "../../scene/Renderable.h"
 #include "../../scene/IMaterial.h"

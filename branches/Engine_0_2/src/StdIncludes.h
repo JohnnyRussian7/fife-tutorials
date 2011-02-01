@@ -36,6 +36,7 @@
 #include <memory>
 
 //containers
+#include <iterator>
 #include <string>
 #include <vector>
 #include <deque>
@@ -60,7 +61,7 @@
 
 // takes care of including opengl properly
 // on windows, linux, and os x
-#include "extern/glee/GLee.h"
+#include "../extern/glee/GLee.h"
 
 // typedefs for commonly used built in types
 #include "StdInt.h"

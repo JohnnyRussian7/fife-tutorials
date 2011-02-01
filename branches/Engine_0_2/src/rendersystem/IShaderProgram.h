@@ -1,7 +1,7 @@
 /**********************************************************************
-*	Filename: OpenglUtility.h
+*	Filename: IShaderProgram.h
 *	
-*	Copyright (C) 2010, FIFE team
+*	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
 *
 *	This file is part of FIFE.
@@ -19,24 +19,24 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef OPENGLUTILITY_H_
-#define OPENGLUTILITY_H_
+#ifndef ISHADERPROGRAM_H_
+#define ISHADERPROGRAM_H_
 
-#include "StdIncludes.h"
+class IShader;
 
-#include "../TextureEnums.h"
-#include "../VertexIndexBufferEnums.h"
-#include "../../rendersystem/RenderEnums.h"
-#include "../../rendersystem/ShaderEnums.h"
+class IShaderProgram
+{
+public:
+    virtual ~IShaderProgram() { };
 
-namespace opengl { namespace utility {
-    
-    GLenum ConvertPrimitiveType(PrimitiveType::Enum type);
-    GLenum ConvertTextureType(TextureType::Enum type);
-    GLenum ConvertBufferUsage(HwBufferUsage::Enum usage);
-    GLenum ConvertVertexBufferParamSizeType(VertexParamSizeType::Enum type);
-    GLenum ConvertIndexBufferType(IndexBufferDataType::Enum type);
-    GLenum ConvertShaderType(ShaderType::Enum type);
-}}
+    virtual IShader* GetVertexShader() const = 0;
+    virtual void SetVertexShader(IShader* shader) = 0;
+
+    virtual IShader* GetFragmentShader() const = 0;
+    virtual void SetFragmentShader(IShader* shader) = 0;
+
+    virtual void Enable() = 0;
+    virtual void Disable() = 0;
+};
 
 #endif

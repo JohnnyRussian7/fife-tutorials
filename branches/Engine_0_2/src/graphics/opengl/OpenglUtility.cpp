@@ -114,4 +114,20 @@ namespace opengl { namespace utility {
             return GL_UNSIGNED_SHORT;
         }
     }
+
+    GLenum ConvertShaderType( ShaderType::Enum type )
+    {
+        switch (type)
+        {
+        case ShaderType::Vertex:
+            return GL_VERTEX_SHADER;
+        case ShaderType::Fragment:
+            return GL_FRAGMENT_SHADER;
+        default:
+            // TODO - throw error here
+            assert(0);
+            return GL_VERTEX_SHADER;
+        }
+    }
+
 }}

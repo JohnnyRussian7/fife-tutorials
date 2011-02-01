@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;../../src&quot;; &quot;../../src/extern/zlib&quot;"
+				AdditionalIncludeDirectories="&quot;../../src&quot;; &quot;../../extern/zlib&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;PE_EXPORT;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -106,7 +106,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;../../src&quot;; &quot;../../src/extern/zlib&quot;"
+				AdditionalIncludeDirectories="&quot;../../src&quot;; &quot;../../extern/zlib&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;PE_EXPORT"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -154,7 +154,7 @@
 				Name="libpng"
 				>
 				<File
-					RelativePath="..\..\src\extern\libpng\png.c"
+					RelativePath="..\..\extern\libpng\png.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -174,35 +174,15 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\png.h"
+					RelativePath="..\..\extern\libpng\png.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngconf.h"
+					RelativePath="..\..\extern\libpng\pngconf.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngerror.c"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\libpng\pngget.c"
+					RelativePath="..\..\extern\libpng\pngerror.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -222,7 +202,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngmem.c"
+					RelativePath="..\..\extern\libpng\pngget.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -242,7 +222,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngpread.c"
+					RelativePath="..\..\extern\libpng\pngmem.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -262,11 +242,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngpriv.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\libpng\pngread.c"
+					RelativePath="..\..\extern\libpng\pngpread.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -286,7 +262,11 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngrio.c"
+					RelativePath="..\..\extern\libpng\pngpriv.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\extern\libpng\pngread.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -306,7 +286,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngrtran.c"
+					RelativePath="..\..\extern\libpng\pngrio.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -326,7 +306,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngrutil.c"
+					RelativePath="..\..\extern\libpng\pngrtran.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -346,7 +326,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngset.c"
+					RelativePath="..\..\extern\libpng\pngrutil.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -366,7 +346,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngtrans.c"
+					RelativePath="..\..\extern\libpng\pngset.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -386,7 +366,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngwio.c"
+					RelativePath="..\..\extern\libpng\pngtrans.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -406,7 +386,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngwrite.c"
+					RelativePath="..\..\extern\libpng\pngwio.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -426,7 +406,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngwtran.c"
+					RelativePath="..\..\extern\libpng\pngwrite.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -446,7 +426,27 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\libpng\pngwutil.c"
+					RelativePath="..\..\extern\libpng\pngwtran.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\extern\libpng\pngwutil.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -470,7 +470,7 @@
 				Name="zlib"
 				>
 				<File
-					RelativePath="..\..\src\extern\zlib\adler32.c"
+					RelativePath="..\..\extern\zlib\adler32.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -490,7 +490,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\compress.c"
+					RelativePath="..\..\extern\zlib\compress.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -510,7 +510,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\crc32.c"
+					RelativePath="..\..\extern\zlib\crc32.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -530,35 +530,11 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\crc32.h"
+					RelativePath="..\..\extern\zlib\crc32.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\deflate.c"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\zlib\deflate.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\zlib\gzclose.c"
+					RelativePath="..\..\extern\zlib\deflate.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -578,31 +554,11 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\gzguts.h"
+					RelativePath="..\..\extern\zlib\deflate.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\gzlib.c"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\zlib\gzread.c"
+					RelativePath="..\..\extern\zlib\gzclose.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -622,7 +578,11 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\gzwrite.c"
+					RelativePath="..\..\extern\zlib\gzguts.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\extern\zlib\gzlib.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -642,7 +602,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\infback.c"
+					RelativePath="..\..\extern\zlib\gzread.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -662,7 +622,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\inffast.c"
+					RelativePath="..\..\extern\zlib\gzwrite.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -682,15 +642,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\inffast.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\zlib\inffixed.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\zlib\inflate.c"
+					RelativePath="..\..\extern\zlib\infback.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -710,11 +662,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\inflate.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\zlib\inftrees.c"
+					RelativePath="..\..\extern\zlib\inffast.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -734,35 +682,15 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\inftrees.h"
+					RelativePath="..\..\extern\zlib\inffast.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\trees.c"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\zlib\trees.h"
+					RelativePath="..\..\extern\zlib\inffixed.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\uncompr.c"
+					RelativePath="..\..\extern\zlib\inflate.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -782,15 +710,11 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\zconf.h"
+					RelativePath="..\..\extern\zlib\inflate.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\zlib.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\zlib\zutil.c"
+					RelativePath="..\..\extern\zlib\inftrees.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -810,7 +734,83 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\zlib\zutil.h"
+					RelativePath="..\..\extern\zlib\inftrees.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\extern\zlib\trees.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\extern\zlib\trees.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\extern\zlib\uncompr.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\extern\zlib\zconf.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\extern\zlib\zlib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\extern\zlib\zutil.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\extern\zlib\zutil.h"
 					>
 				</File>
 			</Filter>
@@ -818,7 +818,7 @@
 				Name="tinyxml"
 				>
 				<File
-					RelativePath="..\..\src\extern\tinyxml\tinystr.cpp"
+					RelativePath="..\..\extern\tinyxml\tinystr.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -838,35 +838,11 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\tinyxml\tinystr.h"
+					RelativePath="..\..\extern\tinyxml\tinystr.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\tinyxml\tinyxml.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\tinyxml\tinyxml.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\src\extern\tinyxml\tinyxmlerror.cpp"
+					RelativePath="..\..\extern\tinyxml\tinyxml.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -886,7 +862,31 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\tinyxml\tinyxmlparser.cpp"
+					RelativePath="..\..\extern\tinyxml\tinyxml.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\extern\tinyxml\tinyxmlerror.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="0"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\extern\tinyxml\tinyxmlparser.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -910,7 +910,7 @@
 				Name="glee"
 				>
 				<File
-					RelativePath="..\..\src\extern\glee\GLee.c"
+					RelativePath="..\..\extern\glee\GLee.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -930,7 +930,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\src\extern\glee\GLee.h"
+					RelativePath="..\..\extern\glee\GLee.h"
 					>
 				</File>
 			</Filter>
@@ -1275,11 +1275,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\rendersystem\IShader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\IShaderManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\IShaderProgram.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\rendersystem\RenderEnums.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\rendersystem\RenderSystemTypes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\ShaderEnums.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\ShaderEnums.h"
 				>
 			</File>
 			<Filter
@@ -1291,6 +1311,30 @@
 				</File>
 				<File
 					RelativePath="..\..\src\rendersystem\opengl\OpenglRenderer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\rendersystem\opengl\OpenglShader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\rendersystem\opengl\OpenglShader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\rendersystem\opengl\OpenglShaderManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\rendersystem\opengl\OpenglShaderManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\rendersystem\opengl\OpenglShaderProgram.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\rendersystem\opengl\OpenglShaderProgram.h"
 					>
 				</File>
 			</Filter>

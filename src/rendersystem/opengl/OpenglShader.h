@@ -31,6 +31,7 @@ class OpenglShader : public IShader
 {
 public:
     OpenglShader(ShaderType::Enum type, const std::string& name, const std::string& source);
+    OpenglShader(ShaderType::Enum type, const std::string& name, char* source);
     ~OpenglShader();
 
     virtual ShaderType::Enum GetType() const;
@@ -41,6 +42,9 @@ public:
     virtual bool IsCompiled() const;
 
     virtual bool IsAttached() const;
+
+private:
+    void Init(const char* source);
 
 private:
     OpenglShaderProgram* m_parent;

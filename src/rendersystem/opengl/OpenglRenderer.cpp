@@ -22,6 +22,7 @@
 #include "PrecompiledIncludes.h"
 
 #include "OpenglRenderer.h"
+#include "OpenglCapabilities.h"
 #include "OpenglShaderManager.h"
 #include "../IShaderProgram.h"
 #include "../../Color.h"
@@ -40,10 +41,13 @@
 // useful macro to help with offsets in buffer objects
 #define BUFFER_OFFSET(i) ((char*)NULL + (i))
 
+// lets create the shaders we are going to use
+IShaderProgram* shaderProgram;
+
 void DrawBox()
 {
     glBegin(GL_TRIANGLE_STRIP);
-    //glColor3f(255, 0, 0);
+    glColor3f(255, 0, 0);
     glTexCoord2f(0.0, 0.0);			// left bottom
     glVertex3f(-2.0, -2.0, -2.0);
 
@@ -86,10 +90,21 @@ OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
 : m_settings(settings), m_viewport(Viewport()),
   m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
   m_projectionMatrix(Matrix4::Identity()), m_modelMatrixUpdate(false), m_viewMatrixUpdate(false),
-  m_projectionMatrixUpdate(false), m_activeTexture(0), m_vboSupport(false), m_nonPowerOfTwoTextureSupport(false)
+  m_projectionMatrixUpdate(false), m_activeTexture(0), m_shaderManager(new OpenglShaderManager()),
+  m_useVbo(false)
 {
-    m_vboSupport = (GLEE_ARB_vertex_buffer_object == GL_TRUE);
-    m_nonPowerOfTwoTextureSupport = (GLEE_ARB_texture_non_power_of_two == GL_TRUE);
+    m_useVbo = OpenglCapabilities::Instance()->HasVboSupport() && m_settings.useVbo;
+
+    if (OpenglCapabilities::Instance()->HasShaderSupport())
+    {
+        // TODO - this is temporary, just for testing
+        shaderProgram = m_shaderManager->CreateShaderProgram("..\\..\\shaders\\opengl\\simple.vs",
+                                                         "..\\..\\shaders\\opengl\\colorinvert.fs");
+    }
+    else
+    {
+        std::cout << "Shaders not supported in opengl version: " << OpenglVersion::ToString(OpenglCapabilities::Instance()->GetOpenglVersion()) << std::endl;
+    }
 }
 
 OpenglRenderer::~OpenglRenderer()
@@ -158,7 +173,7 @@ void OpenglRenderer::SetTransform(TransformType::Enum type, const Matrix4& mat)
 }
 IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
 {
-    if (m_vboSupport && m_settings.useVbo)
+    if (m_useVbo)
     {
         return new OpenglVertexBuffer(numVertices, vertexSize, usage);
     }
@@ -168,7 +183,7 @@ IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t
 
 IIndexBuffer* OpenglRenderer::CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage)
 {
-    if (m_vboSupport && m_settings.useVbo)
+    if (m_useVbo)
     {
         return new OpenglIndexBuffer(numIndices, indexType, usage);
     }
@@ -188,6 +203,10 @@ void OpenglRenderer::ClearBuffers(bool colorBuffer, bool depthBuffer)
     {
         buffers |= GL_DEPTH_BUFFER_BIT;
     }
+
+    // TODO - this is temporary
+    Color color = Color::Blue();
+    glClearColor(color.r, color.g, color.b, color.a);
 
     glClear(buffers);
 }
@@ -229,7 +248,7 @@ void OpenglRenderer::Render(Renderable* renderable)
 
     if (vertexBuffer)
     {
-        if (m_vboSupport && m_settings.useVbo)
+        if (m_useVbo)
         {
             glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
 
@@ -277,7 +296,7 @@ void OpenglRenderer::Render(Renderable* renderable)
             // TODO - this should be programmable
             uint32_t indexStart = 0;
             void *indexData = 0;
-            if (m_vboSupport && m_settings.useVbo)
+            if (m_useVbo)
             {
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->GetBufferId());
                 indexData = BUFFER_OFFSET(indexStart * indexBuffer->GetStride());
@@ -300,14 +319,26 @@ void OpenglRenderer::Render(Renderable* renderable)
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-        if (m_vboSupport && m_settings.useVbo)
+        if (m_useVbo)
         {
             // unbind the buffers
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
-    }
+   }
 
     //DrawAxes();
-    //DrawBox();
+
+//     if (shaderProgram)
+//     {
+//         // use shader program
+//         shaderProgram->Enable();
+//     }
+// 
+//     DrawBox();
+// 
+//     if (shaderProgram)
+//     {
+//         shaderProgram->Disable();
+//     }
 }

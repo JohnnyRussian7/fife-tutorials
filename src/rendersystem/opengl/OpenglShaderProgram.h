@@ -45,6 +45,11 @@ public:
     bool IsLinked() const;
 
     void operator()();
+
+private:
+    void Init();
+    void Destroy();
+
 private:
     uint32_t m_id;
     IShader* m_vertexShader;

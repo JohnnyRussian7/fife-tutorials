@@ -22,17 +22,25 @@
 #include "PrecompiledIncludes.h"
 
 #include "OpenglShader.h"
+#include "OpenglCapabilities.h"
 #include "../../graphics/opengl/OpenglUtility.h"
 
 OpenglShader::OpenglShader(ShaderType::Enum type, const std::string& name, const std::string& source)
 : m_parent(0), m_type(type), m_name(name), m_id(0), m_compiled(false)
 {
-    m_id = glCreateShader(opengl::utility::ConvertShaderType(type));
+    const char* data = source.c_str();
+    Init(data);
+}
 
-    if (m_id)
+OpenglShader::OpenglShader(ShaderType::Enum type, const std::string& name, char* source)
+: m_parent(0), m_type(type), m_name(name), m_id(0), m_compiled(false)
+{
+    if (source)
     {
-        const char* data = source.c_str();
-        glShaderSource(m_id, 1, &data, 0);
+        Init(source);
+        
+        // safe to delete memory here
+        free(source);
     }
 }
 
@@ -40,7 +48,31 @@ OpenglShader::~OpenglShader()
 {
     if (m_id)
     {
-        glDeleteShader(m_id);
+        if (OpenglCapabilities::Instance()->GetOpenglVersion() >= OpenglVersion::_2_0)
+        {
+            glDeleteShader(m_id);
+        }
+        else
+        {
+            glDeleteObjectARB(m_id);
+        }
+    }
+}
+
+void OpenglShader::Init(const char* source)
+{
+    m_id = glCreateShader(opengl::utility::ConvertShaderType(m_type));
+
+    if (m_id)
+    {
+        if (OpenglCapabilities::Instance()->GetOpenglVersion() >= OpenglVersion::_2_0)
+        {
+            glShaderSource(m_id, 1, &source, 0);
+        }
+        else
+        {
+            glShaderSourceARB(m_id, 1, &source, 0);
+        }
     }
 }
 
@@ -61,18 +93,61 @@ const uint32_t OpenglShader::GetId() const
 
 bool OpenglShader::Compile()
 {
-    glCompileShader(m_id);
+    GLint compiled = GL_FALSE;
 
-    GLint compiled;
-    glGetShaderiv(m_id, GL_COMPILE_STATUS, &compiled);
-
-    if (compiled == GL_TRUE)
+    if (OpenglCapabilities::Instance()->GetOpenglVersion() >= OpenglVersion::_2_0)
     {
-        m_compiled = true;
+        glCompileShader(m_id);
+
+        glGetShaderiv(m_id, GL_COMPILE_STATUS, &compiled);
+
+        if (compiled == GL_TRUE)
+        {
+            m_compiled = true;
+        }
+        else
+        {
+            GLint infoLogLength = 0;
+            glGetShaderiv(m_id, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+            if (infoLogLength > 0)
+            {
+                GLchar *strInfoLog = (GLchar*)malloc(infoLogLength);
+                glGetShaderInfoLog(m_id, infoLogLength, &infoLogLength, strInfoLog);
+
+                printf("Compile failure: %s\n", strInfoLog);
+                free(strInfoLog); 
+            }
+
+            m_compiled = false;
+        }
     }
     else
     {
-        m_compiled = false;
+        glCompileShaderARB(m_id);
+
+        glGetObjectParameterivARB(m_id, GL_OBJECT_COMPILE_STATUS_ARB, &compiled);
+
+        if (compiled == GL_TRUE)
+        {
+            m_compiled = true;
+        }
+        else
+        {
+            GLint infoLogLength = 0;
+            glGetObjectParameterivARB(m_id, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infoLogLength);
+
+            if (infoLogLength > 0)
+            {
+                GLchar *strInfoLog = (GLchar*)malloc(infoLogLength);
+                glGetInfoLogARB(m_id, infoLogLength, &infoLogLength, strInfoLog);
+
+                printf("Compile failure: %s\n", strInfoLog);
+                free(strInfoLog); 
+            }
+
+            m_compiled = false;
+        }
     }
 
     return m_compiled;

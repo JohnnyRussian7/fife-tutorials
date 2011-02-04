@@ -1306,6 +1306,14 @@
 				Name="opengl"
 				>
 				<File
+					RelativePath="..\..\src\rendersystem\opengl\OpenglCapabilities.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\rendersystem\opengl\OpenglCapabilities.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\src\rendersystem\opengl\OpenglRenderer.cpp"
 					>
 				</File>

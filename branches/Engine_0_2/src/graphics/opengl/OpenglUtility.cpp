@@ -22,6 +22,7 @@
 #include "PrecompiledIncludes.h"
 
 #include "OpenglUtility.h"
+#include "../../rendersystem/opengl/OpenglCapabilities.h"
 
 namespace opengl { namespace utility {
 
@@ -117,16 +118,39 @@ namespace opengl { namespace utility {
 
     GLenum ConvertShaderType( ShaderType::Enum type )
     {
+        OpenglVersion::Enum version = OpenglCapabilities::Instance()->GetOpenglVersion();
         switch (type)
         {
         case ShaderType::Vertex:
-            return GL_VERTEX_SHADER;
+            if (version >= OpenglVersion::_2_0)
+            {
+                return GL_VERTEX_SHADER;
+            }
+            else
+            {
+                return GL_VERTEX_SHADER_ARB;
+            }
         case ShaderType::Fragment:
-            return GL_FRAGMENT_SHADER;
+            if (version >= OpenglVersion::_2_0)
+            {
+                return GL_FRAGMENT_SHADER;
+            }
+            else
+            {
+                return GL_FRAGMENT_SHADER_ARB;
+            }
         default:
             // TODO - throw error here
             assert(0);
-            return GL_VERTEX_SHADER;
+
+            if (version >= OpenglVersion::_2_0)
+            {
+                return GL_VERTEX_SHADER;
+            }
+            else
+            {
+                return GL_VERTEX_SHADER_ARB;
+            }
         }
     }
 

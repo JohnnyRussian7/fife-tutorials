@@ -41,6 +41,53 @@ namespace
 
         return name;
     }
+
+    std::string ReadShaderFileIntoString(const std::string& fileName)
+    {
+        std::ifstream shaderFile(fileName.c_str());
+       
+        if (shaderFile)
+        {
+            // make sure to not skip whitespace
+            shaderFile >> std::noskipws;
+
+            // read entire file into string
+            std::string shaderCode((std::istreambuf_iterator<std::string::value_type>(shaderFile)),
+                (std::istreambuf_iterator<std::string::value_type>()));
+
+            shaderFile.close();
+
+            return shaderCode;
+        }
+
+        return 0;
+    }
+
+    const char* ReadShaderFileIntoCArray(const std::string& fileName)
+    {
+        char *content = 0;
+
+        FILE* fp = fopen(fileName.c_str(),"rt");
+
+        if (fp != NULL) 
+        {
+            int count = 0;
+            fseek(fp, 0, SEEK_END);
+            count = ftell(fp);
+            rewind(fp);
+
+            if (count > 0) 
+            {
+                content = (char *)malloc(sizeof(char) * (count+1));
+                count = fread(content,sizeof(char),count,fp);
+                content[count] = '\0';
+            }
+
+            fclose(fp);
+        }
+
+        return content;
+    }
 }
 
 OpenglShaderManager::OpenglShaderManager()
@@ -64,6 +111,9 @@ IShader* OpenglShaderManager::CreateShader(ShaderType::Enum type, const std::str
 
     if (shaderFile)
     {
+        // close here, we read elsewhere
+        shaderFile.close();
+
         // create name from the shader filename
         std::string::size_type pos = fileName.find_last_of('\\');
         if (pos == std::string::npos)
@@ -98,19 +148,10 @@ IShader* OpenglShaderManager::CreateShader(ShaderType::Enum type, const std::str
         {
             // TODO - report shader already exists
             return 0;
-        }
+        }      
 
-        // make sure to not skip whitespace
-        shaderFile >> std::noskipws;
+        OpenglShader *shader = new OpenglShader(type, shaderName, ReadShaderFileIntoString(fileName));
 
-        // read file contents into 
-        std::string shaderCode((std::istreambuf_iterator<std::string::value_type>(shaderFile)),
-                                (std::istreambuf_iterator<std::string::value_type>()));
-//         std::copy(std::istream_iterator<std::string::value_type>(shaderFile), 
-//                     std::istream_iterator<std::string::value_type>(), 
-//                     std::back_inserter(shaderCode));
-
-        OpenglShader *shader = new OpenglShader(type, shaderName, shaderCode);
         if (shader)
         {
             if (compile)

@@ -32,6 +32,7 @@
 
 class IVertexBuffer;
 class IIndexBuffer;
+class OpenglShaderManager;
 
 class OpenglRenderer : public IRenderSystem
 {
@@ -68,8 +69,9 @@ private:
 
 	OpenglTexture* m_activeTexture;
 
-    bool m_vboSupport;
-    bool m_nonPowerOfTwoTextureSupport;
+    OpenglShaderManager* m_shaderManager;
+
+    bool m_useVbo;
 };
 
 #endif

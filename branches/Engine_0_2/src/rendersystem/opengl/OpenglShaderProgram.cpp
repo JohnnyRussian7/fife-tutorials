@@ -29,7 +29,7 @@
 OpenglShaderProgram::OpenglShaderProgram(IShader* vertexShader, IShader* fragmentShader)
 : m_id(0), m_vertexShader(vertexShader), m_fragmentShader(fragmentShader), m_linked(false)
 {
-    //assert(m_vertexShader && m_fragmentShader);
+    assert(m_vertexShader && m_fragmentShader);
 
     Init();
 }
@@ -55,7 +55,7 @@ void OpenglShaderProgram::Init()
             glLinkProgram(m_id);
 
             GLint linked;
-            glGetShaderiv(m_id, GL_LINK_STATUS, &linked);
+            glGetProgramiv(m_id, GL_LINK_STATUS, &linked);
 
             if (linked == GL_TRUE)
             {
@@ -69,7 +69,7 @@ void OpenglShaderProgram::Init()
                 if (infoLogLength > 0)
                 {
                     GLchar *strInfoLog = (GLchar*)malloc(infoLogLength);
-                    glGetProgramInfoLog(m_id, infoLogLength, &infoLogLength, strInfoLog);
+                    glGetProgramInfoLog(m_id, infoLogLength, NULL, strInfoLog);
 
                     printf("Linker failure: %s\n", strInfoLog);
                     free(strInfoLog);
@@ -116,7 +116,7 @@ void OpenglShaderProgram::Init()
                 if (infoLogLength > 0)
                 {
                     GLchar *strInfoLog = (GLchar*)malloc(infoLogLength);
-                    glGetInfoLogARB(m_id, infoLogLength, &infoLogLength, strInfoLog);
+                    glGetInfoLogARB(m_id, infoLogLength, NULL, strInfoLog);
 
                     printf("Linker failure: %s\n", strInfoLog);
                     free(strInfoLog);
@@ -166,7 +166,7 @@ void OpenglShaderProgram::SetFragmentShader(IShader* shader)
 
 void OpenglShaderProgram::Enable()
 {
-    if (1/*IsLinked()*/)
+    if (IsLinked())
     {
         if (OpenglCapabilities::Instance()->GetOpenglVersion() >= OpenglVersion::_2_0)
         {

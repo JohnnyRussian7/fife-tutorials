@@ -113,10 +113,10 @@ bool OpenglShader::Compile()
             if (infoLogLength > 0)
             {
                 GLchar *strInfoLog = (GLchar*)malloc(infoLogLength);
-                glGetShaderInfoLog(m_id, infoLogLength, &infoLogLength, strInfoLog);
+                glGetShaderInfoLog(m_id, infoLogLength, NULL, strInfoLog);
 
                 printf("Compile failure: %s\n", strInfoLog);
-                free(strInfoLog); 
+                free(strInfoLog);
             }
 
             m_compiled = false;
@@ -134,16 +134,16 @@ bool OpenglShader::Compile()
         }
         else
         {
-            GLint infoLogLength = 0;
+            GLint infoLogLength;
             glGetObjectParameterivARB(m_id, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infoLogLength);
 
             if (infoLogLength > 0)
             {
                 GLchar *strInfoLog = (GLchar*)malloc(infoLogLength);
-                glGetInfoLogARB(m_id, infoLogLength, &infoLogLength, strInfoLog);
+                glGetInfoLogARB(m_id, infoLogLength, NULL, strInfoLog);
 
                 printf("Compile failure: %s\n", strInfoLog);
-                free(strInfoLog); 
+                free(strInfoLog);
             }
 
             m_compiled = false;

@@ -19,10 +19,10 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef IWINDOWSYSTEM_H_
-#define IWINDOWSYSTEM_H_
+#ifndef IWINDOW_SYSTEM_H_
+#define IWINDOW_SYSTEM_H_
 
-#include "../StdIncludes.h"
+#include "StdIncludes.h"
 
 #include "WindowSystemTypes.h"
 
@@ -60,11 +60,11 @@ class IWindowSystem
 {
 public:
 
-	virtual ~IWindowSystem() = 0 { };
+	virtual ~IWindowSystem() { };
 
 	virtual void Init() = 0;
 	virtual WindowSystemType::Enum GetWindowSystemType() const = 0;
-	virtual void SetWindowTitle(const wchar_t* text) = 0;
+	virtual void SetWindowTitle(const char* text) = 0;
 	virtual void Destroy() = 0;
 	virtual void Minimize() = 0;
 	virtual void Maximize() = 0;

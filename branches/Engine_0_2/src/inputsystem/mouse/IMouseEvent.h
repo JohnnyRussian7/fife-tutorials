@@ -42,7 +42,7 @@ struct MouseEventType
 class IMouseEvent
 {
 public:
-    virtual ~IMouseEvent() = 0 { };
+    virtual ~IMouseEvent() { };
 
     virtual MouseEventType::Enum GetEventType() const = 0;
     virtual int32_t GetXPos() const = 0;

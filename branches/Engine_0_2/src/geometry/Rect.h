@@ -24,24 +24,26 @@
 
 #include "../StdIncludes.h"
 
+namespace fife {
 template <typename T>
-struct Rect
-{
-    Rect() : m_left(T()), m_top(T()), m_right(T()), m_bottom(T()) { }
-    Rect(T left, T top, T right, T bottom)
-    : m_left(left), m_top(top), m_right(right), m_bottom(bottom)
+    struct Rect
     {
+        Rect() : m_left(T()), m_top(T()), m_right(T()), m_bottom(T()) { }
+        Rect(T left, T top, T right, T bottom)
+        : m_left(left), m_top(top), m_right(right), m_bottom(bottom)
+        {
+            
+        }
+        
+        T m_left;
+        T m_top;
+        T m_right;
+        T m_bottom;
+    };
+}
 
-    }
-
-    T m_left;
-    T m_top;
-    T m_right;
-    T m_bottom;
-};
-
-typedef Rect<float> FloatRect;
-typedef Rect<uint32_t> UintRect;
-typedef Rect<int32_t> IntRect;
+typedef fife::Rect<float> FloatRect;
+typedef fife::Rect<uint32_t> UintRect;
+typedef fife::Rect<int32_t> IntRect;
 
 #endif

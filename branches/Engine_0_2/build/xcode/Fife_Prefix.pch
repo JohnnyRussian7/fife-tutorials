@@ -1,0 +1,12 @@
+//
+// Prefix header for all source files of the 'ParticleEngine' target in the 'ParticleEngine' project
+//
+
+#ifdef __cplusplus
+#include "PrecompiledIncludes.h"
+#endif
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
+

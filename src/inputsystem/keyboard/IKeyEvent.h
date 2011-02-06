@@ -29,7 +29,7 @@
 class IKeyEvent
 {
 public:
-    virtual ~IKeyEvent() = 0 { };
+    virtual ~IKeyEvent() { };
 
     virtual KeyCodes::Enum GetKeyCode() const = 0;
     virtual uint32_t GetText() const = 0;

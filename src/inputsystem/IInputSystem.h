@@ -37,7 +37,7 @@ struct InputSystemSettings
 class IInputSystem
 {
 public:
-    virtual ~IInputSystem() = 0 { };
+    virtual ~IInputSystem() { };
 
     virtual void AddKeyListener(IKeyListener* listener) = 0;
     virtual void AddMouseListener(IMouseListener* listener) = 0;

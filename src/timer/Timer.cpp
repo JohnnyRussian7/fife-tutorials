@@ -28,6 +28,8 @@
 #include "win32/Win32TimerImpl.h"
 #elif defined(__linux) || defined(linux)
 #include "linux/LinuxTimerImpl.h"
+#elif defined(__APPLE__) || defined(__APPLE_CC__)
+#include "osx/OsxTimerImpl.h"
 #endif
 
 Timer::Timer()

@@ -22,7 +22,12 @@
 #include "PrecompiledIncludes.h"
 
 #include "IWindowSystem.h"
-#include "win32/Win32WindowSystem.h"
+
+#if defined(_MSC_VER)
+#include "Win32WindowSystem.h"
+#endif
+
+#include "OsxWindowSystem.h"
 
 IWindowSystem* CreateWindowSystem(const WindowSystemSettings& settings)
 {
@@ -30,10 +35,13 @@ IWindowSystem* CreateWindowSystem(const WindowSystemSettings& settings)
 
 	switch (settings.windowSystemType)
 	{
+#if defined(_MSC_VER)
 	case WindowSystemType::Win32:
 		windowSystem = new Win32WindowSystem(settings);
 		break;
+#endif
 	case WindowSystemType::MacOsx:
+        windowSystem = new OsxWindowSystem(settings);
 		break;
 	case WindowSystemType::Linux:
 		break;

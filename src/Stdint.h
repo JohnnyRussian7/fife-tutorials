@@ -24,8 +24,8 @@
 
 #include "StdIncludes.h"
 
-// defines for variable types for portability and consistency
-
+// defines for variable types for portability and consistency for MSVC
+#if defined(_MSC_VER)
 // 8-bit types
 typedef unsigned char uint8_t;
 typedef signed char int8_t;
@@ -41,6 +41,10 @@ typedef unsigned long   uint32_t;
 # elif UINT_MAX == 0xffffffff
 typedef int             int32_t;
 typedef unsigned int    uint32_t;
+#endif
+#else
+// OS X and Linux platforms define these for us
+#include <stdint.h>
 #endif
 
 #endif

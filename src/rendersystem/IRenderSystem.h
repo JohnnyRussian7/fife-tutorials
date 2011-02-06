@@ -51,7 +51,7 @@ struct RenderSystemSettings
 class IRenderSystem
 {
 public:
-	virtual ~IRenderSystem() = 0 { };
+	virtual ~IRenderSystem() { };
 
 	virtual RenderSystemType::Enum GetRenderSystemType() const = 0;
 	virtual void SetViewPort(const Viewport& viewport) = 0;

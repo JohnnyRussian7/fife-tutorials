@@ -14,7 +14,7 @@ struct FileSystemSettings
 class IFileSystem
 {
 public:
-    virtual ~IFileSystem() = 0 { };
+    virtual ~IFileSystem() { };
 };
 
 IFileSystem* CreateFileSystem(const FileSystemSettings& settings);

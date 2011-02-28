@@ -53,17 +53,21 @@ float MagnitudeSquare(const Quaternion& q)
 
 Quaternion Normalize(const Quaternion& q)
 {
-	const float Tolerance = 0.00001f;
+// 	const float Tolerance = 0.00001f;
+// 
+// 	float magSquared = MagnitudeSquare(q);
+// 
+// 	if (magSquared != 0.f && std::abs(magSquared - 1.0f) > Tolerance)
+// 	{
+// 		float mag = 1.f/std::sqrt(magSquared);
+// 		return Quaternion(q.x*mag, q.y*mag, q.z*mag, q.w*mag);
+//  	}
+// 
+// 	return q;
 
-	float magSquared = MagnitudeSquare(q);
+    float magInv = 1.f/Magnitude(q);
 
-	if (magSquared != 0.f && std::abs(magSquared - 1.0f) > Tolerance)
-	{
-		float mag = 1.f/std::sqrt(magSquared);
-		return Quaternion(q.x*mag, q.y*mag, q.z*mag, q.w*mag);
-	}
-
-	return q;
+    return Quaternion(q.x*magInv, q.y*magInv, q.z*magInv, q.w*magInv);
 }
 
 Quaternion Conjugate(const Quaternion& q)
@@ -83,6 +87,7 @@ Quaternion Inverse(const Quaternion& q)
 	else
 	{
 		// need to signal bad operation, return an invalid quaternion
+        assert(false);
 		return Quaternion::Zero();
 	}
 }
@@ -94,7 +99,7 @@ float Dot(const Quaternion& q1, const Quaternion& q2)
 
 Vector3 Rotate(const Quaternion& q, const Vector3& v)
 {
-	Matrix4 rotMat = ToMatrix(q);
+	Matrix4 rotMat = ToRotationMatrix(q);
 	return rotMat*v;
 }
 
@@ -157,7 +162,34 @@ Quaternion FromEuler(float pitch, float yaw, float roll)
 						cosr*cosp*cosy + sinr*sinp*siny));
 }
 
-Matrix4 ToMatrix(const Quaternion& q)
+Quaternion FromAxes(const Vector3& xAxis, const Vector3& yAxis, const Vector3& zAxis)
+{
+    // create rotation matrix from x,y,z axis
+    Matrix4 m;
+    m[0] = xAxis.x;
+    m[1] = xAxis.y;
+    m[2] = xAxis.z;
+    m[3] = 0.f;
+
+    m[4] = yAxis.x;
+    m[5] = yAxis.y;
+    m[6] = yAxis.z;
+    m[7] = 0.f;
+
+    m[8] = zAxis.x;
+    m[9] = zAxis.y;
+    m[10] = zAxis.z;
+    m[11] = 0.f;
+
+    m[12] = 0.f;
+    m[13] = 0.f;
+    m[14] = 0.f;
+    m[15] = 1.f;
+
+    return FromRotationMatrix(m);
+}
+
+Matrix4 ToRotationMatrix(const Quaternion& q)
 {
 	const float x2 = q.x*q.x;
 	const float y2 = q.y*q.y;
@@ -192,6 +224,57 @@ Matrix4 ToMatrix(const Quaternion& q)
 	mat.matrix[15] = 1.f;						// [3][3]
 
 	return mat;
+}
+
+Quaternion FromRotationMatrix(const Matrix4& m)
+{
+    Quaternion q;
+
+    float trace = m[0] + m[5] + m[10] + 1.f;
+
+    float tolerance = 0.00001f;
+
+    if (trace > tolerance)
+    {
+        float root = std::sqrt(trace);
+        q.w = 0.5f*root;
+        root = 0.5f/root;
+        q.x = (m[6]-m[9]) * root;
+        q.y = (m[8]-m[2]) * root;
+        q.z = (m[1]-m[4]) * root;
+    }
+    else
+    {
+        if (m[0] > m[5] && m[0] > m[10])
+        {
+            float root = std::sqrt(m[0] - m[5] - m[10] + 1.f);
+            q.x = 0.5f*root;
+            root = 0.5f/root;
+            q.y = (m[1]-m[4]) * root;
+            q.z = (m[8]-m[2]) * root;
+            q.w = (m[6]-m[9]) * root;
+        }
+        else if (m[5] > m[10])
+        {
+            float root = std::sqrt(m[5] - m[0] - m[10] + 1.f);
+            q.y = 0.5f*root;
+            root = 0.5f/root;
+            q.x = (m[1]-m[4]) * root;
+            q.z = (m[6]-m[9]) * root;
+            q.w = (m[8]-m[2]) * root;
+        }
+        else
+        {
+            float root = std::sqrt(m[10] - m[0] - m[5] + 1.f);
+            q.z = 0.5f*root;
+            root = 0.5f/root;
+            q.x = (m[8]-m[2]) * root;
+            q.y = (m[6]-m[9]) * root;
+            q.w = (m[1]-m[4]) * root;
+        }
+    }
+
+    return q;
 }
 
 Vector3 XAxis(const Quaternion& q)

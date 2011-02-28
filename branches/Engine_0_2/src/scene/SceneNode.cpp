@@ -48,7 +48,7 @@ namespace
 SceneNode::SceneNode(const char* name, SceneManager* manager)
 : m_name(""), m_sceneManager(manager), m_parent(0), m_scale(1, 1, 1), m_position(Vector3::Zero()),
 m_orientation(Quaternion::Identity()), m_relativeScale(1, 1, 1), m_relativePosition(Vector3::Zero()),
-m_relativeOrientation(Quaternion::Identity()), m_requiresUpdate(false)
+m_relativeOrientation(Quaternion::Identity()), m_requiresUpdate(false), m_updateTransform(false)
 {
 	if (name)
 	{
@@ -59,7 +59,7 @@ m_relativeOrientation(Quaternion::Identity()), m_requiresUpdate(false)
 		m_name = CreateUniqueSceneNodeName();
 	}
 
-    SetDirtyFlag();
+    MarkDirty();
 }
 
 SceneNode::~SceneNode()
@@ -90,7 +90,7 @@ void SceneNode::SetParent(SceneNode* parent)
 
 	m_parent = parent;
 
-    SetDirtyFlag();
+    MarkDirty();
 }
 
 void SceneNode::SetParent(const char* parentName)
@@ -259,7 +259,7 @@ void SceneNode::SetScale(const Vector3& scale)
 {
 	m_scale = scale;
 
-    SetDirtyFlag();
+    MarkDirty();
 }
 
 void SceneNode::SetScale(float x, float y, float z)
@@ -271,7 +271,7 @@ void SceneNode::SetPosition(const Vector3& position)
 {
 	m_position = position;
 
-    SetDirtyFlag();
+    MarkDirty();
 }
 
 void SceneNode::SetPosition(float x, float y, float z)
@@ -283,7 +283,7 @@ void SceneNode::SetOrientation(const Quaternion& orientation)
 {
 	m_orientation = Normalize(orientation);
 
-    SetDirtyFlag();
+    MarkDirty();
 }
 
 void SceneNode::SetOrientation(const Vector3& axis, float angle)
@@ -298,7 +298,7 @@ Matrix4 SceneNode::GetTransform()
     if (m_updateTransform)
     {
         m_transform = MakeTransform(m_relativeScale, m_relativePosition, m_relativeOrientation);
-        m_updateTransform = false;
+        ResetTransformDirty();
     }
 
     return m_transform;
@@ -323,7 +323,7 @@ void SceneNode::Translate(const Vector3& translation)
     //    m_position += translation;
     //}
 
-    SetDirtyFlag();
+    MarkDirty();
 }
 
 void SceneNode::Translate(float x, float y, float z)
@@ -335,10 +335,10 @@ void SceneNode::Rotate(const Quaternion& rotation)
 {
     Quaternion normRotation = Normalize(rotation);
 
-    // rotation relative to parent
-    m_orientation = normRotation * m_orientation;
+    // rotation in local space
+    m_orientation = m_orientation * normRotation;
 
-    SetDirtyFlag();
+    MarkDirty();
 }
 
 void SceneNode::Rotate(const Vector3& axis, float angle)
@@ -366,6 +366,11 @@ bool SceneNode::IsDirty()
     return m_requiresUpdate;
 }
 
+bool SceneNode::IsTransformDirty()
+{
+    return m_updateTransform;
+}
+
 void SceneNode::Update(uint32_t time)
 {
     if (IsDirty())
@@ -384,11 +389,8 @@ void SceneNode::Update(uint32_t time)
             m_relativeScale = m_scale;
         }
 
-        // reset the dirty flag, but be sure not to change dirty flag for children
-        ResetDirtyFlag(false);
-
         // mark the cached transform for this node as needing an update
-        m_updateTransform = true;
+        MarkTransformDirty();
     }
 
     EntityContainer::iterator entityIter;
@@ -403,9 +405,12 @@ void SceneNode::Update(uint32_t time)
     {
         (*nodeIter)->Update(time);
     }
+
+    // reset the dirty flag, but be sure not to change dirty flag for children
+    ResetDirty(false);
 }
 
-void SceneNode::SetDirtyFlag(bool setChildren)
+void SceneNode::MarkDirty(bool setChildren)
 {
     m_requiresUpdate = true;
 
@@ -416,13 +421,13 @@ void SceneNode::SetDirtyFlag(bool setChildren)
         std::vector<SceneNode*>::iterator iter;
         for (iter = m_childNodes.begin(); iter != m_childNodes.end(); ++iter)
         {
-            (*iter)->SetDirtyFlag(setChildren);
+            (*iter)->MarkDirty(setChildren);
         }
     }
 
 }
 
-void SceneNode::ResetDirtyFlag(bool resetChildren)
+void SceneNode::ResetDirty(bool resetChildren)
 {
     m_requiresUpdate = false;
 
@@ -432,7 +437,38 @@ void SceneNode::ResetDirtyFlag(bool resetChildren)
         std::vector<SceneNode*>::iterator iter;
         for (iter = m_childNodes.begin(); iter != m_childNodes.end(); ++iter)
         {
-            (*iter)->ResetDirtyFlag(resetChildren);
+            (*iter)->ResetDirty(resetChildren);
+        }
+    }
+}
+
+void SceneNode::MarkTransformDirty(bool setChildren)
+{
+    m_updateTransform = true;
+
+    if (setChildren)
+    {
+        // all children will need the same dirty flag set
+        // so the update cycle will process them
+        std::vector<SceneNode*>::iterator iter;
+        for (iter = m_childNodes.begin(); iter != m_childNodes.end(); ++iter)
+        {
+            (*iter)->MarkTransformDirty(setChildren);
+        }
+    }
+}
+
+void SceneNode::ResetTransformDirty(bool resetChildren)
+{
+    m_requiresUpdate = false;
+
+    if (resetChildren)
+    {
+        // notify children of the dirty flag change
+        std::vector<SceneNode*>::iterator iter;
+        for (iter = m_childNodes.begin(); iter != m_childNodes.end(); ++iter)
+        {
+            (*iter)->ResetTransformDirty(resetChildren);
         }
     }
 }

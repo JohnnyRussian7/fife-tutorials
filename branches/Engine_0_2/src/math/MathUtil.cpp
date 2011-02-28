@@ -57,9 +57,9 @@ uint32_t NextPowerOf2(uint32_t n)
 Matrix4 MakeTransform(const Vector3& scale, const Vector3& position, const Quaternion& orientation)
 {
 	// convert orientation to rotation matrix
-	Matrix4 rotMatrix = ToMatrix(orientation);
+	Matrix4 rotMatrix = ToRotationMatrix(orientation);
 
-	// no projection, this is currently being done in ToMatrix call above
+	// no projection, this is currently being done in ToRotationMatrix call above
 	//rotMatrix[3] = 0.f;
 	//rotMatrix[7] = 0.f;
 	//rotMatrix[11] = 0.f;

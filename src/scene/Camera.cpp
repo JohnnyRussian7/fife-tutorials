@@ -22,6 +22,8 @@
 #include "PrecompiledIncludes.h"
 
 #include "Camera.h"
+#include "SceneNode.h"
+#include "../Visual.h"
 #include "../math/MathUtil.h"
 
 namespace
@@ -44,7 +46,8 @@ namespace
 
 Camera::Camera(const char* name, const Vector3& position, const Quaternion& orientation)
 : m_position(position), m_orientation(orientation), m_viewMatrix(Matrix4::Identity()), 
-  m_needsUpdate(true)
+  m_needsUpdate(true), m_parent(0), m_visual(0), m_fixedYaw(false), 
+  m_fixedYawAxis(Vector3::UnitY())
 {
     if (name)
     {
@@ -103,19 +106,25 @@ Vector3 Camera::GetLookAt() const
 	return m_orientation * -Vector3::UnitZ();
 }
 
+void Camera::Translate(float x, float y, float z)
+{
+    Translate(Vector3(x, y, z));
+}
+
 void Camera::Translate(const Vector3& translation)
 {
 	// translate in world space
-	m_position += translation;
+	//m_position += translation;
 
 	// TODO - implement translate in local space, using algorithm below 
-	//m_position += m_orientation * translation;
+	m_position += m_orientation * translation;
 
     MarkDirty();
 }
 
 void Camera::LookAt(const Vector3& target)
 {
+    // always looking down negative z-axis so negate direction
 	Vector3 direction = -(target - m_position);
 
 	// nothing to do if direction is zero vector
@@ -124,17 +133,42 @@ void Camera::LookAt(const Vector3& target)
 		return;
 	}
 
-	// always looking down negative z-axis so need to 
-	// negate and normalize direction vector
-	Vector3 normDirection = Normalize(-direction);
+    // normalize the direction vector
+    Vector3 normDirection = Normalize(direction);
 
-	// get z-axis of current rotation
-	Vector3 zAxis = ZAxis(m_orientation);
+    Quaternion orientation;
 
-	// get shortest rotation arc to direction
-	Quaternion rotation = GetRotationTo(zAxis, normDirection);
+    if (m_fixedYaw)
+    {
+        // calculate right and up vectors from the fixed yaw axis
+        Vector3 fixYawAxis = Vector3::UnitY();
 
-	m_orientation = rotation * m_orientation;
+        Vector3 right = Normalize(Cross(fixYawAxis, normDirection));
+        Vector3 up = Normalize(Cross(normDirection, right));
+
+        orientation = FromAxes(right, up, normDirection);
+    }
+    else
+    {
+	    // get z-axis of current rotation
+	    Vector3 zAxis = ZAxis(m_orientation);
+
+	    // get shortest rotation arc to direction
+	    Quaternion rotation = GetRotationTo(zAxis, normDirection);
+
+	    orientation = rotation * m_orientation;
+    }
+
+    if (m_parent)
+    {
+        // calculate orientation with respect to parent
+        m_orientation = Inverse(m_parent->GetRelativeOrientation()) * orientation;
+    }
+    else
+    {
+        // no parent just set orientation directly
+        m_orientation = orientation;
+    }
 
     MarkDirty();
 }
@@ -149,8 +183,18 @@ void Camera::Pitch(float angle)
 
 void Camera::Yaw(float angle)
 {
-	Vector3 yaxis = m_orientation * Vector3::UnitY();
-	Rotate(yaxis, angle);
+    Vector3 yAxis;
+
+    if  (m_fixedYaw)
+    {
+        yAxis = m_fixedYawAxis;
+    }
+    else
+    {
+        yAxis = m_orientation * Vector3::UnitY();
+    }
+
+    Rotate(yAxis, angle);
 
     MarkDirty();
 }
@@ -161,6 +205,22 @@ void Camera::Roll(float angle)
 	Rotate(zaxis, angle);
 
     MarkDirty();
+}
+
+bool Camera::IsYawAxisFixed() const
+{
+    return m_fixedYaw;
+}
+
+const Vector3& Camera::GetFixedYawAxis() const
+{
+    return m_fixedYawAxis;
+}
+
+void Camera::SetFixedYawAxis(bool fixedYaw, const Vector3& axis)
+{
+    m_fixedYaw = fixedYaw;
+    m_fixedYawAxis = axis;
 }
 
 void Camera::Rotate(const Vector3& axis, float angle)
@@ -174,34 +234,115 @@ void Camera::Rotate(const Vector3& axis, float angle)
 void Camera::Rotate(const Quaternion& rotation)
 {
 	Quaternion normQ = Normalize(rotation);
-	m_orientation = normQ * m_orientation;
+    m_orientation = normQ * m_orientation;
 
     MarkDirty();
 }
 
 void Camera::UpdateView()
 {
-    if (!m_needsUpdate)
+    if (!IsDirty())
     {
         return;
     }
 
 	// create matrix for position
-	Matrix4 posMatrix = Matrix4::Identity();
-	posMatrix.matrix[12] = -m_position.x;
-	posMatrix.matrix[13] = -m_position.y;
-	posMatrix.matrix[14] = -m_position.z;
+// 	Matrix4 posMatrix = Matrix4::Identity();
+// 	posMatrix.matrix[12] = -m_position.x;
+// 	posMatrix.matrix[13] = -m_position.y;
+// 	posMatrix.matrix[14] = -m_position.z;
+// 
+// 	// create rotation matrix
+// 	Matrix4 conjRotMatrix = ToRotationMatrix(Conjugate(m_orientation));
+//  
+//      m_viewMatrix = posMatrix * conjRotMatrix;
 
-	// create rotation matrix
-	Matrix4 conjRotMatrix = ToMatrix(Conjugate(m_orientation));
+    Matrix4 rotMatrix = ToRotationMatrix(m_orientation);
+    Vector3 translation = -rotMatrix * m_position;
+    rotMatrix[12] = translation.x;
+    rotMatrix[13] = translation.y;
+    rotMatrix[14] = translation.z;
 
-	m_viewMatrix = posMatrix * conjRotMatrix;
+    m_viewMatrix = rotMatrix;
+
+//     Vector3 xAxis = Vector3(conjRotMatrix.matrix[0], conjRotMatrix.matrix[1], conjRotMatrix.matrix[2]);
+//     Vector3 yAxis = Vector3(conjRotMatrix.matrix[4], conjRotMatrix.matrix[5], conjRotMatrix.matrix[6]);
+//     Vector3 zAxis = Vector3(conjRotMatrix.matrix[8], conjRotMatrix.matrix[9], conjRotMatrix.matrix[10]);
+// 
+//     m_viewMatrix[12] = -Dot(xAxis, m_position);
+//     m_viewMatrix[13] = -Dot(yAxis, m_position);
+//     m_viewMatrix[14] = -Dot(zAxis, m_position);
+// 
+//     Matrix4 rotMatrix2 = ToRotationMatrix(m_orientation);
+//     Matrix4 transRotMatrix2 = Transpose(rotMatrix2);
+//     Vector3 translation2 = -transRotMatrix2 * m_position;
+// 
+//     rotMatrix2[12] = translation2.x;
+//     rotMatrix2[13] = translation2.y;
+//     rotMatrix2[14] = translation2.z;
+//     rotMatrix2[15] = 1.f;
+// 
+//     Matrix4 tempViewMatrix = Matrix4::Identity();
+//     tempViewMatrix = rotMatrix2;
 
     // update frustum
     m_frustum.Update(m_viewMatrix);
 
     // reset dirty flag
     ResetDirty();
+}
+
+void Camera::SetParent(SceneNode* node)
+{
+    m_parent = node;
+}
+
+SceneNode* Camera::GetParent() const
+{
+    return m_parent;
+}
+
+void Camera::SetVisual(Visual* visual)
+{
+    delete m_visual;
+
+    m_visual = visual;
+
+    if (m_visual)
+    {
+        m_visual->SetParent(this);
+    }
+}
+
+Visual* Camera::GetVisual() const
+{
+    return m_visual;
+}
+
+void Camera::Update(uint32_t time)
+{
+    if (m_visual)
+    {
+        m_visual->Update(time);
+    }
+
+    if (m_parent && m_parent->IsDirty())
+    {
+        m_orientation = m_parent->GetRelativeOrientation() * m_orientation;
+        m_position = (m_parent->GetRelativeOrientation() * m_position) + m_parent->GetRelativePosition();
+
+        MarkDirty();
+    }
+}
+
+Matrix4 Camera::GetTransform()
+{
+    if (m_parent)
+    {
+        return m_parent->GetTransform();
+    }
+
+    return Matrix4::Identity();
 }
 
 void Camera::MarkDirty()
@@ -212,4 +353,9 @@ void Camera::MarkDirty()
 void Camera::ResetDirty()
 {
     m_needsUpdate = false;
+}
+
+bool Camera::IsDirty()
+{  
+    return m_needsUpdate;
 }

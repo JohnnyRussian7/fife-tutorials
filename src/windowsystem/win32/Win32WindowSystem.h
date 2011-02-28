@@ -39,7 +39,7 @@ public:
 
 	virtual void Init();
 	virtual WindowSystemType::Enum GetWindowSystemType() const;
-	virtual void SetWindowTitle(const wchar_t* text);
+	virtual void SetWindowTitle(const char* text);
 	virtual void Destroy();
 	virtual void Minimize();
 	virtual void Maximize();
@@ -65,20 +65,8 @@ private:
 	void Resize();
 
 private:
-	WindowSystemSettings m_settings;
-	bool m_externalWindow;
-	bool m_fullScreen;
-	bool m_shouldResize;
-	bool m_quit;
-    bool m_mouseCaptured;
-	HWND m_hwnd;
-	HDC m_hdc;
-	HGLRC m_hglrc;
-
-	typedef std::vector<IWindowSystemEventListener*> Listeners;
-	Listeners m_listeners;
-
-    IInputSystem* m_inputSystem;
+    class Impl;
+    Impl* m_impl;
 };
 
 #endif

@@ -85,12 +85,15 @@ public:
     void Roll(float angle);
 
     bool IsDirty();
+    bool IsTransformDirty();
 
     void Update(uint32_t time);
 
 private:
-    void SetDirtyFlag(bool setChildren = true);
-    void ResetDirtyFlag(bool resetChildren = false);
+    void MarkDirty(bool setChildren = true);
+    void ResetDirty(bool resetChildren = false);
+    void MarkTransformDirty(bool setChildren = true);
+    void ResetTransformDirty(bool resetChildren = false);
 
 private:
 	std::string m_name;

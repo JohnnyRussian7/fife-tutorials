@@ -6,68 +6,36 @@
 class TestKeyListener : public IKeyListener
 {
 public:
-    TestKeyListener(Camera* cam) : m_yawAngle(0.f), m_pitchAngle(0.f), m_name("TestKeyListener"), m_cam(cam) { };
+    TestKeyListener(Camera* cam) 
+    : m_name("TestKeyListener"), m_cam(cam), m_xTrans(0.f), m_yTrans(0.f), m_zTrans(0.f)
+    { 
+    
+    };
 
     virtual const std::string& GetName() { return m_name; };
 
     virtual bool OnKeyPressed(const IKeyEvent& event) 
     { 
+        const float TranslationAmount = 1.f;
+
         if (event.GetKeyCode() == KeyCodes::Left)
         {
-            m_yawAngle += 1.0f; 
-
-            m_yawAngle = (uint32_t)m_yawAngle % 360;
-            //m_yawAngle = std::fmod(m_yawAngle, 360.f);
-
-//             if (m_yawAngle > 360.f)
-//             {
-//                 m_yawAngle = 0.f;
-//             }
-
-            m_cam->Yaw(DegToRad(m_yawAngle));
+            m_xTrans -= TranslationAmount;
         }
         else if (event.GetKeyCode() == KeyCodes::Right)
         {
-            m_yawAngle -= 1.0f;
-
-            m_yawAngle = (uint32_t)m_yawAngle % 360;
-            //m_yawAngle = std::fmod(m_yawAngle, 360.f);
-
-//             if (m_yawAngle < -360.f)
-//             {
-//                 m_yawAngle = 0.f;
-//             }
-
-            m_cam->Yaw(DegToRad(m_yawAngle));
+            m_xTrans += TranslationAmount;
         }
         else if (event.GetKeyCode() == KeyCodes::Up)
         {
-            m_pitchAngle += 1.0f;
-
-            m_pitchAngle = (uint32_t)m_pitchAngle % 360;
-            //m_pitchAngle = std::fmod(m_pitchAngle, 360.f);
-
-//             if (m_pitchAngle > 360.f)
-//             {
-//                 m_pitchAngle = 0.f;
-//             }
-
-            m_cam->Pitch(DegToRad(m_pitchAngle));
+            m_zTrans -= TranslationAmount;
         }
         else if (event.GetKeyCode() == KeyCodes::Down)
         {
-            m_pitchAngle -= 1.0f;
-
-            m_pitchAngle = (uint32_t)m_pitchAngle % 360;
-            //m_pitchAngle = std::fmod(m_pitchAngle, 360.f);
-
-//             if (m_pitchAngle < -360.f)
-//             {
-//                 m_pitchAngle = 0.f;
-//             }
-
-            m_cam->Pitch(DegToRad(m_pitchAngle));
+            m_zTrans += TranslationAmount;
         }
+
+        m_cam->Translate(m_xTrans, m_yTrans, m_zTrans);
 
         return true;
     }
@@ -76,41 +44,48 @@ public:
 
 private:
     Camera* m_cam;
-    float m_yawAngle;
-    float m_pitchAngle;
     std::string m_name;
+    float m_xTrans;
+    float m_yTrans;
+    float m_zTrans;
 };
 
 class TestMouseListener : public IMouseListener
 {
 public:
-    TestMouseListener(Camera* cam) : m_name("TestMouseListener"), m_cam(cam) { };
+    TestMouseListener(Camera* cam) 
+    : m_name("TestMouseListener"), m_cam(cam), m_lastX(0), m_lastY(0), m_initialized(false)
+    { 
+    
+    };
 
     virtual const std::string& GetName() { return m_name; };
 
     virtual bool OnMouseMoved(const IMouseEvent& event) 
-    { 
+    {
+        float yawAmount = (event.GetXPos() - m_lastX) * 0.015;
+        float pitchAmount = (event.GetYPos() - m_lastY) * 0.015;
+
+        if  (m_initialized)
+        {
+            m_cam->Yaw(yawAmount);
+            m_cam->Pitch(pitchAmount);
+
+            std::cout << "relative pos: " << "(" << (event.GetYPos() - m_lastY) << "," << (event.GetXPos() - m_lastX) << ")" << std::endl;
+        }
+
+        m_lastX = event.GetXPos();
+        m_lastY = event.GetYPos();
+
+        m_initialized = true;
+
         if (event.IsButtonPressed(MouseButtons::LeftButton))
         {
-            m_yawAngle += 0.1f; 
-
-            if (m_yawAngle > 360.f)
-            {
-                m_yawAngle = 0.f;
-            }
-
-            m_cam->Yaw(DegToRad(m_yawAngle));
+            // TODO - add something fun here
         }
         else if (event.IsButtonPressed(MouseButtons::RightButton))
         {
-            m_yawAngle -= 0.1f;
-
-            if (m_yawAngle < -360.f)
-            {
-                m_yawAngle = 0.f;
-            }
-
-            m_cam->Yaw(DegToRad(m_yawAngle));
+            // TODO - maybe something else fun here
         }
 
         return true;
@@ -131,6 +106,9 @@ private:
     Camera* m_cam;
     float m_yawAngle;
     std::string m_name;
+    int32_t m_lastX;
+    int32_t m_lastY;
+    bool m_initialized;
 };
 
 int main()
@@ -140,12 +118,11 @@ int main()
 
     SceneManager* sceneManager = engine.GetSceneManager();
     Camera* camera = sceneManager->CreateCamera();
-//     camera->Pitch(DegToRad(30));
-//     camera->Yaw(DegToRad(45));
-    camera->Translate(Vector3(0, 0, 50));
-    camera->LookAt(Vector3(0, 0, 0));
+    sceneManager->AddCamera(camera);
 
-    sceneManager->AddCamera(camera);   
+    camera->SetFixedYawAxis(true);
+    camera->Translate(Vector3(0, 0, 500));
+    camera->LookAt(Vector3(0, 0, 0));
 
     TestKeyListener* keyListener = new TestKeyListener(camera);
     TestMouseListener* mouseListener = new TestMouseListener(camera);
@@ -156,7 +133,7 @@ int main()
 
     Image* image1 = loader.Load("..\\..\\data\\torch_animation.png");
     IEntity* e1 = sceneManager->CreateEntity("e1");
-    Visual* b1 = sceneManager->CreateBillboard(4, 4);
+    Visual* b1 = sceneManager->CreateBillboard(40, 40);
     e1->SetVisual(b1);
     if (image1)
     {
@@ -168,11 +145,11 @@ int main()
     SceneNode* torchNode = sceneManager->CreateSceneNode("torch");
     torchNode->AddEntity(e1);
     sceneManager->GetRootSceneNode()->AddChild(torchNode);
-    torchNode->Translate(0, 0, -5);
+    torchNode->Translate(0, 0, 0);
 
     Image* image2 = loader.Load("..\\..\\data\\explosions_pot.png");
     IEntity* e2 = sceneManager->CreateEntity("e2");
-    Visual* b2 = sceneManager->CreateBillboard(4, 4);
+    Visual* b2 = sceneManager->CreateBillboard(40, 40);
     e2->SetVisual(b2);
     if (image2)
     {
@@ -184,11 +161,11 @@ int main()
     SceneNode* explosionNode = sceneManager->CreateSceneNode("explosions");
     explosionNode->AddEntity(e2);
     sceneManager->GetRootSceneNode()->AddChild(explosionNode);
-    explosionNode->Translate(4, 0, -5);
+    explosionNode->Translate(40, 0, 0);
 
     Image* image3 = loader.Load("..\\..\\data\\torch_animation.png");
     IEntity* e3 = sceneManager->CreateEntity("e3");
-    Visual* b3 = sceneManager->CreateBillboard(4, 4);
+    Visual* b3 = sceneManager->CreateBillboard(40, 40);
     e3->SetVisual(b3);
     if (image3)
     {
@@ -200,7 +177,7 @@ int main()
     SceneNode* torchNode2 = sceneManager->CreateSceneNode("torchNode2");
     torchNode2->AddEntity(e3);
     sceneManager->GetRootSceneNode()->AddChild(torchNode2);
-    torchNode2->Translate(-4, 0, -5);
+    torchNode2->Translate(-40, 0, 0);
 
 //     Image* image3 = loader.Load("..\\data\\finalfantasy5_pot.png"); 
 //     IEntity* e3 = sceneManager->CreateEntity("e3");
@@ -249,7 +226,7 @@ int main()
 		engine.Render();
 		engine.EndScene();
 
-		std::wstringstream oss;
+		std::stringstream oss;
 		oss << "FPS: " << engine.GetFps();
 		engine.GetWindowSystem()->SetWindowTitle(oss.str().c_str());
 	}

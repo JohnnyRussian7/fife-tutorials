@@ -67,3 +67,34 @@ Vector3 operator* (const Matrix4& mat, const Vector3& p)
 		mat.matrix[10]*p.z
 	);
 }
+
+Matrix4 Transpose(const Matrix4& mat)
+{
+    Matrix4 retMat(mat);
+
+    retMat.matrix[1] = mat.matrix[4];
+    retMat.matrix[4] = mat.matrix[1];
+
+    retMat.matrix[2] = mat.matrix[8];
+    retMat.matrix[8] = mat.matrix[2];
+
+    retMat.matrix[6] = mat.matrix[9];
+    retMat.matrix[9] = mat.matrix[6];
+
+    return retMat;
+}
+
+void TransposeRef(Matrix4& mat)
+{
+    float temp = mat.matrix[1];
+    mat.matrix[1] = mat.matrix[4];
+    mat.matrix[4] = temp;
+
+    temp = mat.matrix[2];
+    mat.matrix[2] = mat.matrix[8];
+    mat.matrix[8] = temp;
+
+    temp = mat.matrix[6];
+    mat.matrix[6] = mat.matrix[9];
+    mat.matrix[9] = temp;
+}

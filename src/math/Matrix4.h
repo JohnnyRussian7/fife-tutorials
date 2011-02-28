@@ -83,13 +83,28 @@ struct Matrix4
 		return identity;
 	}
 
+    inline Matrix4 operator-() const
+    {
+        Matrix4 retMat;
+
+        for (uint32_t i = 0; i < NumMatrixElements; ++i)
+        {
+            retMat[i] = -matrix[i];
+        }
+
+        return retMat;
+    }
+
 	float& operator[](uint32_t index) { return matrix[index]; }
 	const float& operator[](uint32_t index) const { return matrix[index]; }
 
-	float matrix[16];
+    static const uint32_t NumMatrixElements = 16;
+	float matrix[NumMatrixElements];
 };
 
 Matrix4 operator*(const Matrix4& rhs, const Matrix4& lhs);
 Vector3 operator* (const Matrix4& mat, const Vector3& p);
+Matrix4 Transpose(const Matrix4& mat);
+void TransposeRef(Matrix4& mat);
 
 #endif

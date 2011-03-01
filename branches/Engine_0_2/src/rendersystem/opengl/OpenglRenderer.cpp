@@ -69,8 +69,8 @@ void DrawAxes()
     const Vector3 unity = Vector3::UnitY();
     const Vector3 unitz = Vector3::UnitZ();
 
-//     glMatrixMode(GL_MODELVIEW);
-//     glTranslatef (-5, -5, -5);
+    //     glMatrixMode(GL_MODELVIEW);
+    //     glTranslatef (-5, -5, -5);
     glLineWidth (2.0);
 
     glBegin (GL_LINES);
@@ -88,10 +88,10 @@ void DrawAxes()
 
 OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
 : m_settings(settings), m_viewport(Viewport()),
-  m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
-  m_projectionMatrix(Matrix4::Identity()), m_modelMatrixUpdate(false), m_viewMatrixUpdate(false),
-  m_projectionMatrixUpdate(false), m_activeTexture(0), m_shaderManager(new OpenglShaderManager()),
-  m_useVbo(false)
+m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
+m_projectionMatrix(Matrix4::Identity()), m_modelMatrixUpdate(false), m_viewMatrixUpdate(false),
+m_projectionMatrixUpdate(false), m_activeTexture(0), m_shaderManager(new OpenglShaderManager()),
+m_useVbo(false)
 {
     m_useVbo = OpenglCapabilities::Instance()->HasVboSupport() && m_settings.useVbo;
 
@@ -99,7 +99,7 @@ OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
     {
         // TODO - this is temporary, just for testing
         shaderProgram = m_shaderManager->CreateShaderProgram("..\\..\\shaders\\opengl\\simple.vs",
-                                                         "..\\..\\shaders\\opengl\\colorinvert.fs");
+            "..\\..\\shaders\\opengl\\colorinvert.fs");
     }
     else
     {
@@ -114,62 +114,62 @@ OpenglRenderer::~OpenglRenderer()
 
 RenderSystemType::Enum OpenglRenderer::GetRenderSystemType() const
 {
-	return RenderSystemType::Opengl;
+    return RenderSystemType::Opengl;
 }
 
 void OpenglRenderer::SetViewPort(const Viewport& viewport)
 {
-	m_viewport = viewport;
+    m_viewport = viewport;
 
-	// create viewport
-	glViewport(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
+    // create viewport
+    glViewport(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
 
-	// TODO - this should be done elsewhere
-	// setup the frustum
-	int32_t aspectRatio = viewport.GetWidth() / viewport.GetHeight();
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glFrustum(-0.5, 0.5, -aspectRatio*0.5, aspectRatio*0.5, 1, 5000);
+    // TODO - this should be done elsewhere
+    // setup the frustum
+    int32_t aspectRatio = viewport.GetWidth() / viewport.GetHeight();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-0.5, 0.5, -aspectRatio*0.5, aspectRatio*0.5, 1, 5000);
 
-	// enable scissor testing to clip against viewport
-	glScissor(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
+    // enable scissor testing to clip against viewport
+    glScissor(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
 }
 
 void OpenglRenderer::SetTransform(TransformType::Enum type, const Matrix4& mat)
 {
-	switch (type)
-	{
-		case TransformType::Model:
-		{
+    switch (type)
+    {
+    case TransformType::Model:
+        {
             m_modelMatrix = mat;
 
             glMatrixMode(GL_MODELVIEW);
             glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
             m_modelMatrix = mat;
-		}
-		break;
-		case TransformType::View:
-		{
+        }
+        break;
+    case TransformType::View:
+        {
             m_viewMatrix = mat;
 
             glMatrixMode(GL_MODELVIEW);
             glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
-		}
-		break;
-		case TransformType::Projection:
-		{
+        }
+        break;
+    case TransformType::Projection:
+        {
             m_projectionMatrix = mat;
 
             glMatrixMode(GL_PROJECTION);
             glLoadMatrixf(m_projectionMatrix.matrix);
-		}
-		break;
-		default:
-		{
+        }
+        break;
+    default:
+        {
             // TODO - print error here
-		}
-		break;
-	}
+        }
+        break;
+    }
 }
 IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
 {
@@ -232,12 +232,12 @@ void OpenglRenderer::Render(Renderable* renderable)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-    //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
-    //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-    // 
-    //         glActiveTextureARB(GL_TEXTURE0);
+            //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
+            //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+            //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+            //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+            // 
+            //         glActiveTextureARB(GL_TEXTURE0);
             glEnable(opengl::utility::ConvertTextureType(texture->GetType()));    
             glBindTexture(opengl::utility::ConvertTextureType(texture->GetType()), texture->GetId());
         }
@@ -325,20 +325,20 @@ void OpenglRenderer::Render(Renderable* renderable)
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
-   }
+    }
 
     //DrawAxes();
 
-//     if (shaderProgram)
-//     {
-//         // use shader program
-//         shaderProgram->Enable();
-//     }
-// 
-//     DrawBox();
-// 
-//     if (shaderProgram)
-//     {
-//         shaderProgram->Disable();
-//     }
+    //     if (shaderProgram)
+    //     {
+    //         // use shader program
+    //         shaderProgram->Enable();
+    //     }
+    // 
+    //     DrawBox();
+    // 
+    //     if (shaderProgram)
+    //     {
+    //         shaderProgram->Disable();
+    //     }
 }

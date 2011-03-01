@@ -41,6 +41,9 @@ public:
     const char* GetName() const;
 
     const Vector3& GetPosition() const;
+    void SetPosition(float x, float y, float z);
+    void SetPosition(const Vector3& position);
+
     const Quaternion& GetOrientation() const;
 	const Matrix4& GetViewMatrix();
     const Frustum& GetFrustum();

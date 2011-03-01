@@ -69,6 +69,18 @@ const Vector3& Camera::GetPosition() const
     return m_position;
 }
 
+void Camera::SetPosition(float x, float y, float z)
+{
+    SetPosition(Vector3(x,y,z));
+}
+
+void Camera::SetPosition(const Vector3& position)
+{
+    m_position = position;
+
+    MarkDirty();
+}
+
 const Quaternion& Camera::GetOrientation() const
 {
     return m_orientation;

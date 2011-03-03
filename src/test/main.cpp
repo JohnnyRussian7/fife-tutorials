@@ -120,8 +120,8 @@ int main()
     EngineSettings settings;
 	Engine engine(settings);
 
-    //CreateSimpleAnimatedTextures(engine);
-    CreateSimpleStaticTextures(engine);
+    CreateSimpleAnimatedTextures(engine);
+    //CreateSimpleStaticTextures(engine);
 
     Camera* camera = engine.GetSceneManager()->GetCamera();
     TestKeyListener* keyListener = new TestKeyListener(camera);

@@ -53,18 +53,6 @@ float MagnitudeSquare(const Quaternion& q)
 
 Quaternion Normalize(const Quaternion& q)
 {
-// 	const float Tolerance = 0.00001f;
-// 
-// 	float magSquared = MagnitudeSquare(q);
-// 
-// 	if (magSquared != 0.f && std::abs(magSquared - 1.0f) > Tolerance)
-// 	{
-// 		float mag = 1.f/std::sqrt(magSquared);
-// 		return Quaternion(q.x*mag, q.y*mag, q.z*mag, q.w*mag);
-//  	}
-// 
-// 	return q;
-
     float magInv = 1.f/Magnitude(q);
 
     return Quaternion(q.x*magInv, q.y*magInv, q.z*magInv, q.w*magInv);
@@ -79,7 +67,7 @@ Quaternion Inverse(const Quaternion& q)
 {
 	float magSqr = MagnitudeSquare(q);
 
-	if ( magSqr > 0.0 )
+	if ( magSqr > 0.0f )
 	{
 		float invMag = 1.f/magSqr;
 		return Quaternion(-q.x*invMag, -q.y*invMag, -q.z*invMag, q.w*invMag);
@@ -203,25 +191,25 @@ Matrix4 ToRotationMatrix(const Quaternion& q)
 
 	// filling up row-wise
 	Matrix4 mat;
-	mat.matrix[0] = 1.0f - 2.0f*(y2+z2);		// [0][0]
-	mat.matrix[4] = 2.0f*(xy-wz);				// [0][1]
-	mat.matrix[8] = 2.0f*(xz+wy);				// [0][2]
-	mat.matrix[12] = 0.f;						// [0][3]
+	mat[0] = 1.0f - 2.0f*(y2+z2);		// [0][0]
+	mat[4] = 2.0f*(xy-wz);				// [0][1]
+	mat[8] = 2.0f*(xz+wy);				// [0][2]
+	mat[12] = 0.f;						// [0][3]
 
-	mat.matrix[1] = 2.0f*(xy+wz);				// [1][0]
-	mat.matrix[5] = 1.0f - 2.0f*(x2+z2);		// [1][1]
-	mat.matrix[9] = 2.0f*(yz-wx);				// [1][2]
-	mat.matrix[13] = 0.f;						// [1][3]
+	mat[1] = 2.0f*(xy+wz);				// [1][0]
+	mat[5] = 1.0f - 2.0f*(x2+z2);		// [1][1]
+	mat[9] = 2.0f*(yz-wx);				// [1][2]
+	mat[13] = 0.f;						// [1][3]
 
-	mat.matrix[2] = 2.0f*(xz-wy);				// [2][0]
-	mat.matrix[6] = 2.0f*(yz+wx);				// [2][1]
-	mat.matrix[10] = 1.0f - 2.0f*(x2+y2);		// [2][2]
-	mat.matrix[14] = 0.f;						// [2][3]
+	mat[2] = 2.0f*(xz-wy);				// [2][0]
+	mat[6] = 2.0f*(yz+wx);				// [2][1]
+	mat[10] = 1.0f - 2.0f*(x2+y2);		// [2][2]
+	mat[14] = 0.f;						// [2][3]
 
-	mat.matrix[3] = 0.f;						// [3][0]
-	mat.matrix[7] = 0.f;						// [3][1]
-	mat.matrix[11] = 0.f;						// [3][2]
-	mat.matrix[15] = 1.f;						// [3][3]
+	mat[3] = 0.f;						// [3][0]
+	mat[7] = 0.f;						// [3][1]
+	mat[11] = 0.f;						// [3][2]
+	mat[15] = 1.f;						// [3][3]
 
 	return mat;
 }

@@ -137,36 +137,36 @@ void Frustum::Update(const Matrix4& m)
         return;
     }
 
-    Vector3 leftNormal(m.matrix[3] + m.matrix[0], 
-                        m.matrix[7] + m.matrix[4], 
-                        m.matrix[11] + m.matrix[8]);
+    Vector3 leftNormal(m[3] + m[0], 
+                        m[7] + m[4], 
+                        m[11] + m[8]);
 
-    Vector3 rightNormal(m.matrix[3] - m.matrix[0],
-                        m.matrix[7] - m.matrix[4],
-                        m.matrix[11] - m.matrix[8]);
+    Vector3 rightNormal(m[3] - m[0],
+                        m[7] - m[4],
+                        m[11] - m[8]);
 
-    Vector3 bottomNormal(m.matrix[3] + m.matrix[1],
-                            m.matrix[7] + m.matrix[5],
-                            m.matrix[11] + m.matrix[9]);
+    Vector3 bottomNormal(m[3] + m[1],
+                            m[7] + m[5],
+                            m[11] + m[9]);
 
-    Vector3 topNormal(m.matrix[3] - m.matrix[1],
-                        m.matrix[7] - m.matrix[5],
-                        m.matrix[11] - m.matrix[9]);
+    Vector3 topNormal(m[3] - m[1],
+                        m[7] - m[5],
+                        m[11] - m[9]);
 
-    Vector3 nearNormal(m.matrix[3] + m.matrix[2],
-                        m.matrix[7] + m.matrix[6],
-                        m.matrix[11] + m.matrix[10]);
+    Vector3 nearNormal(m[3] + m[2],
+                        m[7] + m[6],
+                        m[11] + m[10]);
 
-    Vector3 farNormal(m.matrix[3] - m.matrix[2],
-                        m.matrix[7] - m.matrix[6],
-                        m.matrix[11] - m.matrix[10]);
+    Vector3 farNormal(m[3] - m[2],
+                        m[7] - m[6],
+                        m[11] - m[10]);
 
-    m_sides[FrustumPlanes::Left] = Plane(leftNormal, m.matrix[15] + m.matrix[12]);
-    m_sides[FrustumPlanes::Right] = Plane(rightNormal, m.matrix[15] - m.matrix[12]);
-    m_sides[FrustumPlanes::Bottom] = Plane(bottomNormal, m.matrix[15] + m.matrix[13]);
-    m_sides[FrustumPlanes::Top] = Plane(topNormal, m.matrix[15] - m.matrix[13]);
-    m_sides[FrustumPlanes::Near] = Plane(nearNormal, m.matrix[15] + m.matrix[14]);
-    m_sides[FrustumPlanes::Far] = Plane(farNormal, m.matrix[15] - m.matrix[14]);
+    m_sides[FrustumPlanes::Left] = Plane(leftNormal, m[15] + m[12]);
+    m_sides[FrustumPlanes::Right] = Plane(rightNormal, m[15] - m[12]);
+    m_sides[FrustumPlanes::Bottom] = Plane(bottomNormal, m[15] + m[13]);
+    m_sides[FrustumPlanes::Top] = Plane(topNormal, m[15] - m[13]);
+    m_sides[FrustumPlanes::Near] = Plane(nearNormal, m[15] + m[14]);
+    m_sides[FrustumPlanes::Far] = Plane(farNormal, m[15] - m[14]);
 
     // normalize all planes
     for (PlaneContainer::size_type i=0; i < m_sides.size(); ++i)

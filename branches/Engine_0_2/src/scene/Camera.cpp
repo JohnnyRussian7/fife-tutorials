@@ -260,9 +260,9 @@ void Camera::UpdateView()
 
 	// create matrix for position
 // 	Matrix4 posMatrix = Matrix4::Identity();
-// 	posMatrix.matrix[12] = -m_position.x;
-// 	posMatrix.matrix[13] = -m_position.y;
-// 	posMatrix.matrix[14] = -m_position.z;
+// 	posMatrix[12] = -m_position.x;
+// 	posMatrix[13] = -m_position.y;
+// 	posMatrix[14] = -m_position.z;
 // 
 // 	// create rotation matrix
 // 	Matrix4 conjRotMatrix = ToRotationMatrix(Conjugate(m_orientation));
@@ -277,9 +277,9 @@ void Camera::UpdateView()
 
     m_viewMatrix = rotMatrix;
 
-//     Vector3 xAxis = Vector3(conjRotMatrix.matrix[0], conjRotMatrix.matrix[1], conjRotMatrix.matrix[2]);
-//     Vector3 yAxis = Vector3(conjRotMatrix.matrix[4], conjRotMatrix.matrix[5], conjRotMatrix.matrix[6]);
-//     Vector3 zAxis = Vector3(conjRotMatrix.matrix[8], conjRotMatrix.matrix[9], conjRotMatrix.matrix[10]);
+//     Vector3 xAxis = Vector3(conjRotMatrix[0], conjRotMatrix[1], conjRotMatrix[2]);
+//     Vector3 yAxis = Vector3(conjRotMatrix[4], conjRotMatrix[5], conjRotMatrix[6]);
+//     Vector3 zAxis = Vector3(conjRotMatrix[8], conjRotMatrix[9], conjRotMatrix[10]);
 // 
 //     m_viewMatrix[12] = -Dot(xAxis, m_position);
 //     m_viewMatrix[13] = -Dot(yAxis, m_position);

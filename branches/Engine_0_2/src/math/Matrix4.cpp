@@ -28,25 +28,25 @@ Matrix4 operator*(const Matrix4& lhs, const Matrix4& rhs)
 {
 	Matrix4 result;
 
-	result.matrix[0] = lhs.matrix[0]*rhs.matrix[0] + lhs.matrix[4]*rhs.matrix[1] + lhs.matrix[8]*rhs.matrix[2] + lhs.matrix[12]*rhs.matrix[3];
-	result.matrix[1] = lhs.matrix[1]*rhs.matrix[0] + lhs.matrix[5]*rhs.matrix[1] + lhs.matrix[9]*rhs.matrix[2] + lhs.matrix[13]*rhs.matrix[3];
-	result.matrix[2] = lhs.matrix[2]*rhs.matrix[0] + lhs.matrix[6]*rhs.matrix[1] + lhs.matrix[10]*rhs.matrix[2] + lhs.matrix[14]*rhs.matrix[3];
-	result.matrix[3] = lhs.matrix[3]*rhs.matrix[0] + lhs.matrix[7]*rhs.matrix[1] + lhs.matrix[11]*rhs.matrix[2] + lhs.matrix[15]*rhs.matrix[3];
+	result[0] = lhs[0]*rhs[0] + lhs[4]*rhs[1] + lhs[8]*rhs[2] + lhs[12]*rhs[3];
+	result[1] = lhs[1]*rhs[0] + lhs[5]*rhs[1] + lhs[9]*rhs[2] + lhs[13]*rhs[3];
+	result[2] = lhs[2]*rhs[0] + lhs[6]*rhs[1] + lhs[10]*rhs[2] + lhs[14]*rhs[3];
+	result[3] = lhs[3]*rhs[0] + lhs[7]*rhs[1] + lhs[11]*rhs[2] + lhs[15]*rhs[3];
 	
-	result.matrix[4] = lhs.matrix[0]*rhs.matrix[4] + lhs.matrix[4]*rhs.matrix[5] + lhs.matrix[8]*rhs.matrix[6] + lhs.matrix[12]*rhs.matrix[7];
-	result.matrix[5] = lhs.matrix[1]*rhs.matrix[4] + lhs.matrix[5]*rhs.matrix[5] + lhs.matrix[9]*rhs.matrix[6] + lhs.matrix[13]*rhs.matrix[7];
-	result.matrix[6] = lhs.matrix[2]*rhs.matrix[4] + lhs.matrix[6]*rhs.matrix[5] + lhs.matrix[10]*rhs.matrix[6] + lhs.matrix[14]*rhs.matrix[7];
-	result.matrix[7] = lhs.matrix[3]*rhs.matrix[4] + lhs.matrix[7]*rhs.matrix[5] + lhs.matrix[11]*rhs.matrix[6] + lhs.matrix[15]*rhs.matrix[7];
+	result[4] = lhs[0]*rhs[4] + lhs[4]*rhs[5] + lhs[8]*rhs[6] + lhs[12]*rhs[7];
+	result[5] = lhs[1]*rhs[4] + lhs[5]*rhs[5] + lhs[9]*rhs[6] + lhs[13]*rhs[7];
+	result[6] = lhs[2]*rhs[4] + lhs[6]*rhs[5] + lhs[10]*rhs[6] + lhs[14]*rhs[7];
+	result[7] = lhs[3]*rhs[4] + lhs[7]*rhs[5] + lhs[11]*rhs[6] + lhs[15]*rhs[7];
 
-	result.matrix[8] = lhs.matrix[0]*rhs.matrix[8] + lhs.matrix[4]*rhs.matrix[9] + lhs.matrix[8]*rhs.matrix[10] + lhs.matrix[12]*rhs.matrix[11];
-	result.matrix[9] = lhs.matrix[1]*rhs.matrix[8] + lhs.matrix[5]*rhs.matrix[9] + lhs.matrix[9]*rhs.matrix[10] + lhs.matrix[13]*rhs.matrix[11];
-	result.matrix[10] = lhs.matrix[2]*rhs.matrix[8] + lhs.matrix[6]*rhs.matrix[9] + lhs.matrix[10]*rhs.matrix[10] + lhs.matrix[14]*rhs.matrix[11];
-	result.matrix[11] = lhs.matrix[3]*rhs.matrix[8] + lhs.matrix[7]*rhs.matrix[9] + lhs.matrix[11]*rhs.matrix[10] + lhs.matrix[15]*rhs.matrix[11];
+	result[8] = lhs[0]*rhs[8] + lhs[4]*rhs[9] + lhs[8]*rhs[10] + lhs[12]*rhs[11];
+	result[9] = lhs[1]*rhs[8] + lhs[5]*rhs[9] + lhs[9]*rhs[10] + lhs[13]*rhs[11];
+	result[10] = lhs[2]*rhs[8] + lhs[6]*rhs[9] + lhs[10]*rhs[10] + lhs[14]*rhs[11];
+	result[11] = lhs[3]*rhs[8] + lhs[7]*rhs[9] + lhs[11]*rhs[10] + lhs[15]*rhs[11];
 
-	result.matrix[12] = lhs.matrix[0]*rhs.matrix[12] + lhs.matrix[4]*rhs.matrix[13] + lhs.matrix[8]*rhs.matrix[14] + lhs.matrix[12]*rhs.matrix[15];
-	result.matrix[13] = lhs.matrix[1]*rhs.matrix[12] + lhs.matrix[5]*rhs.matrix[13] + lhs.matrix[9]*rhs.matrix[14] + lhs.matrix[13]*rhs.matrix[15];
-	result.matrix[14] = lhs.matrix[2]*rhs.matrix[12] + lhs.matrix[6]*rhs.matrix[13] + lhs.matrix[10]*rhs.matrix[14] + lhs.matrix[14]*rhs.matrix[15];
-	result.matrix[15] = lhs.matrix[3]*rhs.matrix[12] + lhs.matrix[7]*rhs.matrix[13] + lhs.matrix[11]*rhs.matrix[14] + lhs.matrix[15]*rhs.matrix[15];
+	result[12] = lhs[0]*rhs[12] + lhs[4]*rhs[13] + lhs[8]*rhs[14] + lhs[12]*rhs[15];
+	result[13] = lhs[1]*rhs[12] + lhs[5]*rhs[13] + lhs[9]*rhs[14] + lhs[13]*rhs[15];
+	result[14] = lhs[2]*rhs[12] + lhs[6]*rhs[13] + lhs[10]*rhs[14] + lhs[14]*rhs[15];
+	result[15] = lhs[3]*rhs[12] + lhs[7]*rhs[13] + lhs[11]*rhs[14] + lhs[15]*rhs[15];
 
 	return result;
 }
@@ -54,17 +54,17 @@ Matrix4 operator*(const Matrix4& lhs, const Matrix4& rhs)
 Vector3 operator* (const Matrix4& mat, const Vector3& p)
 {
 	return Vector3(
-		mat.matrix[0]*p.x +
-		mat.matrix[4]*p.y +
-		mat.matrix[8]*p.z,
+		mat[0]*p.x +
+		mat[4]*p.y +
+		mat[8]*p.z,
 
-		mat.matrix[1]*p.x +
-		mat.matrix[5]*p.y +
-		mat.matrix[9]*p.z,
+		mat[1]*p.x +
+		mat[5]*p.y +
+		mat[9]*p.z,
 
-		mat.matrix[2]*p.x +
-		mat.matrix[6]*p.y +
-		mat.matrix[10]*p.z
+		mat[2]*p.x +
+		mat[6]*p.y +
+		mat[10]*p.z
 	);
 }
 
@@ -72,29 +72,29 @@ Matrix4 Transpose(const Matrix4& mat)
 {
     Matrix4 retMat(mat);
 
-    retMat.matrix[1] = mat.matrix[4];
-    retMat.matrix[4] = mat.matrix[1];
+    retMat[1] = mat[4];
+    retMat[4] = mat[1];
 
-    retMat.matrix[2] = mat.matrix[8];
-    retMat.matrix[8] = mat.matrix[2];
+    retMat[2] = mat[8];
+    retMat[8] = mat[2];
 
-    retMat.matrix[6] = mat.matrix[9];
-    retMat.matrix[9] = mat.matrix[6];
+    retMat[6] = mat[9];
+    retMat[9] = mat[6];
 
     return retMat;
 }
 
 void TransposeRef(Matrix4& mat)
 {
-    float temp = mat.matrix[1];
-    mat.matrix[1] = mat.matrix[4];
-    mat.matrix[4] = temp;
+    float temp = mat[1];
+    mat[1] = mat[4];
+    mat[4] = temp;
 
-    temp = mat.matrix[2];
-    mat.matrix[2] = mat.matrix[8];
-    mat.matrix[8] = temp;
+    temp = mat[2];
+    mat[2] = mat[8];
+    mat[8] = temp;
 
-    temp = mat.matrix[6];
-    mat.matrix[6] = mat.matrix[9];
-    mat.matrix[9] = temp;
+    temp = mat[6];
+    mat[6] = mat[9];
+    mat[9] = temp;
 }

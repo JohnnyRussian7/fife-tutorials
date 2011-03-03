@@ -84,10 +84,10 @@ void ParticleRenderer::Render(Camera& camera)
 			float halfwidth = 0.5f * particle.size;
 			float halfheight = 0.5f * particle.size;
 
-			Vector3 horizontal(halfwidth*viewMatrix.matrix[0], halfwidth*viewMatrix.matrix[1], halfwidth*viewMatrix.matrix[2]);
-			Vector3 vertical(halfheight*viewMatrix.matrix[4], halfheight*viewMatrix.matrix[5], halfheight*viewMatrix.matrix[6]);
-// 			Vector3 horizontal(halfwidth*viewMatrix.matrix[0], halfwidth*viewMatrix.matrix[4], halfwidth*viewMatrix.matrix[8]);
-// 			Vector3 vertical(halfheight*viewMatrix.matrix[1], halfheight*viewMatrix.matrix[5], halfheight*viewMatrix.matrix[9]);
+			Vector3 horizontal(halfwidth*viewMatrix[0], halfwidth*viewMatrix[1], halfwidth*viewMatrix[2]);
+			Vector3 vertical(halfheight*viewMatrix[4], halfheight*viewMatrix[5], halfheight*viewMatrix[6]);
+// 			Vector3 horizontal(halfwidth*viewMatrix[0], halfwidth*viewMatrix[4], halfwidth*viewMatrix[8]);
+// 			Vector3 vertical(halfheight*viewMatrix[1], halfheight*viewMatrix[5], halfheight*viewMatrix[9]);
  
 	 		ParticleQuad quad;
 	 		quad.vertex1 = particle.position + horizontal - vertical;

@@ -947,11 +947,27 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\filesystem\FileSystemUtils.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\filesystem\FileSystemUtils.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\filesystem\IFileSystem.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\filesystem\IFileSystem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\filesystem\IPath.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\filesystem\Path.cpp"
 				>
 			</File>
 			<File
@@ -1015,7 +1031,35 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\graphics\IImage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\graphics\IIndexBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\Image.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\Image.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\ImageEnums.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\ImageFwd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\ImageManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\ImageManager.h"
 				>
 			</File>
 			<File
@@ -1412,14 +1456,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\scene\IAnimation.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\scene\Image.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\scene\Image.h"
 				>
 			</File>
 			<File

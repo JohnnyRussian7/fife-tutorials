@@ -24,11 +24,11 @@
 #include "Timer.h"
 
 // chooses the correct timer implementation
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(WINDOWS_OS)
 #include "win32/Win32TimerImpl.h"
-#elif defined(__linux) || defined(linux)
+#elif defined(LINUX_OS)
 #include "linux/LinuxTimerImpl.h"
-#elif defined(__APPLE__) || defined(__APPLE_CC__)
+#elif defined(MACOSX_OS)
 #include "osx/OsxTimerImpl.h"
 #endif
 

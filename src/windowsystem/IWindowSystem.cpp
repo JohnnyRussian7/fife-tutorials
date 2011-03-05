@@ -31,12 +31,11 @@ IWindowSystem* CreateWindowSystem(const WindowSystemSettings& settings)
 
 	switch (settings.windowSystemType)
 	{
-#if defined(_MSC_VER)
+#if defined(WINDOWS_OS)
 	case WindowSystemType::Win32:
 		windowSystem = new Win32WindowSystem(settings);
 		break;
-#endif
-#if defined(__APPLE__) || defined(__APPLE_CC__)
+#elif defined(MACOSX_OS)
 	case WindowSystemType::MacOsx:
         windowSystem = new OsxWindowSystem(settings);
 		break;

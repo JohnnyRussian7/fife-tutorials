@@ -26,15 +26,14 @@
 
 #include "TextureFwd.h"
 #include "TextureEnums.h"
+#include "ImageFwd.h"
 #include "../rendersystem/RenderSystemTypes.h"
-
-class Image;
 
 class TextureManager
 {
 public:
     TextureManager(RenderSystemType::Enum renderSystemType);
-    TexturePtr CreateTexture(TextureType::Enum type, Image* image, const char* name=0);
+    TexturePtr CreateTexture(TextureType::Enum type, const ImagePtr& image, const char* name=0);
     bool AddTexture(ITexture* texture);
     void RemoveTexture(const char* name);
     void RemoveAllTextures();

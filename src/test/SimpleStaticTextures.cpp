@@ -72,13 +72,11 @@ void CreateSimpleStaticTextures(Engine& engine)
     doom5Node->Pitch(DegToRad(75));
     doom5Node->SetPosition(0, 40, 0);
 
-    PngLoader loader;
-
     // load the images
-    Image* doom1Image = loader.Load("..\\..\\data\\doom_1.png");
-    Image* doom2Image = loader.Load("..\\..\\data\\doom_2.png");
-    Image* doom3Image = loader.Load("..\\..\\data\\doom_3.png");
-    Image* doom4Image = loader.Load("..\\..\\data\\doom_4.png");
+    ImagePtr doom1Image = engine.GetImageManager()->CreateImage("..\\..\\data\\doom_1.png");
+    ImagePtr doom2Image = engine.GetImageManager()->CreateImage("..\\..\\data\\doom_2.png");
+    ImagePtr doom3Image = engine.GetImageManager()->CreateImage("..\\..\\data\\doom_3.png");
+    ImagePtr doom4Image = engine.GetImageManager()->CreateImage("..\\..\\data\\doom_4.png");
 
     // create the entities
     IEntity* doom1Entity = sceneManager->CreateEntity("doom_1");

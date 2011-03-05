@@ -466,9 +466,6 @@ public:
     {
         if (text)
         {
-            // #if defined(_WIN64) || defined(WIN64)
-            // 		SetWindowTextW(m_hwnd, text);
-            // #else
             DWORD result;
 #if defined(UNICODE)
             uint32_t length = strlen(text) + 1;

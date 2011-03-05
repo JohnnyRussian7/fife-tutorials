@@ -22,9 +22,8 @@
 #include "PrecompiledIncludes.h"
 
 #include "SpriteSheet.h"
-#include "Image.h"
 
-SpriteSheet::SpriteSheet(Image* image)
+SpriteSheet::SpriteSheet(const ImagePtr& image)
 : m_image(image), m_numTiles(0), m_numRows(0), m_numCols(0), m_tileSize(0, 0),
   m_storageType(StorageType::RowMajor)
 {
@@ -36,7 +35,7 @@ SpriteSheet::~SpriteSheet()
 
 }
 
-Image* SpriteSheet::GetImage() const
+const ImagePtr& SpriteSheet::GetImage() const
 {
     return m_image;
 }

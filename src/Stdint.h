@@ -25,7 +25,7 @@
 #include "StdIncludes.h"
 
 // defines for variable types for portability and consistency for MSVC
-#if defined(_MSC_VER)
+#if defined(WINDOWS_OS)
 // 8-bit types
 typedef unsigned char uint8_t;
 typedef signed char int8_t;

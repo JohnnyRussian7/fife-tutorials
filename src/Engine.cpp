@@ -24,6 +24,7 @@
 #include "Engine.h"
 #include "scene/SceneManager.h"
 #include "graphics/TextureManager.h"
+#include "graphics/ImageManager.h"
 #include "inputsystem/InputSystem.h"    // remove this in favor of create method
 
 // TODO - should this be here?
@@ -31,7 +32,7 @@
 
 Engine::Engine(const EngineSettings& settings)
 : m_settings(settings), m_windowSystem(0), m_renderSystem(0), m_fileSystem(0), m_inputSystem(0),
-  m_sceneManager(0), m_fps(30), m_fpsFrameCount(0), m_fpsStartTime(0)
+  m_sceneManager(0), m_run(true), m_fps(30), m_fpsFrameCount(0), m_fpsStartTime(0)
 {
     m_windowSystem = CreateWindowSystem(m_settings.windowSettings);
 	m_windowSystem->Init();
@@ -43,6 +44,7 @@ Engine::Engine(const EngineSettings& settings)
 	
     m_sceneManager = new SceneManager(this, m_settings.sceneManagerSettings, m_renderSystem);
     m_textureManager = new TextureManager(m_settings.renderSystemSettings.renderSystemType);
+    m_imageManager = new ImageManager();
 
     m_windowSystem->SetInputSystem(m_inputSystem);
 
@@ -150,6 +152,11 @@ TextureManager* Engine::GetTextureManager() const
     return m_textureManager;
 }
 
+ImageManager* Engine::GetImageManager() const
+{
+    return m_imageManager;
+}
+
 uint32_t Engine::GetFps() const
 {
 	return m_fps;
@@ -175,11 +182,25 @@ bool Engine::Run()
 {
     assert(m_windowSystem && m_renderSystem);
 
-    m_timer.Tick();
+    if (m_run)
+    {
+        m_timer.Tick();
 
-    bool retVal = m_windowSystem->Run();
+        // must save the run state in intermediate variable
+        // and only set the overall engine state after all the
+        // run states have been collected, otherwise the engine
+        // run state will not be recorded correctly
+        bool runState = m_windowSystem->Run();
 
-    return retVal;
+        m_run &= runState;
+    }
+
+    return m_run;
+}
+
+void Engine::Quit()
+{
+    m_run = false;
 }
 
 void Engine::OnResize(uint32_t width, uint32_t height)

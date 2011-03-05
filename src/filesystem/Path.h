@@ -24,14 +24,40 @@
 
 #include "../StdIncludes.h"
 
-class Path
-{
-public:
-    Path(const char* path);
-    Path(const std::string& path);
+#include "IPath.h"
 
-private:
-    std::string m_path;
-};
+namespace filesystem
+{
+    class Path : public IPath
+    {
+    public:
+        Path(const char* path);
+        Path(const std::string& path);
+        Path(const Path& rhs);
+
+        virtual std::string GetString() const;
+        virtual std::string GetFilename() const;
+        virtual std::string GetExtension() const;
+        virtual bool HasExtension() const;
+        virtual void ReplaceExtension(const std::string& extension);
+        virtual void Append(const std::string& path);
+        virtual void Append(const IPath& path);
+
+        Path& operator/=(const std::string& path);
+        Path& operator/=(const IPath& path);
+
+    private:
+        std::string& GetStringRef() const;
+
+    private:
+        std::string m_origPath;
+
+        // making these mutable so they can be set
+        // in const functions, makes it convenient to 
+        // keep track of when updates should happen
+        mutable bool m_updatePlatformSpecific;
+        mutable std::string m_platformSpecificPath;
+    };
+}
 
 #endif

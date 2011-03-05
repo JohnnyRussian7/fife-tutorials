@@ -26,13 +26,14 @@
 
 #include "../Texture.h"
 #include "../TextureEnums.h"
+#include "../ImageFwd.h"
 
-class Image;
+class IImage;
 
 class OpenglTexture : public Texture
 {
 public:
-	OpenglTexture(TextureType::Enum type, Image* image, const char* name=0);
+	OpenglTexture(TextureType::Enum type, const ImagePtr& image, const char* name=0);
 	~OpenglTexture();
 
     uint32_t GetSourceImageWidth() const;
@@ -43,7 +44,7 @@ public:
 	virtual void Upload();
 
 private:
-	Image* m_image;
+	ImagePtr m_image;
     uint32_t m_width;
     uint32_t m_height;
 };

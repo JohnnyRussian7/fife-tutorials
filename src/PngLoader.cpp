@@ -22,7 +22,8 @@
 #include "PrecompiledIncludes.h"
 
 #include "PngLoader.h"
-#include "scene/Image.h"
+#include "graphics/IImage.h"
+#include "graphics/Image.h"     // TODO - this may not need to be here forever
 
 #include "../extern/libpng/png.h"
 
@@ -62,7 +63,7 @@ bool PngLoader::IsLoadable(std::istream& source)
 	return !png_sig_cmp(pngsig, 0, PNG_SIG_SIZE);
 }
 
-Image* PngLoader::Load(const char* filename)
+IImage* PngLoader::Load(const char* filename)
 {
 	if (!filename)
 	{
@@ -172,7 +173,7 @@ Image* PngLoader::Load(const char* filename)
 	}
 
 	// create image object
-	Image* img = new Image(colorFormat, width, height);
+	IImage* img = new Image(colorFormat, width, height);
 
 	// assign image data to row pointers for reading
 	rowPtrs = new png_bytep[height];

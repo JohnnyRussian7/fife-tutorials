@@ -24,7 +24,7 @@
 #include "TextureManager.h"
 #include "ITexture.h"
 #include "opengl/OpenglTexture.h"
-#include "../scene/Image.h"
+#include "IImage.h"
 
 TextureManager::TextureManager(RenderSystemType::Enum renderSystemType)
 : m_type(renderSystemType)
@@ -32,7 +32,7 @@ TextureManager::TextureManager(RenderSystemType::Enum renderSystemType)
 
 }
 
-TexturePtr TextureManager::CreateTexture(TextureType::Enum type, Image* image, const char* name)
+TexturePtr TextureManager::CreateTexture(TextureType::Enum type, const ImagePtr& image, const char* name)
 {
     // if a texture already exists with the same name then it will return that texture
     // otherwise it creates a new texture of returns it

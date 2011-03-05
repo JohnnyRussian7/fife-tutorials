@@ -24,8 +24,8 @@
 
 #include "../StdIncludes.h"
 
-#include "Image.h"
 #include "../geometry/Rect.h"
+#include "../graphics/IImage.h"
 #include "../graphics/TextureFwd.h"
 
 class IAnimatedFrame;

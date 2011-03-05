@@ -21,12 +21,12 @@
 ***********************************************************************/
 #include "PrecompiledIncludes.h"
 
-#include "../../math/MathUtil.h"
-#include "../../scene/Image.h"
 #include "OpenglUtility.h"
 #include "OpenglTexture.h"
+#include "../../math/MathUtil.h"
+#include "../IImage.h"
 
-OpenglTexture::OpenglTexture(TextureType::Enum type, Image *image, const char* name)
+OpenglTexture::OpenglTexture(TextureType::Enum type, const ImagePtr& image, const char* name)
 : Texture(type, name), m_image(image), m_width(0), m_height(0)
 {
 	if (m_image)
@@ -60,8 +60,6 @@ OpenglTexture::~OpenglTexture()
 	{
 		glDeleteTextures(1, reinterpret_cast<GLuint*>(&m_id));
 	}
-
-	delete m_image;
 }
 
 uint32_t OpenglTexture::GetSourceImageWidth() const

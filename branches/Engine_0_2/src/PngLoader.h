@@ -24,13 +24,13 @@
 
 #include "StdIncludes.h"
 
-class Image;
+class IImage;
 
 class PngLoader
 {
 public:
 	bool IsLoadable(std::istream& source);
-	Image* Load(const char* filename);
+	IImage* Load(const char* filename);
 };
 
 #endif

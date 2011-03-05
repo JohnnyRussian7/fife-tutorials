@@ -1,0 +1,129 @@
+/**********************************************************************
+*	Filename: ImageManager.cpp
+*	
+*	Copyright (C) 2011, FIFE team
+*	http://www.fifengine.net
+*
+*	This file is part of FIFE.
+*
+*	FIFE is free software: you can redistribute it and/or modify it
+*	under the terms of the GNU Lesser General Public License as
+*	published by the Free Software Foundation, either version 3 of
+*	the License, or any later version.
+*
+*	FIFE is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* 	GNU Lesser General Public License for more details.
+*
+*	You should have received a copy of the GNU Lesser General Public
+*	License along with FIFE. If not, see http://www.gnu.org/licenses/.
+***********************************************************************/
+#include "PrecompiledIncludes.h"
+
+#include "ImageManager.h"
+#include "IImage.h"
+#include "../PngLoader.h"
+#include "../filesystem/IPath.h"
+#include "../filesystem/Path.h"
+
+ImageManager::ImageManager()
+{
+
+}
+
+ImagePtr ImageManager::CreateImage(const std::string& file, const char* name)
+{
+    return CreateImage(filesystem::Path(file), name);
+}
+
+ImagePtr ImageManager::CreateImage(const filesystem::IPath& path, const char* name)
+{
+    if (name)
+    {
+        ImageContainer::iterator iter = m_images.find(std::string(name));
+
+        if (iter != m_images.end())
+        {
+            // image already exists so lets just return it here
+            return iter->second;
+        }
+    }
+
+    // TODO - this will need to be expanded when more file types are supported
+    if (path.GetExtension() == ".png")
+    {
+        PngLoader loader;
+
+        // load the image
+        IImage* image = loader.Load(path.GetString().c_str());
+
+        // create a shared pointer from the loaded image
+        if (image)
+        {
+            ImagePtr ptr = make_shared(image);  
+
+            std::pair<ImageContainer::iterator, bool> retVal = m_images.insert(std::make_pair(ptr->GetName(), ptr));
+            return retVal.first->second;
+        }
+    }
+
+    return ImagePtr();
+}
+
+bool ImageManager::AddImage(IImage* image)
+{
+    if (image)
+    {
+        ImagePtr sharedImage(image);
+        std::pair<ImageContainer::iterator, bool> retVal = m_images.insert(std::make_pair(sharedImage->GetName(), sharedImage));
+
+        return retVal.second;
+    }
+
+    return false;   
+}
+
+void ImageManager::RemoveImage(IImage* image)
+{
+    // TODO - may need a faster way to do this if it becomes
+    //        a performance bottleneck, for now just loop
+    ImageContainer::iterator iter = m_images.begin();
+    for (; iter != m_images.end(); ++iter)
+    {
+        if (iter->second.Get() == image)
+        {
+            m_images.erase(iter);
+            break;
+        }
+    }
+}
+
+void ImageManager::RemoveImage(const char* name)
+{
+    if (name)
+    {
+        ImageContainer::iterator iter = m_images.find(name);
+        if (iter != m_images.end())
+        {
+            m_images.erase(iter);
+        }
+    }
+}
+
+void ImageManager::RemoveAllImages()
+{
+    m_images.clear();
+}
+
+void ImageManager::RemoveUnusedImages()
+{
+    ImageContainer::iterator iter = m_images.begin();
+    for (; iter != m_images.end(); ++iter)
+    {
+        if (iter->second.Unique())
+        {
+            m_images.erase(iter);
+        }
+    }
+}

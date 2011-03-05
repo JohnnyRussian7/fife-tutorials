@@ -26,9 +26,7 @@
 
 #include "../geometry/Dimension.h"
 #include "../geometry/Rect.h"
-#include "../graphics/TextureFwd.h"
-
-class Image;
+#include "../graphics/ImageFwd.h"
 
 struct StorageType
 {
@@ -45,7 +43,7 @@ public:
 
     virtual ~ISpriteSheet() { };
 
-    virtual Image* GetImage() const = 0;
+    virtual const ImagePtr& GetImage() const = 0;
 
     virtual void SetNumTiles(uint32_t numTiles) = 0;
     virtual uint32_t GetNumTiles() const = 0;

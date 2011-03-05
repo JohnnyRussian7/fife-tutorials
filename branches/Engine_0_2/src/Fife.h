@@ -37,6 +37,8 @@
 
 // filesystem
 #include "filesystem/IFileSystem.h"
+#include "filesystem/IPath.h"
+#include "filesystem/Path.h"        // TODO - should this be here?
 
 // geometry
 #include "geometry/AxisAlignedBoundingBox.h"
@@ -46,6 +48,9 @@
 #include "geometry/Sphere.h"
 
 // graphics
+#include "graphics/ImageEnums.h"        // TODO - does this need to be included?
+#include "graphics/ImageFwd.h"
+#include "graphics/ImageManager.h"
 #include "graphics/IIndexBuffer.h"
 #include "graphics/IVertexBuffer.h"
 #include "graphics/ITexture.h"
@@ -89,7 +94,6 @@
 #include "scene/Camera.h"
 #include "scene/IAnimatedFrame.h"
 #include "scene/IAnimation.h"
-#include "scene/Image.h"
 #include "scene/IMaterial.h"
 #include "scene/ISpriteSheet.h"
 #include "scene/Renderable.h"

@@ -36,9 +36,9 @@ struct WindowSystemSettings
 	width(800), height(600), bitsPerPixel(16), useExternalWindow(false), 
 	allowFullScreen(true), useFullScreen(false), allowResizeable(true), windowId(0)
 	{
-#if defined(WIN32) || defined(_MSC_VER)
+#if defined(WINDOWS_OS)
 		windowSystemType = WindowSystemType::Win32;
-#elif defined(__APPLE__) || defined(MACOSX) || defined(__APPLE_CC__)
+#elif defined(MACOSX_OS)
 		windowSystemType = WindowSystemType::MacOsx;
 #else
 		windowSystemType = WindowSystemType::Linux;

@@ -185,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\test\SimpleIsometricView.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\test\SimpleStaticTextures.cpp"
 				>
 			</File>
@@ -196,6 +200,10 @@
 			>
 			<File
 				RelativePath="..\..\src\test\SimpleAnimatedTextures.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\test\SimpleIsometricView.h"
 				>
 			</File>
 			<File

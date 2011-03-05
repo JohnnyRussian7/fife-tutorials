@@ -35,7 +35,7 @@
 #include <limits>
 #include <memory>
 
-//containers
+// containers
 #include <iterator>
 #include <string>
 #include <vector>
@@ -50,8 +50,20 @@
 #include <sstream>
 #include <iomanip>
 
+// define macro based on platform
+#if defined(_WIN32) || defined(WINDOWS)
+    #define WINDOWS_OS  
+    #if defined(_MSC_VER)
+        #define WINDOWS_COMPILER
+    #endif
+#elif defined(__APPLE__) || defined(__APPLE_CC__)
+    #define MACOSX_OS
+#elif defined(linux) || defined(__linux__)
+    #define LINUX_OS
+#endif
+
 // make sure the proper defines are there for windows
-#if defined(_MSC_VER)
+#if defined(WINDOWS_OS)
     #define NOMINMAX
     #define WIN32_LEAN_AND_MEAN
     #if !defined(WIN32)

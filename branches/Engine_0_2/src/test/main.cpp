@@ -6,12 +6,13 @@
 // sample includes
 #include "SimpleAnimatedTextures.h"
 #include "SimpleStaticTextures.h"
+#include "SimpleIsometricView.h"
 
 class TestKeyListener : public IKeyListener
 {
 public:
-    TestKeyListener(Camera* cam) 
-    : m_name("TestKeyListener"), m_cam(cam), m_xTrans(0.f), m_yTrans(0.f), m_zTrans(0.f)
+    TestKeyListener(Engine& engine, Camera* cam) 
+    : m_engine(engine), m_cam(cam), m_name("TestKeyListener"), m_xTrans(0.f), m_yTrans(0.f), m_zTrans(0.f)
     { 
     
     };
@@ -20,33 +21,50 @@ public:
 
     virtual bool OnKeyPressed(const IKeyEvent& event) 
     { 
+        bool translationChange = false;
         const float TranslationAmount = 1.f;
 
         if (event.GetKeyCode() == KeyCodes::Left)
         {
             m_xTrans -= TranslationAmount;
+            translationChange = true;
         }
         else if (event.GetKeyCode() == KeyCodes::Right)
         {
             m_xTrans += TranslationAmount;
+            translationChange = true;
         }
         else if (event.GetKeyCode() == KeyCodes::Up)
         {
             m_zTrans -= TranslationAmount;
+            translationChange = true;
         }
         else if (event.GetKeyCode() == KeyCodes::Down)
         {
             m_zTrans += TranslationAmount;
+            translationChange = true;
         }
 
-        m_cam->Translate(m_xTrans, m_yTrans, m_zTrans);
+        if (translationChange)
+        {
+            m_cam->Translate(m_xTrans, m_yTrans, m_zTrans);
+        }
 
         return true;
     }
 
-    virtual bool OnKeyReleased(const IKeyEvent& event) { return true; };
+    virtual bool OnKeyReleased(const IKeyEvent& event) 
+    {
+        if (event.GetKeyCode() == KeyCodes::Escape)
+        {
+            m_engine.Quit();
+        }
+
+        return true;
+    };
 
 private:
+    Engine& m_engine;
     Camera* m_cam;
     std::string m_name;
     float m_xTrans;
@@ -120,11 +138,12 @@ int main()
     EngineSettings settings;
 	Engine engine(settings);
 
-    CreateSimpleAnimatedTextures(engine);
+    //CreateSimpleAnimatedTextures(engine);
     //CreateSimpleStaticTextures(engine);
+    CreateSimpleIsometricView(engine);
 
     Camera* camera = engine.GetSceneManager()->GetCamera();
-    TestKeyListener* keyListener = new TestKeyListener(camera);
+    TestKeyListener* keyListener = new TestKeyListener(engine, camera);
     TestMouseListener* mouseListener = new TestMouseListener(camera);
     engine.GetInputSystem()->AddKeyListener(keyListener);
     engine.GetInputSystem()->AddMouseListener(mouseListener);

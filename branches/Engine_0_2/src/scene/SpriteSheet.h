@@ -25,18 +25,18 @@
 #include "../StdIncludes.h"
 
 #include "ISpriteSheet.h"
+#include "../graphics/ImageFwd.h"
 #include "../geometry/Dimension.h"
 #include "../geometry/Rect.h"
 
-class Image;
 
 class SpriteSheet : public ISpriteSheet
 {
 public:
-    SpriteSheet(Image* image);
+    SpriteSheet(const ImagePtr& image);
     ~SpriteSheet();
 
-    virtual Image* GetImage() const;
+    virtual const ImagePtr& GetImage() const;
 
     virtual void SetNumTiles(uint32_t numTiles);
     virtual uint32_t GetNumTiles() const;
@@ -50,7 +50,7 @@ public:
     virtual FloatRect GetTileCoords(uint32_t index) const;
 
 private:
-    Image* m_image;
+    ImagePtr m_image;
     uint32_t m_numTiles;
     uint32_t m_numRows;
     uint32_t m_numCols;

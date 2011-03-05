@@ -29,11 +29,12 @@
 #include "AnimatedTexture.h"
 #include "ISpriteSheet.h"
 #include "SpriteSheet.h"
-#include "Image.h"
 #include "../Engine.h"
 #include "../IEntity.h"
 #include "../rendersystem/IRenderSystem.h"
+#include "../graphics/ImageFwd.h"
 #include "../graphics/TextureManager.h"
+#include "../graphics/ImageManager.h"
 
 SceneManager::SceneManager(Engine* engine, const SceneManagerSettings& settings, IRenderSystem* renderSystem)
 : m_engine(engine), m_settings(settings), m_rootSceneNode(0), m_renderSystem(renderSystem)
@@ -99,7 +100,7 @@ void SceneManager::DestroySceneNode(const char* name)
 
             if (parent)
             {
-                iter->second->GetParent()->RemoveChild(iter->second);
+                parent->RemoveChild(iter->second);
             }
 
 			delete iter->second;
@@ -153,7 +154,7 @@ IAnimation* SceneManager::CreateAnimatedTexture(ISpriteSheet* spriteSheet, uint3
     if (spriteSheet)
     {
         // create texture from sprite sheet image
-        Image* image = spriteSheet->GetImage();
+        ImagePtr image = spriteSheet->GetImage();
         if (image)
         {
             TexturePtr texture = m_engine->GetTextureManager()->CreateTexture(TextureType::_2d, image);
@@ -172,11 +173,12 @@ IAnimation* SceneManager::CreateAnimatedTexture(ISpriteSheet* spriteSheet, uint3
     return animTexture;
 }
 
-IAnimation* SceneManager::CreateAnimatedTexture(Image* image, uint32_t numRows, uint32_t numCols, uint32_t numTiles, uint32_t runTimeInMs, bool looping, const char* name)
+IAnimation* SceneManager::CreateAnimatedTexture(const char* imageFile, uint32_t numRows, uint32_t numCols, uint32_t numTiles, uint32_t runTimeInMs, bool looping, const char* name)
 {
     AnimatedTexture* animTexture = 0;
-    if (image)
+    if (imageFile)
     {
+        ImagePtr image = m_engine->GetImageManager()->CreateImage(imageFile, name);
         ISpriteSheet* spriteSheet = new SpriteSheet(image);
         TexturePtr texture = m_engine->GetTextureManager()->CreateTexture(TextureType::_2d, image);
         spriteSheet->SetNumRows(numRows);

@@ -42,6 +42,7 @@ class IFileSystem;
 class IInputSystem;
 class SceneManager;
 class TextureManager;
+class ImageManager;
 
 struct EngineSettings
 {
@@ -72,6 +73,7 @@ public:
 
 	SceneManager* GetSceneManager() const;
     TextureManager* GetTextureManager() const;
+    ImageManager* GetImageManager() const;
 
 	uint32_t GetFps() const;
 
@@ -80,6 +82,7 @@ public:
     void Render();
 
     bool Run();
+    void Quit();
 
 	virtual void OnResize(uint32_t width, uint32_t height);
 
@@ -94,9 +97,10 @@ private:
     IInputSystem* m_inputSystem;
 	SceneManager* m_sceneManager;
     TextureManager* m_textureManager;
+    ImageManager* m_imageManager;
 
+    bool m_run;
     Timer m_timer;
-
 	uint32_t m_fps;
 	uint32_t m_fpsFrameCount;
 	uint32_t m_fpsStartTime;

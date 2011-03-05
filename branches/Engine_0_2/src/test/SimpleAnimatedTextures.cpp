@@ -38,67 +38,52 @@ void CreateSimpleAnimatedTextures(Engine& engine)
     camera->LookAt(Vector3(0, 0, 0));
     camera->SetFixedYawAxis(true);
 
-    PngLoader loader;
-
-    Image* image1 = loader.Load("..\\..\\data\\torch_animation.png");
     IEntity* e1 = sceneManager->CreateEntity("e1");
     Visual* b1 = sceneManager->CreateBillboard(40, 40);
     e1->SetVisual(b1);
-    if (image1)
-    {
-        b1->SetAnimation(sceneManager->CreateAnimatedTexture(image1, 1, 24, 24, 2500));
+    b1->SetAnimation(sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 1, 24, 24, 2500));
 
-        IMaterial* m1 = new Material();
-        b1->GetRenderable()->SetMaterial(m1);
-    }
+    IMaterial* m1 = new Material();
+    b1->GetRenderable()->SetMaterial(m1);
+
     SceneNode* torchNode = sceneManager->CreateSceneNode("torch");
     torchNode->AddEntity(e1);
     sceneManager->GetRootSceneNode()->AddChild(torchNode);
     torchNode->Translate(0, 0, 0);
 
-    Image* image2 = loader.Load("..\\..\\data\\explosions_pot.png");
     IEntity* e2 = sceneManager->CreateEntity("e2");
     Visual* b2 = sceneManager->CreateBillboard(40, 40);
     e2->SetVisual(b2);
-    if (image2)
-    {
-        b2->SetAnimation(sceneManager->CreateAnimatedTexture(image2, 5, 5, 25, 3000));
+    b2->SetAnimation(sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 5, 5, 25, 3000));
 
-        IMaterial* m2 = new Material();
-        b2->GetRenderable()->SetMaterial(m2);
-    }
+    IMaterial* m2 = new Material();
+    b2->GetRenderable()->SetMaterial(m2);
+
     SceneNode* explosionNode = sceneManager->CreateSceneNode("explosions");
     explosionNode->AddEntity(e2);
     sceneManager->GetRootSceneNode()->AddChild(explosionNode);
     explosionNode->Translate(40, 0, 0);
 
-    Image* image3 = loader.Load("..\\..\\data\\torch_animation.png");
     IEntity* e3 = sceneManager->CreateEntity("e3");
     Visual* b3 = sceneManager->CreateBillboard(40, 40);
     e3->SetVisual(b3);
-    if (image3)
-    {
-        b3->SetAnimation(sceneManager->CreateAnimatedTexture(image1, 1, 24, 24, 2500));
+    b3->SetAnimation(sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 1, 24, 24, 2500));
 
-        IMaterial* m3 = new Material();
-        b3->GetRenderable()->SetMaterial(m3);
-    }
+    IMaterial* m3 = new Material();
+    b3->GetRenderable()->SetMaterial(m3);
+
     SceneNode* torchNode2 = sceneManager->CreateSceneNode("torchNode2");
     torchNode2->AddEntity(e3);
     sceneManager->GetRootSceneNode()->AddChild(torchNode2);
     torchNode2->Translate(-40, 0, 0);
 
-    //     Image* image3 = loader.Load("..\\data\\finalfantasy5_pot.png"); 
     //     IEntity* e3 = sceneManager->CreateEntity("e3");
     //     Billboard* b3 = sceneManager->CreateBillboard(4, 4, Vector3(0, 0, 0));
     //     e3->SetVisual(b3);
-    //     if (image3)
-    //     {
-    //         b3->SetAnimation(sceneManager->CreateAnimatedTexture(image3, 4, 4, 15, 2000));
+    //     b3->SetAnimation(sceneManager->CreateAnimatedTexture("..\\data\\finalfantasy5_pot.png", 4, 4, 15, 2000));
     // 
-    //         IMaterial* m3 = new Material();
-    //         b3->GetRenderable()->SetMaterial(m3);
-    //     }
+    //     IMaterial* m3 = new Material();
+    //     b3->GetRenderable()->SetMaterial(m3);
 
     //     SceneNode* ffBossNode = sceneManager->CreateSceneNode("ffBoss");
     //     ffBossNode->AddEntity(e3);
@@ -115,8 +100,8 @@ void CreateSimpleAnimatedTextures(Engine& engine)
     // 
     //         if (animation)
     //         {
-    //             Image* img = loader.Load("..\\data\\animation_1\\000.png");
-    //             Image* img2 = loader.Load("..\\data\\animation_1\\045.png");
+    //             ImagePtr img = engine.GetImageManager()->CreateImage("..\\data\\animation_1\\000.png");
+    //             ImagePtr img2 = engine.GetImageManager()->CreateImage("..\\data\\animation_1\\045.png");
     //             animation->AddFrame(engine.GetTextureManager()->CreateTexture(TextureType::_2d, img));
     //             animation->AddFrame(engine.GetTextureManager()->CreateTexture(TextureType::_2d, img2));
     //             b4->SetAnimation(animation);

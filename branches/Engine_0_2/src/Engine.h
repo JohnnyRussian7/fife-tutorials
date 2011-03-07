@@ -42,7 +42,10 @@ class IFileSystem;
 class IInputSystem;
 class SceneManager;
 class TextureManager;
-class ImageManager;
+
+namespace graphics {
+    class ImageManager;
+}
 
 struct EngineSettings
 {
@@ -73,7 +76,7 @@ public:
 
 	SceneManager* GetSceneManager() const;
     TextureManager* GetTextureManager() const;
-    ImageManager* GetImageManager() const;
+    graphics::ImageManager* GetImageManager() const;
 
 	uint32_t GetFps() const;
 
@@ -97,7 +100,7 @@ private:
     IInputSystem* m_inputSystem;
 	SceneManager* m_sceneManager;
     TextureManager* m_textureManager;
-    ImageManager* m_imageManager;
+    graphics::ImageManager* m_imageManager;
 
     bool m_run;
     Timer m_timer;

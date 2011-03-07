@@ -54,6 +54,8 @@ public:
 
     void Translate(float x, float y, float z);
 	void Translate(const Vector3& translation);
+
+    void LookAt(float x, float y, float z);
 	void LookAt(const Vector3& target);
 
 	void Pitch(float angle);

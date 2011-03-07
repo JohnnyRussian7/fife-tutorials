@@ -32,7 +32,6 @@
 #include "SharedPtr.h"
 #include "IEntity.h"
 #include "Visual.h"         // TODO - this should be removed at some point
-#include "PngLoader.h"      // TODO - this should be removed at some point
 #include "Color.h"
 
 // filesystem
@@ -51,6 +50,7 @@
 #include "graphics/ImageEnums.h"        // TODO - does this need to be included?
 #include "graphics/ImageFwd.h"
 #include "graphics/ImageManager.h"
+#include "graphics/IImageLoader.h"
 #include "graphics/IIndexBuffer.h"
 #include "graphics/IVertexBuffer.h"
 #include "graphics/ITexture.h"

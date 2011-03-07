@@ -32,32 +32,10 @@ void CreateSimpleIsometricView(Engine& engine)
     Camera* camera = sceneManager->CreateCamera();
     sceneManager->AddCamera(camera);
 
-    // create pitch node
-    SceneNode* camPitchNode = sceneManager->CreateSceneNode("camPitchNode");
-    // create yaw node
-    SceneNode* camYawNode = sceneManager->CreateSceneNode("camYawNode");
-
-    // create translation node
-    SceneNode* camNode = sceneManager->CreateSceneNode("CamNode");
-
-    // add yaw node to translation node
-    camNode->AddChild(camYawNode);
-
-    // add pitch node to yaw node
-    camYawNode->AddChild(camPitchNode);
-
-    // add camera to pitch node
-    camPitchNode->AddEntity(camera);
-    
-    // set the position and look at
-    camNode->SetPosition(0, 0, 500);
-
-    // add top level camera node to the scene
-    sceneManager->GetRootSceneNode()->AddChild(camNode);
-
-    // create isometric perspective by pitching and yawing camera
-    camPitchNode->Pitch(DegToRad(30));
-    camYawNode->Yaw(DegToRad(45));
+    camera->SetPosition(0, 0, 500);
+    camera->LookAt(0, 0, 0);
+    camera->Pitch(DegToRad(30));
+    camera->Yaw(DegToRad(45));
 
     // create the individual nodes
     SceneNode* grass1Node = sceneManager->CreateSceneNode("grass1");
@@ -68,9 +46,9 @@ void CreateSimpleIsometricView(Engine& engine)
 
 
     // position the nodes
-    grass1Node->SetPosition(-20, 0, 0);
+    grass3Node->SetPosition(-20, 0, 0);
     grass2Node->SetPosition(20, 0, 0);
-    grass3Node->SetPosition(20, 20, 0);
+    grass1Node->SetPosition(0, 10, 0);
 //     grass4Node->SetPosition(0, -40, 0);
 //     grass5Node->SetPosition(0, 40, 0);
 
@@ -83,7 +61,7 @@ void CreateSimpleIsometricView(Engine& engine)
 
     // load the image
     filesystem::Path path("../../data/grass/45.png");
-    ImagePtr grassImage = engine.GetImageManager()->CreateImage(path.GetString(), "grassImage");
+    ImagePtr grassImage = engine.GetImageManager()->CreateImage(path, "grassImage");
 
     // create the entity
     IEntity* grass1Entity = sceneManager->CreateEntity("grass1");

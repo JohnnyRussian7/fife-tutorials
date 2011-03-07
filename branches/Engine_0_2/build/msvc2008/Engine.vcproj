@@ -1035,6 +1035,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\graphics\IImageLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\IImageLoader.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\graphics\IIndexBuffer.h"
 				>
 			</File>
@@ -1076,6 +1084,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\graphics\IVertexBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\PngLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\PngLoader.h"
 				>
 			</File>
 			<File
@@ -1601,14 +1617,6 @@
 		</File>
 		<File
 			RelativePath="..\..\src\IEntity.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\src\PngLoader.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\src\PngLoader.h"
 			>
 		</File>
 		<File

@@ -1,7 +1,7 @@
 /**********************************************************************
-*	Filename: ImageManager.h
+*	Filename: IImageLoader.cpp
 *	
-*	Copyright (C) 2010, FIFE team
+*	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
 *
 *	This file is part of FIFE.
@@ -19,35 +19,17 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef IMAGEMANAGER_H_
-#define IMAGEMANAGER_H_
+#include "PrecompiledIncludes.h"
 
-#include "ImageFwd.h"
-#include "ImageEnums.h"
-
-namespace filesystem {
-    class IPath;
-}
+#include "IImageLoader.h"
+#include "PngLoader.h"
 
 namespace graphics
 {
-    class ImageManager
+    IImageLoader* CreateImageLoader(const std::string& type)
     {
-    public:
-        ImageManager();
-
-        ImagePtr CreateImage(const filesystem::IPath& path, /*IImageLoader* loader=0,*/const char* name=0);
-        ImagePtr CreateImage(const std::string& file, /*IImageLoader* loader=0,*/ const char* name=0);
-        bool AddImage(IImage* image);
-        void RemoveImage(IImage* image);
-        void RemoveImage(const char* name);
-        void RemoveAllImages();
-        void RemoveUnusedImages();
-
-    private:
-        typedef std::map<std::string, ImagePtr> ImageContainer;
-        ImageContainer m_images;
-    };
+        // TODO - this needs to be extended to handle multiple
+        //        types of image loaders
+        return new PngLoader;
+    }
 }
-
-#endif

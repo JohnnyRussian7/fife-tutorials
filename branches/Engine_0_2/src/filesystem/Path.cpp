@@ -29,8 +29,6 @@ namespace filesystem
     Path::Path(const char* path)
     : m_origPath(""), m_updatePlatformSpecific(true), m_platformSpecificPath("")
     {
-        assert(path);
-
         if (path)
         {
             m_origPath = std::string(path);
@@ -44,9 +42,23 @@ namespace filesystem
     }
 
     Path::Path(const Path& rhs)
-    : m_origPath(rhs.m_origPath), m_updatePlatformSpecific(true)
+    : m_origPath(rhs.m_origPath), m_updatePlatformSpecific(true), m_platformSpecificPath("")
     {
 
+    }
+
+    Path& Path::operator=(const Path& rhs)
+    {
+        if (this->m_origPath == rhs.m_origPath)
+        {
+            return *this;
+        }
+
+        m_origPath = rhs.m_origPath;
+        m_updatePlatformSpecific = true;
+        m_platformSpecificPath = "";
+
+        return *this;
     }
 
     std::string Path::GetString() const
@@ -58,6 +70,11 @@ namespace filesystem
         }
 
         return m_platformSpecificPath;
+    }
+
+    std::string Path::GetParentPath() const
+    {
+        return filesystem::GetParentPath(*this);
     }
 
     std::string Path::GetFilename() const
@@ -87,17 +104,17 @@ namespace filesystem
 
     void Path::Append(const std::string& path)
     {
-        m_origPath += path;
+        m_origPath = m_origPath + filesystem::FileSeparator + path;
         m_updatePlatformSpecific = true;
     }
 
     void Path::Append(const IPath& path)
     {
-        m_origPath += path.GetString();
+        m_origPath = m_origPath + filesystem::FileSeparator + path.GetString();
 
         // append directly here since GetString will convert
         // the path to platform specific
-        m_platformSpecificPath += path.GetString();
+        m_platformSpecificPath = m_platformSpecificPath + filesystem::FileSeparator + path.GetString();
     }
 
     Path& Path::operator/=(const std::string& path)
@@ -110,11 +127,11 @@ namespace filesystem
 
     Path& Path::operator/=(const IPath& path)
     {
-        m_origPath += path.GetString();
+        m_origPath = m_origPath + filesystem::FileSeparator + path.GetString();
 
         // append directly here since GetString will convert
         // the path to platform specific
-        m_platformSpecificPath += path.GetString();
+        m_platformSpecificPath = m_platformSpecificPath + filesystem::FileSeparator + path.GetString();
 
         return *this;
     }
@@ -128,5 +145,13 @@ namespace filesystem
         }
 
         return m_platformSpecificPath;
+    }
+
+    Path operator/(const Path& lhs, const Path& rhs)
+    {
+        Path path(lhs);
+        path /= rhs;
+
+        return path;
     }
 }

@@ -44,7 +44,7 @@ Engine::Engine(const EngineSettings& settings)
 	
     m_sceneManager = new SceneManager(this, m_settings.sceneManagerSettings, m_renderSystem);
     m_textureManager = new TextureManager(m_settings.renderSystemSettings.renderSystemType);
-    m_imageManager = new ImageManager();
+    m_imageManager = new graphics::ImageManager();
 
     m_windowSystem->SetInputSystem(m_inputSystem);
 
@@ -152,7 +152,7 @@ TextureManager* Engine::GetTextureManager() const
     return m_textureManager;
 }
 
-ImageManager* Engine::GetImageManager() const
+graphics::ImageManager* Engine::GetImageManager() const
 {
     return m_imageManager;
 }

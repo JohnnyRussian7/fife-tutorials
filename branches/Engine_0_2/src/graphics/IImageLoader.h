@@ -1,7 +1,7 @@
 /**********************************************************************
-*	Filename: ImageManager.h
+*	Filename: IImageLoader.h
 *	
-*	Copyright (C) 2010, FIFE team
+*	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
 *
 *	This file is part of FIFE.
@@ -19,11 +19,10 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef IMAGEMANAGER_H_
-#define IMAGEMANAGER_H_
+#ifndef IIMAGELOADER_H_
+#define IIMAGELOADER_H_
 
-#include "ImageFwd.h"
-#include "ImageEnums.h"
+class IImage;
 
 namespace filesystem {
     class IPath;
@@ -31,23 +30,18 @@ namespace filesystem {
 
 namespace graphics
 {
-    class ImageManager
+    class IImageLoader
     {
     public:
-        ImageManager();
+        virtual ~IImageLoader() { };
 
-        ImagePtr CreateImage(const filesystem::IPath& path, /*IImageLoader* loader=0,*/const char* name=0);
-        ImagePtr CreateImage(const std::string& file, /*IImageLoader* loader=0,*/ const char* name=0);
-        bool AddImage(IImage* image);
-        void RemoveImage(IImage* image);
-        void RemoveImage(const char* name);
-        void RemoveAllImages();
-        void RemoveUnusedImages();
-
-    private:
-        typedef std::map<std::string, ImagePtr> ImageContainer;
-        ImageContainer m_images;
+        virtual bool IsLoadable(const filesystem::IPath& file) = 0;
+        virtual IImage* Load(const filesystem::IPath& file) = 0;
+        virtual IImage* Load(const std::string& file) = 0;
+        virtual IImage* Load(const char* file) = 0;
     };
+
+    IImageLoader* CreateImageLoader(const std::string& type);
 }
 
 #endif

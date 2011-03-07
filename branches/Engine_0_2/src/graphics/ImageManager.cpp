@@ -22,108 +22,112 @@
 #include "PrecompiledIncludes.h"
 
 #include "ImageManager.h"
+#include "IImageLoader.h"
 #include "IImage.h"
-#include "../PngLoader.h"
 #include "../filesystem/IPath.h"
 #include "../filesystem/Path.h"
 
-ImageManager::ImageManager()
+namespace graphics
 {
-
-}
-
-ImagePtr ImageManager::CreateImage(const std::string& file, const char* name)
-{
-    return CreateImage(filesystem::Path(file), name);
-}
-
-ImagePtr ImageManager::CreateImage(const filesystem::IPath& path, const char* name)
-{
-    if (name)
+    ImageManager::ImageManager()
     {
-        ImageContainer::iterator iter = m_images.find(std::string(name));
 
-        if (iter != m_images.end())
-        {
-            // image already exists so lets just return it here
-            return iter->second;
-        }
     }
 
-    // TODO - this will need to be expanded when more file types are supported
-    if (path.GetExtension() == ".png")
+    ImagePtr ImageManager::CreateImage(const std::string& file, const char* name)
     {
-        PngLoader loader;
+        return CreateImage(filesystem::Path(file), name);
+    }
 
-        // load the image
-        IImage* image = loader.Load(path.GetString().c_str());
+    ImagePtr ImageManager::CreateImage(const filesystem::IPath& path, const char* name)
+    {
+        if (name)
+        {
+            ImageContainer::iterator iter = m_images.find(std::string(name));
 
-        // create a shared pointer from the loaded image
+            if (iter != m_images.end())
+            {
+                // image already exists so lets just return it here
+                return iter->second;
+            }
+        }
+
+        // TODO - this will need to be expanded to support 
+        //        more image formats
+        IImageLoader* loader = graphics::CreateImageLoader("png");
+
+        if (loader)
+        {
+            // load the image
+            IImage* image = loader->Load(path);
+
+            // create a shared pointer from the loaded image
+            if (image)
+            {
+                ImagePtr ptr = make_shared(image);  
+
+                std::pair<ImageContainer::iterator, bool> retVal = m_images.insert(std::make_pair(ptr->GetName(), ptr));
+                return retVal.first->second;
+            }
+        }
+
+        return ImagePtr();
+    }
+
+    bool ImageManager::AddImage(IImage* image)
+    {
         if (image)
         {
-            ImagePtr ptr = make_shared(image);  
+            ImagePtr sharedImage(image);
+            std::pair<ImageContainer::iterator, bool> retVal = m_images.insert(std::make_pair(sharedImage->GetName(), sharedImage));
 
-            std::pair<ImageContainer::iterator, bool> retVal = m_images.insert(std::make_pair(ptr->GetName(), ptr));
-            return retVal.first->second;
+            return retVal.second;
+        }
+
+        return false;   
+    }
+
+    void ImageManager::RemoveImage(IImage* image)
+    {
+        // TODO - may need a faster way to do this if it becomes
+        //        a performance bottleneck, for now just loop
+        ImageContainer::iterator iter = m_images.begin();
+        for (; iter != m_images.end(); ++iter)
+        {
+            if (iter->second.Get() == image)
+            {
+                m_images.erase(iter);
+                break;
+            }
         }
     }
 
-    return ImagePtr();
-}
-
-bool ImageManager::AddImage(IImage* image)
-{
-    if (image)
+    void ImageManager::RemoveImage(const char* name)
     {
-        ImagePtr sharedImage(image);
-        std::pair<ImageContainer::iterator, bool> retVal = m_images.insert(std::make_pair(sharedImage->GetName(), sharedImage));
-
-        return retVal.second;
-    }
-
-    return false;   
-}
-
-void ImageManager::RemoveImage(IImage* image)
-{
-    // TODO - may need a faster way to do this if it becomes
-    //        a performance bottleneck, for now just loop
-    ImageContainer::iterator iter = m_images.begin();
-    for (; iter != m_images.end(); ++iter)
-    {
-        if (iter->second.Get() == image)
+        if (name)
         {
-            m_images.erase(iter);
-            break;
+            ImageContainer::iterator iter = m_images.find(name);
+            if (iter != m_images.end())
+            {
+                m_images.erase(iter);
+            }
         }
     }
-}
 
-void ImageManager::RemoveImage(const char* name)
-{
-    if (name)
+    void ImageManager::RemoveAllImages()
     {
-        ImageContainer::iterator iter = m_images.find(name);
-        if (iter != m_images.end())
-        {
-            m_images.erase(iter);
-        }
+        m_images.clear();
     }
-}
 
-void ImageManager::RemoveAllImages()
-{
-    m_images.clear();
-}
-
-void ImageManager::RemoveUnusedImages()
-{
-    ImageContainer::iterator iter = m_images.begin();
-    for (; iter != m_images.end(); ++iter)
+    void ImageManager::RemoveUnusedImages()
     {
-        if (iter->second.Unique())
+        ImageContainer::iterator iter = m_images.begin();
+        for (; iter != m_images.end(); ++iter)
         {
-            m_images.erase(iter);
+            if (iter->second.Unique())
+            {
+                m_images.erase(iter);
+            }
         }
     }
 }

@@ -29,14 +29,147 @@ namespace filesystem
     public:
         virtual ~IPath() { };
 
+        //!***************************************************************
+        //! @details:
+        //! returns the full path in the native OS format
+        //!
+        //! @return: 
+        //! std::string
+        //! 
+        //!***************************************************************
         virtual std::string GetString() const = 0;
+
+        //!***************************************************************
+        //! @details:
+        //! returns the full path up to the last file separator character
+        //! in the native OS format
+        //!
+        //! @return: 
+        //! std::string
+        //! 
+        //!***************************************************************
+        virtual std::string GetParentPath() const = 0;
+
+        //!***************************************************************
+        //! @details:
+        //! returns a string from the last file separator character to
+        //! the end of the path string in the native OS format
+        //!
+        //! @note: 
+        //! this will included the extension if one exists
+        //!
+        //! @return: 
+        //! std::string
+        //! 
+        //!***************************************************************
         virtual std::string GetFilename() const = 0;
+
+        //!***************************************************************
+        //! @details:
+        //! returns the extensions including the '.' character 
+        //! in the native OS format
+        //!
+        //! @note
+        //! will return an empty string if no extension present
+        //!
+        //! @return: 
+        //! std::string
+        //! 
+        //!***************************************************************
         virtual std::string GetExtension() const = 0;
+
+        //!***************************************************************
+        //! @details:
+        //! checks to see if an extension is present on the path string
+        //!
+        //! @return: 
+        //! bool
+        //! 
+        //!***************************************************************
         virtual bool HasExtension() const = 0;
+
+        //!***************************************************************
+        //! @details:
+        //! replaces the current extension with the one provided in the
+        //! input argument
+        //!
+        //! @param[in]: extension
+        //! the new extension
+        //!
+        //! @return: 
+        //! void
+        //! 
+        //!***************************************************************
         virtual void ReplaceExtension(const std::string& extension) = 0;
+
+        //!***************************************************************
+        //! @details:
+        //! appends a string onto the end of the current path
+        //!
+        //! @note:
+        //! automatically appends a file separator between the current
+        //! path and the one to be appended
+        //!
+        //! @param[in]: path
+        //! the path string to be appended
+        //!
+        //! @return: 
+        //! void
+        //! 
+        //!***************************************************************
         virtual void Append(const std::string& path) = 0;
+
+        //!***************************************************************
+        //! @details:
+        //! appends a path object onto the end of the current path
+        //!
+        //! @note:
+        //! automatically appends a file separator between the current
+        //! path and the one to be appended
+        //!
+        //! @param[in]: path
+        //! the path object to be appended
+        //!
+        //! @return: 
+        //! void
+        //! 
+        //!***************************************************************
         virtual void Append(const IPath& path) = 0;
+
+        //!***************************************************************
+        //! @details:
+        //! overloaded the '/=' operator to allow convenient appending
+        //! of path strings
+        //!
+        //! @note:
+        //! automatically appends a file separator between the current
+        //! path and the one to be appended
+        //!
+        //! @param[in]: path
+        //! the path string to append
+        //!
+        //! @return: 
+        //! IPath&
+        //! 
+        //!***************************************************************
         virtual IPath& operator/=(const std::string& path) = 0;
+
+        //!***************************************************************
+        //! @details:
+        //! overloaded the '/=' operator to allow convenient appending
+        //! of path objects
+        //!
+        //! @note:
+        //! automatically appends a file separator between the current
+        //! path and the one to be appended
+        //!
+        //! @param[in]: path
+        //! the path object to append
+        //!
+        //! @return: 
+        //! IPath&
+        //! 
+        //!***************************************************************
         virtual IPath& operator/=(const IPath& path) = 0;
     };
 }

@@ -31,6 +31,7 @@
 
 namespace opengl { namespace utility {
     
+    GLenum ConvertPolygonMode(PolygonMode::Enum type);
     GLenum ConvertPrimitiveType(PrimitiveType::Enum type);
     GLenum ConvertTextureType(TextureType::Enum type);
     GLenum ConvertBufferUsage(HwBufferUsage::Enum usage);

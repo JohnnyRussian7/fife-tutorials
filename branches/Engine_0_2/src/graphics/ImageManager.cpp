@@ -31,15 +31,15 @@ namespace graphics
 {
     ImageManager::ImageManager()
     {
-
+        m_loaders.push_back(make_shared(graphics::CreateImageLoader("png")));
     }
 
-    ImagePtr ImageManager::CreateImage(const std::string& file, const char* name)
+    ImagePtr ImageManager::CreateImage(const std::string& file, const char* name, IImageLoader* loader)
     {
-        return CreateImage(filesystem::Path(file), name);
+        return CreateImage(filesystem::Path(file), name, loader);
     }
 
-    ImagePtr ImageManager::CreateImage(const filesystem::IPath& path, const char* name)
+    ImagePtr ImageManager::CreateImage(const filesystem::IPath& path, const char* name, IImageLoader* loader)
     {
         if (name)
         {
@@ -52,14 +52,23 @@ namespace graphics
             }
         }
 
-        // TODO - this will need to be expanded to support 
-        //        more image formats
-        IImageLoader* loader = graphics::CreateImageLoader("png");
+        // attempt to create our own loader if one was not provided
+        if (!loader)
+        {
+            // TODO - this will need to be expanded to support 
+            //        more image formats
+            ImageLoaderPtr loaderPtr = GetImageLoader(path);
+
+            if (loaderPtr)
+            {
+                loader = loaderPtr.Get();
+            }
+        }
 
         if (loader)
         {
             // load the image
-            IImage* image = loader->Load(path);
+            IImage* image = loader->Load(path, name);
 
             // create a shared pointer from the loaded image
             if (image)
@@ -129,5 +138,19 @@ namespace graphics
                 m_images.erase(iter);
             }
         }
+    }
+
+    ImageManager::ImageLoaderPtr ImageManager::GetImageLoader(const filesystem::IPath& path) const
+    {
+        ImageLoaderContainer::const_iterator iter;
+        for (iter = m_loaders.begin(); iter != m_loaders.end(); ++iter)
+        {
+            if ((*iter)->IsLoadable(path))
+            {
+                return *iter;
+            }
+        }
+
+        return ImageLoaderPtr();
     }
 }

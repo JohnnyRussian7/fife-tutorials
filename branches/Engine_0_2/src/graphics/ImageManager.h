@@ -24,6 +24,11 @@
 
 #include "ImageFwd.h"
 #include "ImageEnums.h"
+#include "../SharedPtr.h"
+
+namespace graphics {
+    class IImageLoader;
+}
 
 namespace filesystem {
     class IPath;
@@ -33,11 +38,15 @@ namespace graphics
 {
     class ImageManager
     {
+    private:
+        // private typedef for internal use
+        typedef SharedPtr<IImageLoader> ImageLoaderPtr;
+
     public:
         ImageManager();
 
-        ImagePtr CreateImage(const filesystem::IPath& path, /*IImageLoader* loader=0,*/const char* name=0);
-        ImagePtr CreateImage(const std::string& file, /*IImageLoader* loader=0,*/ const char* name=0);
+        ImagePtr CreateImage(const filesystem::IPath& path, const char* name=0, IImageLoader* loader=0);
+        ImagePtr CreateImage(const std::string& file, const char* name=0, IImageLoader* loader=0);
         bool AddImage(IImage* image);
         void RemoveImage(IImage* image);
         void RemoveImage(const char* name);
@@ -45,8 +54,14 @@ namespace graphics
         void RemoveUnusedImages();
 
     private:
+        ImageLoaderPtr GetImageLoader(const filesystem::IPath& path) const;
+
+    private:
         typedef std::map<std::string, ImagePtr> ImageContainer;
         ImageContainer m_images;
+
+        typedef std::vector<ImageLoaderPtr> ImageLoaderContainer;
+        ImageLoaderContainer m_loaders;
     };
 }
 

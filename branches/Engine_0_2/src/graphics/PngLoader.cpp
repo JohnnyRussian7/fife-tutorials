@@ -29,7 +29,10 @@
 
 #include "../extern/libpng/png.h"
 
-const int PNG_SIG_SIZE = 8;
+namespace
+{
+    const int PngSignatureSizeInBytes = 8;
+}
 
 void png_error_fn(png_structp pngPtr, png_const_charp /*msg*/)
 {
@@ -67,19 +70,19 @@ namespace graphics
             return false;
         }
 
-	    png_byte pngsig[PNG_SIG_SIZE];
+	    png_byte pngsig[PngSignatureSizeInBytes];
 
-	    source.read((char*)pngsig, PNG_SIG_SIZE);
+	    source.read((char*)pngsig, PngSignatureSizeInBytes);
 
-	    if (source.gcount() != PNG_SIG_SIZE)
+	    if (source.gcount() != PngSignatureSizeInBytes)
 	    {
 		    return false;
 	    }
 
-	    return !png_sig_cmp(pngsig, 0, PNG_SIG_SIZE);
+	    return !png_sig_cmp(pngsig, 0, PngSignatureSizeInBytes);
     }
 
-    IImage* PngLoader::Load(const filesystem::IPath& file)
+    IImage* PngLoader::Load(const filesystem::IPath& file, const char* name)
     {
         if (!IsLoadable(file))
         {
@@ -182,7 +185,7 @@ namespace graphics
         }
 
         // create image object
-        IImage* img = new Image(colorFormat, width, height);
+        IImage* img = new Image(colorFormat, width, height, name);
 
         // assign image data to row pointers for reading
         rowPtrs = new png_bytep[height];
@@ -204,18 +207,18 @@ namespace graphics
         return img;
     }
 
-    IImage* PngLoader::Load(const std::string& file)
+    IImage* PngLoader::Load(const std::string& file, const char* name)
     {      
-        return Load(filesystem::Path(file));
+        return Load(filesystem::Path(file), name);
     }
 
-    IImage* PngLoader::Load(const char* file)
+    IImage* PngLoader::Load(const char* file, const char* name)
     {
 	    if (!file)
 	    {
 		    return 0;
 	    }
 
-        return Load(filesystem::Path(file));
+        return Load(filesystem::Path(file), name);
     }
 }

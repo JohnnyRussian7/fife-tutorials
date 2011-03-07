@@ -36,9 +36,9 @@ namespace graphics
         virtual ~IImageLoader() { };
 
         virtual bool IsLoadable(const filesystem::IPath& file) = 0;
-        virtual IImage* Load(const filesystem::IPath& file) = 0;
-        virtual IImage* Load(const std::string& file) = 0;
-        virtual IImage* Load(const char* file) = 0;
+        virtual IImage* Load(const filesystem::IPath& file, const char* name=0) = 0;
+        virtual IImage* Load(const std::string& file, const char* name=0) = 0;
+        virtual IImage* Load(const char* file, const char* name=0) = 0;
     };
 
     IImageLoader* CreateImageLoader(const std::string& type);

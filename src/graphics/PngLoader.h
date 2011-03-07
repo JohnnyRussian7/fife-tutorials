@@ -33,9 +33,9 @@ namespace graphics
         PngLoader();
 
         virtual bool IsLoadable(const filesystem::IPath& file);
-        virtual IImage* Load(const filesystem::IPath& file);
-        virtual IImage* Load(const std::string& file);
-        virtual IImage* Load(const char* file);
+        virtual IImage* Load(const filesystem::IPath& file, const char* name=0);
+        virtual IImage* Load(const std::string& file, const char* name=0);
+        virtual IImage* Load(const char* file, const char* name=0);
     };
 }
 

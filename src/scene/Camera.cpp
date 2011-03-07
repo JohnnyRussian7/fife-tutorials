@@ -134,6 +134,11 @@ void Camera::Translate(const Vector3& translation)
     MarkDirty();
 }
 
+void Camera::LookAt(float x, float y, float z)
+{
+    LookAt(Vector3(x, y, z));
+}
+
 void Camera::LookAt(const Vector3& target)
 {
     // always looking down negative z-axis so negate direction

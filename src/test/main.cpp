@@ -59,6 +59,18 @@ public:
         {
             m_engine.Quit();
         }
+        else if (event.GetKeyCode() == KeyCodes::KeyP)
+        {
+            // toggle between wireframe and fill
+            if (m_engine.GetRenderSystem()->GetPolygonMode() != PolygonMode::Fill)
+            {
+                m_engine.GetRenderSystem()->SetPolygonMode(PolygonMode::Fill);
+            }
+            else
+            {
+                m_engine.GetRenderSystem()->SetPolygonMode(PolygonMode::Line);
+            }
+        }
 
         return true;
     };

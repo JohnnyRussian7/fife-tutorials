@@ -41,6 +41,8 @@ public:
 	~OpenglRenderer();
 
 	virtual RenderSystemType::Enum GetRenderSystemType() const;
+    virtual void SetPolygonMode(PolygonMode::Enum type);
+    virtual PolygonMode::Enum GetPolygonMode() const;
 	virtual void SetViewPort(const Viewport& viewport);
 	virtual void SetTransform(TransformType::Enum type, const Matrix4& mat);
 
@@ -70,6 +72,8 @@ private:
 	OpenglTexture* m_activeTexture;
 
     OpenglShaderManager* m_shaderManager;
+
+    PolygonMode::Enum m_polygonMode;
 
     bool m_useVbo;
 };

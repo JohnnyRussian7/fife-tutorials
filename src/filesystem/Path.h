@@ -34,8 +34,10 @@ namespace filesystem
         Path(const char* path);
         Path(const std::string& path);
         Path(const Path& rhs);
+        Path& operator=(const Path& rhs);
 
         virtual std::string GetString() const;
+        virtual std::string GetParentPath() const;
         virtual std::string GetFilename() const;
         virtual std::string GetExtension() const;
         virtual bool HasExtension() const;
@@ -58,6 +60,27 @@ namespace filesystem
         mutable bool m_updatePlatformSpecific;
         mutable std::string m_platformSpecificPath;
     };
+
+    //!***************************************************************
+    //! @details:
+    //! Overloaded free function for the '/' operator which allows
+    //! convenient appending of path objects
+    //!
+    //! @note:
+    //! automatically appends a file separator between the current
+    //! path and the one to be appended
+    //!
+    //! @param[in]: lhs
+    //! the path object on left hand side of the '/' operator
+    //!
+    //! @param[in]: rhs
+    //! the path object on right hand side of the '/' operator
+    //!
+    //! @return: 
+    //! Path
+    //! 
+    //!***************************************************************
+    Path operator/(const Path& lhs, const Path& rhs);
 }
 
 #endif

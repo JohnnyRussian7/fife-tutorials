@@ -23,15 +23,20 @@
 #define PNGLOADER_H_
 
 #include "StdIncludes.h"
+#include "IImageLoader.h"
 
-class IImage;
-
-class PngLoader
+namespace graphics
 {
-public:
-	bool IsLoadable(std::istream& source);
-	IImage* Load(const char* filename);
-};
+    class PngLoader : public IImageLoader
+    {
+    public:
+        PngLoader();
+
+        virtual bool IsLoadable(const filesystem::IPath& file);
+        virtual IImage* Load(const filesystem::IPath& file);
+        virtual IImage* Load(const std::string& file);
+        virtual IImage* Load(const char* file);
+    };
+}
 
 #endif
-

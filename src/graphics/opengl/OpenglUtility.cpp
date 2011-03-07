@@ -26,6 +26,21 @@
 
 namespace opengl { namespace utility {
 
+    GLenum ConvertPolygonMode(PolygonMode::Enum type)
+    {
+        switch (type)
+        {
+        case PolygonMode::Point:
+            return GL_POINT;
+        case PolygonMode::Line:
+            return GL_LINE;
+        case PolygonMode::Fill:
+            return GL_FILL;
+        default:
+            return GL_FILL;
+        }
+    }
+
     GLenum ConvertPrimitiveType(PrimitiveType::Enum type)
     {
         switch (type)

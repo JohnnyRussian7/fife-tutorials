@@ -93,6 +93,8 @@ m_projectionMatrix(Matrix4::Identity()), m_modelMatrixUpdate(false), m_viewMatri
 m_projectionMatrixUpdate(false), m_activeTexture(0), m_shaderManager(new OpenglShaderManager()),
 m_useVbo(false)
 {
+    SetPolygonMode(PolygonMode::Fill);
+
     m_useVbo = OpenglCapabilities::Instance()->HasVboSupport() && m_settings.useVbo;
 
     if (OpenglCapabilities::Instance()->HasShaderSupport())
@@ -115,6 +117,17 @@ OpenglRenderer::~OpenglRenderer()
 RenderSystemType::Enum OpenglRenderer::GetRenderSystemType() const
 {
     return RenderSystemType::Opengl;
+}
+
+void OpenglRenderer::SetPolygonMode(PolygonMode::Enum type)
+{
+    m_polygonMode = type;
+    glPolygonMode(GL_FRONT_AND_BACK, opengl::utility::ConvertPolygonMode(m_polygonMode));
+}
+
+PolygonMode::Enum OpenglRenderer::GetPolygonMode() const
+{
+    return m_polygonMode;
 }
 
 void OpenglRenderer::SetViewPort(const Viewport& viewport)

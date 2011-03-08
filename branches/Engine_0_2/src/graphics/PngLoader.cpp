@@ -24,10 +24,10 @@
 #include "PngLoader.h"
 #include "IImage.h"
 #include "Image.h"     // TODO - this may not need to be here forever
-#include "filesystem/IPath.h"
-#include "filesystem/Path.h"
+#include "../filesystem/IPath.h"
+#include "../filesystem/Path.h"
 
-#include "../extern/libpng/png.h"
+#include "../../extern/libpng/png.h"
 
 namespace
 {

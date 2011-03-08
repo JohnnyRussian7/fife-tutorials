@@ -98,7 +98,7 @@ public:
     
     void Minimize()
     {
-        
+
     }
     
     void Maximize()
@@ -118,7 +118,7 @@ public:
     
     bool IsActive() const
     {
-        
+
     }
     
     bool HasFocus() const
@@ -128,12 +128,22 @@ public:
     
     bool IsMinimized() const
     {
-        // use NSWindow isMiniaturized
+        if (m_window)
+        {
+            return [m_window isMiniaturized];
+        }
+        
+        return false;
     }
     
     bool IsMaximized() const
     {
-        // use NSWindow isZoomed
+        if (m_window)
+        {
+            return [m_window isZoomed];
+        }
+        
+        return false;
     }
     
     

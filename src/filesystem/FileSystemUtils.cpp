@@ -71,7 +71,7 @@ namespace filesystem
         // convert the file separators to OS specific 
 #if defined(WINDOWS_OS)
         std::transform(srcPath.begin(), srcPath.end(), returnValue.begin(), ForwardSlashPredicate()); 
-#elif (MACOSX_OS) || (LINUX_OS)
+#elif defined(MACOSX_OS) || defined(LINUX_OS)
         std::transform(srcPath.begin(), srcPath.end(), returnValue.begin(), BackSlashPredicate()); 
 #endif
 

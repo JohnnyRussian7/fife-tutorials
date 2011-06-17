@@ -26,23 +26,29 @@
 
 class IShader;
 class IShaderProgram;
-class OpenglShader;
 
-class OpenglShaderManager : public IShaderManager
-{
-public:
-    OpenglShaderManager();
-    ~OpenglShaderManager();
+namespace opengl {
+    class OpenglShader;
+}
 
-    virtual IShader* CreateShader(ShaderType::Enum type, const std::string& fileName, bool compile=true);
-    //virtual OpenglShader* CreateShader(ShaderType::Enum type, const std::string& shaderName, const std::string& shaderCode, bool compile=true);
-    //virtual OpenglShader* CreateShader(ShaderType::Enum type, const std::string& shaderName, const char* shaderCode, bool compile=true);
+namespace opengl {
 
-    virtual IShaderProgram* CreateShaderProgram(const std::string& vertexShaderFile, const std::string fragmentShaderFile);
+    class OpenglShaderManager : public IShaderManager
+    {
+    public:
+        OpenglShaderManager();
+        ~OpenglShaderManager();
 
-private:
-    typedef std::map<std::string, OpenglShader*> ShaderContainer;
-    ShaderContainer m_shaders;
-};
+        virtual IShader* CreateShader(ShaderType::Enum type, const std::string& fileName, bool compile=true);
+        //virtual OpenglShader* CreateShader(ShaderType::Enum type, const std::string& shaderName, const std::string& shaderCode, bool compile=true);
+        //virtual OpenglShader* CreateShader(ShaderType::Enum type, const std::string& shaderName, const char* shaderCode, bool compile=true);
+
+        virtual IShaderProgram* CreateShaderProgram(const std::string& vertexShaderFile, const std::string fragmentShaderFile);
+
+    private:
+        typedef std::map<std::string, OpenglShader*> ShaderContainer;
+        ShaderContainer m_shaders;
+    };
+}
 
 #endif

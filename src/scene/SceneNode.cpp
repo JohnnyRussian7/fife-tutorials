@@ -50,7 +50,7 @@ SceneNode::SceneNode(const char* name, SceneManager* manager)
 : m_name(""), m_sceneManager(manager), m_parent(0), m_scale(1, 1, 1), m_position(Vector3::Zero()),
 m_orientation(Quaternion::Identity()), m_relativeScale(1, 1, 1), m_relativePosition(Vector3::Zero()),
 m_relativeOrientation(Quaternion::Identity()), m_requiresUpdate(false), m_updateTransform(false),
-m_localBlendingMode(false)
+m_localBlendingMode(false), m_localCullMode(false)
 {
 	if (name)
 	{
@@ -207,6 +207,12 @@ void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperatio
     // cache the current blend mode to add to each render operation
     const BlendingMode& blendingMode = GetBlendingMode();
 
+    // cache current cull mode to add to each render operation
+    const CullMode& cullMode = GetCullMode();
+
+    // cache current winding mode to add to each render operation
+    const PolygonWindingMode& windingMode = GetPolygonWindingMode();
+
     // add all of this scene nodes renderables
     EntityContainer::iterator entityIter;
     for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)
@@ -220,6 +226,8 @@ void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperatio
                 RenderOperation operation;
                 operation.SetRenderable(renderable);
                 operation.SetBlendingMode(blendingMode);
+                operation.SetCullMode(cullMode);
+                operation.SetPolygonWindingMode(windingMode);
                 renderOperations.push_back(operation);
             }
         }
@@ -317,6 +325,46 @@ const BlendingMode& SceneNode::GetBlendingMode()
     }
 
     return m_blendingMode;
+}
+
+void SceneNode::SetCullMode(const CullMode& cullMode)
+{
+    // save cull mode locally
+    m_cullMode = cullMode;
+    m_localCullMode = true;
+}
+
+const CullMode& SceneNode::GetCullMode()
+{
+    // attempt to perform a lazy update, if the parent's cull mode has changed
+    // if the cull mode is not the same as our parent and we haven't set it
+    // directly, then update it from the parent
+    if (m_parent && m_cullMode != m_parent->GetCullMode() && !m_localCullMode)
+    {
+        m_cullMode = m_parent->GetCullMode();
+    }
+
+    return m_cullMode;
+}
+
+void SceneNode::SetPolygonWindingMode(const PolygonWindingMode& windingMode)
+{
+    // save winding mode locally
+    m_windingMode = windingMode;
+    m_localWindingMode = true;
+}
+
+const PolygonWindingMode& SceneNode::GetPolygonWindingMode()
+{
+    // attempt to perform a lazy update, if the parent's winding mode has changed
+    // if the winding mode is not the same as our parent and we haven't set it
+    // directly, then update it from the parent
+    if (m_parent && m_windingMode != m_parent->GetPolygonWindingMode() && !m_localWindingMode)
+    {
+        m_windingMode = m_parent->GetPolygonWindingMode();
+    }
+
+    return m_windingMode;
 }
 
 Matrix4 SceneNode::GetTransform()

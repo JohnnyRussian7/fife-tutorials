@@ -88,6 +88,7 @@ void DrawAxes()
 }
 
 namespace opengl {
+
     OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
     : m_settings(settings), m_viewport(Viewport()),
     m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
@@ -124,7 +125,7 @@ namespace opengl {
     void OpenglRenderer::SetPolygonMode(PolygonMode::Enum type)
     {
         m_polygonMode = type;
-        glPolygonMode(GL_FRONT_AND_BACK, opengl::utility::ConvertPolygonMode(m_polygonMode));
+        glPolygonMode(GL_FRONT_AND_BACK, utility::ConvertPolygonMode(m_polygonMode));
     }
 
     PolygonMode::Enum OpenglRenderer::GetPolygonMode() const
@@ -208,6 +209,37 @@ namespace opengl {
         }
     }
 
+    void OpenglRenderer::SetCullMode(const CullMode& cullMode)
+    {
+        if (cullMode != m_cullMode)
+        {
+            if (cullMode.IsEnabled() && !m_cullMode.IsEnabled())
+            {
+                glEnable(GL_CULL_FACE);
+
+                glCullFace(utility::ConvertCullMode(cullMode.GetCullType()));
+            }
+            else if (!cullMode.IsEnabled())
+            {
+                glDisable(GL_CULL_FACE);
+            }
+
+            // storing cull mode
+            m_cullMode = cullMode;
+        }
+    }
+
+    void OpenglRenderer::SetPolygonWindingMode(const PolygonWindingMode& windingMode)
+    {
+        if (windingMode != m_windingMode)
+        {
+            glFrontFace(utility::ConvertPolygonWindingMode(windingMode.GetWindingType()));
+
+            // storing winding mode
+            m_windingMode = windingMode;
+        }
+    }
+
     IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
     {
         if (m_useVbo)
@@ -260,6 +292,15 @@ namespace opengl {
         // set the model transform
         SetTransform(TransformType::Model, renderable->GetTransform());
 
+        // set the blending mode
+        SetBlendingMode(renderOperation.GetBlendingMode());
+
+        // set the cull mode
+        SetCullMode(renderOperation.GetCullMode());
+
+        // set the winding mode
+        SetPolygonWindingMode(renderOperation.GetPolygonWindingMode());
+
         IMaterial* material = renderable->GetMaterial();
 
         if (material)
@@ -268,8 +309,6 @@ namespace opengl {
 
             if (texture)
             {
-                SetBlendingMode(renderOperation.GetBlendingMode());
-
                 // TODO - should be settable outside of render system
                 glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
                 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
@@ -278,8 +317,8 @@ namespace opengl {
                 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
                 // 
                 //         glActiveTextureARB(GL_TEXTURE0);
-                glEnable(opengl::utility::ConvertTextureType(texture->GetType()));    
-                glBindTexture(opengl::utility::ConvertTextureType(texture->GetType()), texture->GetId());
+                glEnable(utility::ConvertTextureType(texture->GetType()));    
+                glBindTexture(utility::ConvertTextureType(texture->GetType()), texture->GetId());
             }
         }
 
@@ -293,19 +332,19 @@ namespace opengl {
                 glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
 
                 glVertexPointer(3, 
-                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
+                    utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
                     vertexBuffer->GetStride(), 
                     BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Position)));
                 glEnableClientState(GL_VERTEX_ARRAY);
 
                 glColorPointer(4, 
-                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
+                    utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
                     vertexBuffer->GetStride(), 
                     BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Color)));
                 glEnableClientState(GL_COLOR_ARRAY);
 
                 glTexCoordPointer(2, 
-                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
+                    utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
                     vertexBuffer->GetStride(), 
                     BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Texture))); 
                 glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -313,19 +352,19 @@ namespace opengl {
             else
             {
                 glVertexPointer(3, 
-                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
+                    utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
                     vertexBuffer->GetStride(), 
                     vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Position)));
                 glEnableClientState(GL_VERTEX_ARRAY);
 
                 glColorPointer(4, 
-                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
+                    utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
                     vertexBuffer->GetStride(), 
                     vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Color)));
                 glEnableClientState(GL_COLOR_ARRAY);
 
                 glTexCoordPointer(2, 
-                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
+                    utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
                     vertexBuffer->GetStride(), 
                     vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Texture))); 
                 glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -346,12 +385,12 @@ namespace opengl {
                     indexData = indexBuffer->GetData(indexStart);
                 }
 
-                //glDrawElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
-                glDrawRangeElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
+                //glDrawElements(utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
+                glDrawRangeElements(utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
             }
             else
             {
-                glDrawArrays(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, vertexBuffer->GetNumVertices());
+                glDrawArrays(utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, vertexBuffer->GetNumVertices());
             }
 
             // disable client state

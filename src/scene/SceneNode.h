@@ -27,7 +27,9 @@
 #include "../math/Vector3.h"
 #include "../math/Quaternion.h"
 #include "../math/Matrix4.h"
-#include "../graphics/BlendingMode.h"
+#include "../rendersystem/BlendingMode.h"
+#include "../rendersystem/CullMode.h"
+#include "../rendersystem/PolygonWindingMode.h"
 
 class SceneManager;
 class IEntity;
@@ -76,6 +78,12 @@ public:
     void SetBlendingMode(const BlendingMode& blendingMode);
     const BlendingMode& GetBlendingMode();
 
+    void SetCullMode(const CullMode& cullMode);
+    const CullMode& GetCullMode();
+
+    void SetPolygonWindingMode(const PolygonWindingMode& windingMode);
+    const PolygonWindingMode& GetPolygonWindingMode();
+
 	Matrix4 GetTransform();
 
     void Translate(const Vector3& translation);
@@ -118,6 +126,12 @@ private:
 
     BlendingMode m_blendingMode;
     bool m_localBlendingMode;
+
+    CullMode m_cullMode;
+    bool m_localCullMode;
+
+    PolygonWindingMode m_windingMode;
+    bool m_localWindingMode;
 
 	bool m_updateTransform;
 	Matrix4 m_transform;

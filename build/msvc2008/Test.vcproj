@@ -189,6 +189,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\test\SimpleKeyListener.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\test\SimpleMouseListener.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\test\SimpleStaticTextures.cpp"
 				>
 			</File>
@@ -204,6 +212,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\test\SimpleIsometricView.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\test\SimpleKeyListener.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\test\SimpleMouseListener.h"
 				>
 			</File>
 			<File

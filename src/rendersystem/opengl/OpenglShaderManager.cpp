@@ -90,106 +90,108 @@ namespace
     }
 }
 
-OpenglShaderManager::OpenglShaderManager()
-{
-
-}
-
-OpenglShaderManager::~OpenglShaderManager()
-{
-    ShaderContainer::iterator iter;
-    for (iter = m_shaders.begin(); iter != m_shaders.end(); ++iter)
+namespace opengl {
+    OpenglShaderManager::OpenglShaderManager()
     {
-        delete iter->second;
+
     }
-    m_shaders.clear();
-}
 
-IShader* OpenglShaderManager::CreateShader(ShaderType::Enum type, const std::string& fileName, bool compile)
-{
-    std::ifstream shaderFile(fileName.c_str());
-
-    if (shaderFile)
+    OpenglShaderManager::~OpenglShaderManager()
     {
-        // close here, we read elsewhere
-        shaderFile.close();
-
-        // create name from the shader filename
-        std::string::size_type pos = fileName.find_last_of('\\');
-        if (pos == std::string::npos)
+        ShaderContainer::iterator iter;
+        for (iter = m_shaders.begin(); iter != m_shaders.end(); ++iter)
         {
-            // no \ found so look for /
-            pos = fileName.find_last_of('/');
+            delete iter->second;
         }
+        m_shaders.clear();
+    }
 
-        // increment up 1 to avoid grabbing the slash character
-        pos += 1;
+    IShader* OpenglShaderManager::CreateShader(ShaderType::Enum type, const std::string& fileName, bool compile)
+    {
+        std::ifstream shaderFile(fileName.c_str());
 
-        std::string shaderName;
-        if (pos < fileName.length())
+        if (shaderFile)
         {
-//             std::string::size_type dotPos = fileName.find_last_of('.');
-//             if (dotPos != std::string::npos)
-//             {
-//                 uint32_t count = (fileName.length() - pos) - (fileName.length() - dotPos);
-//                 shaderName = fileName.substr(pos, count);
-//             }
-//             else
-//             {
-                shaderName = fileName.substr(pos, std::string::npos);
-//            }
-        }
-        else
-        {
-            shaderName = CreateUniqueShaderName(type);
-        }
+            // close here, we read elsewhere
+            shaderFile.close();
 
-        if (m_shaders.find(shaderName) != m_shaders.end())
-        {
-            // TODO - report shader already exists
-            return 0;
-        }      
-
-        OpenglShader *shader = new OpenglShader(type, shaderName, ReadShaderFileIntoString(fileName));
-
-        if (shader)
-        {
-            if (compile)
+            // create name from the shader filename
+            std::string::size_type pos = fileName.find_last_of('\\');
+            if (pos == std::string::npos)
             {
-                bool success = shader->Compile();
-
-                if (!success)
-                {
-                    // TODO - report error here
-                    return 0;
-                }         
+                // no \ found so look for /
+                pos = fileName.find_last_of('/');
             }
 
-            m_shaders.insert(std::make_pair(shader->GetName(), shader)); 
+            // increment up 1 to avoid grabbing the slash character
+            pos += 1;
 
-            return shader;
+            std::string shaderName;
+            if (pos < fileName.length())
+            {
+    //             std::string::size_type dotPos = fileName.find_last_of('.');
+    //             if (dotPos != std::string::npos)
+    //             {
+    //                 uint32_t count = (fileName.length() - pos) - (fileName.length() - dotPos);
+    //                 shaderName = fileName.substr(pos, count);
+    //             }
+    //             else
+    //             {
+                    shaderName = fileName.substr(pos, std::string::npos);
+    //            }
+            }
+            else
+            {
+                shaderName = CreateUniqueShaderName(type);
+            }
+
+            if (m_shaders.find(shaderName) != m_shaders.end())
+            {
+                // TODO - report shader already exists
+                return 0;
+            }      
+
+            OpenglShader *shader = new OpenglShader(type, shaderName, ReadShaderFileIntoString(fileName));
+
+            if (shader)
+            {
+                if (compile)
+                {
+                    bool success = shader->Compile();
+
+                    if (!success)
+                    {
+                        // TODO - report error here
+                        return 0;
+                    }         
+                }
+
+                m_shaders.insert(std::make_pair(shader->GetName(), shader)); 
+
+                return shader;
+            }
         }
-    }
 
-    return 0;
-}
-
-IShaderProgram* OpenglShaderManager::CreateShaderProgram(const std::string& vertexShaderFile, const std::string fragmentShaderFile)
-{
-    IShader* vertexShader = CreateShader(ShaderType::Vertex, vertexShaderFile, true);
-    IShader* fragmentShader = CreateShader(ShaderType::Fragment, fragmentShaderFile, true);
-
-    if (!vertexShader)
-    {
-        // TODO - report error
         return 0;
     }
 
-    if (!fragmentShader)
+    IShaderProgram* OpenglShaderManager::CreateShaderProgram(const std::string& vertexShaderFile, const std::string fragmentShaderFile)
     {
-        // TODO - report error
-        return 0;
-    }
+        IShader* vertexShader = CreateShader(ShaderType::Vertex, vertexShaderFile, true);
+        IShader* fragmentShader = CreateShader(ShaderType::Fragment, fragmentShaderFile, true);
 
-    return new OpenglShaderProgram(vertexShader, fragmentShader);
+        if (!vertexShader)
+        {
+            // TODO - report error
+            return 0;
+        }
+
+        if (!fragmentShader)
+        {
+            // TODO - report error
+            return 0;
+        }
+
+        return new OpenglShaderProgram(vertexShader, fragmentShader);
+    }
 }

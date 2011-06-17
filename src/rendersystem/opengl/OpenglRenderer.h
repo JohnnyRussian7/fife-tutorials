@@ -25,17 +25,22 @@
 #include "../IRenderSystem.h"
 
 #include "../RenderEnums.h"
+#include "../BlendingMode.h"
+#include "../CullMode.h"
 #include "../../math/Matrix4.h"
 #include "../../scene/Viewport.h"
 #include "../../graphics/opengl/OpenglTexture.h"
 #include "../../graphics/VertexIndexBufferEnums.h"
-#include "../../graphics/BlendingMode.h"
 
 class IVertexBuffer;
 class IIndexBuffer;
-class OpenglShaderManager;
 
 namespace opengl {
+    class OpenglShaderManager;
+}
+
+namespace opengl {
+
     class OpenglRenderer : public IRenderSystem
     {
     public:
@@ -47,7 +52,6 @@ namespace opengl {
         virtual PolygonMode::Enum GetPolygonMode() const;
 	    virtual void SetViewPort(const Viewport& viewport);
 	    virtual void SetTransform(TransformType::Enum type, const Matrix4& mat);
-        virtual void SetBlendingMode(const BlendingMode& BlendingMode);
 
 	    void EnableTextures(TextureType::Enum type);
 	    void DisableTextures(TextureType::Enum type);
@@ -59,6 +63,11 @@ namespace opengl {
 
         virtual void ClearBuffers(bool colorBuffer=true, bool depthBuffer=true);
 	    virtual void Render(const RenderOperation& renderOperation);
+
+    protected:
+        virtual void SetBlendingMode(const BlendingMode& BlendingMode);
+        virtual void SetCullMode(const CullMode& cullMode);
+        virtual void SetPolygonWindingMode(const PolygonWindingMode& windingMode);
 
     private:
         RenderSystemSettings m_settings;
@@ -78,6 +87,8 @@ namespace opengl {
 
         PolygonMode::Enum m_polygonMode;
         BlendingMode m_blendingMode;
+        CullMode m_cullMode;
+        PolygonWindingMode m_windingMode;
 
         bool m_useVbo;
     };

@@ -26,6 +26,9 @@
 
 #include "RenderSystemTypes.h"
 #include "RenderEnums.h"
+#include "BlendingMode.h"
+#include "CullMode.h"
+#include "PolygonWindingMode.h"
 #include "../graphics/VertexIndexBufferEnums.h"
 
 class Viewport;
@@ -64,6 +67,11 @@ public:
 
     virtual void ClearBuffers(bool colorBuffer=true, bool depthBuffer=true) = 0;
 	virtual void Render(const RenderOperation& renderable) = 0;
+
+protected:
+    virtual void SetBlendingMode(const BlendingMode& BlendingMode) = 0;
+    virtual void SetCullMode(const CullMode& cullMode) = 0;
+    virtual void SetPolygonWindingMode(const PolygonWindingMode& polygonWindingMode) = 0;
 };
 
 IRenderSystem* CreateRenderSystem(const RenderSystemSettings& settings);

@@ -60,7 +60,6 @@
 #include "graphics/Vertex.h"
 #include "graphics/VertexData.h"
 #include "graphics/VertexIndexBufferEnums.h"
-#include "graphics/BlendingMode.h"
 
 // gui
 
@@ -88,6 +87,9 @@
 #include "rendersystem/IRenderSystem.h"
 #include "rendersystem/RenderEnums.h"
 #include "rendersystem/RenderSystemTypes.h"
+#include "rendersystem/BlendingMode.h"
+#include "rendersystem/CullMode.h"
+#include "rendersystem/PolygonWindingMode.h"
 
 // scene
 #include "scene/SceneManager.h"

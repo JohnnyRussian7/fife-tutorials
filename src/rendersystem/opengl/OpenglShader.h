@@ -27,31 +27,34 @@
 
 class OpenglShaderProgram;
 
-class OpenglShader : public IShader
-{
-public:
-    OpenglShader(ShaderType::Enum type, const std::string& name, const std::string& source);
-    OpenglShader(ShaderType::Enum type, const std::string& name, char* source);
-    ~OpenglShader();
+namespace opengl {
 
-    virtual ShaderType::Enum GetType() const;
-    virtual const std::string& GetName() const;
-    virtual const uint32_t GetId() const;
+    class OpenglShader : public IShader
+    {
+    public:
+        OpenglShader(ShaderType::Enum type, const std::string& name, const std::string& source);
+        OpenglShader(ShaderType::Enum type, const std::string& name, char* source);
+        ~OpenglShader();
 
-    virtual bool Compile();
-    virtual bool IsCompiled() const;
+        virtual ShaderType::Enum GetType() const;
+        virtual const std::string& GetName() const;
+        virtual const uint32_t GetId() const;
 
-    virtual bool IsAttached() const;
+        virtual bool Compile();
+        virtual bool IsCompiled() const;
 
-private:
-    void Init(const char* source);
+        virtual bool IsAttached() const;
 
-private:
-    OpenglShaderProgram* m_parent;
-    ShaderType::Enum m_type;
-    std::string m_name;
-    uint32_t m_id;
-    bool m_compiled;
-};
+    private:
+        void Init(const char* source);
+
+    private:
+        OpenglShaderProgram* m_parent;
+        ShaderType::Enum m_type;
+        std::string m_name;
+        uint32_t m_id;
+        bool m_compiled;
+    };
+}
 
 #endif

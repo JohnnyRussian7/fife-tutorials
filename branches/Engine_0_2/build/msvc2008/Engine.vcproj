@@ -1015,14 +1015,6 @@
 			Name="graphics"
 			>
 			<File
-				RelativePath="..\..\src\graphics\BlendingMode.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\graphics\BlendingMode.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\graphics\GenericIndexBuffer.cpp"
 				>
 			</File>
@@ -1335,6 +1327,22 @@
 			Name="rendersystem"
 			>
 			<File
+				RelativePath="..\..\src\rendersystem\BlendingMode.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\BlendingMode.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\CullMode.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\CullMode.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\rendersystem\IRenderSystem.cpp"
 				>
 			</File>
@@ -1352,6 +1360,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\rendersystem\IShaderProgram.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\PolygonWindingMode.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\PolygonWindingMode.h"
 				>
 			</File>
 			<File

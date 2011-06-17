@@ -239,4 +239,32 @@ namespace opengl { namespace utility {
         }
     }
 
+    GLenum ConvertCullMode(CullType::Enum cullMode)
+    {
+        switch (cullMode)
+        {
+        case CullType::Back:
+            return GL_BACK;
+        case CullType::Front:
+            return GL_FRONT;
+        case CullType::Both:
+            return GL_FRONT_AND_BACK;
+        default:
+            return GL_BACK;
+        }
+    }
+
+    GLenum ConvertPolygonWindingMode(WindingType::Enum windingType)
+    {
+        switch (windingType)
+        {
+        case WindingType::Clockwise:
+            return GL_CW;
+        case WindingType::CounterClockwise:
+            return GL_CCW;
+        default:
+            return GL_CCW;
+        }
+    }
+
 }}

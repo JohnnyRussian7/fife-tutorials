@@ -26,7 +26,9 @@
 
 #include "../TextureEnums.h"
 #include "../VertexIndexBufferEnums.h"
-#include "../BlendingMode.h"
+#include "../../rendersystem/BlendingMode.h"
+#include "../../rendersystem/CullMode.h"
+#include "../../rendersystem/PolygonWindingMode.h"
 #include "../../rendersystem/RenderEnums.h"
 #include "../../rendersystem/ShaderEnums.h"
 
@@ -41,6 +43,8 @@ namespace opengl { namespace utility {
     GLenum ConvertShaderType(ShaderType::Enum type);
     GLenum ConvertSrcBlendMode(SrcBlendMode::Enum mode);
     GLenum ConvertDestBlendMode(DestBlendMode::Enum mode);
+    GLenum ConvertCullMode(CullType::Enum cullType);
+    GLenum ConvertPolygonWindingMode(WindingType::Enum polygonWindingType);
 }}
 
 #endif

@@ -26,35 +26,38 @@
 
 class IShader;
 
-class OpenglShaderProgram : public IShaderProgram
-{
-public:
-    OpenglShaderProgram(IShader* vertexShader, IShader* fragmentShader);
+namespace opengl {
 
-    ~OpenglShaderProgram();
+    class OpenglShaderProgram : public IShaderProgram
+    {
+    public:
+        OpenglShaderProgram(IShader* vertexShader, IShader* fragmentShader);
 
-    virtual IShader* GetVertexShader() const;
-    virtual void SetVertexShader(IShader* shader);
+        ~OpenglShaderProgram();
 
-    virtual IShader* GetFragmentShader() const;
-    virtual void SetFragmentShader(IShader* shader);
+        virtual IShader* GetVertexShader() const;
+        virtual void SetVertexShader(IShader* shader);
 
-    virtual void Enable();
-    virtual void Disable();
+        virtual IShader* GetFragmentShader() const;
+        virtual void SetFragmentShader(IShader* shader);
 
-    bool IsLinked() const;
+        virtual void Enable();
+        virtual void Disable();
 
-    void operator()();
+        bool IsLinked() const;
 
-private:
-    void Init();
-    void Destroy();
+        void operator()();
 
-private:
-    uint32_t m_id;
-    IShader* m_vertexShader;
-    IShader* m_fragmentShader;
-    bool m_linked;
-};
+    private:
+        void Init();
+        void Destroy();
+
+    private:
+        uint32_t m_id;
+        IShader* m_vertexShader;
+        IShader* m_fragmentShader;
+        bool m_linked;
+    };
+}
 
 #endif

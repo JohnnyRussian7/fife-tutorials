@@ -22,7 +22,9 @@
 #ifndef RENDEROPERATION_H_
 #define RENDEROPERATION_H_
 
-#include "graphics/BlendingMode.h"
+#include "BlendingMode.h"
+#include "CullMode.h"
+#include "PolygonWindingMode.h"
 
 class Renderable;
 
@@ -65,9 +67,35 @@ public:
     //**********************************************************************
     const BlendingMode& GetBlendingMode() const;
 
+    //!***************************************************************
+    //! @details:
+    //! sets the cull mode for this render operation
+    //!***************************************************************
+    void SetCullMode(const CullMode& cullMode);
+
+    //!***************************************************************
+    //! @details:
+    //! accessor for the cull mode set for this render operation
+    //!***************************************************************
+    const CullMode& GetCullMode() const;
+
+    //!***************************************************************
+    //! @details:
+    //! sets the winding mode for this render operation
+    //!***************************************************************
+    void SetPolygonWindingMode(const PolygonWindingMode& windingMode);
+
+    //!***************************************************************
+    //! @details:
+    //! accessor for the winding mode set for this render operation
+    //!***************************************************************
+    const PolygonWindingMode& GetPolygonWindingMode() const; 
+
 private:
     Renderable* m_renderable;
     BlendingMode m_blendingMode;
+    CullMode m_cullMode;
+    PolygonWindingMode m_windingMode;
 };
 
 #endif

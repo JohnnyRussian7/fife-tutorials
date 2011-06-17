@@ -52,3 +52,23 @@ const BlendingMode& RenderOperation::GetBlendingMode() const
 {
     return m_blendingMode;
 }
+
+void RenderOperation::SetCullMode(const CullMode& cullMode)
+{
+    m_cullMode = cullMode;
+}
+
+const CullMode& RenderOperation::GetCullMode() const
+{
+    return m_cullMode;
+}
+
+void RenderOperation::SetPolygonWindingMode(const PolygonWindingMode& windingMode)
+{
+    m_windingMode = windingMode;
+}
+
+const PolygonWindingMode& RenderOperation::GetPolygonWindingMode() const
+{
+    return m_windingMode;
+}

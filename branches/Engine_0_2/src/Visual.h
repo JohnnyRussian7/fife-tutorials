@@ -42,7 +42,7 @@ public:
     virtual IAnimation* GetAnimation() const;
 
     virtual void SetRenderable(Renderable* renderable);
-    virtual Renderable* GetRenderable();
+    virtual Renderable* GetRenderable() const;
 
     virtual void Update(uint32_t time);
 

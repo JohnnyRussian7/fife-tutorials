@@ -31,7 +31,7 @@
 class Viewport;
 class IVertexBuffer;
 class IIndexBuffer;
-class Renderable;
+class RenderOperation;
 struct Matrix4;
 
 struct RenderSystemSettings
@@ -63,7 +63,7 @@ public:
     virtual IIndexBuffer* CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage) = 0;
 
     virtual void ClearBuffers(bool colorBuffer=true, bool depthBuffer=true) = 0;
-	virtual void Render(Renderable* renderable) = 0;
+	virtual void Render(const RenderOperation& renderable) = 0;
 };
 
 IRenderSystem* CreateRenderSystem(const RenderSystemSettings& settings);

@@ -32,6 +32,7 @@
 #include "../Engine.h"
 #include "../IEntity.h"
 #include "../rendersystem/IRenderSystem.h"
+#include "../rendersystem/RenderOperation.h"
 #include "../graphics/ImageFwd.h"
 #include "../graphics/TextureManager.h"
 #include "../graphics/ImageManager.h"
@@ -241,26 +242,24 @@ void SceneManager::RenderScene(uint32_t time)
     // update the scene graph information before rendering
     UpdateScene(time);
 
+    // clear the render system buffers to get ready for the next scene render
     m_renderSystem->ClearBuffers();
 
-    // push data to render system
+    // push camera view transform to the render system
     if (m_camera)
     {
         m_renderSystem->SetTransform(TransformType::View, m_camera->GetViewMatrix());
     }
 
-    // get all the renderables in the scene
-    std::vector<Renderable*> renderables;
-    GetRootSceneNode()->GetRenderables(renderables);
+    // get all the render operations in the scene
+    std::vector<RenderOperation> renderOperations;
+    GetRootSceneNode()->GetRenderOperations(renderOperations);
     
-    // pass each renderable to the render system
-    std::vector<Renderable*>::iterator iter;
-    for (iter = renderables.begin(); iter != renderables.end(); ++iter)
+    // pass each render operation to the render system
+    std::vector<RenderOperation>::iterator iter;
+    for (iter = renderOperations.begin(); iter != renderOperations.end(); ++iter)
     { 
-        // set the transform
-        m_renderSystem->SetTransform(TransformType::Model, (*iter)->GetTransform());
-
-        // render the object
+        // render each operation
         m_renderSystem->Render(*iter);
     }
 }

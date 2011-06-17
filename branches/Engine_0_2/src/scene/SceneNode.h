@@ -27,10 +27,11 @@
 #include "../math/Vector3.h"
 #include "../math/Quaternion.h"
 #include "../math/Matrix4.h"
+#include "../graphics/BlendingMode.h"
 
 class SceneManager;
 class IEntity;
-class Renderable;
+class RenderOperation;
 
 class SceneNode
 {
@@ -53,7 +54,7 @@ public:
     void RemoveEntity(const char* name, bool shouldDeleteChild);
     void RemoveAllEntities();
 
-    void GetRenderables(std::vector<Renderable*>& renderables);
+    void GetRenderOperations(std::vector<RenderOperation>& renderOperations);
 
 	const Vector3& GetScale() const;
 	const Vector3& GetPosition() const;
@@ -71,6 +72,9 @@ public:
 
 	void SetOrientation(const Quaternion& orientation);
 	void SetOrientation(const Vector3& axis, float angle);
+
+    void SetBlendingMode(const BlendingMode& blendingMode);
+    const BlendingMode& GetBlendingMode();
 
 	Matrix4 GetTransform();
 
@@ -111,6 +115,9 @@ private:
 	Vector3 m_relativeScale;
 	Vector3 m_relativePosition;
 	Quaternion m_relativeOrientation;
+
+    BlendingMode m_blendingMode;
+    bool m_localBlendingMode;
 
 	bool m_updateTransform;
 	Matrix4 m_transform;

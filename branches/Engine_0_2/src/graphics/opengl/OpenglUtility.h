@@ -26,6 +26,7 @@
 
 #include "../TextureEnums.h"
 #include "../VertexIndexBufferEnums.h"
+#include "../BlendingMode.h"
 #include "../../rendersystem/RenderEnums.h"
 #include "../../rendersystem/ShaderEnums.h"
 
@@ -38,6 +39,8 @@ namespace opengl { namespace utility {
     GLenum ConvertVertexBufferParamSizeType(VertexParamSizeType::Enum type);
     GLenum ConvertIndexBufferType(IndexBufferDataType::Enum type);
     GLenum ConvertShaderType(ShaderType::Enum type);
+    GLenum ConvertSrcBlendMode(SrcBlendMode::Enum mode);
+    GLenum ConvertDestBlendMode(DestBlendMode::Enum mode);
 }}
 
 #endif

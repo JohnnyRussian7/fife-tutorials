@@ -131,7 +131,7 @@ namespace opengl { namespace utility {
         }
     }
 
-    GLenum ConvertShaderType( ShaderType::Enum type )
+    GLenum ConvertShaderType(ShaderType::Enum type)
     {
         OpenglVersion::Enum version = OpenglCapabilities::Instance()->GetOpenglVersion();
         switch (type)
@@ -166,6 +166,76 @@ namespace opengl { namespace utility {
             {
                 return GL_VERTEX_SHADER_ARB;
             }
+        }
+    }
+
+    GLenum ConvertSrcBlendMode(SrcBlendMode::Enum mode)
+    {
+        switch (mode)
+        {
+        case SrcBlendMode::Zero:
+            return GL_ZERO;
+        case SrcBlendMode::One:
+            return GL_ONE;
+        case SrcBlendMode::SrcColor:
+            return GL_SRC_COLOR;
+        case SrcBlendMode::OneMinusSrcColor:
+            return GL_ONE_MINUS_SRC_COLOR;
+        case SrcBlendMode::SrcAlpha:
+            return GL_SRC_ALPHA;
+        case SrcBlendMode::OneMinusSrcAlpha:
+            return GL_ONE_MINUS_SRC_ALPHA;
+        case SrcBlendMode::DestAlpha:
+            return GL_DST_ALPHA;
+        case SrcBlendMode::OneMinusDestAlpha:
+            return GL_ONE_MINUS_DST_ALPHA;
+        case SrcBlendMode::ConstantColor:
+            return GL_CONSTANT_COLOR;
+        case SrcBlendMode::OneMinusConstantColor:
+            return GL_ONE_MINUS_CONSTANT_COLOR;
+        case SrcBlendMode::ConstantAlpha:
+            return GL_CONSTANT_ALPHA;
+        case SrcBlendMode::OneMinusConstantAlpha:
+            return GL_ONE_MINUS_CONSTANT_ALPHA;
+        case SrcBlendMode::SrcAlphaSaturate:
+            return GL_SRC_ALPHA_SATURATE;
+        default:
+            return GL_ONE;
+        }
+    }
+
+    GLenum ConvertDestBlendMode(DestBlendMode::Enum mode)
+    {
+        switch (mode)
+        {
+        case DestBlendMode::Zero:
+            return GL_ZERO;
+        case DestBlendMode::One:
+            return GL_ONE;
+        case DestBlendMode::SrcColor:
+            return GL_SRC_COLOR;
+        case DestBlendMode::DestColor:
+            return GL_DST_COLOR;
+        case DestBlendMode::OneMinusDestColor:
+            return GL_ONE_MINUS_DST_COLOR;
+        case DestBlendMode::SrcAlpha:
+            return GL_SRC_ALPHA;
+        case DestBlendMode::OneMinusSrcAlpha:
+            return GL_ONE_MINUS_SRC_ALPHA;
+        case DestBlendMode::DestAlpha:
+            return GL_DST_ALPHA;
+        case DestBlendMode::OneMinusDestAlpha:
+            return GL_ONE_MINUS_DST_ALPHA;
+        case DestBlendMode::ConstantColor:
+            return GL_CONSTANT_COLOR;
+        case DestBlendMode::OneMinusConstantColor:
+            return GL_ONE_MINUS_CONSTANT_COLOR;
+        case DestBlendMode::ConstantAlpha:
+            return GL_CONSTANT_ALPHA;
+        case DestBlendMode::OneMinusConstantAlpha:
+            return GL_ONE_MINUS_CONSTANT_ALPHA;
+        default:
+            return GL_ZERO;
         }
     }
 

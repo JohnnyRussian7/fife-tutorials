@@ -74,6 +74,26 @@ inline Color interpolate(const Color& color1, const Color& color2, float scale)
 	return retColor;
 }
 
+inline bool operator==(const Color& lhs, const Color& rhs)
+{
+    static const float Epsilon = 0.0005f;
+
+    return (std::abs(lhs.a - rhs.a) < Epsilon
+        && std::abs(lhs.r - rhs.r) < Epsilon
+        && std::abs(lhs.g - rhs.g) < Epsilon
+        && std::abs(lhs.b - rhs.b) < Epsilon);
+}
+
+inline bool operator!=(const Color& lhs, const Color& rhs)
+{
+    static const float Epsilon = 0.00051f;
+
+    return (std::abs(lhs.a - rhs.a) > Epsilon
+        || std::abs(lhs.r - rhs.r) > Epsilon
+        || std::abs(lhs.g - rhs.g) > Epsilon
+        || std::abs(lhs.b - rhs.b) > Epsilon);
+}
+
 
 
 #endif

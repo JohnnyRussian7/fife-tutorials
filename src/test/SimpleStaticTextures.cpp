@@ -35,6 +35,13 @@ void CreateSimpleStaticTextures(Engine& engine)
     SceneNode* camNode = sceneManager->CreateSceneNode("CamNode");
     camNode->AddEntity(camera);
     sceneManager->GetRootSceneNode()->AddChild(camNode);
+
+    BlendingMode blendMode;
+    blendMode.SetEnabled(true);
+    blendMode.SetSrcBlendMode(SrcBlendMode::SrcAlpha);
+    blendMode.SetDestBlendMode(DestBlendMode::OneMinusSrcAlpha);
+    sceneManager->GetRootSceneNode()->SetBlendingMode(blendMode);
+
     camNode->Translate(Vector3(0, 0, 500));
     camera->LookAt(Vector3(0, 0, 0));
     camera->SetFixedYawAxis(true);

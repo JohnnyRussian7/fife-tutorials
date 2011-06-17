@@ -26,6 +26,7 @@
 #include "../IEntity.h"
 #include "../Visual.h"
 #include "../math/MathUtil.h"
+#include "../rendersystem/RenderOperation.h"
 
 namespace
 {
@@ -48,7 +49,8 @@ namespace
 SceneNode::SceneNode(const char* name, SceneManager* manager)
 : m_name(""), m_sceneManager(manager), m_parent(0), m_scale(1, 1, 1), m_position(Vector3::Zero()),
 m_orientation(Quaternion::Identity()), m_relativeScale(1, 1, 1), m_relativePosition(Vector3::Zero()),
-m_relativeOrientation(Quaternion::Identity()), m_requiresUpdate(false), m_updateTransform(false)
+m_relativeOrientation(Quaternion::Identity()), m_requiresUpdate(false), m_updateTransform(false),
+m_localBlendingMode(false)
 {
 	if (name)
 	{
@@ -200,8 +202,11 @@ void SceneNode::RemoveAllEntities()
     m_entities.clear();
 }
 
-void SceneNode::GetRenderables(std::vector<Renderable*>& renderables)
+void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperations)
 {
+    // cache the current blend mode to add to each render operation
+    const BlendingMode& blendingMode = GetBlendingMode();
+
     // add all of this scene nodes renderables
     EntityContainer::iterator entityIter;
     for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)
@@ -212,7 +217,10 @@ void SceneNode::GetRenderables(std::vector<Renderable*>& renderables)
             Renderable* renderable = visual->GetRenderable();
             if (renderable)
             {
-                renderables.push_back(renderable);
+                RenderOperation operation;
+                operation.SetRenderable(renderable);
+                operation.SetBlendingMode(blendingMode);
+                renderOperations.push_back(operation);
             }
         }
     }
@@ -221,7 +229,7 @@ void SceneNode::GetRenderables(std::vector<Renderable*>& renderables)
     std::vector<SceneNode*>::iterator sceneNodeIter;
     for (sceneNodeIter = m_childNodes.begin(); sceneNodeIter != m_childNodes.end(); ++sceneNodeIter)
     {
-        (*sceneNodeIter)->GetRenderables(renderables);
+        (*sceneNodeIter)->GetRenderOperations(renderOperations);
     }
 }
 
@@ -289,6 +297,26 @@ void SceneNode::SetOrientation(const Quaternion& orientation)
 void SceneNode::SetOrientation(const Vector3& axis, float angle)
 {
 	SetOrientation(FromAxisAngle(axis, angle));
+}
+
+void SceneNode::SetBlendingMode(const BlendingMode& blendingMode)
+{
+    // save blending mode locally
+    m_blendingMode = blendingMode;
+    m_localBlendingMode = true;
+}
+
+const BlendingMode& SceneNode::GetBlendingMode()
+{
+    // attempt to perform a lazy update, if the parent's blending mode has changed
+    // if the blending mode is not the same as our parent and we haven't set it
+    // directly, then update it from the parent
+    if (m_parent && m_blendingMode != m_parent->GetBlendingMode() && !m_localBlendingMode)
+    {
+        m_blendingMode = m_parent->GetBlendingMode();
+    }
+
+    return m_blendingMode;
 }
 
 Matrix4 SceneNode::GetTransform()

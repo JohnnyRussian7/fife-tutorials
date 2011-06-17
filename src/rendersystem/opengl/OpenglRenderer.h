@@ -29,53 +29,58 @@
 #include "../../scene/Viewport.h"
 #include "../../graphics/opengl/OpenglTexture.h"
 #include "../../graphics/VertexIndexBufferEnums.h"
+#include "../../graphics/BlendingMode.h"
 
 class IVertexBuffer;
 class IIndexBuffer;
 class OpenglShaderManager;
 
-class OpenglRenderer : public IRenderSystem
-{
-public:
-	OpenglRenderer(const RenderSystemSettings& settings);
-	~OpenglRenderer();
+namespace opengl {
+    class OpenglRenderer : public IRenderSystem
+    {
+    public:
+	    OpenglRenderer(const RenderSystemSettings& settings);
+	    ~OpenglRenderer();
 
-	virtual RenderSystemType::Enum GetRenderSystemType() const;
-    virtual void SetPolygonMode(PolygonMode::Enum type);
-    virtual PolygonMode::Enum GetPolygonMode() const;
-	virtual void SetViewPort(const Viewport& viewport);
-	virtual void SetTransform(TransformType::Enum type, const Matrix4& mat);
+	    virtual RenderSystemType::Enum GetRenderSystemType() const;
+        virtual void SetPolygonMode(PolygonMode::Enum type);
+        virtual PolygonMode::Enum GetPolygonMode() const;
+	    virtual void SetViewPort(const Viewport& viewport);
+	    virtual void SetTransform(TransformType::Enum type, const Matrix4& mat);
+        virtual void SetBlendingMode(const BlendingMode& BlendingMode);
 
-	void EnableTextures(TextureType::Enum type);
-	void DisableTextures(TextureType::Enum type);
+	    void EnableTextures(TextureType::Enum type);
+	    void DisableTextures(TextureType::Enum type);
 
-	void SetActiveTexture(OpenglTexture* texture);
+	    void SetActiveTexture(OpenglTexture* texture);
 
-    virtual IVertexBuffer* CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage);
-    virtual IIndexBuffer* CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage);
+        virtual IVertexBuffer* CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage);
+        virtual IIndexBuffer* CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage);
 
-    virtual void ClearBuffers(bool colorBuffer=true, bool depthBuffer=true);
-	virtual void Render(Renderable* renderable);
+        virtual void ClearBuffers(bool colorBuffer=true, bool depthBuffer=true);
+	    virtual void Render(const RenderOperation& renderOperation);
 
-private:
-    RenderSystemSettings m_settings;
+    private:
+        RenderSystemSettings m_settings;
 
-	Viewport m_viewport;
-	Matrix4 m_modelMatrix;
-	Matrix4 m_viewMatrix;
-	Matrix4 m_projectionMatrix;
+	    Viewport m_viewport;
+	    Matrix4 m_modelMatrix;
+	    Matrix4 m_viewMatrix;
+	    Matrix4 m_projectionMatrix;
 
-    bool m_modelMatrixUpdate;
-    bool m_viewMatrixUpdate;
-    bool m_projectionMatrixUpdate;
+        bool m_modelMatrixUpdate;
+        bool m_viewMatrixUpdate;
+        bool m_projectionMatrixUpdate;
 
-	OpenglTexture* m_activeTexture;
+	    OpenglTexture* m_activeTexture;
 
-    OpenglShaderManager* m_shaderManager;
+        OpenglShaderManager* m_shaderManager;
 
-    PolygonMode::Enum m_polygonMode;
+        PolygonMode::Enum m_polygonMode;
+        BlendingMode m_blendingMode;
 
-    bool m_useVbo;
-};
+        bool m_useVbo;
+    };
+}
 
 #endif

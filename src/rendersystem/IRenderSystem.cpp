@@ -31,7 +31,7 @@ IRenderSystem* CreateRenderSystem(const RenderSystemSettings& settings)
 	switch (settings.renderSystemType)
 	{
 	case RenderSystemType::Opengl:
-		renderSystem = new OpenglRenderer(settings);
+        renderSystem = new opengl::OpenglRenderer(settings);
 		break;
 
 	case RenderSystemType::Sdl:

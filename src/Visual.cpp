@@ -72,7 +72,7 @@ void Visual::SetRenderable(Renderable* renderable)
     m_renderable = renderable;
 }
 
-Renderable* Visual::GetRenderable()
+Renderable* Visual::GetRenderable() const
 {
     return m_renderable;
 }

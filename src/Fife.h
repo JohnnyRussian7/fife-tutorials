@@ -60,6 +60,7 @@
 #include "graphics/Vertex.h"
 #include "graphics/VertexData.h"
 #include "graphics/VertexIndexBufferEnums.h"
+#include "graphics/BlendingMode.h"
 
 // gui
 

@@ -24,6 +24,7 @@
 #include "OpenglRenderer.h"
 #include "OpenglCapabilities.h"
 #include "OpenglShaderManager.h"
+#include "../RenderOperation.h"
 #include "../IShaderProgram.h"
 #include "../../Color.h"
 #include "../../scene/Renderable.h"
@@ -41,7 +42,7 @@
 // useful macro to help with offsets in buffer objects
 #define BUFFER_OFFSET(i) ((char*)NULL + (i))
 
-// lets create the shaders we are going to use
+// TODO - temporary - lets create the shaders we are going to use
 IShaderProgram* shaderProgram;
 
 void DrawBox()
@@ -86,272 +87,299 @@ void DrawAxes()
     glEnd();
 }
 
-OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
-: m_settings(settings), m_viewport(Viewport()),
-m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
-m_projectionMatrix(Matrix4::Identity()), m_modelMatrixUpdate(false), m_viewMatrixUpdate(false),
-m_projectionMatrixUpdate(false), m_activeTexture(0), m_shaderManager(new OpenglShaderManager()),
-m_useVbo(false)
-{
-    SetPolygonMode(PolygonMode::Fill);
-
-    m_useVbo = OpenglCapabilities::Instance()->HasVboSupport() && m_settings.useVbo;
-
-    if (OpenglCapabilities::Instance()->HasShaderSupport())
+namespace opengl {
+    OpenglRenderer::OpenglRenderer(const RenderSystemSettings& settings)
+    : m_settings(settings), m_viewport(Viewport()),
+    m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
+    m_projectionMatrix(Matrix4::Identity()), m_modelMatrixUpdate(false), m_viewMatrixUpdate(false),
+    m_projectionMatrixUpdate(false), m_activeTexture(0), m_shaderManager(new OpenglShaderManager()),
+    m_useVbo(false)
     {
-        // TODO - this is temporary, just for testing
-        shaderProgram = m_shaderManager->CreateShaderProgram("..\\..\\shaders\\opengl\\simple.vs",
-            "..\\..\\shaders\\opengl\\colorinvert.fs");
-    }
-    else
-    {
-        std::cout << "Shaders not supported in opengl version: " << OpenglVersion::ToString(OpenglCapabilities::Instance()->GetOpenglVersion()) << std::endl;
-    }
-}
+        SetPolygonMode(PolygonMode::Fill);
 
-OpenglRenderer::~OpenglRenderer()
-{
+        m_useVbo = OpenglCapabilities::Instance()->HasVboSupport() && m_settings.useVbo;
 
-}
-
-RenderSystemType::Enum OpenglRenderer::GetRenderSystemType() const
-{
-    return RenderSystemType::Opengl;
-}
-
-void OpenglRenderer::SetPolygonMode(PolygonMode::Enum type)
-{
-    m_polygonMode = type;
-    glPolygonMode(GL_FRONT_AND_BACK, opengl::utility::ConvertPolygonMode(m_polygonMode));
-}
-
-PolygonMode::Enum OpenglRenderer::GetPolygonMode() const
-{
-    return m_polygonMode;
-}
-
-void OpenglRenderer::SetViewPort(const Viewport& viewport)
-{
-    m_viewport = viewport;
-
-    // create viewport
-    glViewport(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
-
-    // TODO - this should be done elsewhere
-    // setup the frustum
-    int32_t aspectRatio = viewport.GetWidth() / viewport.GetHeight();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(-0.5, 0.5, -aspectRatio*0.5, aspectRatio*0.5, 1, 5000);
-
-    // enable scissor testing to clip against viewport
-    glScissor(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
-}
-
-void OpenglRenderer::SetTransform(TransformType::Enum type, const Matrix4& mat)
-{
-    switch (type)
-    {
-    case TransformType::Model:
+        if (OpenglCapabilities::Instance()->HasShaderSupport())
         {
-            m_modelMatrix = mat;
-
-            glMatrixMode(GL_MODELVIEW);
-            glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
-            m_modelMatrix = mat;
-        }
-        break;
-    case TransformType::View:
-        {
-            m_viewMatrix = mat;
-
-            glMatrixMode(GL_MODELVIEW);
-            glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
-        }
-        break;
-    case TransformType::Projection:
-        {
-            m_projectionMatrix = mat;
-
-            glMatrixMode(GL_PROJECTION);
-            glLoadMatrixf(m_projectionMatrix.matrix);
-        }
-        break;
-    default:
-        {
-            // TODO - print error here
-        }
-        break;
-    }
-}
-IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
-{
-    if (m_useVbo)
-    {
-        return new OpenglVertexBuffer(numVertices, vertexSize, usage);
-    }
-
-    return new GenericVertexBuffer(numVertices, vertexSize);
-}
-
-IIndexBuffer* OpenglRenderer::CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage)
-{
-    if (m_useVbo)
-    {
-        return new OpenglIndexBuffer(numIndices, indexType, usage);
-    }
-
-    return new GenericIndexBuffer(numIndices, indexType);
-}
-
-void OpenglRenderer::ClearBuffers(bool colorBuffer, bool depthBuffer)
-{
-    GLbitfield buffers = 0;
-
-    if (colorBuffer)
-    {
-        buffers |= GL_COLOR_BUFFER_BIT;
-    }
-    if (depthBuffer)
-    {
-        buffers |= GL_DEPTH_BUFFER_BIT;
-    }
-
-    // TODO - this is temporary
-    Color color = Color::Blue();
-    glClearColor(color.r, color.g, color.b, color.a);
-
-    glClear(buffers);
-}
-
-void OpenglRenderer::Render(Renderable* renderable)
-{
-    if (!renderable)
-    {
-        return;
-    }
-
-    IMaterial* material = renderable->GetMaterial();
-
-    if (material)
-    {
-        TexturePtr texture = renderable->GetMaterial()->GetTexture();
-
-        if (texture)
-        {
-            // TODO - this should be settable outside of renderer
-            // enable blending
-            glEnable(GL_BLEND); 
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-            glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-            //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
-            //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-            //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-            //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-            // 
-            //         glActiveTextureARB(GL_TEXTURE0);
-            glEnable(opengl::utility::ConvertTextureType(texture->GetType()));    
-            glBindTexture(opengl::utility::ConvertTextureType(texture->GetType()), texture->GetId());
-        }
-    }
-
-    IVertexBuffer* vertexBuffer = renderable->GetVertexBuffer();
-    IIndexBuffer* indexBuffer = renderable->GetIndexBuffer();
-
-    if (vertexBuffer)
-    {
-        if (m_useVbo)
-        {
-            glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
-
-            glVertexPointer(3, 
-                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
-                vertexBuffer->GetStride(), 
-                BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Position)));
-            glEnableClientState(GL_VERTEX_ARRAY);
-
-            glColorPointer(4, 
-                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
-                vertexBuffer->GetStride(), 
-                BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Color)));
-            glEnableClientState(GL_COLOR_ARRAY);
-
-            glTexCoordPointer(2, 
-                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
-                vertexBuffer->GetStride(), 
-                BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Texture))); 
-            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            // TODO - this is temporary, just for testing
+            shaderProgram = m_shaderManager->CreateShaderProgram("..\\..\\shaders\\opengl\\simple.vs",
+                "..\\..\\shaders\\opengl\\colorinvert.fs");
         }
         else
         {
-            glVertexPointer(3, 
-                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
-                vertexBuffer->GetStride(), 
-                vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Position)));
-            glEnableClientState(GL_VERTEX_ARRAY);
+            std::cout << "Shaders not supported in opengl version: " << OpenglVersion::ToString(OpenglCapabilities::Instance()->GetOpenglVersion()) << std::endl;
+        }
+    }
 
-            glColorPointer(4, 
-                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
-                vertexBuffer->GetStride(), 
-                vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Color)));
-            glEnableClientState(GL_COLOR_ARRAY);
+    OpenglRenderer::~OpenglRenderer()
+    {
 
-            glTexCoordPointer(2, 
-                opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
-                vertexBuffer->GetStride(), 
-                vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Texture))); 
-            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
+
+    RenderSystemType::Enum OpenglRenderer::GetRenderSystemType() const
+    {
+        return RenderSystemType::Opengl;
+    }
+
+    void OpenglRenderer::SetPolygonMode(PolygonMode::Enum type)
+    {
+        m_polygonMode = type;
+        glPolygonMode(GL_FRONT_AND_BACK, opengl::utility::ConvertPolygonMode(m_polygonMode));
+    }
+
+    PolygonMode::Enum OpenglRenderer::GetPolygonMode() const
+    {
+        return m_polygonMode;
+    }
+
+    void OpenglRenderer::SetViewPort(const Viewport& viewport)
+    {
+        m_viewport = viewport;
+
+        // create viewport
+        glViewport(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
+
+        // TODO - this should be done elsewhere
+        // setup the frustum
+        int32_t aspectRatio = viewport.GetWidth() / viewport.GetHeight();
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glFrustum(-0.5, 0.5, -aspectRatio*0.5, aspectRatio*0.5, 1, 5000);
+
+        // enable scissor testing to clip against viewport
+        glScissor(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
+    }
+
+    void OpenglRenderer::SetTransform(TransformType::Enum type, const Matrix4& mat)
+    {
+        switch (type)
+        {
+        case TransformType::Model:
+            {
+                m_modelMatrix = mat;
+
+                glMatrixMode(GL_MODELVIEW);
+                glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
+                m_modelMatrix = mat;
+            }
+            break;
+        case TransformType::View:
+            {
+                m_viewMatrix = mat;
+
+                glMatrixMode(GL_MODELVIEW);
+                glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
+            }
+            break;
+        case TransformType::Projection:
+            {
+                m_projectionMatrix = mat;
+
+                glMatrixMode(GL_PROJECTION);
+                glLoadMatrixf(m_projectionMatrix.matrix);
+            }
+            break;
+        default:
+            {
+                // TODO - print error here
+            }
+            break;
+        }
+    }
+
+    void OpenglRenderer::SetBlendingMode(const BlendingMode& blendingMode)
+    {
+        if (blendingMode != m_blendingMode)
+        {
+            if (blendingMode.IsEnabled() && !m_blendingMode.IsEnabled())
+            {
+                glEnable(GL_BLEND);
+
+                glBlendFunc(utility::ConvertSrcBlendMode(blendingMode.GetSrcBlendMode()), 
+                            utility::ConvertDestBlendMode(blendingMode.GetDestBlendMode()));
+            }
+            else if (!blendingMode.IsEnabled())
+            {
+                glDisable(GL_BLEND);
+            }
+
+            // store blending mode
+            m_blendingMode = blendingMode;
+        }
+    }
+
+    IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
+    {
+        if (m_useVbo)
+        {
+            return new OpenglVertexBuffer(numVertices, vertexSize, usage);
         }
 
-        if (indexBuffer)
+        return new GenericVertexBuffer(numVertices, vertexSize);
+    }
+
+    IIndexBuffer* OpenglRenderer::CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage)
+    {
+        if (m_useVbo)
         {
-            // TODO - this should be programmable
-            uint32_t indexStart = 0;
-            void *indexData = 0;
+            return new OpenglIndexBuffer(numIndices, indexType, usage);
+        }
+
+        return new GenericIndexBuffer(numIndices, indexType);
+    }
+
+    void OpenglRenderer::ClearBuffers(bool colorBuffer, bool depthBuffer)
+    {
+        GLbitfield buffers = 0;
+
+        if (colorBuffer)
+        {
+            buffers |= GL_COLOR_BUFFER_BIT;
+        }
+        if (depthBuffer)
+        {
+            buffers |= GL_DEPTH_BUFFER_BIT;
+        }
+
+        // TODO - this is temporary
+        Color color = Color::Blue();
+        glClearColor(color.r, color.g, color.b, color.a);
+
+        glClear(buffers);
+    }
+
+    void OpenglRenderer::Render(const RenderOperation& renderOperation)
+    {
+        Renderable* renderable = renderOperation.GetRenderable();
+
+        if (!renderable)
+        {
+            return;
+        }
+
+        // set the model transform
+        SetTransform(TransformType::Model, renderable->GetTransform());
+
+        IMaterial* material = renderable->GetMaterial();
+
+        if (material)
+        {
+            TexturePtr texture = renderable->GetMaterial()->GetTexture();
+
+            if (texture)
+            {
+                SetBlendingMode(renderOperation.GetBlendingMode());
+
+                // TODO - should be settable outside of render system
+                glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+                //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
+                //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+                //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+                //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+                // 
+                //         glActiveTextureARB(GL_TEXTURE0);
+                glEnable(opengl::utility::ConvertTextureType(texture->GetType()));    
+                glBindTexture(opengl::utility::ConvertTextureType(texture->GetType()), texture->GetId());
+            }
+        }
+
+        IVertexBuffer* vertexBuffer = renderable->GetVertexBuffer();
+        IIndexBuffer* indexBuffer = renderable->GetIndexBuffer();
+
+        if (vertexBuffer)
+        {
             if (m_useVbo)
             {
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->GetBufferId());
-                indexData = BUFFER_OFFSET(indexStart * indexBuffer->GetStride());
+                glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
+
+                glVertexPointer(3, 
+                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
+                    vertexBuffer->GetStride(), 
+                    BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Position)));
+                glEnableClientState(GL_VERTEX_ARRAY);
+
+                glColorPointer(4, 
+                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
+                    vertexBuffer->GetStride(), 
+                    BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Color)));
+                glEnableClientState(GL_COLOR_ARRAY);
+
+                glTexCoordPointer(2, 
+                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
+                    vertexBuffer->GetStride(), 
+                    BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Texture))); 
+                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             }
             else
             {
-                indexData = indexBuffer->GetData(indexStart);
+                glVertexPointer(3, 
+                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
+                    vertexBuffer->GetStride(), 
+                    vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Position)));
+                glEnableClientState(GL_VERTEX_ARRAY);
+
+                glColorPointer(4, 
+                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float4), 
+                    vertexBuffer->GetStride(), 
+                    vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Color)));
+                glEnableClientState(GL_COLOR_ARRAY);
+
+                glTexCoordPointer(2, 
+                    opengl::utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float2), 
+                    vertexBuffer->GetStride(), 
+                    vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Texture))); 
+                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             }
 
-            //glDrawElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
-            glDrawRangeElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
-        }
-        else
-        {
-            glDrawArrays(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, vertexBuffer->GetNumVertices());
+            if (indexBuffer)
+            {
+                // TODO - this should be programmable
+                uint32_t indexStart = 0;
+                void *indexData = 0;
+                if (m_useVbo)
+                {
+                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->GetBufferId());
+                    indexData = BUFFER_OFFSET(indexStart * indexBuffer->GetStride());
+                }
+                else
+                {
+                    indexData = indexBuffer->GetData(indexStart);
+                }
+
+                //glDrawElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
+                glDrawRangeElements(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
+            }
+            else
+            {
+                glDrawArrays(opengl::utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, vertexBuffer->GetNumVertices());
+            }
+
+            // disable client state
+            glDisableClientState(GL_VERTEX_ARRAY);
+            glDisableClientState(GL_COLOR_ARRAY);
+            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+            if (m_useVbo)
+            {
+                // unbind the buffers
+                glBindBuffer(GL_ARRAY_BUFFER, 0);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            }
         }
 
-        // disable client state
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        //DrawAxes();
 
-        if (m_useVbo)
-        {
-            // unbind the buffers
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        }
+        //     if (shaderProgram)
+        //     {
+        //         // use shader program
+        //         shaderProgram->Enable();
+        //     }
+        // 
+        //     DrawBox();
+        // 
+        //     if (shaderProgram)
+        //     {
+        //         shaderProgram->Disable();
+        //     }
     }
-
-    //DrawAxes();
-
-    //     if (shaderProgram)
-    //     {
-    //         // use shader program
-    //         shaderProgram->Enable();
-    //     }
-    // 
-    //     DrawBox();
-    // 
-    //     if (shaderProgram)
-    //     {
-    //         shaderProgram->Disable();
-    //     }
 }

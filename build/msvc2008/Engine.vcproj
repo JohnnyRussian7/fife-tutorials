@@ -1015,6 +1015,14 @@
 			Name="graphics"
 			>
 			<File
+				RelativePath="..\..\src\graphics\BlendingMode.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\graphics\BlendingMode.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\graphics\GenericIndexBuffer.cpp"
 				>
 			</File>
@@ -1348,6 +1356,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\rendersystem\RenderEnums.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\RenderOperation.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\RenderOperation.h"
 				>
 			</File>
 			<File

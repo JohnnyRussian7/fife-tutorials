@@ -116,4 +116,9 @@ void CreateSimpleIsometricView(Engine& engine)
 //     doom4Visual->GetRenderable()->GetMaterial()->SetTexture(doom4Texture);
 //     doom5Visual->GetRenderable()->GetMaterial()->SetTexture(doom4Texture);
 
+    BlendingMode blendMode;
+    blendMode.SetEnabled(true);
+    blendMode.SetSrcBlendMode(SrcBlendMode::SrcAlpha);
+    blendMode.SetDestBlendMode(DestBlendMode::OneMinusSrcAlpha);
+    sceneManager->GetRootSceneNode()->SetBlendingMode(blendMode);
 }

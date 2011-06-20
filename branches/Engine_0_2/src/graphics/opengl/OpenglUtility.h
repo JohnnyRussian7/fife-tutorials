@@ -29,12 +29,12 @@
 #include "../../rendersystem/BlendingMode.h"
 #include "../../rendersystem/CullMode.h"
 #include "../../rendersystem/PolygonWindingMode.h"
+#include "../../rendersystem/FillMode.h"
 #include "../../rendersystem/RenderEnums.h"
 #include "../../rendersystem/ShaderEnums.h"
 
 namespace opengl { namespace utility {
     
-    GLenum ConvertPolygonMode(PolygonMode::Enum type);
     GLenum ConvertPrimitiveType(PrimitiveType::Enum type);
     GLenum ConvertTextureType(TextureType::Enum type);
     GLenum ConvertBufferUsage(HwBufferUsage::Enum usage);
@@ -45,6 +45,7 @@ namespace opengl { namespace utility {
     GLenum ConvertDestBlendMode(DestBlendMode::Enum mode);
     GLenum ConvertCullMode(CullType::Enum cullType);
     GLenum ConvertPolygonWindingMode(WindingType::Enum polygonWindingType);
+    GLenum ConvertFillMode(FillType::Enum type);
 }}
 
 #endif

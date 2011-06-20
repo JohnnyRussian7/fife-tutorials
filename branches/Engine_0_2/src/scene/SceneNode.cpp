@@ -50,7 +50,7 @@ SceneNode::SceneNode(const char* name, SceneManager* manager)
 : m_name(""), m_sceneManager(manager), m_parent(0), m_scale(1, 1, 1), m_position(Vector3::Zero()),
 m_orientation(Quaternion::Identity()), m_relativeScale(1, 1, 1), m_relativePosition(Vector3::Zero()),
 m_relativeOrientation(Quaternion::Identity()), m_requiresUpdate(false), m_updateTransform(false),
-m_localBlendingMode(false), m_localCullMode(false)
+m_localBlendingMode(false), m_localCullMode(false), m_localFillMode(false)
 {
 	if (name)
 	{
@@ -213,6 +213,9 @@ void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperatio
     // cache current winding mode to add to each render operation
     const PolygonWindingMode& windingMode = GetPolygonWindingMode();
 
+    // cache current fill mode to add to each render operation
+    const FillMode& fillMode = GetFillMode();
+
     // add all of this scene nodes renderables
     EntityContainer::iterator entityIter;
     for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)
@@ -228,6 +231,7 @@ void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperatio
                 operation.SetBlendingMode(blendingMode);
                 operation.SetCullMode(cullMode);
                 operation.SetPolygonWindingMode(windingMode);
+                operation.SetFillMode(fillMode);
                 renderOperations.push_back(operation);
             }
         }
@@ -365,6 +369,26 @@ const PolygonWindingMode& SceneNode::GetPolygonWindingMode()
     }
 
     return m_windingMode;
+}
+
+void SceneNode::SetFillMode(const FillMode& fillMode)
+{
+    // save fill mode locally
+    m_fillMode = fillMode;
+    m_localFillMode = true;
+}
+
+const FillMode& SceneNode::GetFillMode()
+{
+    // attempt to perform a lazy update, if the parent's fill mode has changed
+    // if the fill mode is not the same as our parent and we haven't set it
+    // directly, then update it from the parent
+    if (m_parent && m_fillMode != m_parent->GetFillMode() && !m_localFillMode)
+    {
+        m_fillMode = m_parent->GetFillMode();
+    }
+
+    return m_fillMode;
 }
 
 Matrix4 SceneNode::GetTransform()

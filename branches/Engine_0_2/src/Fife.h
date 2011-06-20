@@ -90,6 +90,7 @@
 #include "rendersystem/BlendingMode.h"
 #include "rendersystem/CullMode.h"
 #include "rendersystem/PolygonWindingMode.h"
+#include "rendersystem/FillMode.h"
 
 // scene
 #include "scene/SceneManager.h"

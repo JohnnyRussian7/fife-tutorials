@@ -76,13 +76,15 @@ bool SimpleKeyListener::OnKeyReleased(const IKeyEvent& event)
     else if (event.GetKeyCode() == KeyCodes::KeyP)
     {
         // toggle between wireframe and fill
-        if (m_engine.GetRenderSystem()->GetPolygonMode() != PolygonMode::Fill)
+        if (m_fillMode.GetFillType() != FillType::Fill)
         {
-            m_engine.GetRenderSystem()->SetPolygonMode(PolygonMode::Fill);
+            m_fillMode.SetFillType(FillType::Fill);
+            m_engine.GetSceneManager()->GetRootSceneNode()->SetFillMode(m_fillMode);
         }
         else
         {
-            m_engine.GetRenderSystem()->SetPolygonMode(PolygonMode::Line);
+            m_fillMode.SetFillType(FillType::Line);
+            m_engine.GetSceneManager()->GetRootSceneNode()->SetFillMode(m_fillMode);
         }
     }
 

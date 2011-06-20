@@ -30,6 +30,7 @@
 #include "../rendersystem/BlendingMode.h"
 #include "../rendersystem/CullMode.h"
 #include "../rendersystem/PolygonWindingMode.h"
+#include "../rendersystem/FillMode.h"
 
 class SceneManager;
 class IEntity;
@@ -84,6 +85,9 @@ public:
     void SetPolygonWindingMode(const PolygonWindingMode& windingMode);
     const PolygonWindingMode& GetPolygonWindingMode();
 
+    void SetFillMode(const FillMode& fillMode);
+    const FillMode& GetFillMode();
+
 	Matrix4 GetTransform();
 
     void Translate(const Vector3& translation);
@@ -132,6 +136,9 @@ private:
 
     PolygonWindingMode m_windingMode;
     bool m_localWindingMode;
+
+    FillMode m_fillMode;
+    bool m_localFillMode;
 
 	bool m_updateTransform;
 	Matrix4 m_transform;

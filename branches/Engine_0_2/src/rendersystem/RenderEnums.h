@@ -31,16 +31,6 @@ struct ProjectionType
 	};
 };
 
-struct PolygonMode
-{
-    enum Enum
-    {
-        Point = 0,
-        Line,
-        Fill
-    };
-};
-
 struct TransformType
 {
 	enum Enum

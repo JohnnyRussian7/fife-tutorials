@@ -72,3 +72,13 @@ const PolygonWindingMode& RenderOperation::GetPolygonWindingMode() const
 {
     return m_windingMode;
 }
+
+void RenderOperation::SetFillMode(const FillMode& fillMode)
+{
+    m_fillMode = fillMode;
+}
+
+const FillMode& RenderOperation::GetFillMode() const
+{
+    return m_fillMode;
+}

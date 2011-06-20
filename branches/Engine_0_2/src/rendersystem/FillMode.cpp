@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: SimpleKeyListener.h
+*	Filename: FillMode.cpp
 *	
 *	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
@@ -19,28 +19,32 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef SIMPLEKEYLISTENER_H_
-#define SIMPLEKEYLISTENER_H_
+#include "PrecompiledIncludes.h"
 
-#include "../Fife.h"
+#include "FillMode.h"
 
-class SimpleKeyListener : public IKeyListener
+FillMode::FillMode()
+: m_fillType(FillType::Fill)
 {
-public:
-    SimpleKeyListener(Engine& engine, Camera* cam);
 
-    virtual const std::string& GetName();
-    virtual bool OnKeyPressed(const IKeyEvent& event);
-    virtual bool OnKeyReleased(const IKeyEvent& event);
+}
 
-private:
-    Engine& m_engine;
-    Camera* m_cam;
-    std::string m_name;
-    float m_xTrans;
-    float m_yTrans;
-    float m_zTrans;
-    FillMode m_fillMode;
-};
+void FillMode::SetFillType(FillType::Enum type)
+{
+    m_fillType = type;
+}
 
-#endif
+FillType::Enum FillMode::GetFillType() const
+{
+    return m_fillType;
+}
+
+bool operator==(const FillMode& lhs, const FillMode& rhs)
+{
+    return (lhs.GetFillType() == rhs.GetFillType());
+}
+
+bool operator!=(const FillMode& lhs, const FillMode& rhs)
+{
+    return (lhs.GetFillType() != rhs.GetFillType());
+}

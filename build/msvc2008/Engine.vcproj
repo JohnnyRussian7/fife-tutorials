@@ -1343,6 +1343,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\rendersystem\FillMode.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\FillMode.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\rendersystem\IRenderSystem.cpp"
 				>
 			</File>

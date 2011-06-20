@@ -25,6 +25,7 @@
 #include "BlendingMode.h"
 #include "CullMode.h"
 #include "PolygonWindingMode.h"
+#include "FillMode.h"
 
 class Renderable;
 
@@ -91,11 +92,24 @@ public:
     //!***************************************************************
     const PolygonWindingMode& GetPolygonWindingMode() const; 
 
+    //!***************************************************************
+    //! @details:
+    //! sets the fill mode for this render operation
+    //!***************************************************************
+    void SetFillMode(const FillMode& fillMode);
+
+    //!***************************************************************
+    //! @details:
+    //! accessor for the fill mode for this render operation
+    //!***************************************************************
+    const FillMode& GetFillMode() const;
+
 private:
     Renderable* m_renderable;
     BlendingMode m_blendingMode;
     CullMode m_cullMode;
     PolygonWindingMode m_windingMode;
+    FillMode m_fillMode;
 };
 
 #endif

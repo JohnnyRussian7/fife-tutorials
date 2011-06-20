@@ -27,6 +27,7 @@
 #include "../RenderEnums.h"
 #include "../BlendingMode.h"
 #include "../CullMode.h"
+#include "../FillMode.h"
 #include "../../math/Matrix4.h"
 #include "../../scene/Viewport.h"
 #include "../../graphics/opengl/OpenglTexture.h"
@@ -48,8 +49,6 @@ namespace opengl {
 	    ~OpenglRenderer();
 
 	    virtual RenderSystemType::Enum GetRenderSystemType() const;
-        virtual void SetPolygonMode(PolygonMode::Enum type);
-        virtual PolygonMode::Enum GetPolygonMode() const;
 	    virtual void SetViewPort(const Viewport& viewport);
 	    virtual void SetTransform(TransformType::Enum type, const Matrix4& mat);
 
@@ -68,6 +67,7 @@ namespace opengl {
         virtual void SetBlendingMode(const BlendingMode& BlendingMode);
         virtual void SetCullMode(const CullMode& cullMode);
         virtual void SetPolygonWindingMode(const PolygonWindingMode& windingMode);
+        virtual void SetFillMode(const FillMode& fillMode);
 
     private:
         RenderSystemSettings m_settings;
@@ -85,10 +85,10 @@ namespace opengl {
 
         OpenglShaderManager* m_shaderManager;
 
-        PolygonMode::Enum m_polygonMode;
         BlendingMode m_blendingMode;
         CullMode m_cullMode;
         PolygonWindingMode m_windingMode;
+        FillMode m_fillMode;
 
         bool m_useVbo;
     };

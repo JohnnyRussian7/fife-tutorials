@@ -96,8 +96,6 @@ namespace opengl {
     m_projectionMatrixUpdate(false), m_activeTexture(0), m_shaderManager(new OpenglShaderManager()),
     m_useVbo(false)
     {
-        SetPolygonMode(PolygonMode::Fill);
-
         m_useVbo = OpenglCapabilities::Instance()->HasVboSupport() && m_settings.useVbo;
 
         if (OpenglCapabilities::Instance()->HasShaderSupport())
@@ -120,17 +118,6 @@ namespace opengl {
     RenderSystemType::Enum OpenglRenderer::GetRenderSystemType() const
     {
         return RenderSystemType::Opengl;
-    }
-
-    void OpenglRenderer::SetPolygonMode(PolygonMode::Enum type)
-    {
-        m_polygonMode = type;
-        glPolygonMode(GL_FRONT_AND_BACK, utility::ConvertPolygonMode(m_polygonMode));
-    }
-
-    PolygonMode::Enum OpenglRenderer::GetPolygonMode() const
-    {
-        return m_polygonMode;
     }
 
     void OpenglRenderer::SetViewPort(const Viewport& viewport)
@@ -240,6 +227,18 @@ namespace opengl {
         }
     }
 
+    void OpenglRenderer::SetFillMode(const FillMode& fillMode)
+    {
+        if (fillMode != m_fillMode)
+        {
+            // TODO - should we allow setting polygon mode differently depending on 
+            //        side (front/back/both)?
+            glPolygonMode(GL_FRONT_AND_BACK, utility::ConvertFillMode(fillMode.GetFillType()));
+
+            m_fillMode = fillMode;
+        }
+    }
+
     IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
     {
         if (m_useVbo)
@@ -300,6 +299,9 @@ namespace opengl {
 
         // set the winding mode
         SetPolygonWindingMode(renderOperation.GetPolygonWindingMode());
+
+        // set the fill mode
+        SetFillMode(renderOperation.GetFillMode());
 
         IMaterial* material = renderable->GetMaterial();
 

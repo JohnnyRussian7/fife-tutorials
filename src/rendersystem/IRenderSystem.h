@@ -57,8 +57,6 @@ public:
 	virtual ~IRenderSystem() { };
 
 	virtual RenderSystemType::Enum GetRenderSystemType() const = 0;
-    virtual void SetPolygonMode(PolygonMode::Enum mode) = 0;
-    virtual PolygonMode::Enum GetPolygonMode() const = 0;
 	virtual void SetViewPort(const Viewport& viewport) = 0;
     virtual void SetTransform(TransformType::Enum type, const Matrix4& mat) = 0;
 

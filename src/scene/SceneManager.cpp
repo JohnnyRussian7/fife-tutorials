@@ -262,4 +262,7 @@ void SceneManager::RenderScene(uint32_t time)
         // render each operation
         m_renderSystem->Render(*iter);
     }
+
+    // render axes last
+    m_renderSystem->RenderAxes();
 }

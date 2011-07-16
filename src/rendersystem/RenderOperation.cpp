@@ -24,6 +24,7 @@
 #include "RenderOperation.h"
 
 RenderOperation::RenderOperation()
+: m_renderable(0)
 {
 
 }

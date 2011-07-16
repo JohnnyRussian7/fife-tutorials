@@ -53,23 +53,43 @@ struct Matrix4
 			float _02, float _12, float _22, float _32,
 			float _03, float _13, float _23, float _33)
 	{
-		matrix[0] = _00; 
-		matrix[1] = _10; 
-		matrix[2] = _20;
-		matrix[3] = _30;
-		matrix[4] = _01;
-		matrix[5] = _11; 
-		matrix[6] = _21;
-		matrix[7] = _31;
-		matrix[8] = _02;
-		matrix[9] = _12;
-		matrix[10] = _22;
-		matrix[11] = _32;
-		matrix[12] = _03; 
-		matrix[13] = _13;
-		matrix[14] = _23;
-		matrix[15] = _33;
+		m_matrix[0] = _00; 
+		m_matrix[1] = _10; 
+		m_matrix[2] = _20;
+		m_matrix[3] = _30;
+		m_matrix[4] = _01;
+		m_matrix[5] = _11; 
+		m_matrix[6] = _21;
+		m_matrix[7] = _31;
+		m_matrix[8] = _02;
+		m_matrix[9] = _12;
+		m_matrix[10] = _22;
+		m_matrix[11] = _32;
+		m_matrix[12] = _03; 
+		m_matrix[13] = _13;
+		m_matrix[14] = _23;
+		m_matrix[15] = _33;
 	}
+
+    Matrix4(const float* const matrix)
+    {
+        m_matrix[0] = matrix[0]; 
+        m_matrix[1] = matrix[1]; 
+        m_matrix[2] = matrix[2];
+        m_matrix[3] = matrix[3];
+        m_matrix[4] = matrix[4];
+        m_matrix[5] = matrix[5]; 
+        m_matrix[6] = matrix[6];
+        m_matrix[7] = matrix[7];
+        m_matrix[8] = matrix[8];
+        m_matrix[9] = matrix[9];
+        m_matrix[10] = matrix[10];
+        m_matrix[11] = matrix[11];
+        m_matrix[12] = matrix[12]; 
+        m_matrix[13] = matrix[13];
+        m_matrix[14] = matrix[14];
+        m_matrix[15] = matrix[15];
+    }
 
 	static Matrix4 Zero()
 	{
@@ -89,17 +109,21 @@ struct Matrix4
 
         for (uint32_t i = 0; i < NumMatrixElements; ++i)
         {
-            retMat[i] = -matrix[i];
+            retMat[i] = -m_matrix[i];
         }
 
         return retMat;
     }
 
-	float& operator[](uint32_t index) { return matrix[index]; }
-	const float& operator[](uint32_t index) const { return matrix[index]; }
+	float& operator[](uint32_t index) { return m_matrix[index]; }
+	const float& operator[](uint32_t index) const { return m_matrix[index]; }
+
+    Vector3 GetX() const;
+    Vector3 GetY() const;
+    Vector3 GetZ() const;
 
     static const uint32_t NumMatrixElements = 16;
-	float matrix[NumMatrixElements];
+	float m_matrix[NumMatrixElements];
 };
 
 Matrix4 operator*(const Matrix4& rhs, const Matrix4& lhs);

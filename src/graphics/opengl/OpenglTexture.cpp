@@ -123,5 +123,8 @@ void OpenglTexture::Upload()
         {
             delete [] data;
         }
+
+        // disable texture
+        glDisable(textureType);
 	}
 }

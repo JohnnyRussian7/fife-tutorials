@@ -33,7 +33,7 @@ struct Matrix4;
 class Renderable
 {
 public:
-    Renderable(Visual* visual);
+    Renderable(Visual* visual=0);
 	~Renderable();
 
     IVertexBuffer* GetVertexBuffer() const;

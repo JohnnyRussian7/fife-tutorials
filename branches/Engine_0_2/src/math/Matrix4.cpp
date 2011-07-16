@@ -24,6 +24,21 @@
 #include "Matrix4.h"
 #include "Vector3.h"
 
+Vector3 Matrix4::GetX() const
+{
+    return Vector3(m_matrix[0], m_matrix[1], m_matrix[2]);
+}
+
+Vector3 Matrix4::GetY() const
+{
+    return Vector3(m_matrix[4], m_matrix[5], m_matrix[6]);
+}
+
+Vector3 Matrix4::GetZ() const
+{
+    return Vector3(m_matrix[8], m_matrix[9], m_matrix[10]);
+}
+
 Matrix4 operator*(const Matrix4& lhs, const Matrix4& rhs)
 {
 	Matrix4 result;

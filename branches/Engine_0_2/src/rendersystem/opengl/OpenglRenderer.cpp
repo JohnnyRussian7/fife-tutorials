@@ -24,7 +24,6 @@
 #include "OpenglRenderer.h"
 #include "OpenglCapabilities.h"
 #include "OpenglShaderManager.h"
-#include "../RenderOperation.h"
 #include "../IShaderProgram.h"
 #include "../../Color.h"
 #include "../../scene/Renderable.h"
@@ -94,8 +93,10 @@ namespace opengl {
     m_modelMatrix(Matrix4::Identity()), m_viewMatrix(Matrix4::Identity()),
     m_projectionMatrix(Matrix4::Identity()), m_modelMatrixUpdate(false), m_viewMatrixUpdate(false),
     m_projectionMatrixUpdate(false), m_activeTexture(0), m_shaderManager(new OpenglShaderManager()),
-    m_useVbo(false)
+    m_useVbo(false), m_axesRenderable(new Renderable()), m_clearColor(Color::Black())
     {
+        m_axesRenderOperation.SetRenderable(m_axesRenderable);
+
         m_useVbo = OpenglCapabilities::Instance()->HasVboSupport() && m_settings.useVbo;
 
         if (OpenglCapabilities::Instance()->HasShaderSupport())
@@ -108,11 +109,19 @@ namespace opengl {
         {
             std::cout << "Shaders not supported in opengl version: " << OpenglVersion::ToString(OpenglCapabilities::Instance()->GetOpenglVersion()) << std::endl;
         }
+
+        // TODO - figure out where to put this
+        // setup the color material properly so that even if lighting
+        // is enabled the color for the lines will be specified by the 
+        // color set in the vertex array for the axes
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+        glEnable(GL_COLOR_MATERIAL);
     }
 
     OpenglRenderer::~OpenglRenderer()
     {
-
+        delete m_axesRenderable;
+        m_axesRenderable = 0;
     }
 
     RenderSystemType::Enum OpenglRenderer::GetRenderSystemType() const
@@ -136,6 +145,7 @@ namespace opengl {
 
         // enable scissor testing to clip against viewport
         glScissor(m_viewport.GetLeft(), m_viewport.GetTop(), m_viewport.GetWidth(), m_viewport.GetHeight());
+        glEnable(GL_SCISSOR_TEST);
     }
 
     void OpenglRenderer::SetTransform(TransformType::Enum type, const Matrix4& mat)
@@ -147,8 +157,7 @@ namespace opengl {
                 m_modelMatrix = mat;
 
                 glMatrixMode(GL_MODELVIEW);
-                glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
-                m_modelMatrix = mat;
+                glLoadMatrixf((m_viewMatrix*m_modelMatrix).m_matrix);
             }
             break;
         case TransformType::View:
@@ -156,7 +165,7 @@ namespace opengl {
                 m_viewMatrix = mat;
 
                 glMatrixMode(GL_MODELVIEW);
-                glLoadMatrixf((m_viewMatrix*m_modelMatrix).matrix);
+                glLoadMatrixf((m_viewMatrix*m_modelMatrix).m_matrix);
             }
             break;
         case TransformType::Projection:
@@ -164,12 +173,13 @@ namespace opengl {
                 m_projectionMatrix = mat;
 
                 glMatrixMode(GL_PROJECTION);
-                glLoadMatrixf(m_projectionMatrix.matrix);
+                glLoadMatrixf(m_projectionMatrix.m_matrix);
             }
             break;
         default:
             {
                 // TODO - print error here
+                assert(0);
             }
             break;
         }
@@ -239,6 +249,68 @@ namespace opengl {
         }
     }
 
+    void OpenglRenderer::UpdateAxesRenderOperation(const Matrix4& rotation)
+    {
+        static const uint32_t NumVertices = 6;
+
+        if (!m_axesRenderable->GetVertexBuffer())
+        {
+            m_axesRenderable->SetVertexBuffer(CreateVertexBuffer(NumVertices, sizeof(Vertex), HwBufferUsage::Dynamic));
+        }
+
+        IVertexBuffer* vertexBuffer = m_axesRenderable->GetVertexBuffer();
+
+        if (vertexBuffer)
+        {
+            float axesLength = 100;
+
+            std::vector<Vertex> axes;
+            axes.reserve(NumVertices);
+
+            Vertex origin;
+            origin.m_position = Vector3::Zero();
+
+            // x axis
+            origin.m_color = Color::Red();
+
+            Vertex x;
+            x.m_position = Normalize(rotation.GetX())*axesLength;
+            x.m_color = Color::Red();
+
+            axes.push_back(origin);
+            axes.push_back(x);
+
+            // y axis
+            origin.m_color = Color::Green();
+
+            Vertex y;
+            y.m_position = Normalize(rotation.GetY())*axesLength;
+            y.m_color = Color::Green();
+            
+            axes.push_back(origin);
+            axes.push_back(y);
+
+            // z axis
+            origin.m_color = Color::Blue();
+
+            Vertex z;
+            z.m_position = Normalize(rotation.GetZ())*axesLength;
+            z.m_color = Color::Blue();
+
+            axes.push_back(origin);
+            axes.push_back(z);
+
+            vertexBuffer->WriteData(&axes[0], axes.size(), 0);
+
+            m_axesRenderable->SetPrimitiveType(PrimitiveType::Lines);
+        }
+    }
+
+    const RenderOperation& OpenglRenderer::GetAxesRenderOperation() const
+    {
+        return m_axesRenderOperation;
+    }
+
     IVertexBuffer* OpenglRenderer::CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage)
     {
         if (m_useVbo)
@@ -259,6 +331,15 @@ namespace opengl {
         return new GenericIndexBuffer(numIndices, indexType);
     }
 
+    void OpenglRenderer::SetClearColor(const Color& color)
+    {
+        if (color != m_clearColor)
+        {
+            m_clearColor = color;
+            glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
+        }
+    }
+
     void OpenglRenderer::ClearBuffers(bool colorBuffer, bool depthBuffer)
     {
         GLbitfield buffers = 0;
@@ -271,10 +352,6 @@ namespace opengl {
         {
             buffers |= GL_DEPTH_BUFFER_BIT;
         }
-
-        // TODO - this is temporary
-        Color color = Color::Blue();
-        glClearColor(color.r, color.g, color.b, color.a);
 
         glClear(buffers);
     }
@@ -304,7 +381,6 @@ namespace opengl {
         SetFillMode(renderOperation.GetFillMode());
 
         IMaterial* material = renderable->GetMaterial();
-
         if (material)
         {
             TexturePtr texture = renderable->GetMaterial()->GetTexture();
@@ -331,6 +407,7 @@ namespace opengl {
         {
             if (m_useVbo)
             {
+
                 glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
 
                 glVertexPointer(3, 
@@ -408,6 +485,17 @@ namespace opengl {
             }
         }
 
+        if (material)
+        {
+            TexturePtr texture = material->GetTexture();
+
+            if (texture)
+            {
+                // disable texture
+                glDisable(utility::ConvertTextureType(texture->GetType()));
+            }
+        }
+
         //DrawAxes();
 
         //     if (shaderProgram)
@@ -422,5 +510,50 @@ namespace opengl {
         //     {
         //         shaderProgram->Disable();
         //     }
+    }
+
+    void OpenglRenderer::RenderAxes()
+    {
+        // current clear color
+        Color color = m_clearColor;
+
+        // save current viewport 
+        Viewport currentViewport = m_viewport;
+
+        // set new viewport
+        //SetViewPort(Viewport(0,0,currentViewport.GetWidth(),currentViewport.GetHeight()));
+        SetViewPort(Viewport(currentViewport.GetWidth()-75,0,75,75));
+
+        ClearBuffers();
+        
+        SetClearColor(color);
+
+        // save current transform
+        glPushMatrix();
+
+        // reset model view matrix
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        Matrix4 viewRotation(m_viewMatrix);
+        viewRotation[12] = 0;
+        viewRotation[13] = 0;
+        viewRotation[14] = -300;
+
+        SetTransform(TransformType::Model, Matrix4::Identity());
+        SetTransform(TransformType::View, viewRotation);
+
+        // set the line width to 2
+        glLineWidth(2.0);
+
+        UpdateAxesRenderOperation(viewRotation);
+
+        Render(GetAxesRenderOperation());
+
+        // remove matrix to restore state
+        glPopMatrix();
+
+        // restore viewport
+        SetViewPort(currentViewport);
     }
 }

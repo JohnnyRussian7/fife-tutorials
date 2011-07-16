@@ -48,7 +48,7 @@ struct PrimitiveType
     enum Enum
     {
         Points = 0,
-        Line,
+        Lines,
         LineStrip,
         LineLoop,
         Triangles,

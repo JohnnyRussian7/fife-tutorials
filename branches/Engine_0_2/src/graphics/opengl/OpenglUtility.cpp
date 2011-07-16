@@ -32,8 +32,8 @@ namespace opengl { namespace utility {
         {
         case PrimitiveType::Points:
             return GL_POINTS;
-        case PrimitiveType::Line:
-            return GL_LINE;
+        case PrimitiveType::Lines:
+            return GL_LINES;
         case PrimitiveType::LineStrip:
             return GL_LINE_STRIP;
         case PrimitiveType::LineLoop:

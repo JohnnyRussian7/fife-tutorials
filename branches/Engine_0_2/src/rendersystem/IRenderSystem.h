@@ -63,8 +63,10 @@ public:
     virtual IVertexBuffer* CreateVertexBuffer(uint32_t numVertices, uint32_t vertexSize, HwBufferUsage::Enum usage) = 0;
     virtual IIndexBuffer* CreateIndexBuffer(uint32_t numIndices, IndexBufferDataType::Enum indexType, HwBufferUsage::Enum usage) = 0;
 
+    virtual void SetClearColor(const Color& color) = 0;
     virtual void ClearBuffers(bool colorBuffer=true, bool depthBuffer=true) = 0;
 	virtual void Render(const RenderOperation& renderable) = 0;
+    virtual void RenderAxes() = 0;
 
 protected:
     virtual void SetBlendingMode(const BlendingMode& BlendingMode) = 0;

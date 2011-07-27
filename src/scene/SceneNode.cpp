@@ -216,6 +216,9 @@ void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperatio
     // cache current fill mode to add to each render operation
     const FillMode& fillMode = GetFillMode();
 
+    // cache current alpha test mode to add to each render operation
+    const AlphaTestMode& alphaTestMode = GetAlphaTestMode();
+
     // add all of this scene nodes renderables
     EntityContainer::iterator entityIter;
     for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)
@@ -232,6 +235,7 @@ void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperatio
                 operation.SetCullMode(cullMode);
                 operation.SetPolygonWindingMode(windingMode);
                 operation.SetFillMode(fillMode);
+                operation.SetAlphaTestMode(alphaTestMode);
                 renderOperations.push_back(operation);
             }
         }
@@ -389,6 +393,26 @@ const FillMode& SceneNode::GetFillMode()
     }
 
     return m_fillMode;
+}
+
+void SceneNode::SetAlphaTestMode(const AlphaTestMode& alphaTestMode)
+{
+    // save alpha test mode locally
+    m_alphaTestMode = alphaTestMode;
+    m_localAlphaTestMode = true;
+}
+
+const AlphaTestMode& SceneNode::GetAlphaTestMode()
+{
+    // attempt to perform a lazy update, if the parent's alpha test mode has changed
+    // if the alpha test mode is not the same as our parent and we haven't set it
+    // directly, then update it from the parent
+    if (m_parent && m_alphaTestMode != m_parent->GetAlphaTestMode() && !m_localAlphaTestMode)
+    {
+        m_alphaTestMode = m_parent->GetAlphaTestMode();
+    }
+
+    return m_alphaTestMode;
 }
 
 Matrix4 SceneNode::GetTransform()

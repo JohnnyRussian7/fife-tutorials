@@ -30,6 +30,8 @@ struct Quaternion;
 
 extern const float Pi;
 
+bool IsEqual(float a, float b);
+
 // radian/degree conversions
 float RadToDeg(float rad);
 float DegToRad(float deg);

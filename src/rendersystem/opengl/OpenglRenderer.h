@@ -28,6 +28,7 @@
 #include "../BlendingMode.h"
 #include "../CullMode.h"
 #include "../FillMode.h"
+#include "../AlphaTestMode.h"
 #include "../RenderOperation.h"
 #include "../../math/Matrix4.h"
 #include "../../scene/Viewport.h"
@@ -72,6 +73,7 @@ namespace opengl {
         virtual void SetCullMode(const CullMode& cullMode);
         virtual void SetPolygonWindingMode(const PolygonWindingMode& windingMode);
         virtual void SetFillMode(const FillMode& fillMode);
+        virtual void SetAlphaTestMode(const AlphaTestMode& alphaTestMode);
 
         void UpdateAxesRenderOperation(const Matrix4& rotation);
         const RenderOperation& GetAxesRenderOperation() const;
@@ -99,6 +101,7 @@ namespace opengl {
         CullMode m_cullMode;
         PolygonWindingMode m_windingMode;
         FillMode m_fillMode;
+        AlphaTestMode m_alphaTestMode;
         Color m_clearColor;
 
         bool m_useVbo;

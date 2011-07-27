@@ -30,6 +30,7 @@
 #include "../../rendersystem/CullMode.h"
 #include "../../rendersystem/PolygonWindingMode.h"
 #include "../../rendersystem/FillMode.h"
+#include "../../rendersystem/AlphaTestMode.h"
 #include "../../rendersystem/RenderEnums.h"
 #include "../../rendersystem/ShaderEnums.h"
 
@@ -45,7 +46,8 @@ namespace opengl { namespace utility {
     GLenum ConvertDestBlendMode(DestBlendMode::Enum mode);
     GLenum ConvertCullMode(CullType::Enum cullType);
     GLenum ConvertPolygonWindingMode(WindingType::Enum polygonWindingType);
-    GLenum ConvertFillMode(FillType::Enum type);
+    GLenum ConvertFillMode(FillType::Enum fillType);
+    GLenum ConvertAlphaTestMode(AlphaTestType::Enum alphaTestType);
 }}
 
 #endif

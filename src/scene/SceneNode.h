@@ -31,6 +31,7 @@
 #include "../rendersystem/CullMode.h"
 #include "../rendersystem/PolygonWindingMode.h"
 #include "../rendersystem/FillMode.h"
+#include "../rendersystem/AlphaTestMode.h"
 
 class SceneManager;
 class IEntity;
@@ -88,6 +89,9 @@ public:
     void SetFillMode(const FillMode& fillMode);
     const FillMode& GetFillMode();
 
+    void SetAlphaTestMode(const AlphaTestMode& alphaTestMode);
+    const AlphaTestMode& GetAlphaTestMode();
+
 	Matrix4 GetTransform();
 
     void Translate(const Vector3& translation);
@@ -139,6 +143,9 @@ private:
 
     FillMode m_fillMode;
     bool m_localFillMode;
+
+    AlphaTestMode m_alphaTestMode;
+    bool m_localAlphaTestMode;
 
 	bool m_updateTransform;
 	Matrix4 m_transform;

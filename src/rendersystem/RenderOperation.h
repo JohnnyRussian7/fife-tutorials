@@ -26,6 +26,7 @@
 #include "CullMode.h"
 #include "PolygonWindingMode.h"
 #include "FillMode.h"
+#include "AlphaTestMode.h"
 
 class Renderable;
 
@@ -104,12 +105,25 @@ public:
     //!***************************************************************
     const FillMode& GetFillMode() const;
 
+    //!***************************************************************
+    //! @details:
+    //! sets the alpha test mode for this render operation
+    //!***************************************************************
+    void SetAlphaTestMode(const AlphaTestMode& alphaTestMode);
+
+    //!***************************************************************
+    //! @details:
+    //! accessor for the alpha test mode for this render operation
+    //!***************************************************************
+    const AlphaTestMode& GetAlphaTestMode() const;
+
 private:
     Renderable* m_renderable;
     BlendingMode m_blendingMode;
     CullMode m_cullMode;
     PolygonWindingMode m_windingMode;
     FillMode m_fillMode;
+    AlphaTestMode m_alphaTestMode;
 };
 
 #endif

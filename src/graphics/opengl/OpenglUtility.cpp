@@ -252,9 +252,9 @@ namespace opengl { namespace utility {
         }
     }
 
-    GLenum ConvertFillMode(FillType::Enum type)
+    GLenum ConvertFillMode(FillType::Enum fillType)
     {
-        switch (type)
+        switch (fillType)
         {
         case FillType::Point:
             return GL_POINT;
@@ -264,6 +264,31 @@ namespace opengl { namespace utility {
             return GL_FILL;
         default:
             return GL_FILL;
+        }
+    }
+
+    GLenum ConvertAlphaTestMode(AlphaTestType::Enum alphaTestType)
+    {
+        switch (alphaTestType)
+        {
+        case AlphaTestType::Never:
+            return GL_NEVER;
+        case AlphaTestType::Less:
+            return GL_LESS;
+        case AlphaTestType::Equal:
+            return GL_EQUAL;
+        case AlphaTestType::LessEqual:
+            return GL_LEQUAL;
+        case AlphaTestType::Greater:
+            return GL_GREATER;
+        case AlphaTestType::NotEqual:
+            return GL_NOTEQUAL;
+        case AlphaTestType::GreaterEqual:
+            return GL_GEQUAL;
+        case AlphaTestType::Always:
+            return GL_ALWAYS;
+        default:
+            return GL_ALWAYS;
         }
     }
 

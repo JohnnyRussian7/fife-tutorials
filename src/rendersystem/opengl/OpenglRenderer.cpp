@@ -189,16 +189,19 @@ namespace opengl {
     {
         if (blendingMode != m_blendingMode)
         {
-            if (blendingMode.IsEnabled() && !m_blendingMode.IsEnabled())
-            {
-                glEnable(GL_BLEND);
-
-                glBlendFunc(utility::ConvertSrcBlendMode(blendingMode.GetSrcBlendMode()), 
-                            utility::ConvertDestBlendMode(blendingMode.GetDestBlendMode()));
-            }
-            else if (!blendingMode.IsEnabled())
+            if (!blendingMode.IsEnabled())
             {
                 glDisable(GL_BLEND);
+            }
+            else
+            {
+                glBlendFunc(utility::ConvertSrcBlendMode(blendingMode.GetSrcBlendMode()), 
+                            utility::ConvertDestBlendMode(blendingMode.GetDestBlendMode()));
+
+                if (blendingMode.IsEnabled() && !m_blendingMode.IsEnabled())
+                {
+                    glEnable(GL_BLEND);
+                }
             }
 
             // store blending mode
@@ -210,15 +213,18 @@ namespace opengl {
     {
         if (cullMode != m_cullMode)
         {
-            if (cullMode.IsEnabled() && !m_cullMode.IsEnabled())
-            {
-                glEnable(GL_CULL_FACE);
-
-                glCullFace(utility::ConvertCullMode(cullMode.GetCullType()));
-            }
-            else if (!cullMode.IsEnabled())
+            if (!cullMode.IsEnabled())
             {
                 glDisable(GL_CULL_FACE);
+            }
+            else
+            {
+                glCullFace(utility::ConvertCullMode(cullMode.GetCullType()));
+
+                if (cullMode.IsEnabled() && !m_cullMode.IsEnabled())
+                {
+                    glEnable(GL_CULL_FACE);
+                }
             }
 
             // storing cull mode
@@ -249,8 +255,32 @@ namespace opengl {
         }
     }
 
+    void OpenglRenderer::SetAlphaTestMode(const AlphaTestMode& alphaTestMode)
+    {
+        if (alphaTestMode != m_alphaTestMode)
+        {
+            if (!alphaTestMode.IsEnabled())
+            {
+                glDisable(GL_ALPHA_TEST);
+            }
+            else
+            {
+                glAlphaFunc(utility::ConvertAlphaTestMode(alphaTestMode.GetType()), alphaTestMode.GetValue());
+
+                if (alphaTestMode.IsEnabled() && !m_alphaTestMode.IsEnabled())
+                {
+                    glEnable(GL_ALPHA_TEST);
+                }
+            }
+
+            // store alpha test mode
+            m_alphaTestMode = alphaTestMode;
+        }
+    }
+
     void OpenglRenderer::UpdateAxesRenderOperation(const Matrix4& rotation)
     {
+        // 2 vertexes per line and 3 lines (X,Y,Z)
         static const uint32_t NumVertices = 6;
 
         if (!m_axesRenderable->GetVertexBuffer())
@@ -379,6 +409,9 @@ namespace opengl {
 
         // set the fill mode
         SetFillMode(renderOperation.GetFillMode());
+
+        // set the alpha test mode
+        SetAlphaTestMode(renderOperation.GetAlphaTestMode());
 
         IMaterial* material = renderable->GetMaterial();
         if (material)

@@ -83,3 +83,13 @@ const FillMode& RenderOperation::GetFillMode() const
 {
     return m_fillMode;
 }
+
+void RenderOperation::SetAlphaTestMode(const AlphaTestMode& alphaTestMode)
+{
+    m_alphaTestMode = alphaTestMode;
+}
+
+const AlphaTestMode& RenderOperation::GetAlphaTestMode() const
+{
+    return m_alphaTestMode;
+}

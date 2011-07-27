@@ -1327,6 +1327,14 @@
 			Name="rendersystem"
 			>
 			<File
+				RelativePath="..\..\src\rendersystem\AlphaTestMode.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\rendersystem\AlphaTestMode.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\rendersystem\BlendingMode.cpp"
 				>
 			</File>

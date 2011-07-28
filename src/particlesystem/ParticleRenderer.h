@@ -52,9 +52,9 @@ private:
 	void SetupBillboard(const Vector3& cameraPosition, const Vector3& particlePosition);
 
 private:
-	bool isEnabled;
+	bool m_enabled;
 	ParticleEmitter* m_emitter;
-	std::vector<ParticleQuad> particleQuads;
+	std::vector<ParticleQuad> m_particleQuads;
 };
 
 #endif

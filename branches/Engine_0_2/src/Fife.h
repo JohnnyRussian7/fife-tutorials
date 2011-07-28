@@ -91,6 +91,7 @@
 #include "rendersystem/CullMode.h"
 #include "rendersystem/PolygonWindingMode.h"
 #include "rendersystem/FillMode.h"
+#include "rendersystem/AlphaTestMode.h"
 
 // scene
 #include "scene/SceneManager.h"

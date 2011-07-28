@@ -28,7 +28,7 @@
 #include "../scene/Camera.h"
 
 ParticleRenderer::ParticleRenderer()
-: isEnabled(true)
+: m_enabled(true)
 {
 	
 }
@@ -45,17 +45,17 @@ void ParticleRenderer::SetEmitter(ParticleEmitter* emitter)
 
 void ParticleRenderer::SetEnabled(bool enabled)
 {
-	isEnabled = enabled;
+	m_enabled = enabled;
 }
 
 bool ParticleRenderer::IsEnabled() const
 {
-	return isEnabled;
+	return m_enabled;
 }
 
 void ParticleRenderer::Update(float time)
 {
-	if (isEnabled && m_emitter)
+	if (m_enabled && m_emitter)
 	{
 		m_emitter->Update(time);
 		m_emitter->Emit();
@@ -64,16 +64,16 @@ void ParticleRenderer::Update(float time)
 
 void ParticleRenderer::Render(Camera& camera)
 {
-	if (isEnabled && m_emitter)
+	if (m_enabled && m_emitter)
 	{
 		const Matrix4& viewMatrix = camera.GetViewMatrix();
 
 		const std::vector<Particle>& particles = m_emitter->GetParticles();
 
-        if (particleQuads.size() != m_emitter->GetNumActiveParticles())
+        if (m_particleQuads.size() != m_emitter->GetNumActiveParticles())
         {
             // preallocate correct number of particle quads
-            particleQuads.reserve(m_emitter->GetNumActiveParticles());
+            m_particleQuads.reserve(m_emitter->GetNumActiveParticles());
         }
 
 		// first setup the quads for the active particles
@@ -94,7 +94,7 @@ void ParticleRenderer::Render(Camera& camera)
 	 		quad.vertex2 = particle.position - horizontal - vertical;
 	 		quad.vertex3 = particle.position - horizontal + vertical;
 			quad.vertex4 = particle.position + horizontal + vertical;
-	 		particleQuads.push_back(quad);
+	 		m_particleQuads.push_back(quad);
 		}
 
 		// get bounding box and calculate edges for drawing
@@ -147,9 +147,9 @@ void ParticleRenderer::Render(Camera& camera)
 		glEnd();
 
         glBegin(GL_QUADS);
-        for (std::size_t i=0; i < particleQuads.size(); ++i)
+        for (std::size_t i=0; i < m_particleQuads.size(); ++i)
         {
-            ParticleQuad& quad = particleQuads[i];
+            ParticleQuad& quad = m_particleQuads[i];
 
             glColor3f(particles[i].color.r, particles[i].color.g, particles[i].color.b);
  			glTexCoord2f(0.0, 0.0); glVertex3f(quad.vertex1.x, quad.vertex1.y, quad.vertex1.z);
@@ -160,7 +160,7 @@ void ParticleRenderer::Render(Camera& camera)
         glEnd();
 	}
 
-    particleQuads.clear();
+    m_particleQuads.clear();
 }
 
 void ParticleRenderer::SetupBillboard(const Vector3& camPosition, const Vector3& particlePosition)

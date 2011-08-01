@@ -23,7 +23,6 @@
 
 #include "Camera.h"
 #include "SceneNode.h"
-#include "../Visual.h"
 #include "../math/MathUtil.h"
 
 namespace
@@ -45,9 +44,8 @@ namespace
 }
 
 Camera::Camera(const char* name, const Vector3& position, const Quaternion& orientation)
-: m_position(position), m_orientation(orientation), m_viewMatrix(Matrix4::Identity()), 
-  m_needsUpdate(true), m_parent(0), m_visual(0), m_fixedYaw(false), 
-  m_fixedYawAxis(Vector3::UnitY())
+: m_orientation(orientation), m_viewMatrix(Matrix4::Identity()), 
+  m_needsUpdate(true), m_fixedYaw(false), m_fixedYawAxis(Vector3::UnitY())
 {
     if (name)
     {
@@ -57,16 +55,8 @@ Camera::Camera(const char* name, const Vector3& position, const Quaternion& orie
     {
         m_name = CreateUniqueCameraName();
     }
-}
 
-const char* Camera::GetName() const
-{
-    return m_name.c_str();
-}
-
-const Vector3& Camera::GetPosition() const
-{
-    return m_position;
+    m_position = position;
 }
 
 void Camera::SetPosition(float x, float y, float z)
@@ -76,7 +66,8 @@ void Camera::SetPosition(float x, float y, float z)
 
 void Camera::SetPosition(const Vector3& position)
 {
-    m_position = position;
+    // call base class implementation first
+    Entity::SetPosition(position);
 
     MarkDirty();
 }
@@ -309,40 +300,8 @@ void Camera::UpdateView()
     ResetDirty();
 }
 
-void Camera::SetParent(SceneNode* node)
-{
-    m_parent = node;
-}
-
-SceneNode* Camera::GetParent() const
-{
-    return m_parent;
-}
-
-void Camera::SetVisual(Visual* visual)
-{
-    delete m_visual;
-
-    m_visual = visual;
-
-    if (m_visual)
-    {
-        m_visual->SetParent(this);
-    }
-}
-
-Visual* Camera::GetVisual() const
-{
-    return m_visual;
-}
-
 void Camera::Update(uint32_t time)
 {
-    if (m_visual)
-    {
-        m_visual->Update(time);
-    }
-
     if (m_parent && m_parent->IsDirty())
     {
         m_orientation = m_parent->GetRelativeOrientation() * m_orientation;

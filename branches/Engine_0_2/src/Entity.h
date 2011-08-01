@@ -25,32 +25,45 @@
 #include "StdIncludes.h"
 
 #include "IEntity.h"
+#include "math/Vector3.h"
 
 class SceneNode;
+class IComponent;
 class Visual;
 struct Matrix4;
 
 class Entity : public IEntity
 {
 public:
-	Entity(const char* name=0);
+    Entity(const char* name=0, const Vector3& position=Vector3::Zero());
 	~Entity();
 
-	const char* GetName() const;
+	virtual const char* GetName() const;
 
     virtual void SetParent(SceneNode* node);
     virtual SceneNode* GetParent() const;
 
-    virtual void SetVisual(Visual* visual);
-    virtual Visual* GetVisual() const;
+    virtual IComponent* GetComponent(std::string name);
+    virtual void AddComponent(IComponent* component);
+    virtual void RemoveComponent(std::string name);
+
+    const Vector3& GetPosition() const;
+    void SetPosition(float x, float y, float z);
+    void SetPosition(const Vector3& position);
 
     virtual void Update(uint32_t time);
 
     virtual Matrix4 GetTransform();
+
 protected:
 	std::string m_name;
     SceneNode* m_parent;
-    Visual* m_visual;
+    
+    typedef std::vector<IComponent*> ComponentContainer;
+    ComponentContainer m_components;
+
+    // common parameters shared by all game entities
+    Vector3 m_position;
 };
 
 #endif

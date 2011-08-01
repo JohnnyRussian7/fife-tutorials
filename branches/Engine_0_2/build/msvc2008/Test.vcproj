@@ -197,6 +197,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\test\SimpleParticleSystem.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\test\SimpleStaticTextures.cpp"
 				>
 			</File>
@@ -220,6 +224,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\test\SimpleMouseListener.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\test\SimpleParticleSystem.h"
 				>
 			</File>
 			<File

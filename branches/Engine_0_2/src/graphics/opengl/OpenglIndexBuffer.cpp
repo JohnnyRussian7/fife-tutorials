@@ -78,7 +78,7 @@ void* OpenglIndexBuffer::GetData(uint32_t offset) const
 
 void OpenglIndexBuffer::WriteData(void* data, uint32_t numElements, uint32_t offset)
 {
-    glBindBufferARB(GL_ARRAY_BUFFER_ARB, m_bufferId);
+    glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, m_bufferId);
 
     if (offset == 0 && (numElements*m_indexSize == m_bufferSize))
     {
@@ -88,4 +88,6 @@ void OpenglIndexBuffer::WriteData(void* data, uint32_t numElements, uint32_t off
     {
         glBufferSubDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, offset, numElements*m_indexSize, data);
     }
+
+    glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 }

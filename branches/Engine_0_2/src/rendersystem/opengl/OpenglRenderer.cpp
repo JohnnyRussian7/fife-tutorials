@@ -95,8 +95,6 @@ namespace opengl {
     m_projectionMatrixUpdate(false), m_activeTexture(0), m_shaderManager(new OpenglShaderManager()),
     m_useVbo(false), m_axesRenderable(new Renderable()), m_clearColor(Color::Black())
     {
-        m_axesRenderOperation.SetRenderable(m_axesRenderable);
-
         m_useVbo = OpenglCapabilities::Instance()->HasVboSupport() && m_settings.useVbo;
 
         if (OpenglCapabilities::Instance()->HasShaderSupport())
@@ -333,6 +331,10 @@ namespace opengl {
             vertexBuffer->WriteData(&axes[0], axes.size(), 0);
 
             m_axesRenderable->SetPrimitiveType(PrimitiveType::Lines);
+
+            m_axesRenderOperation.SetVertexBuffer(vertexBuffer);
+            m_axesRenderOperation.SetTransform(m_axesRenderable->GetTransform());
+            m_axesRenderOperation.SetPrimitiveType(m_axesRenderable->GetPrimitiveType());
         }
     }
 
@@ -388,15 +390,8 @@ namespace opengl {
 
     void OpenglRenderer::Render(const RenderOperation& renderOperation)
     {
-        Renderable* renderable = renderOperation.GetRenderable();
-
-        if (!renderable)
-        {
-            return;
-        }
-
         // set the model transform
-        SetTransform(TransformType::Model, renderable->GetTransform());
+        SetTransform(TransformType::Model, renderOperation.GetTransform());
 
         // set the blending mode
         SetBlendingMode(renderOperation.GetBlendingMode());
@@ -413,10 +408,10 @@ namespace opengl {
         // set the alpha test mode
         SetAlphaTestMode(renderOperation.GetAlphaTestMode());
 
-        IMaterial* material = renderable->GetMaterial();
+        IMaterial* material = renderOperation.GetMaterial();
         if (material)
         {
-            TexturePtr texture = renderable->GetMaterial()->GetTexture();
+            TexturePtr texture = material->GetTexture();
 
             if (texture)
             {
@@ -433,14 +428,13 @@ namespace opengl {
             }
         }
 
-        IVertexBuffer* vertexBuffer = renderable->GetVertexBuffer();
-        IIndexBuffer* indexBuffer = renderable->GetIndexBuffer();
+        IVertexBuffer* vertexBuffer = renderOperation.GetVertexBuffer();
+        IIndexBuffer* indexBuffer = renderOperation.GetIndexBuffer();
 
         if (vertexBuffer)
         {
             if (m_useVbo)
             {
-
                 glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetBufferId());
 
                 glVertexPointer(3, 
@@ -498,11 +492,11 @@ namespace opengl {
                 }
 
                 //glDrawElements(utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), indexBuffer->GetBufferSize(), opengl::utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData);
-                glDrawRangeElements(utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
+                glDrawRangeElements(utility::ConvertPrimitiveType(renderOperation.GetPrimitiveType()), 0, indexBuffer->GetBufferSize()-1, indexBuffer->GetBufferSize(), utility::ConvertIndexBufferType(indexBuffer->GetType()), indexData); 
             }
             else
             {
-                glDrawArrays(utility::ConvertPrimitiveType(renderable->GetPrimitiveType()), 0, vertexBuffer->GetNumVertices());
+                glDrawArrays(utility::ConvertPrimitiveType(renderOperation.GetPrimitiveType()), 0, vertexBuffer->GetNumVertices());
             }
 
             // disable client state

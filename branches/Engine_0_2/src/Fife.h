@@ -81,7 +81,10 @@
 #include "math/Vector3.h"
 
 // particlesystem
-
+#include "particlesystem/ParticleSystem.h"
+#include "particlesystem/ParticleEmitter.h"
+#include "particlesystem/IParticleEffect.h"
+#include "particlesystem/ParticleColorChangeEffect.h"
 
 // rendersystem
 #include "rendersystem/IRenderSystem.h"

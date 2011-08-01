@@ -107,11 +107,11 @@ void CreateSimpleStaticTextures(Engine& engine)
     Visual* doom5Visual = sceneManager->CreateBillboard(40, 40);
 
     // set each entities visual
-    doom1Entity->SetVisual(doom1Visual);
-    doom2Entity->SetVisual(doom2Visual);
-    doom3Entity->SetVisual(doom3Visual);
-    doom4Entity->SetVisual(doom4Visual);
-    doom5Entity->SetVisual(doom5Visual);
+    //doom1Entity->SetVisual(doom1Visual);
+    //doom2Entity->SetVisual(doom2Visual);
+    //doom3Entity->SetVisual(doom3Visual);
+    //doom4Entity->SetVisual(doom4Visual);
+    //doom5Entity->SetVisual(doom5Visual);
 
     // create the textures for each image, note visual 4 and 5 share the same texture
     TexturePtr doom1Texture = engine.GetTextureManager()->CreateTexture(TextureType::_2d, doom1Image);

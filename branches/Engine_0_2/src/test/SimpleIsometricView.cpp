@@ -83,9 +83,9 @@ void CreateSimpleIsometricView(Engine& engine)
 //     Visual* doom5Visual = sceneManager->CreateBillboard(40, 40);
 
     // set each entities visual
-    grass1Entity->SetVisual(grass1Visual);
-    grass2Entity->SetVisual(grass2Visual);
-    grass3Entity->SetVisual(grass3Visual);
+    //grass1Entity->SetVisual(grass1Visual);
+    //grass2Entity->SetVisual(grass2Visual);
+    //grass3Entity->SetVisual(grass3Visual);
 //     doom4Entity->SetVisual(doom4Visual);
 //     doom5Entity->SetVisual(doom5Visual);
 

@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: ParticleFadeOutEffect.cpp
+*	Filename: ParticleColorChangeEffect.h
 *	
 *	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
@@ -19,27 +19,26 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#include "PrecompiledIncludes.h"
+#ifndef PARTICLECOLORCHANGEEFFECT_H_
+#define PARTICLECOLORCHANGEEFFECT_H_
 
-#include "ParticleFadeOutEffect.h"
-#include "Particle.h"
+#include "StdIncludes.h"
 
-ParticleFadeOutEffect::ParticleFadeOutEffect(const Color& endColor, float fadeOutTime)
-: endColor(endColor), fadeOutTime(fadeOutTime)
+#include "IParticleEffect.h"
+#include "Color.h"
+
+struct Particle;
+
+class ParticleColorChangeEffect : public IParticleEffect
 {
+public:
+	ParticleColorChangeEffect(const Color& endColor, uint32_t fadeOutTime);
 
-}
+	void apply(Particle* particles, uint32_t particleCount, uint32_t updateRate);
 
-void ParticleFadeOutEffect::apply(Particle* particles, uint32_t particleCount, float updateRate)
-{
-	for (std::size_t i=0; i < particleCount; ++i)
-	{
-		//Particle& particle = particles[i];
+private:
+	Color endColor;
+	float fadeOutTime;
+};
 
-		if (particles[i].lifetime < fadeOutTime)
-		{
-			float interpolationScale = (particles[i].lifetime - fadeOutTime/2) / fadeOutTime;
-			particles[i].color = interpolate(particles[i].startColor, endColor, interpolationScale);
-		}
-	}
-}
+#endif

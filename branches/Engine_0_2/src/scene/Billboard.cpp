@@ -30,25 +30,169 @@
 #include "../graphics/IVertexBuffer.h"
 #include "../graphics/IIndexBuffer.h"
 
+Billboard::Billboard(BillboardGroup* parent, uint32_t width, uint32_t height, const Vector3& position)
+: m_parent(parent), m_dirty(true), m_width(width), m_height(height), m_position(position)
+{
+
+}
+
 Billboard::Billboard(SceneManager* sceneManager)
-: m_sceneManager(sceneManager), m_owner(0), m_width(1), m_height(1),
+: m_sceneManager(sceneManager), m_parent(0), m_width(1), m_height(1),
 m_position(Vector3::Zero()), m_color(Color::White()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
 }
 
 Billboard::Billboard(SceneManager* sceneManager, const Vector3& position)
-: m_sceneManager(sceneManager),m_owner(0), m_width(1), m_height(1),
+: m_sceneManager(sceneManager),m_parent(0), m_width(1), m_height(1),
 m_position(position), m_color(Color::White()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
 }
 
 Billboard::Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position)
-: m_sceneManager(sceneManager), m_owner(owner), m_width(1), m_height(1),
+: m_sceneManager(sceneManager), m_parent(owner), m_width(1), m_height(1),
 m_position(position), m_color(Color::White()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
+}
+
+void Billboard::SetPosition(const Vector3& position)
+{
+    if (m_position != position)
+    {
+        m_position = position;
+
+        MarkDirty();
+    }
+}
+
+const Vector3& Billboard::GetPosition() const
+{
+    return m_position;
+}
+
+void Billboard::SetDimensions(uint32_t width, uint32_t height)
+{
+    SetWidth(width);
+    SetHeight(height);
+}
+
+void Billboard::SetWidth(uint32_t width)
+{
+    if (m_width != width)
+    {
+        m_width = width;
+
+        MarkDirty();
+    }
+}
+
+void Billboard::SetHeight(uint32_t height)
+{
+    if (m_height != height)
+    {
+        m_height = height;
+
+        MarkDirty();
+    }
+}
+
+uint32_t Billboard::GetWidth() const
+{
+    return m_width;
+}
+
+uint32_t Billboard::GetHeight() const
+{
+    return m_height;
+}
+
+void Billboard::SetColor(const Color& color)
+{
+    if (m_color != color)
+    {
+        m_color = color;
+
+        MarkDirty();
+    }
+}
+
+const Color& Billboard::GetColor() const
+{
+    return m_color;
+}
+
+void Billboard::SetTextureCoordinates(const FloatRect& texCoords)
+{
+    if (m_textureCoords != texCoords)
+    {
+        m_textureCoords = texCoords;
+
+        MarkDirty();
+    }
+}
+
+void Billboard::SetTextureCoordinates(float left, float top, float right, float bottom)
+{
+    SetTextureCoordinates(FloatRect(left, top, right, bottom));
+}
+
+const FloatRect& Billboard::GetTextureCoordinates() const
+{
+    return m_textureCoords;
+}
+
+void Billboard::FillVertexData(VertexData& vertexData)
+{
+    if (IsDirty())
+    {
+        const float halfWidth = m_width/2.f;
+        const float halfHeight = m_height/2.f;
+
+        // first vertex (0)
+        Vector3 position = m_position + Vector3(-halfWidth, halfHeight, 0);
+        vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
+
+        // second vertex (1)
+        position = m_position + Vector3(halfWidth, halfHeight, 0);
+        vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
+
+        // third vertex (2)
+        position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
+        vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
+
+        // fourth vertex (3)
+        position = m_position + Vector3(halfWidth, -halfHeight, 0); 
+        vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
+        
+        ResetDirty();
+    }
+}
+
+uint32_t Billboard::GetNumberOfVertices()
+{
+    return 4;
+}
+
+Renderable* Billboard::GetRenderable()
+{
+    return m_renderable;
+}
+
+void Billboard::MarkDirty()
+{
+    m_dirty = true;
+}
+
+bool Billboard::IsDirty() const
+{
+    return m_dirty;
+}
+
+void Billboard::ResetDirty()
+{
+    m_dirty = false;
 }
 
 void Billboard::GenerateBuffers()
@@ -146,77 +290,6 @@ void Billboard::UpdateBuffers()
 
         vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
     }
-}
-
-void Billboard::SetPosition(const Vector3& position)
-{
-    m_position = position;
-}
-
-const Vector3& Billboard::GetPosition() const
-{
-    return m_position;
-}
-
-void Billboard::SetDimensions(uint32_t width, uint32_t height)
-{
-    SetWidth(width);
-    SetHeight(height);
-}
-
-void Billboard::SetWidth(uint32_t width)
-{
-    m_width = width;
-}
-
-void Billboard::SetHeight(uint32_t height)
-{
-    m_height = height;
-}
-
-uint32_t Billboard::GetWidth() const
-{
-    return m_width;
-}
-
-uint32_t Billboard::GetHeight() const
-{
-    return m_height;
-}
-
-void Billboard::SetColor(const Color& color)
-{
-    m_color = color;
-}
-
-const Color& Billboard::GetColor() const
-{
-    return m_color;
-}
-
-void Billboard::SetTextureCoordinates(const FloatRect& texCoords)
-{
-    m_textureCoords = texCoords;
-}
-
-void Billboard::SetTextureCoordinates(float left, float top, float right, float bottom)
-{
-    SetTextureCoordinates(FloatRect(left, top, right, bottom));
-}
-
-const FloatRect& Billboard::GetTextureCoordinates() const
-{
-    return m_textureCoords;
-}
-
-uint32_t Billboard::GetNumberOfVertices() const
-{
-    return 4;
-}
-
-Renderable* Billboard::GetRenderable()
-{
-    return m_renderable;
 }
 
 void Billboard::Update(uint32_t time)

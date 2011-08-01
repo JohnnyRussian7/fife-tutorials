@@ -9,6 +9,7 @@
 #include "SimpleAnimatedTextures.h"
 #include "SimpleStaticTextures.h"
 #include "SimpleIsometricView.h"
+#include "SimpleParticleSystem.h"
 
 int main()
 {
@@ -17,7 +18,8 @@ int main()
 
     //CreateSimpleAnimatedTextures(engine);
     //CreateSimpleStaticTextures(engine);
-    CreateSimpleIsometricView(engine);
+    //CreateSimpleIsometricView(engine);
+    CreateSimpleParticleSystem(engine);
 
     Camera* camera = engine.GetSceneManager()->GetCamera();
     SimpleKeyListener* keyListener = new SimpleKeyListener(engine, camera);

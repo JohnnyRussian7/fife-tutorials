@@ -41,6 +41,16 @@ bool IsEqual(float a, float b)
     return false;
 }
 
+bool IsEqual(uint32_t a, uint32_t b)
+{
+    return (a == b);
+}
+
+bool IsEqual(int32_t a, int32_t b)
+{
+    return (a == b);
+}
+
 float RadToDeg(float rad)
 {
     return rad * Rad2Deg;

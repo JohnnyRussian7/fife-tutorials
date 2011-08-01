@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: ParticleFadeOutEffect.h
+*	Filename: IParticleEffect.h
 *	
 *	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
@@ -19,26 +19,17 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#ifndef PARTICLE_FADE_OUT_EFFECT_H_
-#define PARTICLE_FADE_OUT_EFFECT_H_
+#ifndef IPARTICLEEFFECT_H_
+#define IPARTICLEEFFECT_H_
 
-#include "StdIncludes.h"
-
-#include "ParticleEffect.h"
-#include "Color.h"
+#include "../StdIncludes.h"
 
 struct Particle;
 
-class ParticleFadeOutEffect : public IParticleEffect
+class IParticleEffect
 {
 public:
-	ParticleFadeOutEffect(const Color& endColor, float fadeOutTime);
-
-	void apply(Particle* particles, uint32_t particleCount, float updateRate);
-
-private:
-	Color endColor;
-	float fadeOutTime;
+	virtual void apply(Particle* particles, uint32_t particleCount, uint32_t updateRate) = 0;
 };
 
 #endif

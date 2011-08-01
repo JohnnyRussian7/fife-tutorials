@@ -33,40 +33,34 @@ class IParticleEffect;
 class ParticleEmitter
 {
 public:
-	ParticleEmitter(bool enabled, const AxisAlignedBoundingBox& aabb, 
-		std::size_t minParticles, std::size_t maxParticles,
-		const float minSize, const float maxSize, 
-		const float minEnergy, const float maxEnergy,
-		const Vector3& velocity);
+	ParticleEmitter(uint32_t minParticles=0, uint32_t maxParticles=0,
+        const float minSize=1, const float maxSize=1, 
+		const float minEnergy=1, const float maxEnergy=1,
+        const Vector3& velocity=Vector3::Zero(),
+        const AxisAlignedBoundingBox& aabb=AxisAlignedBoundingBox());
 	~ParticleEmitter();
+
 	void Emit(); 
-	void Update(float deltaTime);
-	void SetEnabled(bool enabled);
-	bool IsEnabled() const;
+	void Update(uint32_t deltaTime);
 	void SetFollowEmitter(bool enabled);
 	void ClearParticles();
 	std::size_t GetNumActiveParticles() const;
 	std::size_t GetNumMaxParticles() const;
-	const std::vector<Particle>& GetParticles() const;
+	std::vector<Particle>& GetParticles();
 	const AxisAlignedBoundingBox& GetBoundingBox() const;
-	void AddEffect(IParticleEffect* effect);
-	void ApplyEffects(float updateRate);
+
 private:
-	bool isEnabled;
-	std::size_t minParticles;
-	std::size_t maxParticles;
-	std::size_t activeParticles;
-	std::vector<Particle> particles;
-	Vector3 position;
-	Vector3 velocity;
-	float minSize;
-	float maxSize;
-	float minEnergy;
-	float maxEnergy;
-	float minEmission;
-	float maxEmission;
-	AxisAlignedBoundingBox aabb;
-	std::vector<IParticleEffect*> effects;
+	uint32_t m_minParticles;
+	uint32_t m_maxParticles;
+	uint32_t m_activeParticles;
+	std::vector<Particle> m_particles;
+	Vector3 m_position;
+	Vector3 m_velocity;
+	float m_minSize;
+	float m_maxSize;
+	float m_minEnergy;
+	float m_maxEnergy;
+	AxisAlignedBoundingBox m_aabb;
 };
 
 #endif

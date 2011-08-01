@@ -33,7 +33,6 @@ class Visual
 {
 public:
     Visual(IEntity* entity=0);
-    Visual(Renderable* renderable, IAnimation* animation);
     virtual ~Visual();
 
     virtual void SetParent(IEntity* entity);

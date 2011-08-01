@@ -24,9 +24,10 @@
 #include "SceneNode.h"
 #include "SceneManager.h"
 #include "../IEntity.h"
-#include "../Visual.h"
+#include "../RenderComponent.h"
 #include "../math/MathUtil.h"
 #include "../rendersystem/RenderOperation.h"
+#include "../utility/CheckedCast.h"
 
 namespace
 {
@@ -223,21 +224,21 @@ void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperatio
     EntityContainer::iterator entityIter;
     for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)
     {
-        Visual* visual = (*entityIter)->GetVisual();
-        if (visual)
+        RenderComponent* renderComponent = checked_cast<RenderComponent*>((*entityIter)->GetComponent("Render"));
+        if (renderComponent)
         {
-            Renderable* renderable = visual->GetRenderable();
-            if (renderable)
-            {
-                RenderOperation operation;
-                operation.SetRenderable(renderable);
-                operation.SetBlendingMode(blendingMode);
-                operation.SetCullMode(cullMode);
-                operation.SetPolygonWindingMode(windingMode);
-                operation.SetFillMode(fillMode);
-                operation.SetAlphaTestMode(alphaTestMode);
-                renderOperations.push_back(operation);
-            }
+            RenderOperation operation;
+            operation.SetTransform(renderComponent->GetTransform());
+            operation.SetPrimitiveType(renderComponent->GetPrimitiveType());
+            operation.SetVertexBuffer(renderComponent->GetVertexBuffer());
+            operation.SetIndexBuffer(renderComponent->GetIndexBuffer());
+            operation.SetMaterial(renderComponent->GetMaterial());
+            operation.SetBlendingMode(blendingMode);
+            operation.SetCullMode(cullMode);
+            operation.SetPolygonWindingMode(windingMode);
+            operation.SetFillMode(fillMode);
+            operation.SetAlphaTestMode(alphaTestMode);
+            renderOperations.push_back(operation);
         }
     }
 

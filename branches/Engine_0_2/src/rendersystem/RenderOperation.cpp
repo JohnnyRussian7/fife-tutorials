@@ -24,7 +24,7 @@
 #include "RenderOperation.h"
 
 RenderOperation::RenderOperation()
-: m_renderable(0)
+: m_transform(Matrix4::Identity()), m_vertexBuffer(0), m_indexBuffer(0), m_material(0)
 {
 
 }
@@ -34,14 +34,56 @@ RenderOperation::~RenderOperation()
 
 }
 
-void RenderOperation::SetRenderable(Renderable* renderable)
+void RenderOperation::SetTransform(const Matrix4& transform)
 {
-    m_renderable = renderable;
+    m_transform = transform;
 }
 
-Renderable* RenderOperation::GetRenderable() const
+const Matrix4& RenderOperation::GetTransform() const
 {
-    return m_renderable;
+    return m_transform;
+}
+
+void RenderOperation::SetPrimitiveType(PrimitiveType::Enum type)
+{
+    m_primitiveType = type;
+}
+
+PrimitiveType::Enum RenderOperation::GetPrimitiveType() const
+{
+    return m_primitiveType;
+}
+
+void RenderOperation::SetVertexBuffer(IVertexBuffer* vertexBuffer)
+{
+    m_vertexBuffer = vertexBuffer;
+}
+
+
+IVertexBuffer* RenderOperation::GetVertexBuffer() const
+{
+    return m_vertexBuffer;
+}
+
+void RenderOperation::SetIndexBuffer(IIndexBuffer* indexBuffer)
+{
+    m_indexBuffer = indexBuffer;
+}
+
+
+IIndexBuffer* RenderOperation::GetIndexBuffer() const
+{
+    return m_indexBuffer;
+}
+
+void RenderOperation::SetMaterial(IMaterial* material)
+{
+    m_material = material;
+}
+
+IMaterial* RenderOperation::GetMaterial() const
+{
+    return m_material;
 }
 
 void RenderOperation::SetBlendingMode(const BlendingMode& blendingMode)

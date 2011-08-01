@@ -22,13 +22,17 @@
 #ifndef RENDEROPERATION_H_
 #define RENDEROPERATION_H_
 
+#include "RenderEnums.h"
 #include "BlendingMode.h"
 #include "CullMode.h"
 #include "PolygonWindingMode.h"
 #include "FillMode.h"
 #include "AlphaTestMode.h"
+#include "../math/Matrix4.h"
 
-class Renderable;
+class IVertexBuffer;
+class IIndexBuffer;
+class IMaterial;
 
 class RenderOperation
 {
@@ -45,17 +49,65 @@ public:
     //**********************************************************************
     ~RenderOperation();
 
-    //**********************************************************************
-    //! @details
-    //! sets the renderable for this render operation
-    //**********************************************************************
-    void SetRenderable(Renderable* renderable);
+    //!***************************************************************
+    //! @details:
+    //! sets the transform for this render operation
+    //!***************************************************************
+    void SetTransform(const Matrix4& transform);
 
-    //**********************************************************************
-    //! @details
-    //! accessor for the renderable stored in this render operation
-    //**********************************************************************
-    Renderable* GetRenderable() const;
+    //!***************************************************************
+    //! @details:
+    //! accessor for the transform stored in this render operation
+    //!***************************************************************
+    const Matrix4& GetTransform() const;
+
+    //!***************************************************************
+    //! @details:
+    //! sets the primitive type for this render operation
+    //!***************************************************************
+    void SetPrimitiveType(PrimitiveType::Enum type);
+
+    //!***************************************************************
+    //! @details:
+    //! accessor for the primitive type stored in this render operation
+    //!***************************************************************
+    PrimitiveType::Enum GetPrimitiveType() const;
+
+    //!***************************************************************
+    //! @details:
+    //! sets the vertex buffer for this render operation
+    //!***************************************************************
+    void SetVertexBuffer(IVertexBuffer* vertexBuffer);
+
+    //!***************************************************************
+    //! @details:
+    //! accessor for the vertex buffer stored in this render operation
+    //!***************************************************************
+    IVertexBuffer* GetVertexBuffer() const;
+
+    //!***************************************************************
+    //! @details:
+    //! sets the vertex buffer for this render operation
+    //!***************************************************************
+    void SetIndexBuffer(IIndexBuffer* vertexBuffer);
+
+    //!***************************************************************
+    //! @details:
+    //! accessor for the index buffer stored in this render operation
+    //!***************************************************************
+    IIndexBuffer* GetIndexBuffer() const;
+
+    //!***************************************************************
+    //! @details:
+    //! sets the material for this render operation
+    //!***************************************************************
+    void SetMaterial(IMaterial* material);
+
+    //!***************************************************************
+    //! @details:
+    //! accessor for the material stored in this render operation
+    //!***************************************************************
+    IMaterial* GetMaterial() const;
 
     //**********************************************************************
     //! @details
@@ -118,7 +170,11 @@ public:
     const AlphaTestMode& GetAlphaTestMode() const;
 
 private:
-    Renderable* m_renderable;
+    Matrix4 m_transform;
+    PrimitiveType::Enum m_primitiveType;
+    IVertexBuffer* m_vertexBuffer;
+    IIndexBuffer* m_indexBuffer;
+    IMaterial* m_material;
     BlendingMode m_blendingMode;
     CullMode m_cullMode;
     PolygonWindingMode m_windingMode;

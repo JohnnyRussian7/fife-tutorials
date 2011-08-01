@@ -22,6 +22,8 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
+#include "MathUtil.h"
+
 struct Quaternion;
 
 struct Vector3
@@ -35,6 +37,7 @@ struct Vector3
 	inline Vector3& operator*=(float value);
 	inline Vector3& operator/=(float value);
 	inline bool operator==(const Vector3& rhs) const;
+    inline bool operator!=(const Vector3& rhs) const;
 
 	static Vector3 Zero()
 	{
@@ -118,7 +121,16 @@ Vector3& Vector3::operator/=(float value)
 
 bool Vector3::operator==(const Vector3& rhs) const
 {
-	return (x == rhs.x && y == rhs.y && z == rhs.z);
+	return (IsEqual(x, rhs.x)
+            && IsEqual(y, rhs.y)
+            && IsEqual(z, rhs.z));
+}
+
+bool Vector3::operator!=(const Vector3& rhs) const
+{
+    return (!IsEqual(x, rhs.x) 
+            || !IsEqual(y, rhs.y)
+            || !IsEqual(z, rhs.z));
 }
 
 // free functions for binary vector operators

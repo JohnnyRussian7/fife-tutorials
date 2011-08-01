@@ -25,6 +25,7 @@
 #include "Visual.h"
 #include "math/Matrix4.h"
 #include "scene/SceneNode.h"
+#include "IComponent.h"
 
 namespace
 {
@@ -44,8 +45,8 @@ namespace
     }
 }
 
-Entity::Entity(const char* name)
-: m_name("")
+Entity::Entity(const char* name, const Vector3& position)
+: m_name(""), m_parent(0), m_position(position)
 {
 	if (name)
 	{
@@ -55,14 +56,16 @@ Entity::Entity(const char* name)
     {
         m_name = CreateUniqueEntityName();
     }
-
-    m_visual = new Visual(this);
 }
 
 Entity::~Entity()
 {
-    delete m_visual;
-    m_visual = 0;
+    // remove and delete all components
+    for (ComponentContainer::iterator iter = m_components.begin(); iter != m_components.end(); ++iter)
+    {
+        delete *iter;
+    }
+    m_components.clear();
 }
 
 const char* Entity::GetName() const
@@ -80,28 +83,88 @@ SceneNode* Entity::GetParent() const
     return m_parent;
 }
 
-void Entity::SetVisual(Visual* visual)
+IComponent* Entity::GetComponent(std::string name)
 {
-    delete m_visual;
-
-    m_visual = visual;
-    
-    if (m_visual)
+    // search for a component with the given name
+    for (ComponentContainer::iterator iter = m_components.begin(); iter != m_components.end(); ++iter)
     {
-        m_visual->SetParent(this);
+        if ((*iter)->GetName() == name)
+        {
+            // component found return it
+            return *iter;
+        }
+    }
+
+    return 0;
+}
+
+void Entity::AddComponent(IComponent* component)
+{
+    // the component must be valid and have some type of name
+    if (component && !component->GetName().empty())
+    {
+        bool replacedComponent = false;
+
+        // search for a component with the same name
+        for (ComponentContainer::iterator iter = m_components.begin(); iter != m_components.end(); ++iter)
+        {
+            if ((*iter)->GetName() == component->GetName())
+            {
+                // found identical component, remove
+                // existing one before adding new one
+                delete *iter;
+                component->SetParent(this);
+                *iter = component;
+                replacedComponent = true;
+                break;
+            }
+        }
+
+        // component with same name was not found
+        // so we append to end of component list
+        if (!replacedComponent)
+        {
+            component->SetParent(this);
+            m_components.push_back(component);
+        }
     }
 }
 
-Visual* Entity::GetVisual() const
+void Entity::RemoveComponent(std::string name)
 {
-    return m_visual;
+    // search for a component with the same name
+    for (ComponentContainer::iterator iter = m_components.begin(); iter != m_components.end(); ++iter)
+    {
+        if ((*iter)->GetName() == name)
+        {
+            // component found, delete and remove from list
+            delete *iter;
+            m_components.erase(iter);
+            break;
+        }
+    }
+}
+
+const Vector3& Entity::GetPosition() const
+{
+    return m_position;
+}
+
+void Entity::SetPosition(float x, float y, float z)
+{
+    SetPosition(Vector3(x,y,z));
+}
+
+void Entity::SetPosition(const Vector3& position)
+{
+    m_position = position;
 }
 
 void Entity::Update(uint32_t time)
 {
-    if (m_visual)
+    for (ComponentContainer::iterator iter = m_components.begin(); iter != m_components.end(); ++iter)
     {
-        m_visual->Update(time);
+        (*iter)->Update(time);
     }
 }
 

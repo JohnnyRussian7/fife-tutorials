@@ -25,24 +25,21 @@
 #include "../StdIncludes.h"
 
 #include "Frustum.h"
-#include "../IEntity.h"
+#include "../Entity.h"
 #include "../math/Vector3.h"
 #include "../math/Matrix4.h"
 #include "../math/Quaternion.h"
 
 class SceneNode;
 
-class Camera : public IEntity
+class Camera : public Entity
 {
 public:
 	Camera(const char* name, const Vector3& position = Vector3::Zero(),
             const Quaternion& orientation = Quaternion::Identity());
 
-    const char* GetName() const;
-
-    const Vector3& GetPosition() const;
-    void SetPosition(float x, float y, float z);
-    void SetPosition(const Vector3& position);
+    virtual void SetPosition(float x, float y, float z);
+    virtual void SetPosition(const Vector3& position);
 
     const Quaternion& GetOrientation() const;
 	const Matrix4& GetViewMatrix();
@@ -71,12 +68,6 @@ public:
 
 	void UpdateView();
 
-    virtual void SetParent(SceneNode* node);
-    virtual SceneNode* GetParent() const;
-
-    virtual void SetVisual(Visual* visual);
-    virtual Visual* GetVisual() const;
-
     virtual void Update(uint32_t time);
 
     virtual Matrix4 GetTransform();
@@ -87,14 +78,10 @@ private:
     bool IsDirty();
 
 private:
-    std::string m_name;
-	Vector3 m_position;
 	Quaternion m_orientation;
     Matrix4 m_viewMatrix;
     Frustum m_frustum;
     bool m_needsUpdate;
-    SceneNode* m_parent;
-    Visual* m_visual;
     bool m_fixedYaw;
     Vector3 m_fixedYawAxis;
 };

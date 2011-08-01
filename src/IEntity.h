@@ -25,7 +25,7 @@
 #include "StdIncludes.h"
 
 class SceneNode;
-class Visual;
+class IComponent;
 struct Matrix4;
 
 class IEntity
@@ -38,8 +38,9 @@ public:
     virtual void SetParent(SceneNode* node) = 0;
     virtual SceneNode* GetParent() const = 0;
 
-    virtual void SetVisual(Visual* visual) = 0;
-    virtual Visual* GetVisual() const = 0;
+    virtual IComponent* GetComponent(std::string name) = 0;
+    virtual void AddComponent(IComponent* component) = 0;
+    virtual void RemoveComponent(std::string name) = 0;
 
     virtual void Update(uint32_t time) = 0;
 

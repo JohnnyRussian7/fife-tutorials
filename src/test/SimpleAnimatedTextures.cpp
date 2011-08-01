@@ -47,7 +47,8 @@ void CreateSimpleAnimatedTextures(Engine& engine)
 
     IEntity* e1 = sceneManager->CreateEntity("e1");
     Visual* b1 = sceneManager->CreateBillboard(40, 40);
-    e1->SetVisual(b1);
+
+    //e1->SetVisual(b1);
     b1->SetAnimation(sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 1, 24, 24, 2500));
 
     IMaterial* m1 = new Material();
@@ -60,7 +61,7 @@ void CreateSimpleAnimatedTextures(Engine& engine)
 
     IEntity* e2 = sceneManager->CreateEntity("e2");
     Visual* b2 = sceneManager->CreateBillboard(40, 40);
-    e2->SetVisual(b2);
+    //e2->SetVisual(b2);
     b2->SetAnimation(sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 5, 5, 25, 3000));
 
     IMaterial* m2 = new Material();
@@ -73,7 +74,7 @@ void CreateSimpleAnimatedTextures(Engine& engine)
 
     IEntity* e3 = sceneManager->CreateEntity("e3");
     Visual* b3 = sceneManager->CreateBillboard(40, 40);
-    e3->SetVisual(b3);
+    //e3->SetVisual(b3);
     b3->SetAnimation(sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 1, 24, 24, 2500));
 
     IMaterial* m3 = new Material();

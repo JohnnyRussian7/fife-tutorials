@@ -99,6 +99,8 @@ void OpenglVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t of
     {
         glBufferSubDataARB(GL_ARRAY_BUFFER_ARB, offset, numElements*m_vertexSize, data);
     }
+
+    glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 }
 
 void* OpenglVertexBuffer::GetData(uint32_t offset) const

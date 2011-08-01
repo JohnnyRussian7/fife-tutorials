@@ -30,6 +30,7 @@
 #include "../Color.h"
 #include "../math/Vector3.h"
 #include "../graphics/Vertex.h"
+#include "../graphics/VertexData.h"
 #include "../geometry/Rect.h"
 
 class SceneManager;
@@ -38,6 +39,7 @@ class BillboardGroup;
 class Billboard : public Visual
 {
 public:
+    Billboard(BillboardGroup* parent=0, uint32_t width=1, uint32_t height=1, const Vector3& position=Vector3::Zero());
     Billboard(SceneManager* sceneManager);
     Billboard(SceneManager* sceneManager, const Vector3& position);
     Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position = Vector3::Zero());
@@ -58,18 +60,25 @@ public:
     void SetTextureCoordinates(float left, float top, float right, float bottom);
     const FloatRect& GetTextureCoordinates() const;
 
-    uint32_t GetNumberOfVertices() const;
+    void FillVertexData(VertexData& vertexData);
     
     virtual Renderable* GetRenderable();
     virtual void Update(uint32_t time);
 
+    // static helper methods
+    static uint32_t GetNumberOfVertices();
+
 private:
+    void MarkDirty();
+    void ResetDirty();
+    bool IsDirty() const;
     void GenerateBuffers();
     void UpdateBuffers();
 
 private:
     SceneManager* m_sceneManager;
-    BillboardGroup* m_owner;
+    BillboardGroup* m_parent;
+    bool m_dirty;
     uint32_t m_width;
     uint32_t m_height;
     Vector3 m_position;
@@ -77,6 +86,7 @@ private:
     FloatRect m_textureCoords;
     std::vector<Vertex> m_vertices;
     bool m_buffersGenerated;
+    VertexData m_vertexData;
 };
 
 #endif

@@ -33,19 +33,9 @@ Visual::Visual(IEntity* entity)
     m_renderable = new Renderable(this);
 }
 
-Visual::Visual(Renderable* renderable, IAnimation* animation)
-: m_renderable(renderable), m_animation(animation)
-{
-
-}
-
 Visual::~Visual()
 {
-    delete m_animation;
-    m_animation = 0;
 
-    delete m_renderable;
-    m_renderable = 0;
 }
 
 void Visual::SetParent(IEntity* entity)

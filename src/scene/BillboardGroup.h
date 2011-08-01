@@ -24,27 +24,57 @@
 
 #include "../StdIncludes.h"
 
+#include "Billboard.h"
+#include "../graphics/VertexData.h"
+#include "../graphics/IndexData.h"
+#include "../Color.h"
 #include "../math/Vector3.h"
-
-class VertexData;
-class IndexData;
+#include "../geometry/Rect.h"
 
 class BillboardGroup
 {
 public:
-	BillboardGroup(uint32_t numBillboards = 0);
+	BillboardGroup(uint32_t numBillboards = 0, uint32_t width=1, uint32_t height=1, const FloatRect& textureCoordinates=FloatRect(0, 1, 1, 0));
 
     void SetNumberOfBillboards(uint32_t numBillboards);
     uint32_t GetNumberOfBillboards() const;
 
-	void SetPosition(uint32_t billBoardIndex, const Vector3& position);
-	const Vector3& GetPosition(uint32_t billBoardIndex) const;
+    void SetPosition(uint32_t index, const Vector3& position);
+    Vector3 GetPosition(uint32_t index) const;
+
+    void SetWidth(uint32_t index, uint32_t width);
+    uint32_t GetWidth(uint32_t index) const;
+
+    void SetHeight(uint32_t index, uint32_t height);
+    uint32_t GetHeight(uint32_t index) const;
+
+    void SetColor(uint32_t index, const Color& color);
+    Color GetColor(uint32_t index) const;
+
+    void SetTextureCoordinates(uint32_t index, const FloatRect& texCoords);
+    FloatRect GetTextureCoordinates(uint32_t index) const;
+
+    VertexData& GetVertexData();
+    IndexData& GetIndexData();
 
 private:
+    void MarkDirty();
+    void ResetDirty();
+    bool IsDirty() const;
+    void UpdateBuffers();
+
+private:
+    bool m_dirty;
     uint32_t m_numBillboards;
-	std::vector<Vector3> m_position;
-    VertexData* m_vertexData;
-    IndexData* m_indexData;
+    uint32_t m_width;
+    uint32_t m_height;
+    FloatRect m_textureCoordinates;
+
+    typedef std::vector<Billboard> BillboardContainer;
+    BillboardContainer m_billBoards;
+
+    VertexData m_vertexData;
+    IndexData m_indexData;
 };
 
 #endif

@@ -1291,11 +1291,19 @@
 			Name="particlesystem"
 			>
 			<File
+				RelativePath="..\..\src\particlesystem\IParticleEffect.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\particlesystem\Particle.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\particlesystem\ParticleEffect.h"
+				RelativePath="..\..\src\particlesystem\ParticleColorChangeEffect.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\particlesystem\ParticleColorChangeEffect.h"
 				>
 			</File>
 			<File
@@ -1307,19 +1315,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\particlesystem\ParticleFadeOutEffect.cpp"
+				RelativePath="..\..\src\particlesystem\ParticleSystem.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\particlesystem\ParticleFadeOutEffect.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\particlesystem\ParticleRenderer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\particlesystem\ParticleRenderer.h"
+				RelativePath="..\..\src\particlesystem\ParticleSystem.h"
 				>
 			</File>
 		</Filter>
@@ -1635,6 +1635,14 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="utility"
+			>
+			<File
+				RelativePath="..\..\src\utility\CheckedCast.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\src\Color.h"
 			>
@@ -1664,6 +1672,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\src\IComponent.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\src\IEntity.h"
 			>
 		</File>
@@ -1689,6 +1701,14 @@
 		</File>
 		<File
 			RelativePath="..\..\src\PrecompiledIncludes.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\src\RenderComponent.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\src\RenderComponent.h"
 			>
 		</File>
 		<File

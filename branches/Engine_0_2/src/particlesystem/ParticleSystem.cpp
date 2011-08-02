@@ -30,6 +30,7 @@
 #include "../math/Matrix4.h"
 #include "../scene/SceneManager.h"
 #include "../scene/Material.h"
+#include "../scene/IAnimation.h"
 #include "../scene/Billboard.h"
 #include "../graphics/IVertexBuffer.h"
 #include "../utility/CheckedCast.h"
@@ -69,6 +70,16 @@ void ParticleSystem::AddEffect(IParticleEffect* effect)
     }
 }
 
+void ParticleSystem::AddAnimation(IAnimation* animation)
+{
+    m_animation = animation;
+
+    if (m_animation)
+    {
+        AddTexture(m_animation->GetTexture());
+    }
+}
+
 void ParticleSystem::AddTexture(const TexturePtr& texture)
 {
     RenderComponent* renderComponent = checked_cast<RenderComponent*>(GetComponent("Render"));
@@ -91,7 +102,7 @@ bool ParticleSystem::IsEnabled() const
 void ParticleSystem::Update(uint32_t time)
 {
 	if (m_enabled && m_emitter)
-	{
+	{              
 		m_emitter->Update(time);
 		m_emitter->Emit();
 
@@ -99,8 +110,13 @@ void ParticleSystem::Update(uint32_t time)
 
         m_billboardGroup.SetNumberOfBillboards(m_emitter->GetNumActiveParticles());
 
+        if (m_animation)
+        {
+            m_animation->Animate(time);
+        }
+
         // first setup the billboards for the active particles
-        for (std::size_t i=0; i < m_emitter->GetNumActiveParticles(); ++i)
+        for (uint32_t i=0; i < m_emitter->GetNumActiveParticles(); ++i)
         {
             const Particle& particle = particles[i];
 
@@ -108,15 +124,24 @@ void ParticleSystem::Update(uint32_t time)
             m_billboardGroup.SetWidth(i, particle.size);
             m_billboardGroup.SetHeight(i, particle.size);
             m_billboardGroup.SetColor(i, particle.color);
+
+            if (m_animation && m_animation->IsDirty())
+            {
+                m_billboardGroup.SetTextureCoordinates(i, m_animation->GetTextureCoords());
+            }
         }
 
         VertexData& vertexData = m_billboardGroup.GetVertexData();
         m_vertexBuffer->WriteData(vertexData.GetVertices(), vertexData.GetNumVertices());
 
         RenderComponent* renderComponent = checked_cast<RenderComponent*>(GetComponent("Render"));
-
         if (renderComponent)
         {
+            if (m_animation && m_animation->IsDirty())
+            {
+                renderComponent->GetMaterial()->SetTexture(m_animation->GetTexture());
+            }
+
             renderComponent->SetVertexBuffer(m_vertexBuffer);
         }
 
@@ -124,7 +149,7 @@ void ParticleSystem::Update(uint32_t time)
 	}
 }
 
-void ParticleSystem::Render(Camera& camera)
+void ParticleSystem::Render()
 {
  	if (m_enabled && m_emitter)
  	{

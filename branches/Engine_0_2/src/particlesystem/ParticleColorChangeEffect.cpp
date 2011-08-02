@@ -24,22 +24,22 @@
 #include "ParticleColorChangeEffect.h"
 #include "Particle.h"
 
-ParticleColorChangeEffect::ParticleColorChangeEffect(const Color& endColor, uint32_t fadeOutTime)
-: endColor(endColor), fadeOutTime(fadeOutTime)
+ParticleColorChangeEffect::ParticleColorChangeEffect(const Color& endColor, uint32_t time)
+: m_endColor(endColor), m_time(time)
 {
 
 }
 
-void ParticleColorChangeEffect::apply(Particle* particles, uint32_t particleCount, uint32_t updateRate)
+void ParticleColorChangeEffect::apply(Particle* particles, uint32_t particleCount, uint32_t /*time*/)
 {
-	for (std::size_t i=0; i < particleCount; ++i)
+	for (uint32_t i=0; i < particleCount; ++i)
 	{
-		//Particle& particle = particles[i];
+		Particle& particle = particles[i];
 
-		if (particles[i].lifetime < fadeOutTime)
+		if (particle.lifetime < m_time)
 		{
-			float interpolationScale = (particles[i].lifetime - fadeOutTime/2) / fadeOutTime;
-			particles[i].color = interpolate(particles[i].startColor, endColor, interpolationScale);
+			float interpolationScale = (particle.lifetime - m_time/2) / m_time;
+			particle.color = interpolate(particle.startColor, m_endColor, interpolationScale);
 		}
 	}
 }

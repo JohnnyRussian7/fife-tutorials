@@ -29,7 +29,7 @@ struct Particle;
 class IParticleEffect
 {
 public:
-	virtual void apply(Particle* particles, uint32_t particleCount, uint32_t updateRate) = 0;
+	virtual void apply(Particle* particles, uint32_t particleCount, uint32_t time) = 0;
 };
 
 #endif

@@ -32,13 +32,13 @@ struct Particle;
 class ParticleColorChangeEffect : public IParticleEffect
 {
 public:
-	ParticleColorChangeEffect(const Color& endColor, uint32_t fadeOutTime);
+	ParticleColorChangeEffect(const Color& endColor, uint32_t time);
 
-	void apply(Particle* particles, uint32_t particleCount, uint32_t updateRate);
+	void apply(Particle* particles, uint32_t particleCount, uint32_t /*time*/);
 
 private:
-	Color endColor;
-	float fadeOutTime;
+	Color m_endColor;
+	uint32_t m_time;
 };
 
 #endif

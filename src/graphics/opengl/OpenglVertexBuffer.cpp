@@ -103,7 +103,7 @@ void OpenglVertexBuffer::WriteData(void* data, uint32_t numElements, uint32_t of
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 }
 
-void* OpenglVertexBuffer::GetData(uint32_t offset) const
+void* OpenglVertexBuffer::GetData(uint32_t /*offset*/) const
 {
     // for a vertex buffer object no data needs to be returned
     // the renderer should use offsets instead

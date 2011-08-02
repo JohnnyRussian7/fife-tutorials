@@ -194,6 +194,8 @@ bool BillboardGroup::IsDirty() const
 
 void BillboardGroup::UpdateBuffers()
 {
+    m_vertexData.Clear();
+
     BillboardContainer::iterator iter;
     for (iter = m_billBoards.begin(); iter != m_billBoards.end(); ++iter)
     {

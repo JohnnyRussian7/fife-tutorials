@@ -69,7 +69,7 @@ uint32_t OpenglIndexBuffer::GetStride() const
     return m_indexSize;
 }
 
-void* OpenglIndexBuffer::GetData(uint32_t offset) const
+void* OpenglIndexBuffer::GetData(uint32_t /*offset*/) const
 {
     // for an index buffer object no data needs to be returned
     // the renderer should use offsets instead

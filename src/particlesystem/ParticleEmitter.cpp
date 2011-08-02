@@ -92,7 +92,7 @@ void ParticleEmitter::Emit()
 	}
 }
 
-void ParticleEmitter::Update(uint32_t deltaTime)
+void ParticleEmitter::Update(uint32_t /*time*/)
 {
 	if (!m_particles.empty())
 	{
@@ -149,12 +149,12 @@ void ParticleEmitter::ClearParticles()
 	m_particles.clear();
 }
 
-std::size_t ParticleEmitter::GetNumActiveParticles() const
+uint32_t ParticleEmitter::GetNumActiveParticles() const
 {
 	return m_activeParticles;
 }
 
-std::size_t ParticleEmitter::GetNumMaxParticles() const
+uint32_t ParticleEmitter::GetNumMaxParticles() const
 {
 	return m_maxParticles;
 }

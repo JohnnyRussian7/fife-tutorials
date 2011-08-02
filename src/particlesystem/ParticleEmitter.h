@@ -41,11 +41,11 @@ public:
 	~ParticleEmitter();
 
 	void Emit(); 
-	void Update(uint32_t deltaTime);
+	void Update(uint32_t time);
 	void SetFollowEmitter(bool enabled);
 	void ClearParticles();
-	std::size_t GetNumActiveParticles() const;
-	std::size_t GetNumMaxParticles() const;
+	uint32_t GetNumActiveParticles() const;
+	uint32_t GetNumMaxParticles() const;
 	std::vector<Particle>& GetParticles();
 	const AxisAlignedBoundingBox& GetBoundingBox() const;
 

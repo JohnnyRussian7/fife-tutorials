@@ -300,7 +300,7 @@ void Camera::UpdateView()
     ResetDirty();
 }
 
-void Camera::Update(uint32_t time)
+void Camera::Update(uint32_t /*time*/)
 {
     if (m_parent && m_parent->IsDirty())
     {

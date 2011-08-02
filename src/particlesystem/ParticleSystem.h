@@ -30,6 +30,7 @@
 
 class SceneManager;
 class Camera;
+class IAnimation;
 class ParticleEmitter;
 class IParticleEffect;
 
@@ -40,11 +41,12 @@ public:
 	~ParticleSystem();
 
     void AddEffect(IParticleEffect* effect);
+    void AddAnimation(IAnimation* animation);
 	void AddTexture(const TexturePtr& texture);
 	void SetEnabled(bool enabled);
 	bool IsEnabled() const;
 	void Update(uint32_t time);
-	void Render(Camera& camera);
+	void Render();
 
 private:
     void ApplyEffects(uint32_t time);
@@ -56,6 +58,7 @@ private:
 	BillboardGroup m_billboardGroup;
     IVertexBuffer* m_vertexBuffer;
     IMaterial* m_material;
+    IAnimation* m_animation;
 
     typedef std::vector<IParticleEffect*> EffectContainer;
     EffectContainer m_effects;

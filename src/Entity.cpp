@@ -27,6 +27,9 @@
 #include "scene/SceneNode.h"
 #include "IComponent.h"
 
+// TODO - remove when visual is longer used
+#include "Visual.h"
+
 namespace
 {
     std::string CreateUniqueEntityName()
@@ -46,7 +49,7 @@ namespace
 }
 
 Entity::Entity(const char* name, const Vector3& position)
-: m_name(""), m_parent(0), m_position(position)
+: m_name(""), m_parent(0), m_position(position), m_visual(0)
 {
 	if (name)
 	{
@@ -165,6 +168,12 @@ void Entity::Update(uint32_t time)
     for (ComponentContainer::iterator iter = m_components.begin(); iter != m_components.end(); ++iter)
     {
         (*iter)->Update(time);
+    }
+
+    // TODO - remove when visual is no longer used
+    if (m_visual)
+    {
+        m_visual->Update(time);
     }
 }
 

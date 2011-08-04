@@ -28,7 +28,7 @@
 #include "scene/IAnimation.h"
 
 Visual::Visual(IEntity* entity)
-: m_parent(entity), m_renderable(0), m_animation(0)
+: m_owner(entity), m_renderable(0), m_animation(0)
 {
     m_renderable = new Renderable(this);
 }
@@ -40,7 +40,7 @@ Visual::~Visual()
 
 void Visual::SetParent(IEntity* entity)
 {
-    m_parent = entity;
+    m_owner = entity;
 }
 
 void Visual::SetAnimation(IAnimation* animation)
@@ -77,9 +77,9 @@ void Visual::Update(uint32_t time)
 
 Matrix4 Visual::GetTransform()
 {
-    if (m_parent)
+    if (m_owner)
     {
-        return m_parent->GetTransform();
+        return m_owner->GetTransform();
     }
 
     return Matrix4::Identity();

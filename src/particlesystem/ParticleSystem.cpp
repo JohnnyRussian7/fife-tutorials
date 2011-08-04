@@ -33,11 +33,15 @@
 #include "../scene/IAnimation.h"
 #include "../scene/Billboard.h"
 #include "../graphics/IVertexBuffer.h"
+#include "../graphics/IIndexBuffer.h"
+#include "../graphics/VertexData.h"
+#include "../graphics/IndexData.h"
 #include "../utility/CheckedCast.h"
 
 ParticleSystem::ParticleSystem(SceneManager* sceneManager, ParticleEmitter* emitter, bool enabled, const Vector3& position, char* name)
-: Entity(name, position), m_sceneManager(sceneManager), m_emitter(emitter), m_enabled(enabled)
+: Entity(name, position), m_sceneManager(sceneManager), m_emitter(emitter), m_enabled(enabled), m_animation(0)
 {
+    // TODO - this should probably be refactored, doesn't belong here
     m_material = new Material();
     RenderComponent* renderComponent = new RenderComponent();
     renderComponent->SetPrimitiveType(PrimitiveType::TriangleStrip);
@@ -46,7 +50,7 @@ ParticleSystem::ParticleSystem(SceneManager* sceneManager, ParticleEmitter* emit
     AddComponent(renderComponent);
 
     m_vertexBuffer = m_sceneManager->CreateVertexBuffer(emitter->GetNumMaxParticles()*Billboard::GetNumberOfVertices(), sizeof(Vertex), HwBufferUsage::Stream);
-    m_vertexBuffer->WriteData(0, m_vertexBuffer->GetNumVertices());
+    m_indexBuffer = m_sceneManager->CreateIndexBuffer(emitter->GetNumMaxParticles()*Billboard::GetNumberOfIndices(), IndexBufferDataType::_16bit, HwBufferUsage::Stream);
 }
 
 ParticleSystem::~ParticleSystem()
@@ -120,10 +124,15 @@ void ParticleSystem::Update(uint32_t time)
         {
             const Particle& particle = particles[i];
 
-            m_billboardGroup.SetPosition(i, particle.position);
-            m_billboardGroup.SetWidth(i, particle.size);
-            m_billboardGroup.SetHeight(i, particle.size);
-            m_billboardGroup.SetColor(i, particle.color);
+            m_billboardGroup.SetPosition(i, particle.m_position);
+            m_billboardGroup.SetWidth(i, particle.m_size);
+            m_billboardGroup.SetHeight(i, particle.m_size);
+            m_billboardGroup.SetColor(i, particle.m_color);
+
+            if (m_animation && m_animation->IsDirty())
+            {
+                m_billboardGroup.SetTextureCoordinates(i, m_animation->GetTextureCoords());
+            }
 
             if (m_animation && m_animation->IsDirty())
             {
@@ -133,6 +142,9 @@ void ParticleSystem::Update(uint32_t time)
 
         VertexData& vertexData = m_billboardGroup.GetVertexData();
         m_vertexBuffer->WriteData(vertexData.GetVertices(), vertexData.GetNumVertices());
+        
+        IndexData& indexData = m_billboardGroup.GetIndexData();
+        m_indexBuffer->WriteData(indexData.GetIndices(), indexData.GetNumIndices());
 
         RenderComponent* renderComponent = checked_cast<RenderComponent*>(GetComponent("Render"));
         if (renderComponent)
@@ -143,6 +155,7 @@ void ParticleSystem::Update(uint32_t time)
             }
 
             renderComponent->SetVertexBuffer(m_vertexBuffer);
+            renderComponent->SetIndexBuffer(m_indexBuffer);
         }
 
         ApplyEffects(time);

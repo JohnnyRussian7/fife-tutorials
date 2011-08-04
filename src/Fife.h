@@ -30,9 +30,13 @@
 #include "Stdint.h"
 #include "Engine.h"
 #include "SharedPtr.h"
-#include "IEntity.h"
-#include "Visual.h"         // TODO - this should be removed at some point
 #include "Color.h"
+
+// entity
+#include "IEntity.h"
+#include "IComponent.h"
+#include "RenderComponent.h"
+#include "Visual.h"         // TODO - this should be removed at some point
 
 // filesystem
 #include "filesystem/IFileSystem.h"
@@ -85,6 +89,7 @@
 #include "particlesystem/ParticleEmitter.h"
 #include "particlesystem/IParticleEffect.h"
 #include "particlesystem/ParticleColorChangeEffect.h"
+#include "particlesystem/ParticleColorRandomizerEffect.h"
 
 // rendersystem
 #include "rendersystem/IRenderSystem.h"

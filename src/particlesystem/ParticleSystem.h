@@ -33,6 +33,8 @@ class Camera;
 class IAnimation;
 class ParticleEmitter;
 class IParticleEffect;
+class IVertexBuffer;
+class IIndexBuffer;
 
 class ParticleSystem : public Entity
 {
@@ -57,6 +59,7 @@ private:
 	ParticleEmitter* m_emitter;
 	BillboardGroup m_billboardGroup;
     IVertexBuffer* m_vertexBuffer;
+    IIndexBuffer* m_indexBuffer;
     IMaterial* m_material;
     IAnimation* m_animation;
 

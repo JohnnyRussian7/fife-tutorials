@@ -67,11 +67,15 @@ public:
 
     // static helper methods
     static uint32_t GetNumberOfVertices();
+    static uint32_t GetNumberOfIndices();
 
 private:
     void MarkDirty();
     void ResetDirty();
     bool IsDirty() const;
+    void Update();
+
+    // TODO - do these need to be here anymore
     void GenerateBuffers();
     void UpdateBuffers();
 
@@ -84,9 +88,11 @@ private:
     Vector3 m_position;
     Color m_color;
     FloatRect m_textureCoords;
+    VertexData m_vertexData;
+
+    // TODO - these can be removed when GenerateBuffers and UpdateBuffers are removed
     std::vector<Vertex> m_vertices;
     bool m_buffersGenerated;
-    VertexData m_vertexData;
 };
 
 #endif

@@ -48,7 +48,7 @@ public:
     Matrix4 GetTransform();
 
 protected:
-    IEntity* m_parent;
+    IEntity* m_owner;
     Renderable* m_renderable;
     IAnimation* m_animation;
 

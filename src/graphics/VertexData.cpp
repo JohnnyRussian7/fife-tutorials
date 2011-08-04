@@ -30,9 +30,8 @@ VertexData::VertexData()
 }
 
 VertexData::VertexData( uint32_t numVertices )
-: m_vertices(numVertices, Vertex())
 {
-
+    m_vertices.reserve(numVertices);
 }
 
 VertexData::VertexData( const Vertex* vertices, uint32_t numVertices )
@@ -49,6 +48,11 @@ void VertexData::AddVertex( const Vertex& vertex )
 
 void VertexData::AddVertices( const Vertex* vertices, uint32_t numVertices )
 {
+    if (m_vertices.size() < numVertices)
+    {
+        m_vertices.reserve(m_vertices.size()+numVertices);
+    }
+
 	for (uint32_t i=0; i < numVertices; ++i)
 	{
 		m_vertices.push_back(vertices[i]);

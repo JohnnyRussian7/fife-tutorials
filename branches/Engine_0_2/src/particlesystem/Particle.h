@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Particle.cpp
+*	Filename: Particle.h
 *	
 *	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
@@ -27,13 +27,15 @@
 
 struct Particle
 {
-	Vector3 position;
-	Vector3 prevPosition;
-	Vector3 velocity;
-	float lifetime;
-	float size;
-	Color startColor;
-	Color color;
+    Particle();
+
+	Vector3 m_position;
+	Vector3 m_prevPosition;
+	Vector3 m_velocity;
+	float m_lifetime;
+	float m_size;
+    Color m_color;
+	Color m_startColor;
 };
 
 #endif

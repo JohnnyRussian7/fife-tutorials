@@ -29,24 +29,23 @@ IndexData::IndexData()
 }
 
 IndexData::IndexData(uint32_t numIndices)
-: m_indices(numIndices, 0.f)
 {
-
+    m_indices.reserve(numIndices);
 }
 
-IndexData::IndexData(float* indices, uint32_t numIndices)
+IndexData::IndexData(uint16_t* indices, uint32_t numIndices)
 {
 	m_indices.reserve(numIndices);
 
 	AddIndices(indices, numIndices);
 }
 
-void IndexData::AddIndex(float index)
+void IndexData::AddIndex(uint16_t index)
 {
 	m_indices.push_back(index);
 }
 
-void IndexData::AddIndices(float* indices, uint32_t numIndices)
+void IndexData::AddIndices(uint16_t* indices, uint32_t numIndices)
 {
 	for (uint32_t i=0; i < numIndices; ++i)
 	{
@@ -63,7 +62,7 @@ void IndexData::Clear()
 	IndexContainer().swap(m_indices);
 }
 
-float* IndexData::GetIndices()
+uint16_t* IndexData::GetIndices()
 {
 	if (!m_indices.empty())
 	{

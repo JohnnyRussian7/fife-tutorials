@@ -36,10 +36,10 @@ void ParticleColorChangeEffect::apply(Particle* particles, uint32_t particleCoun
 	{
 		Particle& particle = particles[i];
 
-		if (particle.lifetime < m_time)
+		if (particle.m_lifetime < m_time)
 		{
-			float interpolationScale = (particle.lifetime - m_time/2) / m_time;
-			particle.color = interpolate(particle.startColor, m_endColor, interpolationScale);
+			float interpolationScale = (particle.m_lifetime - m_time/2) / m_time;
+			particle.m_color = interpolate(particle.m_startColor, m_endColor, interpolationScale);
 		}
 	}
 }

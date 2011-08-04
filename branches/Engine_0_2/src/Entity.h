@@ -1,3 +1,4 @@
+
 /**********************************************************************
 *	Filename: Entity.h
 *	
@@ -27,6 +28,8 @@
 #include "IEntity.h"
 #include "math/Vector3.h"
 
+#include "Visual.h"
+
 class SceneNode;
 class IComponent;
 class Visual;
@@ -55,6 +58,9 @@ public:
 
     virtual Matrix4 GetTransform();
 
+    // TODO - these will be removed once visual is no longer used
+    void SetVisual(Visual* visual) { m_visual = visual; m_visual->SetParent(this); };
+
 protected:
 	std::string m_name;
     SceneNode* m_parent;
@@ -64,6 +70,9 @@ protected:
 
     // common parameters shared by all game entities
     Vector3 m_position;
+
+    // TODO - remove once visual is no longer used
+    Visual* m_visual;
 };
 
 #endif

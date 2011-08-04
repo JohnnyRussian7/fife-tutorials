@@ -29,16 +29,16 @@ class IndexData
 public:
 	IndexData();
 	IndexData(uint32_t numIndices);
-	IndexData(float* indices, uint32_t numIndices);
+	IndexData(uint16_t* indices, uint32_t numIndices);
 
-	void AddIndex(float index);
-	void AddIndices(float* indices, uint32_t numIndices);
+	void AddIndex(uint16_t index);
+	void AddIndices(uint16_t* indices, uint32_t numIndices);
 	void Clear();
-	float* GetIndices();
+	uint16_t* GetIndices();
 	uint32_t GetNumIndices() const;
 	
 private:
-	typedef std::vector<float> IndexContainer;
+	typedef std::vector<uint16_t> IndexContainer;
 	IndexContainer m_indices;
 };
 

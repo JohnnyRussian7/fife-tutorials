@@ -37,32 +37,35 @@ void CreateSimpleParticleSystem(Engine& engine)
     sceneManager->AddCamera(camera);
     sceneManager->GetRootSceneNode()->AddChild(cameraNode);
 
-    ParticleEmitter* emitter = new ParticleEmitter(1, 1, 40, 60, 8000, 8000, Vector3(0, 20, 0));
+    ParticleEmitter* emitter = new ParticleEmitter(100, 100, 40, 40, 1500, 1500, Color(1, 1, 102/255), AxisAlignedBoundingBox(Vector3::Zero(), Vector3(200, 200, 200)));
     ParticleSystem* particleSystem = new ParticleSystem(sceneManager, emitter, true);
 
-    //ParticleColorChangeEffect* effect = new ParticleColorChangeEffect(Color::Black(), 20);
-    //particleSystem->AddEffect(effect);
+    //IParticleEffect* effect1 = new ParticleColorChangeEffect(Color::Black(), 300);
+    //particleSystem->AddEffect(effect1);
+
+    //IParticleEffect* effect2 = new ParticleColorRandomizerEffect(Color::Black(), Color::White());
+    //particleSystem->AddEffect(effect2);
 
     SceneNode* particleSceneNode = sceneManager->CreateSceneNode("particleNode");
     particleSceneNode->AddEntity(particleSystem);
     sceneManager->GetRootSceneNode()->AddChild(particleSceneNode);
 
     // load the image
-    //filesystem::Path path("../../data/smoke_animation.png");
-    //filesystem::Path path("../../data/grass/45.png");
-    //ImagePtr smokeImage = engine.GetImageManager()->CreateImage(path, "fireImage");
+//     filesystem::Path path("../../data/smoke_animation.png");
+//     filesystem::Path path("../../data/grass/45.png");
+//     ImagePtr smokeImage = engine.GetImageManager()->CreateImage(path, "smokeImage");
 //     if (smokeImage)
 //     {
-//         TexturePtr fireTexture = engine.GetTextureManager()->CreateTexture(TextureType::_2d, smokeImage);
+//         TexturePtr smokeTexture = engine.GetTextureManager()->CreateTexture(TextureType::_2d, smokeImage);
 // 
-//         if (fireTexture)
+//         if (smokeTexture)
 //         {
-//             particleSystem->AddTexture(fireTexture);
+//             particleSystem->AddTexture(smokeTexture);
 //         }
 //     }
-
-    //IAnimation* smokeAnimation = sceneManager->CreateAnimatedTexture("..\\..\\data\\smoke_animation.png", 1, 8, 8, 3000);
-    IAnimation* smokeAnimation = sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 5, 5, 25, 3000);
+ 
+    IAnimation* smokeAnimation = sceneManager->CreateAnimatedTexture("..\\..\\data\\smoke_animation.png", 1, 8, 8, 1500);
+    //IAnimation* smokeAnimation = sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 1, 24, 24, 2500);
     if (smokeAnimation)
     {
         particleSystem->AddAnimation(smokeAnimation);

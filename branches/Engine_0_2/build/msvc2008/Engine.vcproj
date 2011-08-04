@@ -1295,6 +1295,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\particlesystem\Particle.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\particlesystem\Particle.h"
 				>
 			</File>
@@ -1304,6 +1308,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\particlesystem\ParticleColorChangeEffect.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\particlesystem\ParticleColorRandomizerEffect.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\particlesystem\ParticleColorRandomizerEffect.h"
 				>
 			</File>
 			<File

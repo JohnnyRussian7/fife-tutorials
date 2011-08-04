@@ -25,6 +25,7 @@
 #include "../StdIncludes.h"
 
 #include "Particle.h"
+#include "../Color.h"
 #include "../math/Vector3.h"
 #include "../geometry/AxisAlignedBoundingBox.h"
 
@@ -36,7 +37,7 @@ public:
 	ParticleEmitter(uint32_t minParticles=0, uint32_t maxParticles=0,
         const float minSize=1, const float maxSize=1, 
 		const float minEnergy=1, const float maxEnergy=1,
-        const Vector3& velocity=Vector3::Zero(),
+        const Color& color=Color::White(),
         const AxisAlignedBoundingBox& aabb=AxisAlignedBoundingBox());
 	~ParticleEmitter();
 
@@ -55,11 +56,11 @@ private:
 	uint32_t m_activeParticles;
 	std::vector<Particle> m_particles;
 	Vector3 m_position;
-	Vector3 m_velocity;
 	float m_minSize;
 	float m_maxSize;
 	float m_minEnergy;
 	float m_maxEnergy;
+    Color m_color;
 	AxisAlignedBoundingBox m_aabb;
 };
 

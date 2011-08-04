@@ -28,6 +28,8 @@ class SceneNode;
 class IComponent;
 struct Matrix4;
 
+class Visual;
+
 class IEntity
 {
 public:
@@ -45,6 +47,9 @@ public:
     virtual void Update(uint32_t time) = 0;
 
     virtual Matrix4 GetTransform() = 0;
+
+    // TODO - these will be removed once visual is no longer used
+    virtual void SetVisual(Visual* visual) = 0;
 };
 
 #endif

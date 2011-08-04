@@ -30,6 +30,10 @@
 #include "../graphics/IVertexBuffer.h"
 #include "../graphics/IIndexBuffer.h"
 
+// TODO - temporary
+#include "../RenderComponent.h"
+#include "../utility/CheckedCast.h"
+
 Billboard::Billboard(BillboardGroup* parent, uint32_t width, uint32_t height, const Vector3& position)
 : m_parent(parent), m_dirty(true), m_width(width), m_height(height), m_position(position)
 {
@@ -147,32 +151,20 @@ void Billboard::FillVertexData(VertexData& vertexData)
 {
     if (IsDirty())
     {
-        const float halfWidth = m_width/2.f;
-        const float halfHeight = m_height/2.f;
-
-        // first vertex (0)
-        Vector3 position = m_position + Vector3(-halfWidth, halfHeight, 0);
-        vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
-
-        // second vertex (1)
-        position = m_position + Vector3(halfWidth, halfHeight, 0);
-        vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
-
-        // third vertex (2)
-        position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
-        vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
-
-        // fourth vertex (3)
-        position = m_position + Vector3(halfWidth, -halfHeight, 0); 
-        vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
-        
-        ResetDirty();
+        Update();
     }
+
+    vertexData.AddVertices(m_vertexData.GetVertices(), m_vertexData.GetNumVertices());
 }
 
 uint32_t Billboard::GetNumberOfVertices()
 {
     return 4;
+}
+
+uint32_t Billboard::GetNumberOfIndices()
+{
+    return 6;
 }
 
 Renderable* Billboard::GetRenderable()
@@ -185,14 +177,50 @@ void Billboard::MarkDirty()
     m_dirty = true;
 }
 
+void Billboard::ResetDirty()
+{
+    m_dirty = false;
+}
+
 bool Billboard::IsDirty() const
 {
     return m_dirty;
 }
 
-void Billboard::ResetDirty()
+void Billboard::Update()
 {
-    m_dirty = false;
+    // clear out current vertex information
+    m_vertexData.Clear();
+
+    const float halfWidth = m_width/2.f;
+    const float halfHeight = m_height/2.f;
+
+    // 4 vertices per billboard
+    // split into 2 triangles with 
+    // vertex 1 and 2 shared
+    //  (0) ______ (1)
+    //     |     /|       
+    //     |    / |
+    //     |  /   |
+    //  (2)|/_____| (3)
+
+    // first vertex (0)
+    Vector3 position = m_position + Vector3(-halfWidth, halfHeight, 0);
+    m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
+
+    // second vertex (1)
+    position = m_position + Vector3(halfWidth, halfHeight, 0);
+    m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
+
+    // third vertex (2)
+    position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
+    m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
+
+    // fourth vertex (3)
+    position = m_position + Vector3(halfWidth, -halfHeight, 0); 
+    m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
+
+    ResetDirty();
 }
 
 void Billboard::GenerateBuffers()
@@ -206,6 +234,17 @@ void Billboard::GenerateBuffers()
     //     |  /   |
     //  (2)|/_____| (3)
     
+    RenderComponent* renderComponent = 0;
+    if (m_owner)
+    {
+        renderComponent = checked_cast<RenderComponent*>(m_owner->GetComponent("Render"));
+
+        if (renderComponent)
+        {
+            renderComponent->SetVertexBuffer(m_sceneManager->CreateVertexBuffer(GetNumberOfVertices(), sizeof(Vertex), HwBufferUsage::Dynamic));
+        }
+    }
+
     m_renderable->SetVertexBuffer(m_sceneManager->CreateVertexBuffer(GetNumberOfVertices(), sizeof(Vertex), HwBufferUsage::Dynamic));
 
     IVertexBuffer* vertexBuffer = m_renderable->GetVertexBuffer();
@@ -235,6 +274,16 @@ void Billboard::GenerateBuffers()
         vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
 
         vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
+
+        if (renderComponent)
+        {
+            renderComponent->GetVertexBuffer()->WriteData(&vertices[0], vertices.size(), 0);
+        }
+    }
+
+    if (renderComponent)
+    {
+        renderComponent->SetIndexBuffer(m_sceneManager->CreateIndexBuffer(6, IndexBufferDataType::_16bit, HwBufferUsage::Static));
     }
 
     m_renderable->SetIndexBuffer(m_sceneManager->CreateIndexBuffer(6, IndexBufferDataType::_16bit, HwBufferUsage::Static));
@@ -252,6 +301,16 @@ void Billboard::GenerateBuffers()
         indexData[5] = uint16_t(3);
 
         indexBuffer->WriteData(indexData, 6, 0);
+
+        if (renderComponent)
+        {
+            renderComponent->GetIndexBuffer()->WriteData(indexData, 6, 0);
+        }
+    }
+
+    if (renderComponent)
+    {
+        renderComponent->SetPrimitiveType(PrimitiveType::TriangleStrip);
     }
 
     // set the primitive type
@@ -289,6 +348,17 @@ void Billboard::UpdateBuffers()
         vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
 
         vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
+
+        if (m_owner)
+        {
+            RenderComponent* renderComponent = checked_cast<RenderComponent*>(m_owner->GetComponent("Render"));
+
+            if (renderComponent)
+            {
+                renderComponent->GetVertexBuffer()->WriteData(&vertices[0], vertices.size(), 0);
+            }
+        }
+
     }
 }
 
@@ -299,6 +369,18 @@ void Billboard::Update(uint32_t time)
     bool animationDirty = false;
     if (m_animation && m_animation->IsDirty())
     {
+        if (m_owner)
+        {
+            RenderComponent* renderComponent = checked_cast<RenderComponent*>(m_owner->GetComponent("Render"));
+
+            if (renderComponent)
+            {
+                if (renderComponent->GetMaterial())
+                {
+                    renderComponent->GetMaterial()->SetTexture(m_animation->GetTexture());
+                }
+            }
+        }
         m_renderable->GetMaterial()->SetTexture(m_animation->GetTexture());
         SetTextureCoordinates(m_animation->GetTextureCoords());
 

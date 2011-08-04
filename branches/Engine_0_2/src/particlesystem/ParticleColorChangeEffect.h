@@ -25,7 +25,7 @@
 #include "StdIncludes.h"
 
 #include "IParticleEffect.h"
-#include "Color.h"
+#include "../Color.h"
 
 struct Particle;
 

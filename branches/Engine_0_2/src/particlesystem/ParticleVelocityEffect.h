@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Particle.cpp
+*	Filename: ParticleVelocityEffect.h
 *	
 *	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
@@ -19,14 +19,25 @@
 *	You should have received a copy of the GNU Lesser General Public
 *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
 ***********************************************************************/
-#include "PrecompiledIncludes.h"
+#ifndef PARTICLEVELOCITYEFFECT_H_
+#define PARTICLEVELOCITYEFFECT_H_
 
-#include "Particle.h"
+#include "StdIncludes.h"
 
-Particle::Particle()
-: m_creationTime(0), m_position(Vector3::Zero()), m_prevPosition(Vector3::Zero()), 
-m_velocity(0), m_lifetime(0), m_size(0), m_color(Color::White()), 
-m_startColor(Color::White())
+#include "IParticleEffect.h"
+#include "../math/Vector3.h"
+
+struct Particle;
+
+class ParticleVelocityEffect : public IParticleEffect
 {
+public:
+	ParticleVelocityEffect(const Vector3& force);
 
-}
+	void apply(Particle* particles, uint32_t particleCount, uint32_t time);
+
+private:
+	Vector3 m_force;
+};
+
+#endif

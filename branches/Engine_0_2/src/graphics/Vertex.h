@@ -26,8 +26,51 @@
 #include "../math/Vector2.h"
 #include "../Color.h"
 
+// struct VertexDataType
+// {
+//     enum Enum
+//     {
+//         Position = 0,
+//         Normal,
+//         Color,
+//         TexCoord0,
+//         TexCoord1
+//     };
+// };
+// 
+// struct VertexDataLayout
+// {
+//     enum Enum
+//     {
+//         Unknown = 0,
+//         Vtc,
+//         Vntc,
+//         VtcInterleaved,
+//         VntcInterleaved,
+//         VtcSeparate,
+//         VntcSeparate,
+//     };
+// };
+
 // make sure Vertex has no extra padding
 #pragma pack(push, 1)
+
+// struct VertexData
+// {
+//     VertexData() : m_data(0)
+// };
+// 
+// struct VertexElement
+// {
+//     VertexElement();
+// 
+//     GetSize();
+// 
+// private:
+// 
+//     VertexDataType::Enum m_type;
+// };
+
 struct Vertex
 {
     Vertex() 

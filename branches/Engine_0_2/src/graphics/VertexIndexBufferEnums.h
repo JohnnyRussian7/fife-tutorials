@@ -44,11 +44,26 @@ struct HwBufferUsage
 	};
 };
 
+struct VertexLayoutType
+{
+    enum Enum
+    {
+        Vertex = 0,
+        Normal,
+        Color,
+        Texture,
+        VNCT,
+        VNCTInterleave,
+        VCT,
+        VCTInterleave
+    };
+};
+
 struct VertexParamType
 {
     enum Enum
     {
-        Position,
+        Vertex,
         Normal,
         Color,
         Texture

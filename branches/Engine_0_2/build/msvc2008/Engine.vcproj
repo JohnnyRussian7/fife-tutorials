@@ -1327,11 +1327,31 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\particlesystem\ParticleFadeEffect.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ParticleFadeEffect.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\particlesystem\ParticleFadeEffect.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\particlesystem\ParticleSystem.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\particlesystem\ParticleSystem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\particlesystem\ParticleVelocityEffect.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\particlesystem\ParticleVelocityEffect.h"
 				>
 			</File>
 		</Filter>

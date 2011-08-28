@@ -27,14 +27,37 @@
 
 ParticleEmitter::ParticleEmitter(uint32_t minParticles, uint32_t maxParticles,
 								 const float minSize, const float maxSize, 
-								 const float minEnergy, const float maxEnergy,
-                                 const Color& color, const AxisAlignedBoundingBox& aabb)
+								 const float minLifetimeInMs, const float maxLifetimeInMs,
+                                 const Vector3& minVelocity, const Vector3& maxVelocity,
+                                 const Color& colorRangeStart, const Color& colorRangeEnd,
+                                 const AxisAlignedBoundingBox& aabb)
 : m_minParticles(minParticles), m_maxParticles(maxParticles), 
 m_activeParticles(0), m_particles(maxParticles), m_position(Vector3::Zero()),
-m_minSize(minSize), m_maxSize(maxSize), m_minEnergy(minEnergy), 
-m_maxEnergy(maxEnergy), m_color(color),  m_aabb(aabb)
+m_minSize(minSize), m_maxSize(maxSize), m_minLifetimeInMs(minLifetimeInMs), 
+m_maxLifetimeInMs(maxLifetimeInMs), m_minVelocity(minVelocity), m_maxVelocity(maxVelocity),
+m_colorRangeStart(colorRangeStart),  m_colorRangeEnd(colorRangeEnd), 
+m_aabb(aabb), m_sizeRangeSet(false), m_lifetimeRangeSet(false), m_velocityRangeSet(false),
+m_colorRangeSet(false)
 {
+    if (m_minSize != m_maxSize)
+    {
+        m_sizeRangeSet = true;
+    }
 
+    if (m_minLifetimeInMs != m_maxLifetimeInMs)
+    {
+        m_lifetimeRangeSet = true;
+    }
+
+    if (m_minVelocity != m_maxVelocity)
+    {
+        m_velocityRangeSet = true;
+    }
+
+    if (m_colorRangeStart != m_colorRangeEnd)
+    {
+        m_colorRangeSet = true;
+    }
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -42,87 +65,154 @@ ParticleEmitter::~ParticleEmitter()
 	
 }
 
-void ParticleEmitter::Emit()
+void ParticleEmitter::Emit(uint32_t time)
 {
-	std::size_t diffMaxMin = m_maxParticles - m_minParticles;
+//     uint32_t diffMaxMin = m_maxParticles - m_minParticles;
+// 
+// 	int32_t amount = diffMaxMin ? m_minParticles + int32_t(Randomizer::randBetween(0, diffMaxMin)) : m_minParticles;
+// 
+// 	if (GetNumActiveParticles() + amount > GetNumMaxParticles())
+// 	{
+// 		amount = GetNumMaxParticles() - GetNumActiveParticles();
+// 	}
 
-	int32_t amount = diffMaxMin ? m_minParticles + int32_t(Randomizer::randBetween(0, diffMaxMin)) : m_minParticles;
+    uint32_t maxParticlesAvailable = std::min(m_maxParticles - GetNumActiveParticles(), m_maxParticles);
+    uint32_t minParticlesAvailable = std::min(m_maxParticles - GetNumActiveParticles(), m_minParticles);
+    uint32_t amount = uint32_t(Randomizer::randBetween(static_cast<float>(minParticlesAvailable), 
+                                                        static_cast<float>(maxParticlesAvailable)));
 
-	if (GetNumActiveParticles() + amount > GetNumMaxParticles())
-	{
-		amount = GetNumMaxParticles() - GetNumActiveParticles();
-	}
+    std::cout << "particle amount: " << amount << std::endl;
 
 	if (amount > 0)
 	{
 		const Vector3& max = m_aabb.GetMax();
 		const Vector3& min = m_aabb.GetMin();
 
-		std::size_t index = GetNumActiveParticles();
+		uint32_t index = GetNumActiveParticles();
 		m_activeParticles += amount;
 		for (; index < m_activeParticles; ++index)
 		{
 			Particle& particle = m_particles[index];
+            particle.m_velocity = Vector3::Zero();
+            particle.m_creationTime = time;
+
 			particle.m_position.x = Randomizer::randBetween(min.x, max.x);
 			particle.m_position.y = Randomizer::randBetween(min.y, max.y);
 			particle.m_position.z = Randomizer::randBetween(min.z, max.z);
-            particle.m_color = m_color;
-			particle.m_startColor = particle.m_color;
-// 			particle.m_velocity.x = Randomizer::randBetween(0.f, m_velocity.x);
-// 			particle.m_velocity.y = Randomizer::randBetween(0.f, m_velocity.y);
-// 			particle.m_velocity.z = Randomizer::randBetween(0.f, m_velocity.z);
-			particle.m_lifetime = Randomizer::randBetween(m_minEnergy, m_maxEnergy);
-			particle.m_size = Randomizer::randBetween(m_minSize, m_maxSize);
+
+            if (m_velocityRangeSet)
+            {
+                particle.m_velocity.x = Randomizer::randBetween(m_minVelocity.x, m_maxVelocity.x);
+                particle.m_velocity.y = Randomizer::randBetween(m_minVelocity.y, m_maxVelocity.y);
+                particle.m_velocity.z = Randomizer::randBetween(m_minVelocity.z, m_maxVelocity.z);
+            }
+            else
+            {
+                particle.m_velocity = m_minVelocity;
+            }
+
+            if (m_colorRangeSet)
+            {
+                particle.m_color.r = Randomizer::randBetween(m_colorRangeStart.r, m_colorRangeEnd.r);
+                particle.m_color.g = Randomizer::randBetween(m_colorRangeStart.g, m_colorRangeEnd.g);
+                particle.m_color.b = Randomizer::randBetween(m_colorRangeStart.b, m_colorRangeEnd.b);
+                particle.m_color.a = Randomizer::randBetween(m_colorRangeStart.a, m_colorRangeEnd.a);
+            }
+            else
+            {
+                particle.m_color = m_colorRangeStart;
+            }
+
+            particle.m_startColor = particle.m_color;
+
+            if (m_lifetimeRangeSet)
+            {
+			    particle.m_lifetime = Randomizer::randBetween(m_minLifetimeInMs, m_maxLifetimeInMs);
+            }
+            else
+            {
+                particle.m_lifetime = m_minLifetimeInMs;
+            }
+
+            if (m_sizeRangeSet)
+            {
+                particle.m_size = Randomizer::randBetween(m_minSize, m_maxSize);
+            }
+            else
+            {
+                particle.m_size = m_minSize;
+            }
 		}
 	}
 }
 
-void ParticleEmitter::Update(uint32_t /*time*/)
+void ParticleEmitter::Update(uint32_t time)
 {
 	if (!m_particles.empty())
 	{
 		//Vector3 minAabb = m_aabb.GetMin();
 		//Vector3 maxAabb = m_aabb.GetMax();
 
-		std::size_t index = 0;
+		uint32_t index = 0;
+        bool particleDead = false;
 		while (index < m_activeParticles)
 		{
+            particleDead = false;
+
 			Particle& particle = m_particles[index];
 			
-			// update energy
-			//--particle.lifetime /*-= deltaTime*/;
+            if ((time-particle.m_creationTime) > particle.m_lifetime)
+            {
+                particleDead = true;
+            }
 
-			Vector3& position = particle.m_position;
+            if (!particleDead)
+            {
+			    // update position based on velocity
+			    particle.m_position += particle.m_velocity;
 
-			// update position based on velocity
-			position += particle.m_velocity;
+			    // particle outside emitter bounds, kill particle
+// 			    if (!m_aabb.Contains(particle.m_position))
+// 			    {
+// 				    particle.m_lifetime -= m_maxLifetimeInMs;
+//                     particleDead = true;
+// 			    }
 
-			// particle outside emitter bounds, kill particle
-			if (!m_aabb.Contains(position))
-			{
-				particle.m_lifetime -= m_maxEnergy;
-			}
+            }
 
-			if (particle.m_lifetime < m_minEnergy)
-			{
-				// particle is dead so swap it with the last active particle
+            if (particleDead)
+            {
+                //particle is dead so swap it with the last active particle
 				m_particles[index] = m_particles[m_activeParticles-1];
 
 				// decrease active particle count
 				--m_activeParticles;
-			}
-			else
-			{
-// 				minAabb.x = std::min(minAabb.x, m_position.x);
-// 				minAabb.y = std::min(minAabb.y, m_position.y);
-// 				minAabb.z = std::min(minAabb.z, m_position.z);
-// 				maxAabb.x = std::max(maxAabb.x, m_position.x);
-// 				maxAabb.y = std::max(maxAabb.y, m_position.y);
-// 				maxAabb.z = std::max(maxAabb.z, m_position.z);
+            }
+            else
+            {
+                ++index;
+            }
 
-				// increment the index to move to next particle
-				++index;
-			}
+// 			if (particle.m_lifetime < m_minLifetimeInMs)
+// 			{
+// 				// particle is dead so swap it with the last active particle
+// 				m_particles[index] = m_particles[m_activeParticles-1];
+// 
+// 				// decrease active particle count
+// 				--m_activeParticles;
+// 			}
+// 			else
+// 			{
+// // 				minAabb.x = std::min(minAabb.x, m_position.x);
+// // 				minAabb.y = std::min(minAabb.y, m_position.y);
+// // 				minAabb.z = std::min(minAabb.z, m_position.z);
+// // 				maxAabb.x = std::max(maxAabb.x, m_position.x);
+// // 				maxAabb.y = std::max(maxAabb.y, m_position.y);
+// // 				maxAabb.z = std::max(maxAabb.z, m_position.z);
+// 
+// 				// increment the index to move to next particle
+// 				++index;
+// 			}
 		}
 
 		//m_aabb.SetMinMax(minAabb, maxAabb);

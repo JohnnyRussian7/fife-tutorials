@@ -1,5 +1,5 @@
 /**********************************************************************
-*	Filename: Particle.cpp
+*	Filename: ParticleFadeEffect.h
 *	
 *	Copyright (C) 2011, FIFE team
 *	http://www.fifengine.net
@@ -21,12 +21,22 @@
 ***********************************************************************/
 #include "PrecompiledIncludes.h"
 
+#include "ParticleFadeEffect.h"
 #include "Particle.h"
+#include "../Color.h"
 
-Particle::Particle()
-: m_creationTime(0), m_position(Vector3::Zero()), m_prevPosition(Vector3::Zero()), 
-m_velocity(0), m_lifetime(0), m_size(0), m_color(Color::White()), 
-m_startColor(Color::White())
+ParticleFadeEffect::ParticleFadeEffect(uint32_t maxTimeToLive)
+: m_maxTimeToLive(maxTimeToLive)
 {
 
+}
+
+void ParticleFadeEffect::apply(Particle* particles, uint32_t particleCount, uint32_t time)
+{
+    for (uint32_t i=0; i < particleCount; ++i)
+    {
+        Particle& particle = particles[i];
+
+        particle.m_color.a = static_cast<float>((m_maxTimeToLive - (time-particle.m_creationTime)))/m_maxTimeToLive;
+    }
 }

@@ -29,6 +29,7 @@ struct Particle
 {
     Particle();
 
+    uint32_t m_creationTime;
 	Vector3 m_position;
 	Vector3 m_prevPosition;
 	Vector3 m_velocity;

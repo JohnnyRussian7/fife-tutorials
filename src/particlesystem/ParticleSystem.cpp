@@ -108,7 +108,7 @@ void ParticleSystem::Update(uint32_t time)
 	if (m_enabled && m_emitter)
 	{              
 		m_emitter->Update(time);
-		m_emitter->Emit();
+		m_emitter->Emit(time);
 
         const std::vector<Particle>& particles = m_emitter->GetParticles();
 
@@ -133,11 +133,6 @@ void ParticleSystem::Update(uint32_t time)
             {
                 m_billboardGroup.SetTextureCoordinates(i, m_animation->GetTextureCoords());
             }
-
-            if (m_animation && m_animation->IsDirty())
-            {
-                m_billboardGroup.SetTextureCoordinates(i, m_animation->GetTextureCoords());
-            }
         }
 
         VertexData& vertexData = m_billboardGroup.GetVertexData();
@@ -155,7 +150,11 @@ void ParticleSystem::Update(uint32_t time)
             }
 
             renderComponent->SetVertexBuffer(m_vertexBuffer);
-            renderComponent->SetIndexBuffer(m_indexBuffer);
+
+            if (indexData.GetNumIndices() != 0)
+            {
+                renderComponent->SetIndexBuffer(m_indexBuffer);
+            }
         }
 
         ApplyEffects(time);

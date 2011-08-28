@@ -36,12 +36,13 @@ class ParticleEmitter
 public:
 	ParticleEmitter(uint32_t minParticles=0, uint32_t maxParticles=0,
         const float minSize=1, const float maxSize=1, 
-		const float minEnergy=1, const float maxEnergy=1,
-        const Color& color=Color::White(),
+		const float minLifetimeInMs=1000, const float maxLifetimeInMs=1000,
+        const Vector3& minVelocity=Vector3::Zero(), const Vector3& maxVelocity=Vector3::Zero(),
+        const Color& colorRangeStart=Color::White(), const Color& colorRangeEnd=Color::White(),
         const AxisAlignedBoundingBox& aabb=AxisAlignedBoundingBox());
 	~ParticleEmitter();
 
-	void Emit(); 
+	void Emit(uint32_t time); 
 	void Update(uint32_t time);
 	void SetFollowEmitter(bool enabled);
 	void ClearParticles();
@@ -58,10 +59,17 @@ private:
 	Vector3 m_position;
 	float m_minSize;
 	float m_maxSize;
-	float m_minEnergy;
-	float m_maxEnergy;
-    Color m_color;
+	float m_minLifetimeInMs;
+	float m_maxLifetimeInMs;
+    Vector3 m_minVelocity;
+    Vector3 m_maxVelocity;
+    Color m_colorRangeStart;
+    Color m_colorRangeEnd;
 	AxisAlignedBoundingBox m_aabb;
+    bool m_sizeRangeSet;
+    bool m_lifetimeRangeSet;
+    bool m_velocityRangeSet;
+    bool m_colorRangeSet;
 };
 
 #endif

@@ -90,6 +90,8 @@
 #include "particlesystem/IParticleEffect.h"
 #include "particlesystem/ParticleColorChangeEffect.h"
 #include "particlesystem/ParticleColorRandomizerEffect.h"
+#include "particlesystem/ParticleFadeEffect.h"
+#include "particlesystem/ParticleVelocityEffect.h"
 
 // rendersystem
 #include "rendersystem/IRenderSystem.h"

@@ -415,16 +415,20 @@ namespace opengl {
 
             if (texture)
             {
+                GLenum textureType = utility::ConvertTextureType(texture->GetType());
                 // TODO - should be settable outside of render system
                 glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+                glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); 
+                glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); 
+
                 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST );
                 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
                 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
                 //         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
                 // 
                 //         glActiveTextureARB(GL_TEXTURE0);
-                glEnable(utility::ConvertTextureType(texture->GetType()));    
-                glBindTexture(utility::ConvertTextureType(texture->GetType()), texture->GetId());
+                glEnable(textureType);    
+                glBindTexture(textureType, texture->GetId());
             }
         }
 
@@ -440,7 +444,7 @@ namespace opengl {
                 glVertexPointer(3, 
                     utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
                     vertexBuffer->GetStride(), 
-                    BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Position)));
+                    BUFFER_OFFSET(vertexBuffer->GetOffset(VertexParamType::Vertex)));
                 glEnableClientState(GL_VERTEX_ARRAY);
 
                 glColorPointer(4, 
@@ -460,7 +464,7 @@ namespace opengl {
                 glVertexPointer(3, 
                     utility::ConvertVertexBufferParamSizeType(VertexParamSizeType::Float3), 
                     vertexBuffer->GetStride(), 
-                    vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Position)));
+                    vertexBuffer->GetData(vertexBuffer->GetOffset(VertexParamType::Vertex)));
                 glEnableClientState(GL_VERTEX_ARRAY);
 
                 glColorPointer(4, 

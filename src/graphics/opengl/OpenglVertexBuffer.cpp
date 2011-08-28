@@ -74,10 +74,10 @@ uint32_t OpenglVertexBuffer::GetOffset(VertexParamType::Enum paramType) const
 {
     switch(paramType)
     {
-    case VertexParamType::Position:
+    case VertexParamType::Vertex:
         return 0;
     case VertexParamType::Normal:
-        return GetOffset(VertexParamType::Position) + VertexParamSizeType::GetSize(VertexParamSizeType::Float3);
+        return GetOffset(VertexParamType::Vertex) + VertexParamSizeType::GetSize(VertexParamSizeType::Float3);
     case VertexParamType::Color:
         return GetOffset(VertexParamType::Normal) + VertexParamSizeType::GetSize(VertexParamSizeType::Float3);
     case VertexParamType::Texture:

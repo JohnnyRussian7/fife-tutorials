@@ -67,21 +67,16 @@ ParticleEmitter::~ParticleEmitter()
 
 void ParticleEmitter::Emit(uint32_t time)
 {
-//     uint32_t diffMaxMin = m_maxParticles - m_minParticles;
-// 
-// 	int32_t amount = diffMaxMin ? m_minParticles + int32_t(Randomizer::randBetween(0, diffMaxMin)) : m_minParticles;
-// 
-// 	if (GetNumActiveParticles() + amount > GetNumMaxParticles())
-// 	{
-// 		amount = GetNumMaxParticles() - GetNumActiveParticles();
-// 	}
-
-    uint32_t maxParticlesAvailable = std::min(m_maxParticles - GetNumActiveParticles(), m_maxParticles);
-    uint32_t minParticlesAvailable = std::min(m_maxParticles - GetNumActiveParticles(), m_minParticles);
+    uint32_t maxParticlesAvailable = m_maxParticles - GetNumActiveParticles();
+    
+    uint32_t minParticlesAvailable = 0;
+    if (GetNumActiveParticles() < m_minParticles)
+    {
+        minParticlesAvailable = m_minParticles - GetNumActiveParticles();
+    }
+    
     uint32_t amount = uint32_t(Randomizer::randBetween(static_cast<float>(minParticlesAvailable), 
                                                         static_cast<float>(maxParticlesAvailable)));
-
-    std::cout << "particle amount: " << amount << std::endl;
 
 	if (amount > 0)
 	{

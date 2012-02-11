@@ -26,6 +26,7 @@
 
 #include "WindowSystemTypes.h"
 
+class Engine;
 class IWindowSystemEventListener;
 class IInputSystem;
 
@@ -34,7 +35,8 @@ struct WindowSystemSettings
 	WindowSystemSettings() 
 	: windowSystemType(WindowSystemType::Invalid),
 	width(800), height(600), bitsPerPixel(16), useExternalWindow(false), 
-	allowFullScreen(true), useFullScreen(false), allowResizeable(true), windowId(0)
+	allowFullScreen(true), useFullScreen(false), allowResizeable(true), 
+    useDisplayLink(true), windowId(0)
 	{
 #if defined(WINDOWS_OS)
 		windowSystemType = WindowSystemType::Win32;
@@ -53,6 +55,7 @@ struct WindowSystemSettings
 	bool allowFullScreen;
 	bool useFullScreen;
 	bool allowResizeable;
+    bool useDisplayLink;    // OS X only
 	void* windowId;
 };
 

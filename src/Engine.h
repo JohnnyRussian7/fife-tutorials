@@ -80,6 +80,8 @@ public:
 
 	uint32_t GetFps() const;
 
+    void StartRenderLoop();
+    void PerformRendering();
 	void BeginScene();
 	void EndScene();
     void Render();
@@ -87,7 +89,9 @@ public:
     bool Run();
     void Quit();
 
+    // methods implemented for window listener interface
 	virtual void OnResize(uint32_t width, uint32_t height);
+    virtual void OnDisplayUpdate();
 
 private:
 	void ComputeFps();
@@ -107,6 +111,7 @@ private:
 	uint32_t m_fps;
 	uint32_t m_fpsFrameCount;
 	uint32_t m_fpsStartTime;
+    bool m_autoRendering;
 };
 
 #endif

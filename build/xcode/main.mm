@@ -8,30 +8,19 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include "Fife.h"
+// engine include
+#include "../../src/Fife.h"
+
+// sample includes
+#include "../../src/test/SimpleKeyListener.h"
+#include "../../src/test/SimpleMouseListener.h"
+#include "../../src/test/SimpleAnimatedTextures.h"
+#include "../../src/test/SimpleStaticTextures.h"
+#include "../../src/test/SimpleIsometricView.h"
+#include "../../src/test/SimpleParticleSystem.h"
+
 
 int main(int argc, char *argv[])
 {
-    Engine engine;
-    
-    SceneManager* sceneManager = engine.GetSceneManager();
-    Camera* camera = sceneManager->CreateCamera();
-    //     camera->Pitch(DegToRad(30));
-    //     camera->Yaw(DegToRad(45));
-    camera->Translate(Vector3(0, 0, 50));
-    camera->LookAt(Vector3(0, 0, 0));
-    
-    sceneManager->AddCamera(camera);   
-    
-
-    //while (engine.Run())
-    //{
-    //    engine.BeginScene();
-    //    engine.Render();
-    //    engine.EndScene();
-    //}
-    
     return NSApplicationMain(argc,  (const char **) argv);
-    
-    return 0;
 }

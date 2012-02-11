@@ -1,7 +1,7 @@
 /**********************************************************************
- *	Filename: OsxCocoaView.h
+ *	Filename: OsxKeyConverter.h
  *	
- *	Copyright (C) 2011, FIFE team
+ *	Copyright (C) 2010, FIFE team
  *	http://www.fifengine.net
  *
  *	This file is part of FIFE.
@@ -19,22 +19,13 @@
  *	You should have received a copy of the GNU Lesser General Public
  *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
  ***********************************************************************/
+#ifndef OSXKEYCONVERTER_H_
+#define OSXKEYCONVERTER_H_
 
-#import <Cocoa/Cocoa.h>
-#import <QuartzCore/QuartzCore.h>
+#include "Stdint.h"
+#include "../KeyCodes.h"
 
-struct OsxWindowSystem;
+KeyCodes::Enum ConvertOsxVirtualKeyToKeyCode(uint16_t virtualKey);
 
-@interface OsxCocoaView : NSView {    
-	NSOpenGLContext* m_context;
-	NSOpenGLPixelFormat* m_pixelFormat;
-    
-    CVDisplayLinkRef displayLink;
-    NSTimer* m_renderTimer;
-    
-    OsxWindowSystem* m_windowSystem;
-}
+#endif
 
-- (id)initWithFrame:(NSRect)frame andWindow:(OsxWindowSystem*)windowSystem;
-
-@end

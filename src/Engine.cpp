@@ -32,7 +32,7 @@
 
 Engine::Engine(const EngineSettings& settings)
 : m_settings(settings), m_windowSystem(0), m_renderSystem(0), m_fileSystem(0), m_inputSystem(0),
-  m_sceneManager(0), m_run(true), m_fps(30), m_fpsFrameCount(0), m_fpsStartTime(0)
+  m_sceneManager(0), m_run(false), m_fps(30), m_fpsFrameCount(0), m_fpsStartTime(0), m_autoRendering(false)
 {
     m_windowSystem = CreateWindowSystem(m_settings.windowSettings);
 	m_windowSystem->Init();
@@ -162,6 +162,36 @@ uint32_t Engine::GetFps() const
 	return m_fps;
 }
 
+void Engine::StartRenderLoop() 
+{
+    m_autoRendering = true;
+}
+
+void Engine::PerformRendering()
+{
+// for OS X we let the window system drive the render loop
+#if !defined(MACOSX_OS)
+    while (Run())
+#else
+    if (Run())
+#endif
+	{
+        // TODO - jlm - fire scene begin event
+        
+		BeginScene();
+        
+        // TODO - jlm - fire render begin
+        
+		Render();
+        
+        // TODO - jlm - fire render end
+        
+		EndScene();
+        
+        // TODO - jlm - fire scene end
+    }
+}
+
 void Engine::BeginScene()
 {
 	
@@ -180,8 +210,20 @@ void Engine::Render()
 
 bool Engine::Run()
 {
+    static bool FirstTimeCheck = false;
+    
     assert(m_windowSystem && m_renderSystem);
 
+    if (FirstTimeCheck == false)
+    {
+        FirstTimeCheck = true;
+        
+        if (m_autoRendering == true)
+        {
+            m_run = true;
+        }
+    }
+    
     if (m_run)
     {
         m_timer.Tick();
@@ -206,6 +248,19 @@ void Engine::Quit()
 void Engine::OnResize(uint32_t width, uint32_t height)
 {
     m_renderSystem->SetViewPort(Viewport(0, 0, width, height));
+}
+
+void Engine::OnDisplayUpdate()
+{
+    // when auto rendering is disabled do nothing
+    // as the user is controlling the render loop
+    if (!m_autoRendering)
+    {
+        return;
+    }
+    
+    // display has signaled an update, so its time to render
+    PerformRendering();
 }
 
 void Engine::ComputeFps()

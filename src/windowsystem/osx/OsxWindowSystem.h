@@ -26,6 +26,7 @@
 
 #include "IWindowSystem.h"
 
+class Engine;
 class IWindowSystemEventListener;
 class IInputSystem;
 class IKeyEvent;
@@ -58,6 +59,8 @@ class OsxWindowSystem : public IWindowSystem
         virtual void AddListener(IWindowSystemEventListener* listener);
         virtual void RemoveListener(IWindowSystemEventListener* listener);
         virtual void SetInputSystem(IInputSystem* inputSystem);
+        
+        void OnDisplayUpdate();
         
     private:
         void Resize();

@@ -33,11 +33,37 @@ const std::string& SimpleKeyListener::GetName()
     return m_name; 
 }
 
+float gYaw = 0;
+float gPitch = 0;
 bool SimpleKeyListener::OnKeyPressed(const IKeyEvent& event) 
 { 
     bool translationChange = false;
     const float TranslationAmount = 1.f;
 
+    if (event.GetKeyCode() == KeyCodes::KeyR)
+    {
+        if (gYaw > 360)
+        {
+            gYaw = 0;
+        }
+        else
+        {
+            gYaw += 1;
+        }
+        
+        if (gPitch > 90)
+        {
+            gPitch = 0;
+        }
+        else
+        {
+            gPitch += 1;
+        }
+        
+        m_cam->Yaw(gYaw);
+        m_cam->Pitch(gPitch);
+    }
+    
     if (event.GetKeyCode() == KeyCodes::Left)
     {
         m_xTrans -= TranslationAmount;
@@ -58,6 +84,18 @@ bool SimpleKeyListener::OnKeyPressed(const IKeyEvent& event)
         m_zTrans += TranslationAmount;
         translationChange = true;
     }
+    else if (event.GetKeyCode() == KeyCodes::Plus)
+    {
+        const float ZoomAmount = 10;
+        
+        m_cam->Translate(Vector3(0.f, 0.f, -ZoomAmount));
+    }
+    else if (event.GetKeyCode() == KeyCodes::Minus)
+    {
+        const float ZoomAmount = 10;
+        
+        m_cam->Translate(Vector3(0.f, 0.f, ZoomAmount));
+    }
 
     if (translationChange)
     {
@@ -72,6 +110,21 @@ bool SimpleKeyListener::OnKeyReleased(const IKeyEvent& event)
     if (event.GetKeyCode() == KeyCodes::Escape)
     {
         m_engine.Quit();
+    }
+    else if (event.GetKeyCode() == KeyCodes::KeyC)
+    {
+        // toggle cull mode
+        if (m_cullMode.GetCullType() != CullType::Front)
+        {
+            m_cullMode.SetCullType(CullType::Front);
+        }
+        else
+        {
+            m_cullMode.SetCullType(CullType::Back);
+        }
+        
+        m_cullMode.SetEnabled(true);
+        m_engine.GetSceneManager()->GetRootSceneNode()->SetCullMode(m_cullMode);
     }
     else if (event.GetKeyCode() == KeyCodes::KeyP)
     {

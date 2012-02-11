@@ -41,6 +41,7 @@ private:
     float m_yTrans;
     float m_zTrans;
     FillMode m_fillMode;
+    CullMode m_cullMode;
 };
 
 #endif

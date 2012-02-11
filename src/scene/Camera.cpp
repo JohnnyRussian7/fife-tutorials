@@ -265,12 +265,22 @@ void Camera::UpdateView()
 //  
 //      m_viewMatrix = posMatrix * conjRotMatrix;
 
+/*
+// The Following rotates the objects and not the camera
+    Matrix4 cameraRotationMatrix = Transpose(ToRotationMatrix(m_orientation));
+    Matrix4 cameraPositionMatrix = Matrix4::Identity();
+    cameraPositionMatrix[12] = -m_position.x;
+    cameraPositionMatrix[13] = -m_position.y;
+    cameraPositionMatrix[14] = -m_position.z;
+    m_viewMatrix = cameraPositionMatrix * cameraRotationMatrix;
+*/
+    
+    // this causes the camera to rotate about the origin
     Matrix4 rotMatrix = ToRotationMatrix(m_orientation);
     Vector3 translation = -rotMatrix * m_position;
     rotMatrix[12] = translation.x;
     rotMatrix[13] = translation.y;
     rotMatrix[14] = translation.z;
-
     m_viewMatrix = rotMatrix;
 
 //     Vector3 xAxis = Vector3(conjRotMatrix[0], conjRotMatrix[1], conjRotMatrix[2]);

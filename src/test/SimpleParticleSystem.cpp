@@ -41,8 +41,8 @@ void CreateSimpleParticleSystem(Engine& engine)
     ParticleEmitter* emitter = new ParticleEmitter(40, 60, 2, 8, 1000, 2000, Vector3(0, 0.05, 0), Vector3(0, 0.40, 0), Color::White(), Color::White(), AxisAlignedBoundingBox(Vector3::Zero(), Vector3(10, 0, 10)));
     ParticleSystem* particleSystem = new ParticleSystem(sceneManager, emitter, true);
 
-    IParticleEffect* fadeEffect = new ParticleFadeEffect(2000);
-    particleSystem->AddEffect(fadeEffect);
+    //IParticleEffect* fadeEffect = new ParticleFadeEffect(2000);
+    //particleSystem->AddEffect(fadeEffect);
 
     //IParticleEffect* velocityEffect = new ParticleVelocityEffect(Vector3(0, 0.005, 0));
     //particleSystem->AddEffect(velocityEffect);

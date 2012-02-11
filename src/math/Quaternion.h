@@ -67,9 +67,9 @@ Quaternion& Quaternion::operator=(const Quaternion& rhs)
 
 Quaternion& Quaternion::operator*=(const Quaternion& rhs)
 {
-	float tmpx = w*rhs.x + x*rhs.w + y*rhs.z - z*rhs.y;
-	float tmpy = w*rhs.y + y*rhs.w + z*rhs.x - x*rhs.z;
-	float tmpz = w*rhs.z + z*rhs.w + x*rhs.y - y*rhs.x;
+	float tmpx = w*rhs.x + x*rhs.w + z*rhs.y - y*rhs.z;
+	float tmpy = w*rhs.y + y*rhs.w + x*rhs.z - z*rhs.x;
+	float tmpz = w*rhs.z + z*rhs.w + y*rhs.x - x*rhs.y;
 	float tmpw = w*rhs.w - x*rhs.x - y*rhs.y - z*rhs.z;
 
 	x = tmpx;

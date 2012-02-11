@@ -24,16 +24,17 @@
 #include "OsxWindowSystem.h"
 #import "OsxCocoaView.h"
 
+#include "../../Engine.h"
 #include "InputSystem.h"
 
 class OsxWindowSystem::Impl
 {
 public:
     
-    Impl(const WindowSystemSettings& settings)
-    : m_settings(settings)
+    Impl(OsxWindowSystem* windowSystem, const WindowSystemSettings& settings)
+    : m_engine(0), m_inputSystem(0), m_window(0), m_windowSystem(windowSystem), m_settings(settings)
     {
-        
+
     }
     
     ~Impl()
@@ -50,21 +51,22 @@ public:
         if (!m_settings.useExternalWindow)
         {
             // create our window
-            NSRect windowRect = NSMakeRect(0, 0, m_settings.width, m_settings.height);
-            
-            m_window = [[[NSWindow alloc]
-                         initWithContentRect:windowRect 
+            m_window = [[NSWindow alloc]
+                         initWithContentRect:NSMakeRect(0, 0, m_settings.width, m_settings.height)
                          styleMask:NSTitledWindowMask | NSClosableWindowMask 
                          | NSMiniaturizableWindowMask | NSResizableWindowMask 
-                         backing:NSBackingStoreBuffered defer:NO] autorelease];
+                         backing:NSBackingStoreBuffered defer:YES];
             
             if (m_window)
             {
-                m_view = [[[OsxCocoaView alloc] initWithFrame:windowRect] autorelease];
+                NSRect frame = [m_window contentRectForFrameRect:[m_window frame]];
+                OsxCocoaView* view = [[OsxCocoaView alloc] initWithFrame:frame andWindow:m_windowSystem];
                 
-                if (m_view)
+                if (view)
                 {
-                    [m_window setContentView:m_view];
+                    [m_window setContentView:view];
+                    [m_window makeFirstResponder:view];
+                    [view release];
                 }
                 
                 SetWindowTitle("Fife Engine");
@@ -154,17 +156,17 @@ public:
     
     void OnKeyboardInput(const IKeyEvent& event)
     {
-        
+        m_inputSystem->InjectKeyEvent(event);
     }
     
     void OnMouseInput(const IMouseEvent& event)
     {
-        
+        m_inputSystem->InjectMouseEvent(event);
     }
     
     bool Run()
     {
-        
+        return true;
     }
     
     void Update()
@@ -195,6 +197,18 @@ public:
         m_inputSystem = inputSystem;
     }
     
+    void OnDisplayUpdate()
+    {
+        // alert listeners of display update
+        for (Listeners::iterator iter = m_listeners.begin(); iter != m_listeners.end(); ++iter)
+        {
+            if (*iter)
+            {
+                (*iter)->OnDisplayUpdate();
+            }
+        }
+    }
+    
 private:
     WindowSystemSettings m_settings;
     bool m_externalWindow;
@@ -206,15 +220,16 @@ private:
     typedef std::vector<IWindowSystemEventListener*> Listeners;
     Listeners m_listeners;
     
+    Engine* m_engine;
     IInputSystem* m_inputSystem;
     
     NSWindow* m_window;
-    OsxCocoaView* m_view;    
+    OsxWindowSystem* m_windowSystem;
 };
 
 OsxWindowSystem::OsxWindowSystem(const WindowSystemSettings& settings)
 {
-    m_impl = new Impl(settings);
+    m_impl = new Impl(this, settings);
     assert(m_impl);
 }
 
@@ -327,5 +342,10 @@ void OsxWindowSystem::RemoveListener(IWindowSystemEventListener* listener)
 void OsxWindowSystem::SetInputSystem(IInputSystem* inputSystem)
 {
     m_impl->SetInputSystem(inputSystem);
+}
+
+void OsxWindowSystem::OnDisplayUpdate()
+{
+    m_impl->OnDisplayUpdate();
 }
 

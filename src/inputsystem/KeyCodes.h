@@ -22,13 +22,16 @@
 #ifndef KEYCODES_H_
 #define KEYCODES_H_
 
+#include "Stdint.h"
+
 // enumeration for mouse modifiers
 struct MouseModifiers
 {
     enum Enum
     {
-        Ctrl = 1 << 0,
-        Shift = 1 << 1
+        Ctrl    = 1 << 0,
+        Alt     = 1 << 1,
+        Shift   = 1 << 2
     };
 };
 
@@ -59,7 +62,7 @@ struct KeyModifiers
 
 // key codes taken from: http://msdn.microsoft.com/en-us/library/dd375731%28v=vs.85%29.aspx
 struct KeyCodes
-{
+{    
     enum Enum
     {
         LMouseButton = 0x01,    // VK_LBUTTON Left mouse button
@@ -236,6 +239,8 @@ struct KeyCodes
         Noname = 0xFC,          // VK_NONAME Reserved
         Pa1 = 0xFD,             // VK_PA1 PA1 key
         OemClear = 0xFE,        // VK_OEM_CLEAR Clear key
+        
+        Invalid = -1
    };
 };
 

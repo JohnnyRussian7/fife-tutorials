@@ -38,8 +38,11 @@ bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event)
     float yawAmount = (event.GetXPos() - m_lastX) * 0.015;
     float pitchAmount = (event.GetYPos() - m_lastY) * 0.015;
 
+    //Quaternion test = FromEuler(pitchAmount, yawAmount, 0);
+    
     if  (m_initialized)
     {
+        //m_cam->Rotate(test);
         m_cam->Yaw(yawAmount);
         m_cam->Pitch(pitchAmount);
 

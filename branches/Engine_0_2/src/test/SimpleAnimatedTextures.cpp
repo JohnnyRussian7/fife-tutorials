@@ -43,7 +43,7 @@ void CreateSimpleAnimatedTextures(Engine& engine)
 
     camNode->Translate(Vector3(0, 0, 500));
     camera->LookAt(Vector3(0, 0, 0));
-    camera->SetFixedYawAxis(true);
+    //camera->SetFixedYawAxis(true);
 
     IEntity* e1 = sceneManager->CreateEntity("e1");
     Visual* b1 = sceneManager->CreateBillboard(40, 40);

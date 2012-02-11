@@ -119,21 +119,23 @@ void Timer::TimerImpl::Tick()
 
 uint32_t Timer::TimerImpl::QueryRealTime()
 {
-    static uint64_t timeBase = 0;
+    static bool timeBaseAcquired = false;
+    static double timeBase = 0.0;
     
-    if (timeBase == 0)
+    if (!timeBaseAcquired)
     {
         // only need to calculate this once
         mach_timebase_info_data_t info;
         mach_timebase_info(&info);
-        timeBase = info.numer / info.denom;
+        timeBase = static_cast<double>(info.numer) / static_cast<double>(info.denom);
+        timeBaseAcquired = true;
     }
     
-    uint64_t timeInNanoseconds = mach_absolute_time();
+    double timeInNanoseconds = mach_absolute_time() * timeBase;
 	
-	const uint32_t MsMultiplier = 1e-6;
-	
-    return uint32_t(timeInNanoseconds * timeBase * MsMultiplier);
+	const double MsMultiplier = 1e-6;
+    
+    return uint32_t(timeInNanoseconds * MsMultiplier);
     
     //const uint32_t MsMultiplier = 1000;
     //struct timeval time;

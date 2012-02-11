@@ -65,12 +65,20 @@ Quaternion Conjugate(const Quaternion& q)
 
 Quaternion Inverse(const Quaternion& q)
 {
-	float magSqr = MagnitudeSquare(q);
+    // inverse is defined as: inv = q* / ||q||
+	float mag = Magnitude(q);
 
-	if ( magSqr > 0.0f )
+	if ( mag > 0.0f )
 	{
-		float invMag = 1.f/magSqr;
-		return Quaternion(-q.x*invMag, -q.y*invMag, -q.z*invMag, q.w*invMag);
+		float invMag = 1.f/mag;
+        
+        Quaternion inverseQuaternion = Conjugate(q);
+        inverseQuaternion.x *= invMag;
+        inverseQuaternion.y *= invMag;
+        inverseQuaternion.z *= invMag;
+        inverseQuaternion.w *= invMag;
+        
+        return inverseQuaternion;
 	}
 	else
 	{

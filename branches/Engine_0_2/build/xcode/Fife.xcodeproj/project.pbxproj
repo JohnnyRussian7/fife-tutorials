@@ -114,6 +114,9 @@
 		88447BED140A900D0034453D /* SimpleMouseListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88447BE8140A900D0034453D /* SimpleMouseListener.cpp */; };
 		88447BEE140A900D0034453D /* SimpleParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88447BEA140A900D0034453D /* SimpleParticleSystem.cpp */; };
 		88447C1E140A93F90034453D /* RenderComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88447C1C140A93F90034453D /* RenderComponent.cpp */; };
+		88610D1A148C5F5100A50088 /* FifeAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 88610D19148C5F5100A50088 /* FifeAppDelegate.mm */; };
+		88BF84D914E1F5D4005037EC /* OsxKeyConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 88BF84D814E1F5D4005037EC /* OsxKeyConverter.mm */; };
+		88BF86C814E6E359005037EC /* FpsCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88BF86C714E6E359005037EC /* FpsCameraController.cpp */; };
 		88E9F70112FE040C00D02C4A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E9F70012FE040C00D02C4A /* QuartzCore.framework */; };
 		88EDE2F01325CEC400D57F7D /* FileSystemUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EDE2EC1325CEC400D57F7D /* FileSystemUtils.cpp */; };
 		88EDE2F11325CEC400D57F7D /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EDE2EF1325CEC400D57F7D /* Path.cpp */; };
@@ -374,6 +377,12 @@
 		88447C1C140A93F90034453D /* RenderComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderComponent.cpp; sourceTree = "<group>"; };
 		88447C1D140A93F90034453D /* RenderComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderComponent.h; sourceTree = "<group>"; };
 		88447C20140A940D0034453D /* CheckedCast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckedCast.h; sourceTree = "<group>"; };
+		88610D18148C5F5100A50088 /* FifeAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FifeAppDelegate.h; sourceTree = "<group>"; };
+		88610D19148C5F5100A50088 /* FifeAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FifeAppDelegate.mm; sourceTree = "<group>"; };
+		88BF84D714E1F5D4005037EC /* OsxKeyConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsxKeyConverter.h; sourceTree = "<group>"; };
+		88BF84D814E1F5D4005037EC /* OsxKeyConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsxKeyConverter.mm; sourceTree = "<group>"; };
+		88BF86C614E6E359005037EC /* FpsCameraController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FpsCameraController.h; sourceTree = "<group>"; };
+		88BF86C714E6E359005037EC /* FpsCameraController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpsCameraController.cpp; sourceTree = "<group>"; };
 		88E9F70012FE040C00D02C4A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		88EDE2EC1325CEC400D57F7D /* FileSystemUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemUtils.cpp; sourceTree = "<group>"; };
 		88EDE2ED1325CEC400D57F7D /* FileSystemUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystemUtils.h; sourceTree = "<group>"; };
@@ -469,6 +478,8 @@
 			children = (
 				8828999E12FEE7DF00DF58D2 /* Fife_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.mm */,
+				88610D18148C5F5100A50088 /* FifeAppDelegate.h */,
+				88610D19148C5F5100A50088 /* FifeAppDelegate.mm */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -718,6 +729,7 @@
 		882898DF12FEE73D00DF58D2 /* inputsystem */ = {
 			isa = PBXGroup;
 			children = (
+				88BF84D614E1F55E005037EC /* osx */,
 				882898E012FEE73D00DF58D2 /* IInputSystem.h */,
 				882898E112FEE73D00DF58D2 /* InputSystem.cpp */,
 				882898E212FEE73D00DF58D2 /* InputSystem.h */,
@@ -890,6 +902,8 @@
 				88EDE3051325CF4E00D57F7D /* SimpleStaticTextures.cpp */,
 				88EDE3061325CF4E00D57F7D /* SimpleStaticTextures.h */,
 				8828994312FEE73E00DF58D2 /* main.cpp */,
+				88BF86C614E6E359005037EC /* FpsCameraController.h */,
+				88BF86C714E6E359005037EC /* FpsCameraController.cpp */,
 			);
 			path = test;
 			sourceTree = "<group>";
@@ -978,6 +992,15 @@
 				88447C20140A940D0034453D /* CheckedCast.h */,
 			);
 			path = utility;
+			sourceTree = "<group>";
+		};
+		88BF84D614E1F55E005037EC /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				88BF84D714E1F5D4005037EC /* OsxKeyConverter.h */,
+				88BF84D814E1F5D4005037EC /* OsxKeyConverter.mm */,
+			);
+			path = osx;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1150,6 +1173,9 @@
 				88447BED140A900D0034453D /* SimpleMouseListener.cpp in Sources */,
 				88447BEE140A900D0034453D /* SimpleParticleSystem.cpp in Sources */,
 				88447C1E140A93F90034453D /* RenderComponent.cpp in Sources */,
+				88610D1A148C5F5100A50088 /* FifeAppDelegate.mm in Sources */,
+				88BF84D914E1F5D4005037EC /* OsxKeyConverter.mm in Sources */,
+				88BF86C814E6E359005037EC /* FpsCameraController.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

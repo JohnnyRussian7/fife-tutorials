@@ -1,5 +1,5 @@
 /**********************************************************************
- *	Filename: FifeAppDelegate.h
+ *	Filename: FpsCameraController.h
  *	
  *	Copyright (C) 2011, FIFE team
  *	http://www.fifengine.net
@@ -19,22 +19,31 @@
  *	You should have received a copy of the GNU Lesser General Public
  *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
  ***********************************************************************/
-#ifndef FIFEAPPDELEGATE_H_
-#define FIFEAPPDELEGATE_H_
+#ifndef FPSCAMERACONTROLLER_H_
+#define FPSCAMERACONTROLLER_H_
 
-#import <Cocoa/Cocoa.h>
+#include "../Fife.h"
 
-class Engine;
-class FpsCameraController;
-
-@interface FifeAppDelegate : NSObject {
-    Engine* m_engine;
-    FpsCameraController* m_fpsCamera;
-}
-
--(void)applicationDidFinishLaunching:(NSNotification*)notification;
--(void)applicationWillTerminate:(NSNotification*)notification;
-
-@end
+class FpsCameraController
+{
+public:
+    FpsCameraController(SceneManager* sceneManager, Camera* camera=0);
+    ~FpsCameraController();
+    
+    Camera* GetCamera();
+    SceneNode* GetCameraSceneNode();
+    
+    void yaw(float amount);
+    void pitch(float amount);
+    void update();
+private:
+    SceneManager* m_sceneManager;
+    Camera* m_camera;
+    SceneNode* m_cameraNode;
+    bool m_ownsCamera;
+    float m_rotationX;
+    float m_rotationY;
+};
 
 #endif
+

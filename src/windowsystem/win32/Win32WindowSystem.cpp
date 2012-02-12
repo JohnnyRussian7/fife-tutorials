@@ -237,6 +237,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         MouseEvent event;
         event.SetXPos(static_cast<int32_t>(LOWORD(lParam)));
         event.SetYPos(static_cast<int32_t>(HIWORD(lParam)));
+            
+        // TODO - JLM - need to change these to relative once the
+        //              the calculation for relative coords is done
+        event.SetRelativeX(static_cast<int32_t>(LOWORD(lParam)));
+        event.SetRelativeY(static_cast<int32_t>(HIWORD(lParam)));
 
         WPARAM mouseState = wParam;
         if (message == WM_MOUSEWHEEL)

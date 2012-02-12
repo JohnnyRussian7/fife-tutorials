@@ -47,6 +47,8 @@ public:
     virtual MouseEventType::Enum GetEventType() const = 0;
     virtual int32_t GetXPos() const = 0;
     virtual int32_t GetYPos() const = 0;
+    virtual int32_t GetRelativeX() const = 0;
+    virtual int32_t GetRelativeY() const = 0;
     virtual float GetWheelDelta() const = 0;
     virtual bool IsButtonPressed(MouseButtons::Enum button) const = 0;
     virtual bool IsModifierEnabled(MouseModifiers::Enum modifier) const = 0;

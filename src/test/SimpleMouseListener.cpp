@@ -22,8 +22,8 @@
 
 #include "SimpleMouseListener.h"
 
-SimpleMouseListener::SimpleMouseListener(Camera* cam) 
-: m_name("SimpleMouseListener"), m_cam(cam), m_lastX(0), m_lastY(0), m_initialized(false)
+SimpleMouseListener::SimpleMouseListener(const FpsCameraController& fpsCamera) 
+: m_name("SimpleMouseListener"), m_fpsCamera(fpsCamera), m_lastX(0), m_lastY(0), m_initialized(false)
 { 
 
 }
@@ -35,18 +35,20 @@ const std::string& SimpleMouseListener::GetName()
 
 bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event) 
 {
-    float yawAmount = (event.GetXPos() - m_lastX) * 0.015;
-    float pitchAmount = (event.GetYPos() - m_lastY) * 0.015;
-
-    //Quaternion test = FromEuler(pitchAmount, yawAmount, 0);
+    //float yawAmount = (event.GetXPos() - m_lastX) * 0.015;
+    //float pitchAmount = (event.GetYPos() - m_lastY) * 0.015;
+    float yaw = event.GetRelativeX() * 0.013;
+    float pitch = event.GetRelativeY() * 0.013;
     
     if  (m_initialized)
     {
         //m_cam->Rotate(test);
-        m_cam->Yaw(yawAmount);
-        m_cam->Pitch(pitchAmount);
-
-        std::cout << "relative pos: " << "(" << (event.GetYPos() - m_lastY) << "," << (event.GetXPos() - m_lastX) << ")" << std::endl;
+        //m_cam->Yaw(yawAmount);
+        //m_cam->Pitch(pitchAmount);
+        m_fpsCamera.yaw(yaw);
+        m_fpsCamera.pitch(pitch);
+        m_fpsCamera.update();
+        std::cout << "yaw: " << yaw << "\t\t" << "pitch:" << pitch << std::endl;
     }
 
     m_lastX = event.GetXPos();
@@ -80,7 +82,7 @@ bool SimpleMouseListener::OnMouseWheel(const IMouseEvent& event)
 {
     static float ZoomAmount = 10;
 
-    m_cam->Translate(Vector3(0.f, 0.f, -ZoomAmount*event.GetWheelDelta()));
+    //m_cam->Translate(Vector3(0.f, 0.f, -ZoomAmount*event.GetWheelDelta()));
 
     return true;
 }

@@ -37,7 +37,7 @@ namespace
 
 Frustum::Frustum()
 : m_sides(FrustumPlanes::Max, Plane()), m_fov(Pi/4.f), m_aspectRatio(DefaultAspectRatio), 
-m_nearDistance(DefaultNearDistance), m_farDistance(DefaultFarDistance)
+m_nearDistance(DefaultNearDistance), m_farDistance(DefaultFarDistance), m_needsUpdate(true)
 {
     // mark updated needed
     MarkDirty();

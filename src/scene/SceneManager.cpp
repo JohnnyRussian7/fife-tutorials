@@ -61,6 +61,17 @@ Camera* SceneManager::CreateCamera(const char* name, const Vector3& position, co
     return new Camera(name, position, orientation);
 }
 
+void SceneManager::DestroyCamera(Camera* camera)
+{
+    if (m_camera == camera)
+    {
+        m_camera = 0;
+    }
+    
+    delete camera;
+    camera = 0;
+}
+
 void SceneManager::AddCamera(Camera* camera)
 {
 	m_camera = camera;

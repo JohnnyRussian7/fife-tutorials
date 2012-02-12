@@ -29,13 +29,13 @@ void CreateSimpleParticleSystem(Engine& engine)
     SceneManager* sceneManager = engine.GetSceneManager();
 
     // setup a simple camera
-    Camera* camera = sceneManager->CreateCamera();
-    SceneNode* cameraNode = sceneManager->CreateSceneNode("camera");
-    cameraNode->AddEntity(camera);
-    cameraNode->Translate(0, 0, 500);
-    camera->LookAt(0, 0, 0);
-    sceneManager->AddCamera(camera);
-    sceneManager->GetRootSceneNode()->AddChild(cameraNode);
+    //Camera* camera = sceneManager->CreateCamera();
+    //SceneNode* cameraNode = sceneManager->CreateSceneNode("camera");
+    //cameraNode->AddEntity(camera);
+    //cameraNode->Translate(0, 0, 500);
+    //camera->LookAt(0, 0, 0);
+    //sceneManager->AddCamera(camera);
+    //sceneManager->GetRootSceneNode()->AddChild(cameraNode);
 
     //ParticleEmitter* emitter = new ParticleEmitter(2, 5, 40, 40, 1500, 1500, Color(1, 1, 102/255), Color::Green(), AxisAlignedBoundingBox(Vector3::Zero(), Vector3(200, 200, 200)));
     ParticleEmitter* emitter = new ParticleEmitter(40, 60, 2, 8, 1000, 2000, Vector3(0, 0.05, 0), Vector3(0, 0.40, 0), Color::White(), Color::White(), AxisAlignedBoundingBox(Vector3::Zero(), Vector3(10, 0, 10)));

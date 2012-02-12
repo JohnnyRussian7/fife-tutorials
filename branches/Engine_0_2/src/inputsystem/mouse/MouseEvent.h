@@ -33,8 +33,10 @@ public:
     virtual ~MouseEvent();
 
     void SetEventType(MouseEventType::Enum type);
-    void SetXPos(uint32_t pos);
-    void SetYPos(uint32_t pos);
+    void SetXPos(int32_t pos);
+    void SetYPos(int32_t pos);
+    void SetRelativeX(int32_t xRel);
+    void SetRelativeY(int32_t yRel);
     void SetWheelDelta(float wheelDelta);
     void SetButtonPressed(MouseButtons::Enum button);
     void SetModifier(MouseModifiers::Enum modifier);
@@ -42,6 +44,8 @@ public:
     virtual MouseEventType::Enum GetEventType() const;
     virtual int32_t GetXPos() const;
     virtual int32_t GetYPos() const;
+    virtual int32_t GetRelativeX() const;
+    virtual int32_t GetRelativeY() const;
     virtual float GetWheelDelta() const;
     virtual bool IsButtonPressed(MouseButtons::Enum button) const;
     virtual bool IsModifierEnabled(MouseModifiers::Enum modifier) const;
@@ -50,6 +54,8 @@ private:
     MouseEventType::Enum m_eventType;
     int32_t m_xPos;
     int32_t m_yPos;
+    int32_t m_xRel;
+    int32_t m_yRel;
     float m_wheelDelta;
     uint32_t m_buttonStates;
     uint32_t m_modifierStates;

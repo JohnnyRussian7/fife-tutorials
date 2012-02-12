@@ -72,6 +72,7 @@ public:
     Camera* CreateCamera(const char* name = 0, 
         const Vector3& position=Vector3::Zero(), 
         const Quaternion& orientation=Quaternion::Identity());
+    void DestroyCamera(Camera* camera);
 
     void AddCamera(Camera* camera);
     Camera* GetCamera() const;

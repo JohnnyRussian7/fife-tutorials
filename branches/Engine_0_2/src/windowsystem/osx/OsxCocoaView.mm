@@ -120,6 +120,13 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
         [[NSRunLoop currentRunLoop] addTimer:m_renderTimer forMode:NSDefaultRunLoopMode];
         [[NSRunLoop currentRunLoop] addTimer:m_renderTimer forMode:NSModalPanelRunLoopMode];
 #endif
+        
+        // add ourself as a listener for the terminate signal so we have a chance
+        // to shut ourselves down properly
+        [[NSNotificationCenter defaultCenter] addObserver:self 
+                                                 selector:@selector(applicationWillTerminate:)
+                                                     name:NSApplicationWillTerminateNotification
+                                                   object:nil];
     }
     
     return self;
@@ -140,6 +147,8 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
     event.SetEventType(MouseEventType::MouseClick);
     event.SetXPos(location.x);
     event.SetYPos(location.y);
+    event.SetRelativeX([mouseEvent deltaX]);
+    event.SetRelativeY([mouseEvent deltaY]);
     
     if ([mouseEvent modifierFlags] & NSControlKeyMask)
     {
@@ -173,6 +182,8 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
     event.SetEventType(MouseEventType::MouseMoved);
     event.SetXPos(location.x);
     event.SetYPos(location.y);
+    event.SetRelativeX([mouseEvent deltaX]);
+    event.SetRelativeY([mouseEvent deltaY]);
     
     if ([mouseEvent modifierFlags] & NSControlKeyMask)
     {
@@ -283,14 +294,27 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
     [self renderFrame];
 }
 
+-(void)applicationWillTerminate:(NSNotification*)notification
+{
+#if defined(DISPLAY_LINK)
+    CVDisplayLinkStop(displayLink);
+#endif
+}
+
 - (void)dealloc
 {
+    // removes ourselves as a listener for events
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 #if defined(DISPLAY_LINK)
     CVDisplayLinkRelease(displayLink);
 #else
     [m_renderTimer setFireDate:[NSDate distantFuture]];
     [m_renderTimer invalidate];
 #endif
+    
+    [m_context release];
+    [m_pixelFormat release];
     
     [super dealloc];
 }

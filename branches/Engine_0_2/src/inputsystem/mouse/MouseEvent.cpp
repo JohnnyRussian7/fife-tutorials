@@ -25,7 +25,7 @@
 
 MouseEvent::MouseEvent()
 : m_eventType(MouseEventType::Invalid), m_xPos(0), m_yPos(0), 
-  m_wheelDelta(0.f), m_buttonStates(0), m_modifierStates(0)
+  m_xRel(0), m_yRel(0), m_wheelDelta(0.f), m_buttonStates(0), m_modifierStates(0)
 {
 
 }
@@ -40,14 +40,24 @@ void MouseEvent::SetEventType(MouseEventType::Enum type)
     m_eventType = type;
 }
 
-void MouseEvent::SetXPos(uint32_t pos)
+void MouseEvent::SetXPos(int32_t pos)
 {
     m_xPos = pos;
 }
 
-void MouseEvent::SetYPos(uint32_t pos)
+void MouseEvent::SetYPos(int32_t pos)
 {
     m_yPos = pos;
+}
+
+void MouseEvent::SetRelativeX(int32_t xRel)
+{
+    m_xRel = xRel;
+}
+
+void MouseEvent::SetRelativeY(int32_t yRel)
+{
+    m_yRel = yRel;
 }
 
 void MouseEvent::SetWheelDelta(float wheelDelta)
@@ -78,6 +88,16 @@ int32_t MouseEvent::GetXPos() const
 int32_t MouseEvent::GetYPos() const
 {
     return m_yPos;
+}
+
+int32_t MouseEvent::GetRelativeX() const
+{
+    return m_xRel;
+}
+
+int32_t MouseEvent::GetRelativeY() const
+{
+    return m_yRel;
 }
 
 float MouseEvent::GetWheelDelta() const

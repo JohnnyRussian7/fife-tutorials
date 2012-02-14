@@ -37,11 +37,13 @@ FpsCameraController::FpsCameraController(SceneManager* sceneManager, Camera* cam
     }
     
     m_cameraNode = m_sceneManager->CreateSceneNode("CameraNode");
-    m_cameraNode->AddEntity(m_camera);
-    m_cameraNode->Translate(0, 0, 500);
-    m_camera->LookAt(0, 0, 0);
-    m_sceneManager->AddCamera(m_camera);
     m_sceneManager->GetRootSceneNode()->AddChild(m_cameraNode);
+    m_cameraNode->SetPosition(0, 0, 50);
+    m_camera->LookAt(0, 0, 0);
+    m_pitchNode = m_sceneManager->CreateSceneNode("PitchNode");
+    m_cameraNode->AddChild(m_pitchNode);
+    m_pitchNode->AddEntity(m_camera);
+    m_sceneManager->AddCamera(m_camera);
 }
 
 FpsCameraController::~FpsCameraController()
@@ -52,6 +54,7 @@ FpsCameraController::~FpsCameraController()
         m_camera = 0;
     }
     
+    m_sceneManager->DestroySceneNode(m_pitchNode);
     m_sceneManager->DestroySceneNode(m_cameraNode);
 }
 
@@ -67,19 +70,35 @@ SceneNode* FpsCameraController::GetCameraSceneNode()
 
 void FpsCameraController::yaw(float amount)
 {
-    m_rotationX += DegToRad(amount);
+    m_rotationX = DegToRad(amount);
+    m_cameraNode->Yaw(m_rotationX);
 }
 
 void FpsCameraController::pitch(float amount)
 {
-    m_rotationY += DegToRad(amount);
+    m_rotationY = DegToRad(amount);
+    m_pitchNode->Pitch(m_rotationY);
+}
+
+void FpsCameraController::move(const Vector3& translate)
+{
+    //m_cameraNode->SetPosition(m_cameraNode->GetPosition() + translate);
+    
+    if (translate.y != 0.f)
+    {
+        m_cameraNode->SetPosition(Vector3(0.f, translate.y, 0.f));
+    }
+    
+    Vector3 xzTranslate(translate.x, 0.f, translate.z);
+    
+    m_cameraNode->Translate(m_cameraNode->GetOrientation() * m_pitchNode->GetOrientation()  * xzTranslate);
 }
 
 void FpsCameraController::update()
 {
-    Quaternion pitch = FromAxisAngle(Vector3::UnitX(), m_rotationY);
-    Quaternion yaw = FromAxisAngle(Vector3::UnitY(), m_rotationX);
+    //Quaternion pitch = FromAxisAngle(Vector3::UnitX(), m_rotationY);
+    //Quaternion yaw = FromAxisAngle(Vector3::UnitY(), m_rotationX);
     
-    m_cameraNode->SetOrientation(yaw * pitch);
+    //m_cameraNode->SetOrientation(yaw * pitch);
 }
 

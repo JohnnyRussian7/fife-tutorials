@@ -131,4 +131,6 @@ Vector3 operator* (const Matrix4& mat, const Vector3& p);
 Matrix4 Transpose(const Matrix4& mat);
 void TransposeRef(Matrix4& mat);
 
+std::ostream& operator<<(std::ostream &os, const Matrix4& m);
+
 #endif

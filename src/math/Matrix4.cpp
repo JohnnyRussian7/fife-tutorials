@@ -113,3 +113,19 @@ void TransposeRef(Matrix4& mat)
     mat[6] = mat[9];
     mat[9] = temp;
 }
+
+std::ostream& operator<<(std::ostream &os, const Matrix4& m)
+{
+    os  << std::setprecision(3) 
+        << std::fixed
+        << m[0] << std::setw(10) << m[4] << std::setw(10) << m[8] << std::setw(10) << m[12]    // row 1
+        << std::endl
+        << m[1] << std::setw(10) << m[5] << std::setw(10) << m[9] << std::setw(10) << m[13]    // row 2
+        << std::endl
+        << m[2] << std::setw(10) << m[6] << std::setw(10) << m[10] << std::setw(10) << m[14]   // row 3
+        << std::endl
+        << m[3] << std::setw(10) << m[7] << std::setw(10) << m[11] << std::setw(10) << m[15]    // row 4
+        << std::endl;
+    
+    return os;
+}

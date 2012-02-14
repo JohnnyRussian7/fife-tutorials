@@ -420,22 +420,24 @@ Matrix4 SceneNode::GetTransform()
 {
     // performs lazy update of transform if needed
     // we do it here so it only gets updated if its actually used
-    if (m_updateTransform)
+    if (IsTransformDirty())
     {
         m_transform = MakeTransform(m_relativeScale, m_relativePosition, m_relativeOrientation);
         ResetTransformDirty();
+        
+        std::cout << "scene node transform:\n" << m_transform << std::endl;
     }
-
+    
     return m_transform;
 }
 
 void SceneNode::Translate(const Vector3& translation)
 {
     // translation with respect to parent
-    m_position += translation;
+    //m_position += translation;
 
     // translation with respect to local coordinates
-    // m_position += m_orientation * translation;
+    m_position += m_orientation * translation;
 
     // translation with respect to world coordinates
     //if (m_parent)
@@ -462,7 +464,7 @@ void SceneNode::Rotate(const Quaternion& rotation)
 
     // rotation in local space
     m_orientation = m_orientation * normRotation;
-
+    
     MarkDirty();
 }
 
@@ -502,10 +504,14 @@ void SceneNode::Update(uint32_t time)
     {
         if (m_parent)
         {
-            // update relative to parent
-            m_relativePosition = (m_parent->GetRelativeOrientation() * (m_parent->GetRelativeScale() * m_position)) + m_parent->GetRelativePosition();
             m_relativeOrientation = m_parent->GetRelativeOrientation() * m_orientation;
-            m_relativeScale = m_parent->GetRelativeScale() * m_scale;        
+            m_relativeScale = m_parent->GetRelativeScale() * m_scale; 
+            
+            // calculation relative to parent's position and scale
+            m_relativePosition = m_parent->GetRelativeOrientation() * (m_parent->GetRelativeScale() * m_position);
+            
+            // add to parent's relative position
+            m_relativePosition += m_parent->GetRelativePosition();
         }
         else
         {
@@ -585,7 +591,7 @@ void SceneNode::MarkTransformDirty(bool setChildren)
 
 void SceneNode::ResetTransformDirty(bool resetChildren)
 {
-    m_requiresUpdate = false;
+    m_updateTransform = false;
 
     if (resetChildren)
     {

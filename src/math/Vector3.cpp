@@ -108,3 +108,13 @@ Quaternion GetRotationTo(const Vector3& source, const Vector3& dest)
 	
 	return qnorm;
 }
+
+std::ostream& operator<<(std::ostream& os, const Vector3& v)
+{
+    os  << std::setprecision(3)
+        << std::fixed
+        << v.x << std::setw(10) << v.y << std::setw(10) << v.z
+        << std::endl;
+    
+    return os;
+}

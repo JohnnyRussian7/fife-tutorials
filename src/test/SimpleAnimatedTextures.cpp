@@ -28,12 +28,12 @@
 void CreateSimpleAnimatedTextures(Engine& engine)
 {
     SceneManager* sceneManager = engine.GetSceneManager();
-    Camera* camera = sceneManager->CreateCamera();
-    sceneManager->AddCamera(camera);
+    //Camera* camera = sceneManager->CreateCamera();
+    //sceneManager->AddCamera(camera);
 
-    SceneNode* camNode = sceneManager->CreateSceneNode("CamNode");
-    camNode->AddEntity(camera);
-    sceneManager->GetRootSceneNode()->AddChild(camNode);
+    //SceneNode* camNode = sceneManager->CreateSceneNode("CamNode");
+    //camNode->AddEntity(camera);
+    //sceneManager->GetRootSceneNode()->AddChild(camNode);
 
     BlendingMode blendMode;
     blendMode.SetEnabled(true);
@@ -41,8 +41,8 @@ void CreateSimpleAnimatedTextures(Engine& engine)
     blendMode.SetDestBlendMode(DestBlendMode::OneMinusSrcAlpha);
     sceneManager->GetRootSceneNode()->SetBlendingMode(blendMode);
 
-    camNode->Translate(Vector3(0, 0, 500));
-    camera->LookAt(Vector3(0, 0, 0));
+    //camNode->Translate(Vector3(0, 0, 50));
+    //camera->LookAt(Vector3(0, 0, 0));
     //camera->SetFixedYawAxis(true);
 
     IEntity* e1 = sceneManager->CreateEntity("e1");

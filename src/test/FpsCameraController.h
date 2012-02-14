@@ -35,11 +35,13 @@ public:
     
     void yaw(float amount);
     void pitch(float amount);
+    void move(const Vector3& translate);
     void update();
 private:
     SceneManager* m_sceneManager;
     Camera* m_camera;
     SceneNode* m_cameraNode;
+    SceneNode* m_pitchNode;
     bool m_ownsCamera;
     float m_rotationX;
     float m_rotationY;

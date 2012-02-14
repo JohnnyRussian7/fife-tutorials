@@ -41,8 +41,6 @@ private:
     FpsCameraController m_fpsCamera;
     float m_yawAngle;
     std::string m_name;
-    int32_t m_lastX;
-    int32_t m_lastY;
     bool m_initialized;
 };
 

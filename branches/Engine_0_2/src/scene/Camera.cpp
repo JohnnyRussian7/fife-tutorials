@@ -44,7 +44,8 @@ namespace
 }
 
 Camera::Camera(const char* name, const Vector3& position, const Quaternion& orientation)
-: m_orientation(orientation), m_viewMatrix(Matrix4::Identity()), 
+: m_orientation(orientation), m_relativeOrientation(Quaternion::Identity()), 
+  m_relativePosition(Vector3::Zero()), m_viewMatrix(Matrix4::Identity()), 
   m_needsUpdate(true), m_fixedYaw(false), m_fixedYawAxis(Vector3::UnitY())
 {
     if (name)
@@ -119,7 +120,7 @@ void Camera::Translate(const Vector3& translation)
 	// translate in world space
 	//m_position += translation;
 
-	// TODO - implement translate in local space, using algorithm below 
+	// translate in local space 
 	m_position += m_orientation * translation;
 
     MarkDirty();
@@ -148,10 +149,7 @@ void Camera::LookAt(const Vector3& target)
 
     if (m_fixedYaw)
     {
-        // calculate right and up vectors from the fixed yaw axis
-        Vector3 fixYawAxis = Vector3::UnitY();
-
-        Vector3 right = Normalize(Cross(fixYawAxis, normDirection));
+        Vector3 right = Normalize(Cross(m_fixedYawAxis, normDirection));
         Vector3 up = Normalize(Cross(normDirection, right));
 
         orientation = FromAxes(right, up, normDirection);
@@ -276,12 +274,27 @@ void Camera::UpdateView()
 */
     
     // this causes the camera to rotate about the origin
-    Matrix4 rotMatrix = ToRotationMatrix(m_orientation);
-    Vector3 translation = -rotMatrix * m_position;
+    Matrix4 rotMatrix = ToRotationMatrix(m_relativeOrientation);
+    TransposeRef(rotMatrix);
+    
+    std::cout << "rotation matrix\n" << rotMatrix << std::endl;
+
+    Matrix4 temp = -rotMatrix;
+    temp[3] = 0;
+    temp[7] = 0;
+    temp[11] = 0;
+    temp[15] = 1;
+    Vector3 translation = temp * m_relativePosition;
+    std::cout  << "translation vector\n" << translation << std::endl;
+    
+    //Vector3 translation = -rotMatrix * m_position;
     rotMatrix[12] = translation.x;
     rotMatrix[13] = translation.y;
     rotMatrix[14] = translation.z;
+    //m_viewMatrix = Matrix4::Identity();
     m_viewMatrix = rotMatrix;
+    
+    std::cout << "view matrix\n" << m_viewMatrix << std::endl;
 
 //     Vector3 xAxis = Vector3(conjRotMatrix[0], conjRotMatrix[1], conjRotMatrix[2]);
 //     Vector3 yAxis = Vector3(conjRotMatrix[4], conjRotMatrix[5], conjRotMatrix[6]);
@@ -314,8 +327,8 @@ void Camera::Update(uint32_t /*time*/)
 {
     if (m_parent && m_parent->IsDirty())
     {
-        m_orientation = m_parent->GetRelativeOrientation() * m_orientation;
-        m_position = (m_parent->GetRelativeOrientation() * m_position) + m_parent->GetRelativePosition();
+        m_relativeOrientation = m_parent->GetRelativeOrientation() * m_orientation;
+        m_relativePosition = (m_parent->GetRelativeOrientation() * m_position) + m_parent->GetRelativePosition();
 
         MarkDirty();
     }

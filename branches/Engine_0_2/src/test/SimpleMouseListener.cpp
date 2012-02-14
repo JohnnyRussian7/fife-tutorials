@@ -23,7 +23,7 @@
 #include "SimpleMouseListener.h"
 
 SimpleMouseListener::SimpleMouseListener(const FpsCameraController& fpsCamera) 
-: m_name("SimpleMouseListener"), m_fpsCamera(fpsCamera), m_lastX(0), m_lastY(0), m_initialized(false)
+: m_name("SimpleMouseListener"), m_fpsCamera(fpsCamera), m_initialized(false)
 { 
 
 }
@@ -48,12 +48,9 @@ bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event)
         m_fpsCamera.yaw(yaw);
         m_fpsCamera.pitch(pitch);
         m_fpsCamera.update();
-        std::cout << "yaw: " << yaw << "\t\t" << "pitch:" << pitch << std::endl;
+        //std::cout << "yaw: " << yaw << "\t\t" << "pitch:" << pitch << std::endl;
     }
-
-    m_lastX = event.GetXPos();
-    m_lastY = event.GetYPos();
-
+    
     m_initialized = true;
 
     if (event.IsButtonPressed(MouseButtons::LeftButton))

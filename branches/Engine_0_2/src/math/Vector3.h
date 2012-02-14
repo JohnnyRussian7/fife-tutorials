@@ -151,4 +151,6 @@ Vector3 Cross(const Vector3& vector1, const Vector3& vector2);
 Quaternion GetRotationTo(const Vector3& source, const Vector3& dest);
 
 
+std::ostream& operator<<(std::ostream& os, const Vector3& v);
+
 #endif

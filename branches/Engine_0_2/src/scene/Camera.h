@@ -79,6 +79,8 @@ private:
 
 private:
 	Quaternion m_orientation;
+    Quaternion m_relativeOrientation;
+    Vector3 m_relativePosition;
     Matrix4 m_viewMatrix;
     Frustum m_frustum;
     bool m_needsUpdate;

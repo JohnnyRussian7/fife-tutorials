@@ -38,18 +38,17 @@
 -(void)applicationDidFinishLaunching:(NSNotification*)notification
 {
     EngineSettings settings;
-    settings.renderSystemSettings.useVbo = false;
+    settings.renderSystemSettings.useVbo = true;
 	m_engine = new Engine(settings);
     
     m_fpsCamera = new FpsCameraController(m_engine->GetSceneManager());
     
-    //CreateSimpleAnimatedTextures(*m_engine);
+    CreateSimpleAnimatedTextures(*m_engine);
     //CreateSimpleStaticTextures(*m_engine);
     //CreateSimpleIsometricView(*m_engine);
-    CreateSimpleParticleSystem(*m_engine);
-    
-    Camera* camera = m_engine->GetSceneManager()->GetCamera();
-    SimpleKeyListener* keyListener = new SimpleKeyListener(*m_engine, camera);
+    //CreateSimpleParticleSystem(*m_engine);
+
+    SimpleKeyListener* keyListener = new SimpleKeyListener(*m_engine, *m_fpsCamera);
     SimpleMouseListener* mouseListener = new SimpleMouseListener(*m_fpsCamera);
     m_engine->GetInputSystem()->AddKeyListener(keyListener);
     m_engine->GetInputSystem()->AddMouseListener(mouseListener);

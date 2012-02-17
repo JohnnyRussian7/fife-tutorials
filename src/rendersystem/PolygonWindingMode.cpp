@@ -26,11 +26,13 @@
 PolygonWindingMode::PolygonWindingMode()
 : m_windingType(WindingType::CounterClockwise)
 {
-
+    
 }
 
 void PolygonWindingMode::SetWindingType(WindingType::Enum windingType)
 {
+    assert(WindingType::IsValid(windingType));
+    
     m_windingType = windingType;
 }
 

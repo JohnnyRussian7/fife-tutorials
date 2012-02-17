@@ -91,28 +91,49 @@ bool SimpleKeyListener::OnKeyReleased(const IKeyEvent& event)
         if (m_cullMode.GetCullType() != CullType::Front)
         {
             m_cullMode.SetCullType(CullType::Front);
+            std::cout << "Front face culling enabled" << std::endl;
         }
         else
         {
             m_cullMode.SetCullType(CullType::Back);
+            std::cout << "Back face culling enabled" << std::endl;
         }
         
         m_cullMode.SetEnabled(true);
         m_engine.GetSceneManager()->GetRootSceneNode()->SetCullMode(m_cullMode);
     }
-    else if (event.GetKeyCode() == KeyCodes::KeyP)
+    else if (event.GetKeyCode() == KeyCodes::KeyF)
     {
         // toggle between wireframe and fill
         if (m_fillMode.GetFillType() != FillType::Fill)
         {
             m_fillMode.SetFillType(FillType::Fill);
-            m_engine.GetSceneManager()->GetRootSceneNode()->SetFillMode(m_fillMode);
+            std::cout << "Fill mode enabled" << std::endl;
         }
         else
         {
             m_fillMode.SetFillType(FillType::Line);
-            m_engine.GetSceneManager()->GetRootSceneNode()->SetFillMode(m_fillMode);
+            std::cout << "Wireframe mode enabled" << std::endl;
+            
         }
+        
+        m_engine.GetSceneManager()->GetRootSceneNode()->SetFillMode(m_fillMode);
+    }
+    else if (event.GetKeyCode() == KeyCodes::KeyP)
+    {
+        // toggle between CCW and CW winding
+        if (m_windingMode.GetWindingType() == WindingType::CounterClockwise)
+        {
+            m_windingMode.SetWindingType(WindingType::Clockwise);
+            std::cout << "Clockwise winding enabled" << std::endl;
+        }
+        else
+        {
+            m_windingMode.SetWindingType(WindingType::CounterClockwise);
+            std::cout << "Counter clockwise winding enabled" << std::endl;
+        }
+        
+        m_engine.GetSceneManager()->GetRootSceneNode()->SetPolygonWindingMode(m_windingMode);
     }
 
     return true;

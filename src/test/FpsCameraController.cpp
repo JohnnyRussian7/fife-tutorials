@@ -23,8 +23,9 @@
 
 #include "FpsCameraController.h"
 
-FpsCameraController::FpsCameraController(SceneManager* sceneManager, Camera* camera)
-: m_sceneManager(sceneManager), m_ownsCamera(false), m_rotationX(0.f), m_rotationY(0.f)
+FpsCameraController::FpsCameraController(SceneManager* sceneManager, float sensitivity, Camera* camera)
+: m_sceneManager(sceneManager), m_ownsCamera(false), m_sensitivity(sensitivity),
+  m_rotationX(0.f), m_rotationY(0.f)
 {
     if (camera)
     {
@@ -70,13 +71,13 @@ SceneNode* FpsCameraController::GetCameraSceneNode()
 
 void FpsCameraController::yaw(float amount)
 {
-    m_rotationX = DegToRad(amount);
+    m_rotationX = DegToRad(amount) * m_sensitivity;
     m_cameraNode->Yaw(m_rotationX);
 }
 
 void FpsCameraController::pitch(float amount)
 {
-    m_rotationY = DegToRad(amount);
+    m_rotationY = DegToRad(amount) * m_sensitivity;
     m_pitchNode->Pitch(m_rotationY);
 }
 
@@ -86,12 +87,12 @@ void FpsCameraController::move(const Vector3& translate)
     
     if (translate.y != 0.f)
     {
-        m_cameraNode->SetPosition(Vector3(0.f, translate.y, 0.f));
+        //m_cameraNode->SetPosition(Vector3(0.f, translate.y, 0.f));
     }
     
     Vector3 xzTranslate(translate.x, 0.f, translate.z);
     
-    m_cameraNode->Translate(m_cameraNode->GetOrientation() * m_pitchNode->GetOrientation()  * xzTranslate);
+    m_cameraNode->Translate(translate);
 }
 
 void FpsCameraController::update()

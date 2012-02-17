@@ -139,6 +139,7 @@ Vector3 operator-(const Vector3& vector1, const Vector3& vector2);
 Vector3 operator*(const Vector3& vector, float value);
 Vector3 operator*(const Vector3& vector1, const Vector3& vector2);
 Vector3 operator/(const Vector3& vector, float value);
+Vector3 operator/(const Vector3& v1, const Vector3& v2);
 
 // free functions for vector math
 float Magnitude(const Vector3& vector);

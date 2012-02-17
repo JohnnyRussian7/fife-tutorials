@@ -424,8 +424,6 @@ Matrix4 SceneNode::GetTransform()
     {
         m_transform = MakeTransform(m_relativeScale, m_relativePosition, m_relativeOrientation);
         ResetTransformDirty();
-        
-        std::cout << "scene node transform:\n" << m_transform << std::endl;
     }
     
     return m_transform;
@@ -434,16 +432,16 @@ Matrix4 SceneNode::GetTransform()
 void SceneNode::Translate(const Vector3& translation)
 {
     // translation with respect to parent
-    //m_position += translation;
+    m_position += translation;
 
     // translation with respect to local coordinates
-    m_position += m_orientation * translation;
+    //m_position += m_orientation * translation;
 
     // translation with respect to world coordinates
     //if (m_parent)
     //{
-    //    // relative to parent
-    //    m_position += ElemDiv((Inverse(m_parent->GetRelativeOrientation()) * translation), m_parent->GetRelativeScale());
+        // relative to parent
+    //    m_position += (Inverse(m_parent->GetRelativeOrientation()) * translation) / m_parent->GetRelativeScale();
     //}
     //else
     //{

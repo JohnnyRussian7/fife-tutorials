@@ -44,6 +44,7 @@ private:
     float m_zTrans;
     FillMode m_fillMode;
     CullMode m_cullMode;
+    PolygonWindingMode m_windingMode;
 };
 
 #endif

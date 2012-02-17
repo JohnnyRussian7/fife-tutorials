@@ -198,11 +198,11 @@ void Billboard::Update()
     // 4 vertices per billboard
     // split into 2 triangles with 
     // vertex 1 and 2 shared
-    //  (0) ______ (1)
-    //     |     /|       
-    //     |    / |
-    //     |  /   |
-    //  (2)|/_____| (3)
+    //  (2) ______ (3)
+    //     |\     |       
+    //     |  \   |
+    //     |   \  |
+    //  (0)|_____\| (1)
 
     // first vertex (0)
     Vector3 position = m_position + Vector3(-halfWidth, halfHeight, 0);
@@ -228,11 +228,11 @@ void Billboard::GenerateBuffers()
     // 4 vertices per billboard
     // split into 2 triangles with 
     // vertex 1 and 2 shared
-    //  (0) ______ (1)
-    //     |     /|       
-    //     |    / |
-    //     |  /   |
-    //  (2)|/_____| (3)
+    //  (2) ______ (3)
+    //     |\     |       
+    //     |  \   |
+    //     |   \  |
+    //  (0)|_____\| (1)
     
     RenderComponent* renderComponent = 0;
     if (m_owner)
@@ -258,20 +258,20 @@ void Billboard::GenerateBuffers()
         vertices.reserve(GetNumberOfVertices());
 
         // first vertex (0)
-        Vector3 position = m_position + Vector3(-halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
-
-        // second vertex (1)
-        position = m_position + Vector3(halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
-
-        // third vertex (2)
-        position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
+        Vector3 position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
         vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
 
-        // fourth vertex (3)
+        // second vertex (1)
         position = m_position + Vector3(halfWidth, -halfHeight, 0); 
         vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
+
+        // third vertex (2)
+        position = m_position + Vector3(-halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
+
+        // fourth vertex (3)
+        position = m_position + Vector3(halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));        
 
         vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
 
@@ -292,13 +292,11 @@ void Billboard::GenerateBuffers()
 
     if (indexBuffer)
     {
-        uint16_t indexData[6];
+        uint16_t indexData[4];
         indexData[0] = uint16_t(0);
-        indexData[1] = uint16_t(2);
-        indexData[2] = uint16_t(1);
-        indexData[3] = uint16_t(1);
-        indexData[4] = uint16_t(2);
-        indexData[5] = uint16_t(3);
+        indexData[1] = uint16_t(1);
+        indexData[2] = uint16_t(2);
+        indexData[3] = uint16_t(3);
 
         indexBuffer->WriteData(indexData, 6, 0);
 
@@ -332,21 +330,21 @@ void Billboard::UpdateBuffers()
         vertices.reserve(GetNumberOfVertices());
 
         // first vertex (0)
-        Vector3 position = m_position + Vector3(-halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
-
-        // second vertex (1)
-        position = m_position + Vector3(halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
-
-        // third vertex (2)
-        position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
+        Vector3 position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
         vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
-
-        // fourth vertex (3)
+        
+        // second vertex (1)
         position = m_position + Vector3(halfWidth, -halfHeight, 0); 
         vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
-
+        
+        // third vertex (2)
+        position = m_position + Vector3(-halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
+        
+        // fourth vertex (3)
+        position = m_position + Vector3(halfWidth, halfHeight, 0);
+        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));        
+        
         vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
 
         if (m_owner)

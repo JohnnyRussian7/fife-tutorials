@@ -50,6 +50,11 @@ Vector3 operator/(const Vector3& vector, float value)
 	return Vector3(vector.x*inverseValue, vector.y*inverseValue, vector.z*inverseValue);
 }
 
+Vector3 operator/(const Vector3& v1, const Vector3& v2)
+{
+    return Vector3(v1.x/v2.x, v1.y/v2.y, v1.z/v2.z);
+}
+
 float Magnitude(const Vector3& vector)
 {
 	return std::sqrt(vector.x*vector.x + vector.y*vector.y + vector.z*vector.z);

@@ -37,8 +37,8 @@ bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event)
 {
     //float yawAmount = (event.GetXPos() - m_lastX) * 0.015;
     //float pitchAmount = (event.GetYPos() - m_lastY) * 0.015;
-    float yaw = event.GetRelativeX() * 0.013;
-    float pitch = event.GetRelativeY() * 0.013;
+    float yaw = event.GetRelativeX();
+    float pitch = event.GetRelativeY();
     
     if  (m_initialized)
     {

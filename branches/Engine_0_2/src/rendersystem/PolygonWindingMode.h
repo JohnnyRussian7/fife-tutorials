@@ -27,8 +27,16 @@ struct WindingType
     enum Enum
     {
         Clockwise = 0,
-        CounterClockwise
+        CounterClockwise,
+        
+        Max,
+        Invalid = -1
     };
+    
+    static bool IsValid(Enum type)
+    {
+        return (type > Invalid && type < Max);
+    }
 };
 
 class PolygonWindingMode
@@ -39,7 +47,7 @@ public:
     //! constructor
     //!
     //! @note: 
-    //! default is counter-clockwise
+    //! default is to set to counter-clockwise
     //!***************************************************************
     PolygonWindingMode();
 

@@ -41,10 +41,6 @@ void CreateSimpleAnimatedTextures(Engine& engine)
     blendMode.SetDestBlendMode(DestBlendMode::OneMinusSrcAlpha);
     sceneManager->GetRootSceneNode()->SetBlendingMode(blendMode);
 
-    //camNode->Translate(Vector3(0, 0, 50));
-    //camera->LookAt(Vector3(0, 0, 0));
-    //camera->SetFixedYawAxis(true);
-
     IEntity* e1 = sceneManager->CreateEntity("e1");
     Visual* b1 = sceneManager->CreateBillboard(40, 40);
 
@@ -61,7 +57,6 @@ void CreateSimpleAnimatedTextures(Engine& engine)
     SceneNode* torchNode = sceneManager->CreateSceneNode("torch");
     torchNode->AddEntity(e1);
     sceneManager->GetRootSceneNode()->AddChild(torchNode);
-    torchNode->Translate(0, 0, 0);
 
     IEntity* e2 = sceneManager->CreateEntity("e2");
     Visual* b2 = sceneManager->CreateBillboard(40, 40);

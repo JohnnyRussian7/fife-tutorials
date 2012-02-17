@@ -22,6 +22,8 @@
 #ifndef SIMPLEISOMETRICVIEW_H_
 #define SIMPLEISOMETRICVIEW_H_
 
-void CreateSimpleIsometricView(Engine& engine);
+class FpsCameraController;
+
+void CreateSimpleIsometricView(Engine& engine, FpsCameraController& fpsCamera);
 
 #endif

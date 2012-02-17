@@ -27,7 +27,7 @@
 class FpsCameraController
 {
 public:
-    FpsCameraController(SceneManager* sceneManager, Camera* camera=0);
+    FpsCameraController(SceneManager* sceneManager, float sensitivity=0.1f, Camera* camera=0);
     ~FpsCameraController();
     
     Camera* GetCamera();
@@ -45,6 +45,7 @@ private:
     bool m_ownsCamera;
     float m_rotationX;
     float m_rotationY;
+    float m_sensitivity;
 };
 
 #endif

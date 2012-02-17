@@ -276,8 +276,6 @@ void Camera::UpdateView()
     // this causes the camera to rotate about the origin
     Matrix4 rotMatrix = ToRotationMatrix(m_relativeOrientation);
     TransposeRef(rotMatrix);
-    
-    std::cout << "rotation matrix\n" << rotMatrix << std::endl;
 
     Matrix4 temp = -rotMatrix;
     temp[3] = 0;
@@ -285,36 +283,12 @@ void Camera::UpdateView()
     temp[11] = 0;
     temp[15] = 1;
     Vector3 translation = temp * m_relativePosition;
-    std::cout  << "translation vector\n" << translation << std::endl;
     
     //Vector3 translation = -rotMatrix * m_position;
     rotMatrix[12] = translation.x;
     rotMatrix[13] = translation.y;
     rotMatrix[14] = translation.z;
-    //m_viewMatrix = Matrix4::Identity();
     m_viewMatrix = rotMatrix;
-    
-    std::cout << "view matrix\n" << m_viewMatrix << std::endl;
-
-//     Vector3 xAxis = Vector3(conjRotMatrix[0], conjRotMatrix[1], conjRotMatrix[2]);
-//     Vector3 yAxis = Vector3(conjRotMatrix[4], conjRotMatrix[5], conjRotMatrix[6]);
-//     Vector3 zAxis = Vector3(conjRotMatrix[8], conjRotMatrix[9], conjRotMatrix[10]);
-// 
-//     m_viewMatrix[12] = -Dot(xAxis, m_position);
-//     m_viewMatrix[13] = -Dot(yAxis, m_position);
-//     m_viewMatrix[14] = -Dot(zAxis, m_position);
-// 
-//     Matrix4 rotMatrix2 = ToRotationMatrix(m_orientation);
-//     Matrix4 transRotMatrix2 = Transpose(rotMatrix2);
-//     Vector3 translation2 = -transRotMatrix2 * m_position;
-// 
-//     rotMatrix2[12] = translation2.x;
-//     rotMatrix2[13] = translation2.y;
-//     rotMatrix2[14] = translation2.z;
-//     rotMatrix2[15] = 1.f;
-// 
-//     Matrix4 tempViewMatrix = Matrix4::Identity();
-//     tempViewMatrix = rotMatrix2;
 
     // update frustum
     m_frustum.Update(m_viewMatrix);

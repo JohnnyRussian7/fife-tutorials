@@ -209,6 +209,18 @@ public:
         }
     }
     
+    void ResizeImpl(uint32_t width, uint32_t height)
+    {
+        // alert listeners of display update
+        for (Listeners::iterator iter = m_listeners.begin(); iter != m_listeners.end(); ++iter)
+        {
+            if (*iter)
+            {
+                (*iter)->OnResize(width, height);
+            }
+        }
+    }
+    
 private:
     WindowSystemSettings m_settings;
     bool m_externalWindow;
@@ -347,5 +359,10 @@ void OsxWindowSystem::SetInputSystem(IInputSystem* inputSystem)
 void OsxWindowSystem::OnDisplayUpdate()
 {
     m_impl->OnDisplayUpdate();
+}
+
+void OsxWindowSystem::ResizeImpl(uint32_t width, uint32_t height)
+{
+    m_impl->ResizeImpl(width, height);
 }
 

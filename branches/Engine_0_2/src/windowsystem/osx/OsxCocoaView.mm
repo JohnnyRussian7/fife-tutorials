@@ -126,7 +126,17 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
         [[NSNotificationCenter defaultCenter] addObserver:self 
                                                  selector:@selector(applicationWillTerminate:)
                                                      name:NSApplicationWillTerminateNotification
+                                                     object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                selector:@selector(reshape:)
+                                                     name:NSViewGlobalFrameDidChangeNotification
+                                                     object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(windowResized:) name:NSWindowDidResizeNotification
                                                    object:nil];
+        
     }
     
     return self;
@@ -289,9 +299,32 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
     
 }
 
-- (void)drawRect:(NSRect)rect
+-(void)drawRect:(NSRect)rect
 {    
     [self renderFrame];
+}
+
+-(void)windowResized:(NSNotification *)notification
+{
+    NSSize size = [[self window] frame].size;
+    
+    m_windowSystem->ResizeImpl(uint32_t(size.width), uint32_t(size.height));
+}
+
+-(void)reshape:(NSNotification*)notification
+{
+    // must lock GL context because display link is threaded
+    CGLLockContext(static_cast<CGLContextObj>([m_context CGLContextObj]));
+
+    // lets the context update itself
+    if (m_context && [m_context view] == self)
+	{
+        [m_context update];
+	}
+	
+    CGLUnlockContext(static_cast<CGLContextObj>([m_context CGLContextObj]));
+    
+    std::cout << "reshape called" << std::endl;
 }
 
 -(void)applicationWillTerminate:(NSNotification*)notification

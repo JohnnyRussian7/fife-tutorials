@@ -526,7 +526,7 @@ namespace opengl {
                 glDisable(utility::ConvertTextureType(texture->GetType()));
             }
         }
-
+        
         //DrawAxes();
 
         //     if (shaderProgram)

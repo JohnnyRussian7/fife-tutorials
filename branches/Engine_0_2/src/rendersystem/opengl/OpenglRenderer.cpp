@@ -275,6 +275,24 @@ namespace opengl {
             m_alphaTestMode = alphaTestMode;
         }
     }
+    
+    void OpenglRenderer::SetDepthBufferWriteMode(const DepthBufferWriteMode& depthBufferWriteMode)
+    {
+        if (m_depthBufferWriteMode != depthBufferWriteMode)
+        {
+            if (depthBufferWriteMode.IsEnabled())
+            {
+                glDepthMask(GL_TRUE);
+            }
+            else
+            {
+                glDepthMask(GL_FALSE);
+            }
+            
+            // store depth buffer write mode
+            m_depthBufferWriteMode = depthBufferWriteMode;
+        }
+    }
 
     void OpenglRenderer::UpdateAxesRenderOperation(const Matrix4& rotation)
     {
@@ -407,6 +425,9 @@ namespace opengl {
 
         // set the alpha test mode
         SetAlphaTestMode(renderOperation.GetAlphaTestMode());
+        
+        // set depth buffer write mode
+        SetDepthBufferWriteMode(renderOperation.GetDepthBufferWriteMode());
 
         IMaterial* material = renderOperation.GetMaterial();
         if (material)

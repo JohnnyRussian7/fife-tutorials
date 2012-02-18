@@ -29,6 +29,7 @@
 #include "BlendingMode.h"
 #include "CullMode.h"
 #include "PolygonWindingMode.h"
+#include "DepthBufferWriteMode.h"
 #include "../graphics/VertexIndexBufferEnums.h"
 
 class Viewport;
@@ -72,6 +73,7 @@ protected:
     virtual void SetBlendingMode(const BlendingMode& BlendingMode) = 0;
     virtual void SetCullMode(const CullMode& cullMode) = 0;
     virtual void SetPolygonWindingMode(const PolygonWindingMode& polygonWindingMode) = 0;
+    virtual void SetDepthBufferWriteMode(const DepthBufferWriteMode& depthBufferWriteMode) = 0;
 };
 
 IRenderSystem* CreateRenderSystem(const RenderSystemSettings& settings);

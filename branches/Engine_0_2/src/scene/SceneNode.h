@@ -32,6 +32,7 @@
 #include "../rendersystem/PolygonWindingMode.h"
 #include "../rendersystem/FillMode.h"
 #include "../rendersystem/AlphaTestMode.h"
+#include "../rendersystem/DepthBufferWriteMode.h"
 
 class SceneManager;
 class IEntity;
@@ -91,6 +92,9 @@ public:
 
     void SetAlphaTestMode(const AlphaTestMode& alphaTestMode);
     const AlphaTestMode& GetAlphaTestMode();
+    
+    void SetDepthBufferWriteMode(const DepthBufferWriteMode& depthBufferWriteMode);
+    const DepthBufferWriteMode& GetDepthBufferWriteMode();
 
 	Matrix4 GetTransform();
 
@@ -146,6 +150,9 @@ private:
 
     AlphaTestMode m_alphaTestMode;
     bool m_localAlphaTestMode;
+    
+    DepthBufferWriteMode m_depthBufferWriteMode;
+    bool m_localDepthBufferWriteMode;
 
 	bool m_updateTransform;
 	Matrix4 m_transform;

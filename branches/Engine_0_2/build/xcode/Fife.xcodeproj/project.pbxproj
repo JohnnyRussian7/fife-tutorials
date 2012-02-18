@@ -115,6 +115,7 @@
 		88447BEE140A900D0034453D /* SimpleParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88447BEA140A900D0034453D /* SimpleParticleSystem.cpp */; };
 		88447C1E140A93F90034453D /* RenderComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88447C1C140A93F90034453D /* RenderComponent.cpp */; };
 		88610D1A148C5F5100A50088 /* FifeAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 88610D19148C5F5100A50088 /* FifeAppDelegate.mm */; };
+		88835C0914EFFBA400FDF75A /* DepthBufferWriteMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88835C0814EFFBA400FDF75A /* DepthBufferWriteMode.cpp */; };
 		88BF84D914E1F5D4005037EC /* OsxKeyConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 88BF84D814E1F5D4005037EC /* OsxKeyConverter.mm */; };
 		88BF86C814E6E359005037EC /* FpsCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88BF86C714E6E359005037EC /* FpsCameraController.cpp */; };
 		88E9F70112FE040C00D02C4A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E9F70012FE040C00D02C4A /* QuartzCore.framework */; };
@@ -379,6 +380,8 @@
 		88447C20140A940D0034453D /* CheckedCast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckedCast.h; sourceTree = "<group>"; };
 		88610D18148C5F5100A50088 /* FifeAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FifeAppDelegate.h; sourceTree = "<group>"; };
 		88610D19148C5F5100A50088 /* FifeAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FifeAppDelegate.mm; sourceTree = "<group>"; };
+		88835C0714EFFBA400FDF75A /* DepthBufferWriteMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepthBufferWriteMode.h; sourceTree = "<group>"; };
+		88835C0814EFFBA400FDF75A /* DepthBufferWriteMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DepthBufferWriteMode.cpp; sourceTree = "<group>"; };
 		88BF84D714E1F5D4005037EC /* OsxKeyConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsxKeyConverter.h; sourceTree = "<group>"; };
 		88BF84D814E1F5D4005037EC /* OsxKeyConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsxKeyConverter.mm; sourceTree = "<group>"; };
 		88BF86C614E6E359005037EC /* FpsCameraController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FpsCameraController.h; sourceTree = "<group>"; };
@@ -828,6 +831,8 @@
 				8828991B12FEE73D00DF58D2 /* RenderSystemTypes.h */,
 				8828991C12FEE73D00DF58D2 /* ShaderEnums.cpp */,
 				8828991D12FEE73D00DF58D2 /* ShaderEnums.h */,
+				88835C0714EFFBA400FDF75A /* DepthBufferWriteMode.h */,
+				88835C0814EFFBA400FDF75A /* DepthBufferWriteMode.cpp */,
 			);
 			path = rendersystem;
 			sourceTree = "<group>";
@@ -1176,6 +1181,7 @@
 				88610D1A148C5F5100A50088 /* FifeAppDelegate.mm in Sources */,
 				88BF84D914E1F5D4005037EC /* OsxKeyConverter.mm in Sources */,
 				88BF86C814E6E359005037EC /* FpsCameraController.cpp in Sources */,
+				88835C0914EFFBA400FDF75A /* DepthBufferWriteMode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

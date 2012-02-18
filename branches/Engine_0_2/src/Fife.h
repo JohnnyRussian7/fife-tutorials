@@ -102,6 +102,7 @@
 #include "rendersystem/PolygonWindingMode.h"
 #include "rendersystem/FillMode.h"
 #include "rendersystem/AlphaTestMode.h"
+#include "rendersystem/DepthBufferWriteMode.h"
 
 // scene
 #include "scene/SceneManager.h"

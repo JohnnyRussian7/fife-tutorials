@@ -74,6 +74,7 @@ namespace opengl {
         virtual void SetPolygonWindingMode(const PolygonWindingMode& windingMode);
         virtual void SetFillMode(const FillMode& fillMode);
         virtual void SetAlphaTestMode(const AlphaTestMode& alphaTestMode);
+        virtual void SetDepthBufferWriteMode(const DepthBufferWriteMode& depthBufferWriteMode);
 
         void UpdateAxesRenderOperation(const Matrix4& rotation);
         const RenderOperation& GetAxesRenderOperation() const;
@@ -102,6 +103,7 @@ namespace opengl {
         PolygonWindingMode m_windingMode;
         FillMode m_fillMode;
         AlphaTestMode m_alphaTestMode;
+        DepthBufferWriteMode m_depthBufferWriteMode;
         Color m_clearColor;
 
         bool m_useVbo;

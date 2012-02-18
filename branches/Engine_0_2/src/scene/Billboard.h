@@ -35,6 +35,7 @@
 
 class SceneManager;
 class BillboardGroup;
+class IndexData;
 
 class Billboard : public Visual
 {
@@ -44,6 +45,8 @@ public:
     Billboard(SceneManager* sceneManager, const Vector3& position);
     Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position = Vector3::Zero());
 
+    void InitIndices();
+    
     void SetDimensions(uint32_t width, uint32_t height);
     void SetWidth(uint32_t width);
     void SetHeight(uint32_t height);
@@ -61,6 +64,7 @@ public:
     const FloatRect& GetTextureCoordinates() const;
 
     void FillVertexData(VertexData& vertexData);
+    void FillIndexData(IndexData& indexData, uint32_t billboardNumber);
     
     virtual Renderable* GetRenderable();
     virtual void Update(uint32_t time);
@@ -90,6 +94,8 @@ private:
     FloatRect m_textureCoords;
     VertexData m_vertexData;
 
+    std::vector<uint16_t> m_indices;
+    
     // TODO - these can be removed when GenerateBuffers and UpdateBuffers are removed
     std::vector<Vertex> m_vertices;
     bool m_buffersGenerated;

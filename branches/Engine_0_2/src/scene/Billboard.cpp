@@ -29,6 +29,7 @@
 #include "../graphics/VertexIndexBufferEnums.h"
 #include "../graphics/IVertexBuffer.h"
 #include "../graphics/IIndexBuffer.h"
+#include "../graphics/IndexData.h"
 
 // TODO - temporary
 #include "../RenderComponent.h"
@@ -37,7 +38,7 @@
 Billboard::Billboard(BillboardGroup* parent, uint32_t width, uint32_t height, const Vector3& position)
 : m_parent(parent), m_dirty(true), m_width(width), m_height(height), m_position(position)
 {
-
+    InitIndices();
 }
 
 Billboard::Billboard(SceneManager* sceneManager)
@@ -45,6 +46,8 @@ Billboard::Billboard(SceneManager* sceneManager)
 m_position(Vector3::Zero()), m_color(Color::White()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
+    
+    InitIndices();
 }
 
 Billboard::Billboard(SceneManager* sceneManager, const Vector3& position)
@@ -52,6 +55,8 @@ Billboard::Billboard(SceneManager* sceneManager, const Vector3& position)
 m_position(position), m_color(Color::White()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
+    
+    InitIndices();
 }
 
 Billboard::Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position)
@@ -59,6 +64,18 @@ Billboard::Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Ve
 m_position(position), m_color(Color::White()), m_buffersGenerated(false)
 {
     assert(m_sceneManager);
+    
+    InitIndices();
+}
+
+void Billboard::InitIndices()
+{
+    m_indices.reserve(GetNumberOfIndices());
+    m_indices.push_back(0);
+    m_indices.push_back(1);
+    m_indices.push_back(2);
+    m_indices.push_back(3);
+    m_indices.push_back(3);
 }
 
 void Billboard::SetPosition(const Vector3& position)
@@ -152,9 +169,21 @@ void Billboard::FillVertexData(VertexData& vertexData)
     if (IsDirty())
     {
         Update();
-    }
-
+    }  
+    
     vertexData.AddVertices(m_vertexData.GetVertices(), m_vertexData.GetNumVertices());
+}
+
+void Billboard::FillIndexData(IndexData& indexData, uint32_t billboardNumber)
+{
+    uint32_t numIndices = m_indices.size();
+    
+    for (uint32_t i=0; i < m_indices.size(); ++i)
+    {
+        std::cout << (numIndices-1) * billboardNumber + m_indices[i];
+        
+        indexData.AddIndex((numIndices-1) * billboardNumber + m_indices[i]);
+    }
 }
 
 uint32_t Billboard::GetNumberOfVertices()
@@ -164,7 +193,7 @@ uint32_t Billboard::GetNumberOfVertices()
 
 uint32_t Billboard::GetNumberOfIndices()
 {
-    return 4;
+    return 5;
 }
 
 Renderable* Billboard::GetRenderable()
@@ -292,17 +321,11 @@ void Billboard::GenerateBuffers()
 
     if (indexBuffer)
     {
-        uint16_t indexData[4];
-        indexData[0] = uint16_t(0);
-        indexData[1] = uint16_t(1);
-        indexData[2] = uint16_t(2);
-        indexData[3] = uint16_t(3);
-
-        indexBuffer->WriteData(indexData, 6, 0);
+        indexBuffer->WriteData(&m_indices[0], GetNumberOfIndices(), 0);
 
         if (renderComponent)
         {
-            renderComponent->GetIndexBuffer()->WriteData(indexData, 6, 0);
+            renderComponent->GetIndexBuffer()->WriteData(&m_indices[0], GetNumberOfIndices(), 0);
         }
     }
 

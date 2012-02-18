@@ -194,8 +194,6 @@ bool BillboardGroup::IsDirty() const
 
 void BillboardGroup::UpdateBuffers()
 {
-    static uint32_t NumIndexPerBillboard = Billboard::GetNumberOfIndices();
-
     m_vertexData.Clear();
     m_indexData.Clear();
 
@@ -203,11 +201,7 @@ void BillboardGroup::UpdateBuffers()
     for (uint32_t i=0; i < m_billBoards.size(); ++i)
     {
         m_billBoards[i].FillVertexData(m_vertexData);
-
-        for (uint32_t j=0; j < NumIndexPerBillboard; ++j)
-        {
-            m_indexData.AddIndex(static_cast<uint16_t>(i*NumIndexPerBillboard + j));
-        }
+        //m_billBoards[i].FillIndexData(m_indexData, i);
     }
     
     // reset dirty flag

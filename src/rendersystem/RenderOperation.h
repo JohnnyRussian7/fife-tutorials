@@ -28,6 +28,7 @@
 #include "PolygonWindingMode.h"
 #include "FillMode.h"
 #include "AlphaTestMode.h"
+#include "DepthBufferWriteMode.h"
 #include "../math/Matrix4.h"
 
 class IVertexBuffer;
@@ -168,6 +169,18 @@ public:
     //! accessor for the alpha test mode for this render operation
     //!***************************************************************
     const AlphaTestMode& GetAlphaTestMode() const;
+    
+    //!***************************************************************
+    //! @details:
+    //! sets the depth buffer write mode for this render operation
+    //!***************************************************************
+    void SetDepthBufferWriteMode(const DepthBufferWriteMode& depthBufferWriteMode);
+    
+    //!***************************************************************
+    //! @details:
+    //! accessor for the depth buffer write  mode for this render operation
+    //!***************************************************************
+    const DepthBufferWriteMode& GetDepthBufferWriteMode() const;
 
 private:
     Matrix4 m_transform;
@@ -180,6 +193,7 @@ private:
     PolygonWindingMode m_windingMode;
     FillMode m_fillMode;
     AlphaTestMode m_alphaTestMode;
+    DepthBufferWriteMode m_depthBufferWriteMode;
 };
 
 #endif

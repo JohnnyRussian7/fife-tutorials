@@ -405,7 +405,7 @@ void SceneNode::SetAlphaTestMode(const AlphaTestMode& alphaTestMode)
 
 const AlphaTestMode& SceneNode::GetAlphaTestMode()
 {
-    // attempt to perform a lazy update, if the parent's alpha test mode has changed
+    // attempt to perform a lazy update
     // if the alpha test mode is not the same as our parent and we haven't set it
     // directly, then update it from the parent
     if (m_parent && m_alphaTestMode != m_parent->GetAlphaTestMode() && !m_localAlphaTestMode)
@@ -414,6 +414,26 @@ const AlphaTestMode& SceneNode::GetAlphaTestMode()
     }
 
     return m_alphaTestMode;
+}
+
+void SceneNode::SetDepthBufferWriteMode(const DepthBufferWriteMode& depthBufferWriteMode)
+{
+    // save depth buffer write mode locally
+    m_depthBufferWriteMode = depthBufferWriteMode;
+    m_localDepthBufferWriteMode = true;
+}
+
+const DepthBufferWriteMode& SceneNode::GetDepthBufferWriteMode()
+{
+    // attempt to perform a lazy update
+    // if the depth buffer write mode is not the same as our parent
+    // and we haven't set it directly, then update it from the parent
+    if (m_parent && m_depthBufferWriteMode != m_parent->GetDepthBufferWriteMode() && !m_localDepthBufferWriteMode)
+    {
+        m_depthBufferWriteMode = m_parent->GetDepthBufferWriteMode();
+    }
+    
+    return m_depthBufferWriteMode;
 }
 
 Matrix4 SceneNode::GetTransform()

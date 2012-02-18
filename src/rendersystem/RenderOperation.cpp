@@ -135,3 +135,14 @@ const AlphaTestMode& RenderOperation::GetAlphaTestMode() const
 {
     return m_alphaTestMode;
 }
+
+
+void RenderOperation::SetDepthBufferWriteMode(const DepthBufferWriteMode& depthBufferWriteMode)
+{
+    m_depthBufferWriteMode = depthBufferWriteMode;
+}
+
+const DepthBufferWriteMode& RenderOperation::GetDepthBufferWriteMode() const
+{
+    return m_depthBufferWriteMode;
+}

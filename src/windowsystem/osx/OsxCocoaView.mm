@@ -323,8 +323,6 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
 	}
 	
     CGLUnlockContext(static_cast<CGLContextObj>([m_context CGLContextObj]));
-    
-    std::cout << "reshape called" << std::endl;
 }
 
 -(void)applicationWillTerminate:(NSNotification*)notification

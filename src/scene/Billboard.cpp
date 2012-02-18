@@ -164,7 +164,7 @@ uint32_t Billboard::GetNumberOfVertices()
 
 uint32_t Billboard::GetNumberOfIndices()
 {
-    return 6;
+    return 4;
 }
 
 Renderable* Billboard::GetRenderable()

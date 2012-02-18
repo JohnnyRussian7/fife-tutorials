@@ -43,10 +43,10 @@
     
     m_fpsCamera = new FpsCameraController(m_engine->GetSceneManager(), 0.02);
     
-    //CreateSimpleAnimatedTextures(*m_engine);
+    CreateSimpleAnimatedTextures(*m_engine);
     //CreateSimpleStaticTextures(*m_engine);
     //CreateSimpleIsometricView(*m_engine, *m_fpsCamera);
-    CreateSimpleParticleSystem(*m_engine);
+    //CreateSimpleParticleSystem(*m_engine);
 
     SimpleKeyListener* keyListener = new SimpleKeyListener(*m_engine, *m_fpsCamera);
     SimpleMouseListener* mouseListener = new SimpleMouseListener(*m_fpsCamera);

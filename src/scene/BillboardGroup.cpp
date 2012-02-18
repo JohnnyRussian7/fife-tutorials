@@ -204,15 +204,11 @@ void BillboardGroup::UpdateBuffers()
     {
         m_billBoards[i].FillVertexData(m_vertexData);
 
-        m_indexData.AddIndex(static_cast<uint16_t>(i*NumIndexPerBillboard));
-        m_indexData.AddIndex(static_cast<uint16_t>(i*NumIndexPerBillboard + 2));
-        m_indexData.AddIndex(static_cast<uint16_t>(i*NumIndexPerBillboard + 1));
-        m_indexData.AddIndex(static_cast<uint16_t>(i*NumIndexPerBillboard + 1));
-        m_indexData.AddIndex(static_cast<uint16_t>(i*NumIndexPerBillboard + 2));
-        m_indexData.AddIndex(static_cast<uint16_t>(i*NumIndexPerBillboard + 3));
+        for (uint32_t j=0; j < NumIndexPerBillboard; ++j)
+        {
+            m_indexData.AddIndex(static_cast<uint16_t>(i*NumIndexPerBillboard + j));
+        }
     }
-
-    // TODO - implement index buffer updating
     
     // reset dirty flag
     ResetDirty();

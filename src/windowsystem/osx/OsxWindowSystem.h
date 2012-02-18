@@ -61,6 +61,7 @@ class OsxWindowSystem : public IWindowSystem
         virtual void SetInputSystem(IInputSystem* inputSystem);
         
         void OnDisplayUpdate();
+        void ResizeImpl(uint32_t width, uint32_t height);
         
     private:
         void Resize();

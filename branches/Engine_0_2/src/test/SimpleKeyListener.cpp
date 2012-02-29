@@ -22,7 +22,9 @@
 
 #include "SimpleKeyListener.h"
 
-SimpleKeyListener::SimpleKeyListener(Engine& engine, const FpsCameraController& fpsCamera) 
+#include "FpsCameraController.h"
+
+SimpleKeyListener::SimpleKeyListener(Engine* engine, FpsCameraController* fpsCamera) 
 : m_engine(engine), m_fpsCamera(fpsCamera), m_name("SimpleKeyListener"), m_xTrans(0.f), m_yTrans(0.f), m_zTrans(0.f)
 { 
 
@@ -62,18 +64,18 @@ bool SimpleKeyListener::OnKeyPressed(const IKeyEvent& event)
     {
         const float ZoomAmount = 10;
         
-        m_fpsCamera.move(Vector3(0.f, 0.f, -ZoomAmount));
+        m_fpsCamera->move(Vector3(0.f, 0.f, -ZoomAmount));
     }
     else if (event.GetKeyCode() == KeyCodes::Minus)
     {
         const float ZoomAmount = 10;
         
-        m_fpsCamera.move(Vector3(0.f, 0.f, ZoomAmount));
+        m_fpsCamera->move(Vector3(0.f, 0.f, ZoomAmount));
     }
 
     if (translationChange)
     {
-        m_fpsCamera.move(Vector3(m_xTrans, m_yTrans, m_zTrans));
+        m_fpsCamera->move(Vector3(m_xTrans, m_yTrans, m_zTrans));
     }
 
     return true;
@@ -83,7 +85,7 @@ bool SimpleKeyListener::OnKeyReleased(const IKeyEvent& event)
 {
     if (event.GetKeyCode() == KeyCodes::Escape)
     {
-        m_engine.Quit();
+        m_engine->Quit();
     }
     else if (event.GetKeyCode() == KeyCodes::KeyC)
     {
@@ -100,7 +102,7 @@ bool SimpleKeyListener::OnKeyReleased(const IKeyEvent& event)
         }
         
         m_cullMode.SetEnabled(true);
-        m_engine.GetSceneManager()->GetRootSceneNode()->SetCullMode(m_cullMode);
+        m_engine->GetSceneManager()->GetRootSceneNode()->SetCullMode(m_cullMode);
     }
     else if (event.GetKeyCode() == KeyCodes::KeyF)
     {
@@ -117,7 +119,7 @@ bool SimpleKeyListener::OnKeyReleased(const IKeyEvent& event)
             
         }
         
-        m_engine.GetSceneManager()->GetRootSceneNode()->SetFillMode(m_fillMode);
+        m_engine->GetSceneManager()->GetRootSceneNode()->SetFillMode(m_fillMode);
     }
     else if (event.GetKeyCode() == KeyCodes::KeyP)
     {
@@ -133,7 +135,7 @@ bool SimpleKeyListener::OnKeyReleased(const IKeyEvent& event)
             std::cout << "Counter clockwise winding enabled" << std::endl;
         }
         
-        m_engine.GetSceneManager()->GetRootSceneNode()->SetPolygonWindingMode(m_windingMode);
+        m_engine->GetSceneManager()->GetRootSceneNode()->SetPolygonWindingMode(m_windingMode);
     }
 
     return true;

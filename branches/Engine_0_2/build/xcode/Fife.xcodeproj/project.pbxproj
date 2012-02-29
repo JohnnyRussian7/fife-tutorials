@@ -119,6 +119,7 @@
 		88BF84D914E1F5D4005037EC /* OsxKeyConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 88BF84D814E1F5D4005037EC /* OsxKeyConverter.mm */; };
 		88BF86C814E6E359005037EC /* FpsCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88BF86C714E6E359005037EC /* FpsCameraController.cpp */; };
 		88E9F70112FE040C00D02C4A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E9F70012FE040C00D02C4A /* QuartzCore.framework */; };
+		88EA2D7F14FDDEDE00D3603A /* SimpleApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA2D7E14FDDEDE00D3603A /* SimpleApplication.cpp */; };
 		88EDE2F01325CEC400D57F7D /* FileSystemUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EDE2EC1325CEC400D57F7D /* FileSystemUtils.cpp */; };
 		88EDE2F11325CEC400D57F7D /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EDE2EF1325CEC400D57F7D /* Path.cpp */; };
 		88EDE2FD1325CEDD00D57F7D /* IImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EDE2F31325CEDC00D57F7D /* IImageLoader.cpp */; };
@@ -387,6 +388,8 @@
 		88BF86C614E6E359005037EC /* FpsCameraController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FpsCameraController.h; sourceTree = "<group>"; };
 		88BF86C714E6E359005037EC /* FpsCameraController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpsCameraController.cpp; sourceTree = "<group>"; };
 		88E9F70012FE040C00D02C4A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		88EA2D7D14FDDEDE00D3603A /* SimpleApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleApplication.h; sourceTree = "<group>"; };
+		88EA2D7E14FDDEDE00D3603A /* SimpleApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SimpleApplication.cpp; sourceTree = "<group>"; };
 		88EDE2EC1325CEC400D57F7D /* FileSystemUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemUtils.cpp; sourceTree = "<group>"; };
 		88EDE2ED1325CEC400D57F7D /* FileSystemUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystemUtils.h; sourceTree = "<group>"; };
 		88EDE2EE1325CEC400D57F7D /* IPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPath.h; sourceTree = "<group>"; };
@@ -909,6 +912,8 @@
 				8828994312FEE73E00DF58D2 /* main.cpp */,
 				88BF86C614E6E359005037EC /* FpsCameraController.h */,
 				88BF86C714E6E359005037EC /* FpsCameraController.cpp */,
+				88EA2D7D14FDDEDE00D3603A /* SimpleApplication.h */,
+				88EA2D7E14FDDEDE00D3603A /* SimpleApplication.cpp */,
 			);
 			path = test;
 			sourceTree = "<group>";
@@ -1182,6 +1187,7 @@
 				88BF84D914E1F5D4005037EC /* OsxKeyConverter.mm in Sources */,
 				88BF86C814E6E359005037EC /* FpsCameraController.cpp in Sources */,
 				88835C0914EFFBA400FDF75A /* DepthBufferWriteMode.cpp in Sources */,
+				88EA2D7F14FDDEDE00D3603A /* SimpleApplication.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

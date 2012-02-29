@@ -24,12 +24,12 @@
 
 #include "../Fife.h"
 
-#include "FpsCameraController.h"
+class FpsCameraController;
 
 class SimpleMouseListener : public IMouseListener
 {
 public:
-    SimpleMouseListener(const FpsCameraController& fpsCamera);
+    SimpleMouseListener(FpsCameraController* fpsCamera);
 
     virtual const std::string& GetName();
     virtual bool OnMouseMoved(const IMouseEvent& event);
@@ -38,7 +38,7 @@ public:
     virtual bool OnMouseWheel(const IMouseEvent& event);
 
 private:
-    FpsCameraController m_fpsCamera;
+    FpsCameraController* m_fpsCamera;
     float m_yawAngle;
     std::string m_name;
     bool m_initialized;

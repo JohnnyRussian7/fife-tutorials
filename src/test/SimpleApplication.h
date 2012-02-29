@@ -1,5 +1,5 @@
 /**********************************************************************
- *	Filename: FifeAppDelegate.h
+ *	Filename: SimpleApplication.h
  *	
  *	Copyright (C) 2011, FIFE team
  *	http://www.fifengine.net
@@ -19,20 +19,33 @@
  *	You should have received a copy of the GNU Lesser General Public
  *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
  ***********************************************************************/
-#ifndef FIFEAPPDELEGATE_H_
-#define FIFEAPPDELEGATE_H_
+#ifndef SIMPLEAPPLICATION_H_
+#define SIMPLEAPPLICATION_H_
 
-#import <Cocoa/Cocoa.h>
+#include "../Fife.h"
 
-class SimpleApplication;
+class FpsCameraController;
+class SimpleKeyListener;
+class SimpleMouseListener;
 
-@interface FifeAppDelegate : NSObject {
-    SimpleApplication* m_application;
-}
-
--(void)applicationDidFinishLaunching:(NSNotification*)notification;
--(void)applicationWillTerminate:(NSNotification*)notification;
-
-@end
+class SimpleApplication
+{
+public:
+    SimpleApplication();
+    ~SimpleApplication();
+    
+    void Run();
+    void Stop();
+private:
+    void CreateEngine();
+    void CreateCamera();
+    void CreateMouseListener();
+    void CreateKeyListener();
+private:
+    Engine* m_engine;
+    FpsCameraController* m_fpsCamera;
+    SimpleKeyListener* m_keyListener;
+    SimpleMouseListener* m_mouseListener;
+};
 
 #endif

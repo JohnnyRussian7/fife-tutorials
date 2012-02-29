@@ -22,38 +22,17 @@
 
 #import "FifeAppDelegate.h"
 
-#include "../../src/Engine.h"
-
-// sample includes
-#include "../../src/test/SimpleKeyListener.h"
-#include "../../src/test/SimpleMouseListener.h"
-#include "../../src/test/SimpleAnimatedTextures.h"
-#include "../../src/test/SimpleStaticTextures.h"
-#include "../../src/test/SimpleIsometricView.h"
-#include "../../src/test/SimpleParticleSystem.h"
-#include "../../src/test/FpsCameraController.h"
+#include "../../src/test/SimpleApplication.h"
 
 @implementation FifeAppDelegate
 
 -(void)applicationDidFinishLaunching:(NSNotification*)notification
 {
-    EngineSettings settings;
-    settings.renderSystemSettings.useVbo = true;
-	m_engine = new Engine(settings);
+    // create the sample application now that we are loaded
+    m_application = new SimpleApplication();
     
-    m_fpsCamera = new FpsCameraController(m_engine->GetSceneManager(), 0.02);
-    
-    //CreateSimpleAnimatedTextures(*m_engine);
-    //CreateSimpleStaticTextures(*m_engine);
-    CreateSimpleIsometricView(*m_engine, *m_fpsCamera);
-    //CreateSimpleParticleSystem(*m_engine);
-
-    SimpleKeyListener* keyListener = new SimpleKeyListener(*m_engine, *m_fpsCamera);
-    SimpleMouseListener* mouseListener = new SimpleMouseListener(*m_fpsCamera);
-    m_engine->GetInputSystem()->AddKeyListener(keyListener);
-    m_engine->GetInputSystem()->AddMouseListener(mouseListener);
-    
-    m_engine->StartRenderLoop();
+    // start the application
+    m_application->Run();
 }
 
 -(BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication
@@ -63,10 +42,9 @@
 
 -(void)applicationWillTerminate:(NSNotification*)notification
 {
-    m_engine->Quit();
-    
-    delete m_engine;
-    delete m_fpsCamera;
+    // delete the application, it will take care of everything else
+    delete m_application;
+    m_application = 0;
 }
 
 @end

@@ -22,7 +22,9 @@
 
 #include "SimpleMouseListener.h"
 
-SimpleMouseListener::SimpleMouseListener(const FpsCameraController& fpsCamera) 
+#include "FpsCameraController.h"
+
+SimpleMouseListener::SimpleMouseListener(FpsCameraController* fpsCamera) 
 : m_name("SimpleMouseListener"), m_fpsCamera(fpsCamera), m_initialized(false)
 { 
 
@@ -45,9 +47,9 @@ bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event)
         //m_cam->Rotate(test);
         //m_cam->Yaw(yawAmount);
         //m_cam->Pitch(pitchAmount);
-        m_fpsCamera.yaw(yaw);
-        m_fpsCamera.pitch(pitch);
-        m_fpsCamera.update();
+        m_fpsCamera->yaw(yaw);
+        m_fpsCamera->pitch(pitch);
+        m_fpsCamera->update();
         //std::cout << "yaw: " << yaw << "\t\t" << "pitch:" << pitch << std::endl;
     }
     

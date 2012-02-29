@@ -112,7 +112,7 @@ void SceneManager::DestroySceneNode(const char* name)
 
             if (parent)
             {
-                parent->RemoveChild(iter->second);
+                parent->RemoveChild(iter->second, false);
             }
 
 			delete iter->second;

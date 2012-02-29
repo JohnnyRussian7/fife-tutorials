@@ -24,20 +24,20 @@
 
 #include "../Fife.h"
 
-#include "FpsCameraController.h"
+class FpsCameraController;
 
 class SimpleKeyListener : public IKeyListener
 {
 public:
-    SimpleKeyListener(Engine& engine, const FpsCameraController& fpsCamera);
+    SimpleKeyListener(Engine* engine, FpsCameraController* fpsCamera);
 
     virtual const std::string& GetName();
     virtual bool OnKeyPressed(const IKeyEvent& event);
     virtual bool OnKeyReleased(const IKeyEvent& event);
 
 private:
-    Engine& m_engine;
-    FpsCameraController m_fpsCamera;
+    Engine* m_engine;
+    FpsCameraController* m_fpsCamera;
     std::string m_name;
     float m_xTrans;
     float m_yTrans;

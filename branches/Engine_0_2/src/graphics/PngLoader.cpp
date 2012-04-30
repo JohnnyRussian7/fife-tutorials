@@ -208,8 +208,9 @@ namespace graphics
     }
 
     IImage* PngLoader::Load(const std::string& file, const char* name)
-    {      
-        return Load(filesystem::Path(file), name);
+    {
+        filesystem::Path path(file);
+        return Load(path, name);
     }
 
     IImage* PngLoader::Load(const char* file, const char* name)
@@ -219,6 +220,7 @@ namespace graphics
 		    return 0;
 	    }
 
-        return Load(filesystem::Path(file), name);
+        filesystem::Path path(file);
+        return Load(path, name);
     }
 }

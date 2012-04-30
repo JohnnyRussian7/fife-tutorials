@@ -36,7 +36,8 @@ namespace graphics
 
     ImagePtr ImageManager::CreateImage(const std::string& file, const char* name, IImageLoader* loader)
     {
-        return CreateImage(filesystem::Path(file), name, loader);
+        filesystem::Path path(file);
+        return CreateImage(path, name, loader);
     }
 
     ImagePtr ImageManager::CreateImage(const filesystem::IPath& path, const char* name, IImageLoader* loader)
@@ -52,6 +53,8 @@ namespace graphics
             }
         }
 
+        IImage* image = 0;
+        
         // attempt to create our own loader if one was not provided
         if (!loader)
         {
@@ -61,23 +64,21 @@ namespace graphics
 
             if (loaderPtr)
             {
-                loader = loaderPtr.Get();
+                image = loaderPtr->Load(path, name);
             }
         }
-
-        if (loader)
+        else
         {
             // load the image
-            IImage* image = loader->Load(path, name);
+            image = loader->Load(path, name);
+        }
 
-            // create a shared pointer from the loaded image
-            if (image)
-            {
-                ImagePtr ptr = make_shared(image);  
+        if (image)
+        {
+            ImagePtr ptr = make_shared(image);  
 
-                std::pair<ImageContainer::iterator, bool> retVal = m_images.insert(std::make_pair(ptr->GetName(), ptr));
-                return retVal.first->second;
-            }
+            std::pair<ImageContainer::iterator, bool> retVal = m_images.insert(std::make_pair(ptr->GetName(), ptr));
+            return retVal.first->second;
         }
 
         return ImagePtr();

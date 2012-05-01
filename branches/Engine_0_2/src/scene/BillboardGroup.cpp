@@ -201,7 +201,7 @@ void BillboardGroup::UpdateBuffers()
     for (uint32_t i=0; i < m_billBoards.size(); ++i)
     {
         m_billBoards[i].FillVertexData(m_vertexData);
-        //m_billBoards[i].FillIndexData(m_indexData, i);
+        m_billBoards[i].FillIndexData(m_indexData, i);
     }
     
     // reset dirty flag

@@ -71,10 +71,20 @@ m_position(position), m_color(Color::White()), m_buffersGenerated(false)
 void Billboard::InitIndices()
 {
     m_indices.reserve(GetNumberOfIndices());
+    
+    // this would be for using triangle strips
+    //m_indices.push_back(0);
+    //m_indices.push_back(1);
+    //m_indices.push_back(2);
+    //m_indices.push_back(3);
+    //m_indices.push_back(3);
+    
+    // indices when using triangles
     m_indices.push_back(0);
     m_indices.push_back(1);
     m_indices.push_back(2);
-    m_indices.push_back(3);
+    m_indices.push_back(2);
+    m_indices.push_back(1);
     m_indices.push_back(3);
 }
 
@@ -176,14 +186,11 @@ void Billboard::FillVertexData(VertexData& vertexData)
 
 void Billboard::FillIndexData(IndexData& indexData, uint32_t billboardNumber)
 {
-    uint32_t numIndices = m_indices.size();
-    
     for (uint32_t i=0; i < m_indices.size(); ++i)
     {
-        std::cout << (numIndices-1) * billboardNumber + m_indices[i];
-        
-        indexData.AddIndex((numIndices-1) * billboardNumber + m_indices[i]);
-    }
+        // takes 4 indices to fully describe a billboard
+        indexData.AddIndex(GetNumberOfVertices() * billboardNumber + m_indices[i]);
+    } 
 }
 
 uint32_t Billboard::GetNumberOfVertices()

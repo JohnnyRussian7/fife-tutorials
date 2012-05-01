@@ -27,9 +27,32 @@
 class Randomizer
 {
 public:
+    //!***************************************************************
+    //! @details:
+    //! initializes the random number generator with a seed value
+    //!
+    //! @note:
+    //! this does not have to be called directly, it gets called
+    //! internally
+    //!***************************************************************
 	static void seed();
+    
+    //!***************************************************************
+    //! @details:
+    //! returns a random number based on the seed
+    //!***************************************************************
 	static int32_t rand();
-	static float uniformRand(); 
+    
+    //!***************************************************************
+    //! @details:
+    //! provides a uniform distribution random number between [0, 1]
+    //!***************************************************************
+	static float uniformRand();
+    
+    //!***************************************************************
+    //! @details:
+    //! provides a uniform distribution random number between [min, max]
+    //!***************************************************************
 	static float randBetween(float min, float max);
 
 private:

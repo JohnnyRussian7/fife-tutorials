@@ -44,7 +44,7 @@ ParticleSystem::ParticleSystem(SceneManager* sceneManager, ParticleEmitter* emit
     // TODO - this should probably be refactored, doesn't belong here
     m_material = new Material();
     RenderComponent* renderComponent = new RenderComponent();
-    renderComponent->SetPrimitiveType(PrimitiveType::TriangleStrip);
+    renderComponent->SetPrimitiveType(PrimitiveType::Triangles);
     renderComponent->SetMaterial(m_material);
 
     AddComponent(renderComponent);

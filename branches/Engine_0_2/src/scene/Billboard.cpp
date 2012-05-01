@@ -200,7 +200,7 @@ uint32_t Billboard::GetNumberOfVertices()
 
 uint32_t Billboard::GetNumberOfIndices()
 {
-    return 5;
+    return 6;
 }
 
 Renderable* Billboard::GetRenderable()
@@ -338,11 +338,11 @@ void Billboard::GenerateBuffers()
 
     if (renderComponent)
     {
-        renderComponent->SetPrimitiveType(PrimitiveType::TriangleStrip);
+        renderComponent->SetPrimitiveType(PrimitiveType::Triangles);
     }
 
     // set the primitive type
-    m_renderable->SetPrimitiveType(PrimitiveType::TriangleStrip);
+    m_renderable->SetPrimitiveType(PrimitiveType::Triangles);
 
     m_buffersGenerated = true;
 }

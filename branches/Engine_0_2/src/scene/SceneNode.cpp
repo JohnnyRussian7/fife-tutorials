@@ -28,6 +28,7 @@
 #include "../math/MathUtil.h"
 #include "../rendersystem/RenderOperation.h"
 #include "../utility/CheckedCast.h"
+#include "Camera.h"
 
 namespace
 {
@@ -227,8 +228,16 @@ void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperatio
         RenderComponent* renderComponent = checked_cast<RenderComponent*>((*entityIter)->GetComponent("Render"));
         if (renderComponent)
         {
+            Matrix4 transform = renderComponent->GetTransform();
+            if (m_name != "CameraNode" || m_name != "PitchNode")
+            {
+                //transform.SetX(Vector3(1, 0, 0));
+                //transform.SetY(-m_sceneManager->GetCamera()->GetViewMatrix().GetY());
+                //transform.SetZ(-m_sceneManager->GetCamera()->GetViewMatrix().GetZ());
+            }
+            
             RenderOperation operation;
-            operation.SetTransform(renderComponent->GetTransform());
+            operation.SetTransform(transform);
             operation.SetPrimitiveType(renderComponent->GetPrimitiveType());
             operation.SetVertexBuffer(renderComponent->GetVertexBuffer());
             operation.SetIndexBuffer(renderComponent->GetIndexBuffer());

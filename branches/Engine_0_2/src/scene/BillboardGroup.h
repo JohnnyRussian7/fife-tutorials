@@ -31,10 +31,12 @@
 #include "../math/Vector3.h"
 #include "../geometry/Rect.h"
 
+class SceneManager;
+
 class BillboardGroup
 {
 public:
-	BillboardGroup(uint32_t numBillboards = 0, uint32_t width=1, uint32_t height=1, const FloatRect& textureCoordinates=FloatRect(0, 1, 1, 0));
+	BillboardGroup(SceneManager* sceneManager, uint32_t numBillboards = 0, uint32_t width=1, uint32_t height=1, const FloatRect& textureCoordinates=FloatRect(0, 1, 1, 0));
 
     void SetNumberOfBillboards(uint32_t numBillboards);
     uint32_t GetNumberOfBillboards() const;
@@ -64,6 +66,7 @@ private:
     void UpdateBuffers();
 
 private:
+    SceneManager* m_sceneManager;
     bool m_dirty;
     uint32_t m_numBillboards;
     uint32_t m_width;

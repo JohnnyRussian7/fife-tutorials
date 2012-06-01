@@ -28,24 +28,18 @@ void CreateSimpleParticleSystem(Engine& engine)
     // store off scene manager locally as it will be used often
     SceneManager* sceneManager = engine.GetSceneManager();
 
-    // setup a simple camera
-    //Camera* camera = sceneManager->CreateCamera();
-    //SceneNode* cameraNode = sceneManager->CreateSceneNode("camera");
-    //cameraNode->AddEntity(camera);
-    //cameraNode->Translate(0, 0, 500);
-    //camera->LookAt(0, 0, 0);
-    //sceneManager->AddCamera(camera);
-    //sceneManager->GetRootSceneNode()->AddChild(cameraNode);
-
-    //ParticleEmitter* emitter = new ParticleEmitter(2, 5, 40, 40, 1500, 1500, Color(1, 1, 102/255), Color::Green(), AxisAlignedBoundingBox(Vector3::Zero(), Vector3(200, 200, 200)));
-    ParticleEmitter* emitter = new ParticleEmitter(1, 3, 2, 8, 1000, 2000, Vector3(0, 0.05, 0), Vector3(0, 0.08, 0), Color::White(), Color::White(), AxisAlignedBoundingBox(Vector3::Zero(), Vector3(10, 0, 10)));
+    Vector3 minVelocity = Vector3::Zero();
+    Vector3 maxVelocity = Vector3::Zero();
+    AxisAlignedBoundingBox aabb = AxisAlignedBoundingBox(Vector3(-10, -10, 0), Vector3(10, 10, 0));
+    
+    ParticleEmitter* emitter = new ParticleEmitter(70, 80, 5, 10, 2000, 2300, minVelocity, maxVelocity, Color::White(), Color::White(), aabb);
     ParticleSystem* particleSystem = new ParticleSystem(sceneManager, emitter, true);
 
     IParticleEffect* fadeEffect = new ParticleFadeEffect(2000);
     particleSystem->AddEffect(fadeEffect);
 
-    //IParticleEffect* velocityEffect = new ParticleVelocityEffect(Vector3(0, 0.005, 0));
-    //particleSystem->AddEffect(velocityEffect);
+    IParticleEffect* velocityEffect = new ParticleVelocityEffect(Vector3(0, 0.002, 0));
+    particleSystem->AddEffect(velocityEffect);
 
     //IParticleEffect* colorChangeEffect = new ParticleColorChangeEffect(Color::Black(), 300);
     //particleSystem->AddEffect(colorChangeEffect);
@@ -57,14 +51,12 @@ void CreateSimpleParticleSystem(Engine& engine)
     particleSceneNode->AddEntity(particleSystem);
     
     // disable depth buffer writing for the particle system
-    DepthBufferWriteMode depthBufferWriteMode;
-    depthBufferWriteMode.SetEnabled(false);
+    //DepthBufferWriteMode depthBufferWriteMode;
+    //depthBufferWriteMode.SetEnabled(false);
     //particleSceneNode->SetDepthBufferWriteMode(depthBufferWriteMode);
     
     sceneManager->GetRootSceneNode()->AddChild(particleSceneNode);
 
-    // load the image
-//     filesystem::Path path("../../data/smoke_animation.png");
     filesystem::Path path("../../data/smoke_particle.png");
     ImagePtr smokeImage = engine.GetImageManager()->CreateImage(path, "smokeImage");
     if (smokeImage)
@@ -76,13 +68,6 @@ void CreateSimpleParticleSystem(Engine& engine)
             particleSystem->AddTexture(smokeTexture);
         }
     }
- 
-//     IAnimation* smokeAnimation = sceneManager->CreateAnimatedTexture("..\\..\\data\\smoke_animation.png", 1, 8, 8, 1500);
-//     //IAnimation* smokeAnimation = sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 1, 24, 24, 2500);
-//     if (smokeAnimation)
-//     {
-//         particleSystem->AddAnimation(smokeAnimation);
-//     }
 
     BlendingMode blendMode;
     blendMode.SetEnabled(true);

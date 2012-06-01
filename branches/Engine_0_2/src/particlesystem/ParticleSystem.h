@@ -51,6 +51,7 @@ public:
 	void Render();
 
 private:
+    void FillIndexBuffer();
     void ApplyEffects(uint32_t time);
 
 private:

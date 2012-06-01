@@ -55,6 +55,7 @@ protected:
     virtual void OnMousePressed(const IMouseEvent& event);
     virtual void OnMouseReleased(const IMouseEvent& event);
     virtual void OnMouseWheel(const IMouseEvent& event);
+    virtual void OnMouseDragged(const IMouseEvent& event);
 
 private:
     InputSystemSettings m_settings;

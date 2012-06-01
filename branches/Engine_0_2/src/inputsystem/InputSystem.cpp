@@ -162,6 +162,10 @@ void InputSystem::InjectMouseEvent(const IMouseEvent& event)
     {
         OnMouseWheel(event);
     }
+    else if (event.GetEventType() == MouseEventType::MouseDragged)
+    {
+        OnMouseDragged(event);
+    }
 }
 
 void InputSystem::OnKeyPressed(const IKeyEvent& event)
@@ -235,6 +239,19 @@ void InputSystem::OnMouseWheel(const IMouseEvent& event)
     for (iter = m_mouseListeners.begin(); iter != m_mouseListeners.end(); ++iter)
     {
         if ((*iter)->OnMouseWheel(event))
+        {
+            // event consumed, do not continue
+            break;
+        }
+    }
+}
+
+void InputSystem::OnMouseDragged(const IMouseEvent& event)
+{
+    MouseListenerContainer::iterator iter;
+    for (iter = m_mouseListeners.begin(); iter != m_mouseListeners.end(); ++iter)
+    {
+        if ((*iter)->OnMouseDragged(event))
         {
             // event consumed, do not continue
             break;

@@ -23,8 +23,8 @@
 
 #include "BillboardGroup.h"
 
-BillboardGroup::BillboardGroup(uint32_t numBillboards, uint32_t width, uint32_t height, const FloatRect& textureCoordinates)
-: m_dirty(true), m_width(width), m_height(height), m_textureCoordinates(textureCoordinates)
+BillboardGroup::BillboardGroup(SceneManager* sceneManager, uint32_t numBillboards, uint32_t width, uint32_t height, const FloatRect& textureCoordinates)
+: m_sceneManager(sceneManager), m_dirty(true), m_width(width), m_height(height), m_textureCoordinates(textureCoordinates)
 {
     SetNumberOfBillboards(numBillboards);
 }
@@ -39,7 +39,7 @@ void BillboardGroup::SetNumberOfBillboards(uint32_t numBillboards)
         // reserve space for billboards
         m_billBoards.reserve(numBillboards);
 
-        Billboard billBoard(this, m_width, m_height);
+        Billboard billBoard(m_sceneManager, this, m_width, m_height);
         billBoard.SetTextureCoordinates(m_textureCoordinates);
         for (uint32_t i=0; i < numBillboards; ++i)
         {

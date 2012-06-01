@@ -26,6 +26,7 @@
 #include "graphics/TextureManager.h"
 #include "graphics/ImageManager.h"
 #include "inputsystem/InputSystem.h"    // remove this in favor of create method
+#include "IFrameListener.h"
 
 // TODO - should this be here?
 #include "scene/Viewport.h"
@@ -157,9 +158,27 @@ graphics::ImageManager* Engine::GetImageManager() const
     return m_imageManager;
 }
 
+const Timer& Engine::GetTimer() const
+{
+    return m_timer;
+}
+
 uint32_t Engine::GetFps() const
 {
 	return m_fps;
+}
+
+void Engine::AddFrameListener(IFrameListener* listener)
+{
+	if (listener)
+	{
+		m_frameListeners.push_back(listener);
+	}
+}
+
+void Engine::RemoveFrameListener(IFrameListener* listener)
+{
+	m_frameListeners.erase(std::remove(m_frameListeners.begin(), m_frameListeners.end(), listener), m_frameListeners.end());
 }
 
 void Engine::StartRenderLoop() 
@@ -177,18 +196,22 @@ void Engine::PerformRendering()
 #endif
 	{
         // TODO - jlm - fire scene begin event
+        OnSceneBegin(m_timer.GetTime());
         
 		BeginScene();
         
         // TODO - jlm - fire render begin
+        OnRenderBegin(m_timer.GetTime());
         
 		Render();
         
         // TODO - jlm - fire render end
+        OnRenderEnd(m_timer.GetTime());
         
 		EndScene();
         
         // TODO - jlm - fire scene end
+        OnSceneEnd(m_timer.GetTime());
     }
 }
 
@@ -261,6 +284,38 @@ void Engine::OnDisplayUpdate()
     
     // display has signaled an update, so its time to render
     PerformRendering();
+}
+
+void Engine::OnSceneBegin(uint32_t time)
+{
+    for (FrameListeners::iterator iter = m_frameListeners.begin(); iter != m_frameListeners.end(); ++iter)
+    {
+        (*iter)->OnSceneBegin(time);
+    }
+}
+
+void Engine::OnSceneEnd(uint32_t time)
+{
+    for (FrameListeners::iterator iter = m_frameListeners.begin(); iter != m_frameListeners.end(); ++iter)
+    {
+        (*iter)->OnSceneEnd(time);
+    }
+}
+
+void Engine::OnRenderBegin(uint32_t time)
+{
+    for (FrameListeners::iterator iter = m_frameListeners.begin(); iter != m_frameListeners.end(); ++iter)
+    {
+        (*iter)->OnRenderBegin(time);
+    }
+}
+
+void Engine::OnRenderEnd(uint32_t time)
+{
+    for (FrameListeners::iterator iter = m_frameListeners.begin(); iter != m_frameListeners.end(); ++iter)
+    {
+        (*iter)->OnRenderEnd(time);
+    }
 }
 
 void Engine::ComputeFps()

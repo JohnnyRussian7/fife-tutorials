@@ -216,6 +216,67 @@ static CVReturn DisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeSt
 -(void)mouseDragged:(NSEvent*)mouseEvent
 {
     NSLog(@"mouse dragged event received\n"); 
+    
+    // get pointer location and convert to view coordinates
+    NSPoint location = [self convertPoint:[mouseEvent locationInWindow] fromView:nil];
+    
+    MouseEvent event;
+    event.SetEventType(MouseEventType::MouseDragged);
+    event.SetButtonPressed(MouseButtons::LeftButton);
+    event.SetXPos(location.x);
+    event.SetYPos(location.y);
+    event.SetRelativeX([mouseEvent deltaX]);
+    event.SetRelativeY([mouseEvent deltaY]);
+    
+    if ([mouseEvent modifierFlags] & NSControlKeyMask)
+    {
+        event.SetModifier(MouseModifiers::Ctrl);
+    }
+    if ([mouseEvent modifierFlags] & NSAlternateKeyMask)
+    {
+        event.SetModifier(MouseModifiers::Alt);
+    }
+    if ([mouseEvent modifierFlags] & NSShiftKeyMask)
+    {
+        event.SetModifier(MouseModifiers::Shift);
+    }
+    
+    m_windowSystem->OnMouseInput(event);
+    
+    [self setNeedsDisplay:YES];    
+}
+
+-(void)rightMouseDragged:(NSEvent*)mouseEvent
+{
+    NSLog(@"mouse dragged event received\n"); 
+    
+    // get pointer location and convert to view coordinates
+    NSPoint location = [self convertPoint:[mouseEvent locationInWindow] fromView:nil];
+    
+    MouseEvent event;
+    event.SetEventType(MouseEventType::MouseDragged);
+    event.SetButtonPressed(MouseButtons::RightButton);
+    event.SetXPos(location.x);
+    event.SetYPos(location.y);
+    event.SetRelativeX([mouseEvent deltaX]);
+    event.SetRelativeY([mouseEvent deltaY]);
+    
+    if ([mouseEvent modifierFlags] & NSControlKeyMask)
+    {
+        event.SetModifier(MouseModifiers::Ctrl);
+    }
+    if ([mouseEvent modifierFlags] & NSAlternateKeyMask)
+    {
+        event.SetModifier(MouseModifiers::Alt);
+    }
+    if ([mouseEvent modifierFlags] & NSShiftKeyMask)
+    {
+        event.SetModifier(MouseModifiers::Shift);
+    }
+    
+    m_windowSystem->OnMouseInput(event);
+    
+    [self setNeedsDisplay:YES];    
 }
 
 -(void)keyDown:(NSEvent*)keyEvent

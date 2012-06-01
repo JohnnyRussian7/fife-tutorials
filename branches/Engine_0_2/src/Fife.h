@@ -31,6 +31,7 @@
 #include "Engine.h"
 #include "SharedPtr.h"
 #include "Color.h"
+#include "IFrameListener.h"
 
 // entity
 #include "IEntity.h"

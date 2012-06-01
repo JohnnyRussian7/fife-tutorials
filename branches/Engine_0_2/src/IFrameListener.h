@@ -1,7 +1,7 @@
 /**********************************************************************
- *	Filename: FpsCameraController.h
+ *	Filename: IFrameListener.h
  *	
- *	Copyright (C) 2011, FIFE team
+ *	Copyright (C) 2012, FIFE team
  *	http://www.fifengine.net
  *
  *	This file is part of FIFE.
@@ -19,35 +19,20 @@
  *	You should have received a copy of the GNU Lesser General Public
  *	License along with FIFE. If not, see http://www.gnu.org/licenses/.
  ***********************************************************************/
-#ifndef FPSCAMERACONTROLLER_H_
-#define FPSCAMERACONTROLLER_H_
+#ifndef IFRAMELISTENER_H_
+#define IFRAMELISTENER_H_
 
-#include "../Fife.h"
+#include "StdIncludes.h"
 
-class FpsCameraController
+class IFrameListener
 {
 public:
-    FpsCameraController(SceneManager* sceneManager, float sensitivity=0.1f, Camera* camera=0);
-    ~FpsCameraController();
+    virtual ~IFrameListener()  { }
     
-    SceneManager* GetSceneManager();
-    Camera* GetCamera();
-    SceneNode* GetCameraSceneNode();
-    
-    void yaw(float amount);
-    void pitch(float amount);
-    void move(const Vector3& translate);
-    void update(uint32_t time);
-private:
-    SceneManager* m_sceneManager;
-    Camera* m_camera;
-    SceneNode* m_cameraNode;
-    SceneNode* m_pitchNode;
-    bool m_ownsCamera;
-    float m_rotationX;
-    float m_rotationY;
-    float m_sensitivity;
+    virtual void OnSceneBegin(uint32_t time) = 0;
+    virtual void OnSceneEnd(uint32_t time) = 0;
+    virtual void OnRenderBegin(uint32_t time) = 0;
+    virtual void OnRenderEnd(uint32_t time) = 0;
 };
 
 #endif
-

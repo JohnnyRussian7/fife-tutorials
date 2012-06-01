@@ -118,8 +118,11 @@ struct Matrix4
 	float& operator[](uint32_t index) { return m_matrix[index]; }
 	const float& operator[](uint32_t index) const { return m_matrix[index]; }
 
+    void SetX(const Vector3& right);
     Vector3 GetX() const;
+    void SetY(const Vector3& up);
     Vector3 GetY() const;
+    void SetZ(const Vector3& lookAt);
     Vector3 GetZ() const;
 
     static const uint32_t NumMatrixElements = 16;

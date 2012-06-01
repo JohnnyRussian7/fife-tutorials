@@ -36,6 +36,7 @@ public:
     virtual bool OnMousePressed(const IMouseEvent& event);
     virtual bool OnMouseReleased(const IMouseEvent& event);
     virtual bool OnMouseWheel(const IMouseEvent& event);
+    virtual bool OnMouseDragged(const IMouseEvent& event);
 
 private:
     FpsCameraController* m_fpsCamera;

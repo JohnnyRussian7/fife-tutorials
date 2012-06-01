@@ -38,11 +38,17 @@ SimpleApplication::SimpleApplication()
     CreateCamera();
     CreateKeyListener();
     CreateMouseListener();
+    
+    // add as a frame listener must be done after CreateEngine()
+    m_engine->AddFrameListener(this);
 }
 
 SimpleApplication::~SimpleApplication()
 {
     Stop();
+    
+    // remove as frame listener, must be done before engine deletion
+    m_engine->RemoveFrameListener(this);
     
     m_engine->GetInputSystem()->RemoveAllListeners();
     
@@ -95,9 +101,15 @@ void SimpleApplication::Run()
 #if defined(WINDOWS_OS)
     while (engine.Run())
 	{
+        engine.OnSceneBegin();
 		engine.BeginScene();
+        
+        engine.OnRenderBegin();
 		engine.Render();
+        engine.OnRenderEnd();
+        
 		engine.EndScene();
+        engine.OnSceneEnd();
         
 		std::stringstream oss;
 		oss << "FPS: " << engine.GetFps();
@@ -109,4 +121,25 @@ void SimpleApplication::Run()
 void SimpleApplication::Stop()
 {
     m_engine->Quit();
+}
+
+void SimpleApplication::OnSceneBegin(uint32_t time)
+{
+    // give the camera a chance to update
+    m_fpsCamera->update(time);
+}
+
+void SimpleApplication::OnSceneEnd(uint32_t time)
+{
+    
+}
+
+void SimpleApplication::OnRenderBegin(uint32_t time)
+{
+    
+}
+
+void SimpleApplication::OnRenderEnd(uint32_t time)
+{
+    
 }

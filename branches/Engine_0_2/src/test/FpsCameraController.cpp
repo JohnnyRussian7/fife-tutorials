@@ -38,7 +38,7 @@ FpsCameraController::FpsCameraController(SceneManager* sceneManager, float sensi
     }
     
     m_cameraNode = m_sceneManager->CreateSceneNode("CameraNode");
-    m_sceneManager->GetRootSceneNode()->AddChild(m_cameraNode);
+    //m_sceneManager->GetRootSceneNode()->AddChild(m_cameraNode);
     m_cameraNode->SetPosition(0, 0, 50);
     m_camera->LookAt(0, 0, 0);
     m_pitchNode = m_sceneManager->CreateSceneNode("PitchNode");
@@ -57,6 +57,11 @@ FpsCameraController::~FpsCameraController()
     
     m_sceneManager->DestroySceneNode(m_pitchNode);
     m_sceneManager->DestroySceneNode(m_cameraNode);
+}
+
+SceneManager* FpsCameraController::GetSceneManager()
+{
+    return m_sceneManager;
 }
 
 Camera* FpsCameraController::GetCamera()
@@ -82,24 +87,15 @@ void FpsCameraController::pitch(float amount)
 }
 
 void FpsCameraController::move(const Vector3& translate)
-{
-    //m_cameraNode->SetPosition(m_cameraNode->GetPosition() + translate);
-    
-    if (translate.y != 0.f)
-    {
-        //m_cameraNode->SetPosition(Vector3(0.f, translate.y, 0.f));
-    }
-    
+{    
     Vector3 xzTranslate(translate.x, 0.f, translate.z);
     
     m_cameraNode->Translate(translate);
 }
 
-void FpsCameraController::update()
+void FpsCameraController::update(uint32_t time)
 {
-    //Quaternion pitch = FromAxisAngle(Vector3::UnitX(), m_rotationY);
-    //Quaternion yaw = FromAxisAngle(Vector3::UnitY(), m_rotationX);
-    
-    //m_cameraNode->SetOrientation(yaw * pitch);
+    m_cameraNode->Update(time);
 }
+
 

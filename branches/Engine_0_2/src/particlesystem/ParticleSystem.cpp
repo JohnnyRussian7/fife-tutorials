@@ -39,7 +39,7 @@
 #include "../utility/CheckedCast.h"
 
 ParticleSystem::ParticleSystem(SceneManager* sceneManager, ParticleEmitter* emitter, bool enabled, const Vector3& position, char* name)
-: Entity(name, position), m_sceneManager(sceneManager), m_emitter(emitter), m_enabled(enabled), m_animation(0)
+: Entity(name, position), m_sceneManager(sceneManager), m_emitter(emitter), m_enabled(enabled), m_animation(0), m_billboardGroup(sceneManager)
 {
     // TODO - this should probably be refactored, doesn't belong here
     m_material = new Material();
@@ -50,7 +50,8 @@ ParticleSystem::ParticleSystem(SceneManager* sceneManager, ParticleEmitter* emit
     AddComponent(renderComponent);
 
     m_vertexBuffer = m_sceneManager->CreateVertexBuffer(emitter->GetNumMaxParticles()*Billboard::GetNumberOfVertices(), sizeof(Vertex), HwBufferUsage::Stream);
-    m_indexBuffer = m_sceneManager->CreateIndexBuffer(emitter->GetNumMaxParticles()*Billboard::GetNumberOfIndices(), IndexBufferDataType::_16bit, HwBufferUsage::Stream);
+    m_indexBuffer = m_sceneManager->CreateIndexBuffer(emitter->GetNumMaxParticles()*Billboard::GetNumberOfIndices(), IndexBufferDataType::_16bit, HwBufferUsage::Static);
+    FillIndexBuffer();
 }
 
 ParticleSystem::~ParticleSystem()
@@ -64,6 +65,26 @@ ParticleSystem::~ParticleSystem()
         delete *iter;
     }
     m_effects.clear();
+}
+
+void ParticleSystem::FillIndexBuffer()
+{
+    static uint32_t NumIndices = 6;
+    static uint16_t Indices[] = {0, 1, 2, 2, 1, 3};
+    
+    uint32_t MaxNumberOfIndices = m_emitter->GetNumMaxParticles() * NumIndices;
+    std::vector<uint16_t> computedIndices;
+    computedIndices.reserve(MaxNumberOfIndices);
+    for (uint32_t i=0; i < m_emitter->GetNumMaxParticles(); ++i)
+    {
+        for (uint32_t j=0; j < NumIndices; ++j)
+        {
+            // takes 6 indices to fully describe a billboard
+            computedIndices.push_back(NumIndices * i + Indices[j]);
+        }
+    }
+    
+    m_indexBuffer->WriteData(&computedIndices[0], computedIndices.size());
 }
 
 void ParticleSystem::AddEffect(IParticleEffect* effect)
@@ -137,9 +158,6 @@ void ParticleSystem::Update(uint32_t time)
 
         VertexData& vertexData = m_billboardGroup.GetVertexData();
         m_vertexBuffer->WriteData(vertexData.GetVertices(), vertexData.GetNumVertices());
-        
-        IndexData& indexData = m_billboardGroup.GetIndexData();
-        m_indexBuffer->WriteData(indexData.GetIndices(), indexData.GetNumIndices());
 
         RenderComponent* renderComponent = checked_cast<RenderComponent*>(GetComponent("Render"));
         if (renderComponent)
@@ -150,11 +168,7 @@ void ParticleSystem::Update(uint32_t time)
             }
 
             renderComponent->SetVertexBuffer(m_vertexBuffer);
-
-            if (indexData.GetNumIndices() != 0)
-            {
-                renderComponent->SetIndexBuffer(m_indexBuffer);
-            }
+            renderComponent->SetIndexBuffer(m_indexBuffer);
         }
 
         ApplyEffects(time);

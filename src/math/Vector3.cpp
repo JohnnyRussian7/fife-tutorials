@@ -39,6 +39,11 @@ Vector3 operator*(const Vector3& vector, float value)
 	return Vector3(vector.x*value, vector.y*value, vector.z*value);
 }
 
+Vector3 operator*(float value, const Vector3& vector)
+{
+	return Vector3(vector.x*value, vector.y*value, vector.z*value);
+}
+
 Vector3 operator*(const Vector3& vector1, const Vector3& vector2)
 {
     return Vector3(vector1.x*vector2.x, vector1.y*vector2.y, vector1.z*vector2.z);

@@ -24,14 +24,35 @@
 #include "Matrix4.h"
 #include "Vector3.h"
 
+void Matrix4::SetX(const Vector3& right)
+{
+    m_matrix[0] = right[0];
+    m_matrix[1] = right[1];
+    m_matrix[2] = right[2];
+}
+
 Vector3 Matrix4::GetX() const
 {
     return Vector3(m_matrix[0], m_matrix[1], m_matrix[2]);
 }
 
+void Matrix4::SetY(const Vector3& up)
+{
+    m_matrix[4] = up[0];
+    m_matrix[5] = up[1];
+    m_matrix[6] = up[2];
+}
+
 Vector3 Matrix4::GetY() const
 {
     return Vector3(m_matrix[4], m_matrix[5], m_matrix[6]);
+}
+
+void Matrix4::SetZ(const Vector3& lookAt)
+{
+    m_matrix[8] = lookAt[0];
+    m_matrix[9] = lookAt[1];
+    m_matrix[10] = lookAt[2];
 }
 
 Vector3 Matrix4::GetZ() const

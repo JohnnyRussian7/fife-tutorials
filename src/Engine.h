@@ -40,6 +40,7 @@ class IWindowSystem;
 class IRenderSystem;
 class IFileSystem;
 class IInputSystem;
+class IFrameListener;
 class SceneManager;
 class TextureManager;
 
@@ -78,8 +79,13 @@ public:
     TextureManager* GetTextureManager() const;
     graphics::ImageManager* GetImageManager() const;
 
+    const Timer& GetTimer() const;
+    
 	uint32_t GetFps() const;
 
+    void AddFrameListener(IFrameListener* listener);
+    void RemoveFrameListener(IFrameListener* listener);
+    
     void StartRenderLoop();
     void PerformRendering();
 	void BeginScene();
@@ -94,6 +100,10 @@ public:
     virtual void OnDisplayUpdate();
 
 private:
+    void OnSceneBegin(uint32_t time);
+    void OnSceneEnd(uint32_t time);
+    void OnRenderBegin(uint32_t time);
+    void OnRenderEnd(uint32_t time);
 	void ComputeFps();
 
 private:
@@ -112,6 +122,9 @@ private:
 	uint32_t m_fpsFrameCount;
 	uint32_t m_fpsStartTime;
     bool m_autoRendering;
+    
+    typedef std::vector<IFrameListener*> FrameListeners;
+    FrameListeners m_frameListeners;
 };
 
 #endif

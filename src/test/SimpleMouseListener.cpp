@@ -39,8 +39,8 @@ bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event)
 {
     //float yawAmount = (event.GetXPos() - m_lastX) * 0.015;
     //float pitchAmount = (event.GetYPos() - m_lastY) * 0.015;
-    float yaw = event.GetRelativeX();
-    float pitch = event.GetRelativeY();
+    float yaw = -event.GetRelativeX();
+    float pitch = -event.GetRelativeY();
     
     if  (m_initialized)
     {
@@ -49,7 +49,6 @@ bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event)
         //m_cam->Pitch(pitchAmount);
         m_fpsCamera->yaw(yaw);
         m_fpsCamera->pitch(pitch);
-        m_fpsCamera->update();
         //std::cout << "yaw: " << yaw << "\t\t" << "pitch:" << pitch << std::endl;
     }
     
@@ -69,6 +68,16 @@ bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event)
 
 bool SimpleMouseListener::OnMousePressed(const IMouseEvent& event) 
 { 
+    float yaw = -event.GetRelativeX();
+    float pitch = -event.GetRelativeY();
+    
+    if (event.IsButtonPressed(MouseButtons::LeftButton))
+    {
+        SceneNode* root = m_fpsCamera->GetSceneManager()->GetRootSceneNode();
+        root->Yaw(yaw);
+        root->Pitch(pitch);
+    }
+    
     return true; 
 }
 
@@ -84,4 +93,17 @@ bool SimpleMouseListener::OnMouseWheel(const IMouseEvent& event)
     //m_cam->Translate(Vector3(0.f, 0.f, -ZoomAmount*event.GetWheelDelta()));
 
     return true;
+}
+
+bool SimpleMouseListener::OnMouseDragged(const IMouseEvent& event)
+{
+    float yaw = DegToRad(-event.GetRelativeX());
+    float pitch = DegToRad(-event.GetRelativeY());
+    
+    if (event.IsButtonPressed(MouseButtons::LeftButton))
+    {
+        SceneNode* root = m_fpsCamera->GetSceneManager()->GetRootSceneNode();
+        root->Yaw(yaw);
+        root->Pitch(pitch);
+    }
 }

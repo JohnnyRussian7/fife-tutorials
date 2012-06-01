@@ -23,6 +23,7 @@
 
 #include "Billboard.h"
 #include "SceneManager.h"
+#include "Camera.h"
 #include "IAnimation.h"
 #include "IMaterial.h"
 #include "../math/Vector2.h"
@@ -35,8 +36,8 @@
 #include "../RenderComponent.h"
 #include "../utility/CheckedCast.h"
 
-Billboard::Billboard(BillboardGroup* parent, uint32_t width, uint32_t height, const Vector3& position)
-: m_parent(parent), m_dirty(true), m_width(width), m_height(height), m_position(position)
+Billboard::Billboard(SceneManager* sceneManager, BillboardGroup* parent, uint32_t width, uint32_t height, const Vector3& position)
+: m_sceneManager(sceneManager), m_parent(parent), m_dirty(true), m_width(width), m_height(height), m_position(position)
 {
     InitIndices();
 }
@@ -231,6 +232,13 @@ void Billboard::Update()
     const float halfWidth = m_width/2.f;
     const float halfHeight = m_height/2.f;
 
+    Matrix4 transposeView = Matrix4::Identity();
+    Camera* m_camera = m_sceneManager->GetCamera();
+    if (m_camera)
+    {
+        transposeView = Transpose(m_camera->GetViewMatrix());
+    }
+
     // 4 vertices per billboard
     // split into 2 triangles with 
     // vertex 1 and 2 shared
@@ -241,19 +249,23 @@ void Billboard::Update()
     //  (0)|_____\| (1)
 
     // first vertex (0)
-    Vector3 position = m_position + Vector3(-halfWidth, halfHeight, 0);
+    //Vector3 position = m_position + Vector3(-halfWidth*transposeView.GetX(), halfHeight*transposeView.GetY(), 0);
+    Vector3 position = m_position + (-halfWidth*transposeView.GetX() + halfHeight*transposeView.GetY());
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
 
     // second vertex (1)
-    position = m_position + Vector3(halfWidth, halfHeight, 0);
+    //position = m_position + Vector3(halfWidth, halfHeight, 0);
+    position = m_position + (halfWidth*transposeView.GetX() + halfHeight*transposeView.GetY());
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
 
     // third vertex (2)
-    position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
+    //position = m_position + Vector3(-halfWidth*transposeView.GetX(), -halfHeight*transposeView.GetY(), 0); 
+    position = m_position + (-halfWidth*transposeView.GetX() - halfHeight*transposeView.GetY());
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
 
     // fourth vertex (3)
-    position = m_position + Vector3(halfWidth, -halfHeight, 0); 
+    //position = m_position + Vector3(halfWidth, -halfHeight, 0);
+    position = m_position + (halfWidth*transposeView.GetX() - halfHeight*transposeView.GetY());
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
 
     ResetDirty();

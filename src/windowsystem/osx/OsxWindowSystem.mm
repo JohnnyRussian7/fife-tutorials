@@ -181,7 +181,10 @@ public:
     
     void AddListener(IWindowSystemEventListener* listener)
     {
-        m_listeners.push_back(listener);
+        if (listener)
+        {
+            m_listeners.push_back(listener);
+        }
     }
     
     void RemoveListener(IWindowSystemEventListener* listener)

@@ -150,7 +150,7 @@ namespace opengl {
     {
         switch (type)
         {
-        case TransformType::Model:
+            case TransformType::Model:
             {
                 m_modelMatrix = mat;
 
@@ -158,7 +158,7 @@ namespace opengl {
                 glLoadMatrixf((m_viewMatrix*m_modelMatrix).m_matrix);
             }
             break;
-        case TransformType::View:
+            case TransformType::View:
             {
                 m_viewMatrix = mat;
 
@@ -166,7 +166,7 @@ namespace opengl {
                 glLoadMatrixf((m_viewMatrix*m_modelMatrix).m_matrix);
             }
             break;
-        case TransformType::Projection:
+            case TransformType::Projection:
             {
                 m_projectionMatrix = mat;
 
@@ -174,7 +174,7 @@ namespace opengl {
                 glLoadMatrixf(m_projectionMatrix.m_matrix);
             }
             break;
-        default:
+            default:
             {
                 // TODO - print error here
                 assert(0);
@@ -566,6 +566,17 @@ namespace opengl {
 
     void OpenglRenderer::RenderAxes()
     {
+        
+        //glBegin(GL_TRIANGLE_STRIP);
+        glBegin(GL_TRIANGLES);
+        glVertex2f(-1, -1);
+        glVertex2f(1, -1);
+        glVertex2f(-1, 1);
+        
+        glVertex2f(1, -1);
+        glVertex2f(-1, 1);
+        glVertex2f(1, 1);
+        glEnd();
         // current clear color
         Color color = m_clearColor;
 

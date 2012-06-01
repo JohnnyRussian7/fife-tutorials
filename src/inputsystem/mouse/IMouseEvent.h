@@ -33,6 +33,7 @@ struct MouseEventType
         MouseClick = 0,
         MouseMoved,
         MouseWheel,
+        MouseDragged,
 
         Max,
         Invalid = -1

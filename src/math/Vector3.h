@@ -38,7 +38,37 @@ struct Vector3
 	inline Vector3& operator/=(float value);
 	inline bool operator==(const Vector3& rhs) const;
     inline bool operator!=(const Vector3& rhs) const;
-
+    
+    inline float& operator[](uint32_t index) 
+    {
+        switch (index)
+        {
+            case 0:
+                return x;
+            case 1:
+                return y;
+            case 2:
+                return z;
+            default:
+                return x;
+        }
+    };
+    
+    inline const float& operator[](uint32_t index) const
+    {
+        switch (index)
+        {
+            case 0:
+                return x;
+            case 1:
+                return y;
+            case 2:
+                return z;
+            default:
+                return x;
+        }
+    }
+    
 	static Vector3 Zero()
 	{
 		static Vector3 zero(0.f, 0.f, 0.f);
@@ -137,6 +167,7 @@ bool Vector3::operator!=(const Vector3& rhs) const
 Vector3 operator+(const Vector3& vector1, const Vector3& vector2);
 Vector3 operator-(const Vector3& vector1, const Vector3& vector2);
 Vector3 operator*(const Vector3& vector, float value);
+Vector3 operator*(float value, const Vector3& vector);
 Vector3 operator*(const Vector3& vector1, const Vector3& vector2);
 Vector3 operator/(const Vector3& vector, float value);
 Vector3 operator/(const Vector3& v1, const Vector3& v2);

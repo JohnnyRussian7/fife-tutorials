@@ -40,7 +40,7 @@ class IndexData;
 class Billboard : public Visual
 {
 public:
-    Billboard(BillboardGroup* parent=0, uint32_t width=1, uint32_t height=1, const Vector3& position=Vector3::Zero());
+    Billboard(SceneManager* sceneManager, BillboardGroup* parent=0, uint32_t width=1, uint32_t height=1, const Vector3& position=Vector3::Zero());
     Billboard(SceneManager* sceneManager);
     Billboard(SceneManager* sceneManager, const Vector3& position);
     Billboard(SceneManager* sceneManager, BillboardGroup* owner, const Vector3& position = Vector3::Zero());

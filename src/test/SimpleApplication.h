@@ -28,7 +28,7 @@ class FpsCameraController;
 class SimpleKeyListener;
 class SimpleMouseListener;
 
-class SimpleApplication
+class SimpleApplication : public IFrameListener
 {
 public:
     SimpleApplication();
@@ -36,11 +36,19 @@ public:
     
     void Run();
     void Stop();
+    
+    // overrides from IFrameListener
+    void OnSceneBegin(uint32_t time);
+    void OnSceneEnd(uint32_t time);
+    void OnRenderBegin(uint32_t time);
+    void OnRenderEnd(uint32_t time);
+    
 private:
     void CreateEngine();
     void CreateCamera();
     void CreateMouseListener();
     void CreateKeyListener();
+    
 private:
     Engine* m_engine;
     FpsCameraController* m_fpsCamera;

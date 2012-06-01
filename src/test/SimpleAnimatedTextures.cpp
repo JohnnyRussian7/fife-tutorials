@@ -45,7 +45,7 @@ void CreateSimpleAnimatedTextures(Engine& engine)
     Visual* b1 = sceneManager->CreateBillboard(40, 40);
 
     e1->SetVisual(b1);
-    b1->SetAnimation(sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 1, 24, 24, 2500));
+    //b1->SetAnimation(sceneManager->CreateAnimatedTexture("..\\..\\data\\torch_animation.png", 1, 24, 24, 2500));
 
     IMaterial* m1 = new Material();
     b1->GetRenderable()->SetMaterial(m1);

@@ -25,7 +25,7 @@
 #include "FpsCameraController.h"
 
 SimpleKeyListener::SimpleKeyListener(Engine* engine, FpsCameraController* fpsCamera) 
-: m_engine(engine), m_fpsCamera(fpsCamera), m_name("SimpleKeyListener"), m_xTrans(0.f), m_yTrans(0.f), m_zTrans(0.f)
+: m_engine(engine), m_fpsCamera(fpsCamera), m_name("SimpleKeyListener"), m_translation(Vector3::Zero())
 { 
 
 }
@@ -35,47 +35,57 @@ const std::string& SimpleKeyListener::GetName()
     return m_name; 
 }
 
+void SimpleKeyListener::ResetTranslation()
+{
+    m_translation = Vector3::Zero();
+}
+
 bool SimpleKeyListener::OnKeyPressed(const IKeyEvent& event) 
-{ 
+{
+    // make sure to reset the translation values
+    // before reading new ones in
+    ResetTranslation();
+    
     bool translationChange = false;
     const float TranslationAmount = 1.f;
+    const float ZoomAmount = 10.f;
     
     if (event.GetKeyCode() == KeyCodes::Left)
     {
-        m_xTrans = -TranslationAmount;
+        m_translation.x = -TranslationAmount;
         translationChange = true;
     }
     else if (event.GetKeyCode() == KeyCodes::Right)
     {
-        m_xTrans = TranslationAmount;
+        m_translation.x = TranslationAmount;
         translationChange = true;
     }
     else if (event.GetKeyCode() == KeyCodes::Up)
     {
-        m_zTrans = -TranslationAmount;
+        m_translation.y = TranslationAmount;
         translationChange = true;
     }
     else if (event.GetKeyCode() == KeyCodes::Down)
     {
-        m_zTrans = TranslationAmount;
+        m_translation.y = -TranslationAmount;
         translationChange = true;
     }
     else if (event.GetKeyCode() == KeyCodes::Plus)
     {
         const float ZoomAmount = 10;
         
-        m_fpsCamera->move(Vector3(0.f, 0.f, -ZoomAmount));
+        m_translation.z = -ZoomAmount;
+        m_fpsCamera->move(m_translation);
     }
     else if (event.GetKeyCode() == KeyCodes::Minus)
     {
-        const float ZoomAmount = 10;
-        
-        m_fpsCamera->move(Vector3(0.f, 0.f, ZoomAmount));
+        m_translation.z = ZoomAmount;
+        m_fpsCamera->move(m_translation);
     }
 
     if (translationChange)
     {
-        m_fpsCamera->move(Vector3(m_xTrans, m_yTrans, m_zTrans));
+        m_fpsCamera->move(m_translation);
     }
 
     return true;

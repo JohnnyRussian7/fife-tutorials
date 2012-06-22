@@ -30,7 +30,7 @@ public:
     virtual ~IComponent() { };
 
     virtual std::string GetName() = 0;
-    virtual void SetParent(IEntity* entity) = 0;
+    virtual void SetOwner(IEntity* entity) = 0;
     virtual void Update(uint32_t time) = 0;
 };
 

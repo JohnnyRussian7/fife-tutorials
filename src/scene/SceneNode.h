@@ -33,6 +33,7 @@
 #include "../rendersystem/FillMode.h"
 #include "../rendersystem/AlphaTestMode.h"
 #include "../rendersystem/DepthBufferWriteMode.h"
+#include "../TransformComponent.h"
 
 class SceneManager;
 class IEntity;
@@ -59,6 +60,8 @@ public:
     void RemoveEntity(const char* name, bool shouldDeleteChild);
     void RemoveAllEntities();
 
+    TransformComponent* GetTransformComponent() const;
+    
     void GetRenderOperations(std::vector<RenderOperation>& renderOperations);
 
 	const Vector3& GetScale() const;
@@ -128,6 +131,8 @@ private:
     typedef std::vector<IEntity*> EntityContainer;
     EntityContainer m_entities;
 
+    TransformComponent* m_transformComponent;
+    
 	Vector3 m_scale;
 	Vector3 m_position;
 	Quaternion m_orientation;

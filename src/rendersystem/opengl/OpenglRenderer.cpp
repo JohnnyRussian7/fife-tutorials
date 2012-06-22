@@ -156,6 +156,16 @@ namespace opengl {
 
                 glMatrixMode(GL_MODELVIEW);
                 glLoadMatrixf((m_viewMatrix*m_modelMatrix).m_matrix);
+                
+                /*
+                std::cout << "supposed model view" << std::endl;
+                std::cout << (m_viewMatrix*m_modelMatrix) << "\n" << std::endl;
+                
+                float m[16];
+                glGetFloatv(GL_MODELVIEW_MATRIX, m);
+                std::cout << "actual modelview: " << std::endl;
+                std::cout << Matrix4(m) << std::endl;
+                */
             }
             break;
             case TransformType::View:
@@ -408,9 +418,17 @@ namespace opengl {
 
     void OpenglRenderer::Render(const RenderOperation& renderOperation)
     {
+        //std::cout << "supposed model view" << std::endl;
+        //std::cout << m_viewMatrix * renderOperation.GetTransform() << "\n" << std::endl;
+        
         // set the model transform
         SetTransform(TransformType::Model, renderOperation.GetTransform());
 
+        /*float m[16];
+        glGetFloatv(GL_MODELVIEW_MATRIX, m);
+        std::cout << "actual model view" << std::endl;
+        std::cout << Matrix4(m) << std::endl;*/
+        
         // set the blending mode
         SetBlendingMode(renderOperation.GetBlendingMode());
 
@@ -573,9 +591,10 @@ namespace opengl {
         glVertex2f(1, -1);
         glVertex2f(-1, 1);
         
-        glVertex2f(1, -1);
         glVertex2f(-1, 1);
+        glVertex2f(1, -1);
         glVertex2f(1, 1);
+        
         glEnd();
         // current clear color
         Color color = m_clearColor;

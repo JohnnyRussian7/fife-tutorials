@@ -26,6 +26,7 @@
 #include "math/Matrix4.h"
 #include "scene/SceneNode.h"
 #include "IComponent.h"
+#include "TransformComponent.h"
 
 // TODO - remove when visual is longer used
 #include "Visual.h"
@@ -49,7 +50,7 @@ namespace
 }
 
 Entity::Entity(const char* name, const Vector3& position)
-: m_name(""), m_parent(0), m_position(position), m_visual(0)
+: m_name(""), m_parent(0), m_visual(0)
 {
 	if (name)
 	{
@@ -59,6 +60,10 @@ Entity::Entity(const char* name, const Vector3& position)
     {
         m_name = CreateUniqueEntityName();
     }
+    
+    // by default every entity has a transform component
+    m_transformComponent = new TransformComponent();
+    AddComponent(m_transformComponent);
 }
 
 Entity::~Entity()
@@ -116,7 +121,7 @@ void Entity::AddComponent(IComponent* component)
                 // found identical component, remove
                 // existing one before adding new one
                 delete *iter;
-                component->SetParent(this);
+                component->SetOwner(this);
                 *iter = component;
                 replacedComponent = true;
                 break;
@@ -127,7 +132,7 @@ void Entity::AddComponent(IComponent* component)
         // so we append to end of component list
         if (!replacedComponent)
         {
-            component->SetParent(this);
+            component->SetOwner(this);
             m_components.push_back(component);
         }
     }
@@ -150,7 +155,14 @@ void Entity::RemoveComponent(std::string name)
 
 const Vector3& Entity::GetPosition() const
 {
+    return m_transformComponent->GetPosition();
+    /*
+    if (m_parent)
+    {
+        m_parent->GetRelativePosition();
+    }
     return m_position;
+    */
 }
 
 void Entity::SetPosition(float x, float y, float z)
@@ -160,7 +172,22 @@ void Entity::SetPosition(float x, float y, float z)
 
 void Entity::SetPosition(const Vector3& position)
 {
-    m_position = position;
+    m_transformComponent->SetPosition(position);
+}
+
+const Quaternion& Entity::GetOrientation() const
+{
+    return m_transformComponent->GetOrientation();
+}
+
+void Entity::SetOrientation(const Quaternion& rotation)
+{
+    m_transformComponent->SetOrientation(rotation);
+}
+
+void Entity::SetOrientation(const Vector3& axis, float angle)
+{
+    m_transformComponent->SetOrientation(FromAxisAngle(axis, angle));
 }
 
 void Entity::Update(uint32_t time)
@@ -178,11 +205,6 @@ void Entity::Update(uint32_t time)
 }
 
 Matrix4 Entity::GetTransform()
-{
-    if (m_parent)
-    {
-        return m_parent->GetTransform();
-    }
-
-    return Matrix4::Identity();
+{    
+    return m_transformComponent->GetTransform();
 }

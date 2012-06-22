@@ -73,6 +73,7 @@ public:
     static uint32_t GetNumberOfVertices();
     static uint32_t GetNumberOfIndices();
 
+    
 private:
     void MarkDirty();
     void ResetDirty();

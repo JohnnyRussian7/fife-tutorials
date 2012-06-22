@@ -35,8 +35,7 @@ class SceneNode;
 class Camera : public Entity
 {
 public:
-	Camera(const char* name, const Vector3& position = Vector3::Zero(),
-            const Quaternion& orientation = Quaternion::Identity());
+	Camera(const char* name);
 
     virtual void SetPosition(float x, float y, float z);
     virtual void SetPosition(const Vector3& position);
@@ -76,14 +75,19 @@ private:
     void MarkDirty();
     void ResetDirty();
     bool IsDirty();
+    
+    void MarkViewDirty();
+    void ResetViewDirty();
+    bool IsViewDirty() const;
 
 private:
-	Quaternion m_orientation;
-    Quaternion m_relativeOrientation;
-    Vector3 m_relativePosition;
+	//Quaternion m_orientation;
+    //Quaternion m_relativeOrientation;
+    //Vector3 m_relativePosition;
     Matrix4 m_viewMatrix;
     Frustum m_frustum;
     bool m_needsUpdate;
+    bool m_viewDirty;
     bool m_fixedYaw;
     Vector3 m_fixedYawAxis;
 };

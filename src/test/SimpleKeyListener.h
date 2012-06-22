@@ -31,6 +31,8 @@ class SimpleKeyListener : public IKeyListener
 public:
     SimpleKeyListener(Engine* engine, FpsCameraController* fpsCamera);
 
+    void ResetTranslation();
+    
     virtual const std::string& GetName();
     virtual bool OnKeyPressed(const IKeyEvent& event);
     virtual bool OnKeyReleased(const IKeyEvent& event);
@@ -39,9 +41,7 @@ private:
     Engine* m_engine;
     FpsCameraController* m_fpsCamera;
     std::string m_name;
-    float m_xTrans;
-    float m_yTrans;
-    float m_zTrans;
+    Vector3 m_translation;
     FillMode m_fillMode;
     CullMode m_cullMode;
     PolygonWindingMode m_windingMode;

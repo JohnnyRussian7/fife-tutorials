@@ -28,7 +28,7 @@
 #include "graphics/IIndexBuffer.h"
 
 RenderComponent::RenderComponent()
-: m_parent(0), m_vertexBuffer(0), m_indexBuffer(0), m_material(0), m_primitiveType(PrimitiveType::Triangles)
+: m_owner(0), m_vertexBuffer(0), m_indexBuffer(0), m_material(0), m_primitiveType(PrimitiveType::Triangles)
 {
 
 }
@@ -43,9 +43,9 @@ std::string RenderComponent::GetName()
     return "Render";
 }
 
-void RenderComponent::SetParent(IEntity* entity)
+void RenderComponent::SetOwner(IEntity* entity)
 {
-    m_parent = entity;
+    m_owner = entity;
 }
 
 void RenderComponent::Update(uint32_t time)
@@ -95,9 +95,9 @@ PrimitiveType::Enum RenderComponent::GetPrimitiveType() const
 
 Matrix4 RenderComponent::GetTransform()
 {
-    if (m_parent)
+    if (m_owner)
     {
-        return m_parent->GetTransform();
+        return m_owner->GetTransform();
     }
 
     return Matrix4::Identity();

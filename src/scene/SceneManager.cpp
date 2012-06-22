@@ -58,7 +58,11 @@ SceneManager::~SceneManager()
 
 Camera* SceneManager::CreateCamera(const char* name, const Vector3& position, const Quaternion& orientation)
 {
-    return new Camera(name, position, orientation);
+    Camera* camera = new Camera(name);
+    camera->SetPosition(position);
+    camera->SetOrientation(orientation);
+    return camera;
+    
 }
 
 void SceneManager::DestroyCamera(Camera* camera)
@@ -269,7 +273,7 @@ void SceneManager::RenderScene(uint32_t time)
     // pass each render operation to the render system
     std::vector<RenderOperation>::iterator iter;
     for (iter = renderOperations.begin(); iter != renderOperations.end(); ++iter)
-    { 
+    {
         // render each operation
         m_renderSystem->Render(*iter);
     }

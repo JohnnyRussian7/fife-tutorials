@@ -31,7 +31,7 @@ VertexData::VertexData()
 
 VertexData::VertexData( uint32_t numVertices )
 {
-    m_vertices.reserve(numVertices);
+    SetNumVertexHint(numVertices);
 }
 
 VertexData::VertexData( const Vertex* vertices, uint32_t numVertices )
@@ -39,6 +39,11 @@ VertexData::VertexData( const Vertex* vertices, uint32_t numVertices )
 	m_vertices.reserve(numVertices);
 	
 	AddVertices(vertices, numVertices);
+}
+
+void VertexData::SetNumVertexHint(uint32_t numVertices)
+{
+    m_vertices.reserve(numVertices);
 }
 
 void VertexData::AddVertex( const Vertex& vertex )
@@ -59,13 +64,16 @@ void VertexData::AddVertices( const Vertex* vertices, uint32_t numVertices )
 	}
 }
 
-void VertexData::Clear()
+void VertexData::Clear(bool resetSize)
 {
 	// remove all vertices
 	m_vertices.clear();
 
-	// shrink vertex container
-	VertexContainer().swap(m_vertices);
+    if (resetSize)
+    {
+        // shrink vertex container
+        VertexContainer().swap(m_vertices);
+    }
 }
 
 Vertex* VertexData::GetVertices()

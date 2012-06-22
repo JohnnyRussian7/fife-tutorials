@@ -91,10 +91,10 @@ void SimpleApplication::CreateKeyListener()
 
 void SimpleApplication::Run()
 {
-    //CreateSimpleAnimatedTextures(*m_engine);
+    CreateSimpleAnimatedTextures(*m_engine);
     //CreateSimpleStaticTextures(*m_engine);
     //CreateSimpleIsometricView(*m_engine, *m_fpsCamera);
-    CreateSimpleParticleSystem(*m_engine);
+    //CreateSimpleParticleSystem(*m_engine);
     
     m_engine->StartRenderLoop();
     

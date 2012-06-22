@@ -38,7 +38,7 @@ public:
     ~RenderComponent();
 
     virtual std::string GetName();
-    virtual void SetParent(IEntity* entity);
+    virtual void SetOwner(IEntity* entity);
     virtual void Update(uint32_t time);
 
     IVertexBuffer* GetVertexBuffer() const;
@@ -56,7 +56,7 @@ public:
     Matrix4 GetTransform();
 
 private:
-    IEntity* m_parent;
+    IEntity* m_owner;
     IVertexBuffer* m_vertexBuffer;
     IIndexBuffer* m_indexBuffer;
     IMaterial* m_material;

@@ -31,13 +31,15 @@
 #include "../graphics/IVertexBuffer.h"
 #include "../graphics/IIndexBuffer.h"
 #include "../graphics/IndexData.h"
+#include "SceneNode.h"
 
 // TODO - temporary
 #include "../RenderComponent.h"
 #include "../utility/CheckedCast.h"
 
 Billboard::Billboard(SceneManager* sceneManager, BillboardGroup* parent, uint32_t width, uint32_t height, const Vector3& position)
-: m_sceneManager(sceneManager), m_parent(parent), m_dirty(true), m_width(width), m_height(height), m_position(position)
+: m_sceneManager(sceneManager), m_parent(parent), m_dirty(true), m_width(width), m_height(height), m_position(position),
+  m_vertexData(GetNumberOfVertices())
 {
     InitIndices();
 }
@@ -189,7 +191,7 @@ void Billboard::FillIndexData(IndexData& indexData, uint32_t billboardNumber)
 {
     for (uint32_t i=0; i < m_indices.size(); ++i)
     {
-        // takes 4 indices to fully describe a billboard
+        // takes 6 indices to fully describe a billboard
         indexData.AddIndex(GetNumberOfVertices() * billboardNumber + m_indices[i]);
     } 
 }
@@ -226,19 +228,19 @@ bool Billboard::IsDirty() const
 
 void Billboard::Update()
 {
-    // clear out current vertex information
-    m_vertexData.Clear();
+    // clear out current vertex information, but do not resize the container
+    m_vertexData.Clear(false);
 
     const float halfWidth = m_width/2.f;
     const float halfHeight = m_height/2.f;
 
     Matrix4 transposeView = Matrix4::Identity();
-    Camera* m_camera = m_sceneManager->GetCamera();
-    if (m_camera)
+    Camera* camera = m_sceneManager->GetCamera();
+    if (camera)
     {
-        transposeView = Transpose(m_camera->GetViewMatrix());
+        transposeView = camera->GetViewMatrix() * GetTransform();
     }
-
+    
     // 4 vertices per billboard
     // split into 2 triangles with 
     // vertex 1 and 2 shared
@@ -248,40 +250,49 @@ void Billboard::Update()
     //     |   \  |
     //  (0)|_____\| (1)
 
+    Vector3 lookAt = -Normalize(camera->GetPosition() - m_owner->GetParent()->GetRelativePosition());
+    Vector3 upVec = Vector3(0, 1, 0);
+    Vector3 rightVec = Normalize(Cross(upVec, lookAt));
+    upVec = Normalize(Cross(lookAt, rightVec));
+    
+    /*
+    std::cout << "cam position: " << camera->GetPosition() << std::endl;
+    std::cout << "cam up : " << camera->GetUp() << std::endl;
+    std::cout << "cam right: " << camera->GetRight() << std::endl;
+    std::cout << "cam lookAt: " << camera->GetLookAt() << std::endl;
+    std::cout << "position: " << m_owner->GetParent()->GetRelativePosition() << std::endl;
+    std::cout << "lookAt: " << lookAt << std::endl;
+    std::cout << "upVec: " << upVec << std::endl;
+    std::cout << "rightVec: " << rightVec << std::endl;
+    */
+    
+    //float m[16];
+    //glGetFloatv(GL_MODELVIEW_MATRIX, m);
+    //transposeView = Matrix4(m);
+    //Vector3 rightVec = transposeView.GetX();
+    //Vector3 upVec = transposeView.GetY();
+    
     // first vertex (0)
-    //Vector3 position = m_position + Vector3(-halfWidth*transposeView.GetX(), halfHeight*transposeView.GetY(), 0);
-    Vector3 position = m_position + (-halfWidth*transposeView.GetX() + halfHeight*transposeView.GetY());
+    Vector3 position = m_position + (-halfWidth*rightVec + halfHeight*upVec);
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
 
     // second vertex (1)
-    //position = m_position + Vector3(halfWidth, halfHeight, 0);
-    position = m_position + (halfWidth*transposeView.GetX() + halfHeight*transposeView.GetY());
+    position = m_position + (halfWidth*rightVec + halfHeight*upVec);
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
 
     // third vertex (2)
-    //position = m_position + Vector3(-halfWidth*transposeView.GetX(), -halfHeight*transposeView.GetY(), 0); 
-    position = m_position + (-halfWidth*transposeView.GetX() - halfHeight*transposeView.GetY());
+    position = m_position + (-halfWidth*rightVec - halfHeight*upVec);
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
 
     // fourth vertex (3)
-    //position = m_position + Vector3(halfWidth, -halfHeight, 0);
-    position = m_position + (halfWidth*transposeView.GetX() - halfHeight*transposeView.GetY());
+    position = m_position + (halfWidth*rightVec - halfHeight*upVec);
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
 
     ResetDirty();
 }
 
 void Billboard::GenerateBuffers()
-{
-    // 4 vertices per billboard
-    // split into 2 triangles with 
-    // vertex 1 and 2 shared
-    //  (2) ______ (3)
-    //     |\     |       
-    //     |  \   |
-    //     |   \  |
-    //  (0)|_____\| (1)
-    
+{    
     RenderComponent* renderComponent = 0;
     if (m_owner)
     {
@@ -299,33 +310,14 @@ void Billboard::GenerateBuffers()
 
     if (vertexBuffer)
     {
-        const float halfWidth = m_width/2.f;
-        const float halfHeight = m_height/2.f;
+        // update vertex information
+        Update();       
 
-        std::vector<Vertex> vertices;
-        vertices.reserve(GetNumberOfVertices());
-
-        // first vertex (0)
-        Vector3 position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
-
-        // second vertex (1)
-        position = m_position + Vector3(halfWidth, -halfHeight, 0); 
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
-
-        // third vertex (2)
-        position = m_position + Vector3(-halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
-
-        // fourth vertex (3)
-        position = m_position + Vector3(halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));        
-
-        vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
+        vertexBuffer->WriteData(m_vertexData.GetVertices(), m_vertexData.GetNumVertices(), 0);
 
         if (renderComponent)
         {
-            renderComponent->GetVertexBuffer()->WriteData(&vertices[0], vertices.size(), 0);
+            renderComponent->GetVertexBuffer()->WriteData(m_vertexData.GetVertices(), m_vertexData.GetNumVertices(), 0);
         }
     }
 
@@ -365,29 +357,10 @@ void Billboard::UpdateBuffers()
 
     if (vertexBuffer)
     {
-        const float halfWidth = m_width/2.f;
-        const float halfHeight = m_height/2.f;
-
-        std::vector<Vertex> vertices;
-        vertices.reserve(GetNumberOfVertices());
-
-        // first vertex (0)
-        Vector3 position = m_position + Vector3(-halfWidth, -halfHeight, 0); 
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
+        // update vertex data
+        Update();
         
-        // second vertex (1)
-        position = m_position + Vector3(halfWidth, -halfHeight, 0); 
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
-        
-        // third vertex (2)
-        position = m_position + Vector3(-halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
-        
-        // fourth vertex (3)
-        position = m_position + Vector3(halfWidth, halfHeight, 0);
-        vertices.push_back(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));        
-        
-        vertexBuffer->WriteData(&vertices[0], vertices.size(), 0);
+        vertexBuffer->WriteData(m_vertexData.GetVertices(), m_vertexData.GetNumVertices(), 0);
 
         if (m_owner)
         {
@@ -395,7 +368,7 @@ void Billboard::UpdateBuffers()
 
             if (renderComponent)
             {
-                renderComponent->GetVertexBuffer()->WriteData(&vertices[0], vertices.size(), 0);
+                renderComponent->GetVertexBuffer()->WriteData(m_vertexData.GetVertices(), m_vertexData.GetNumVertices(), 0);
             }
         }
 

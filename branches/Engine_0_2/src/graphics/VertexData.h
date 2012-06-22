@@ -32,10 +32,11 @@ public:
 	VertexData();
 	VertexData(uint32_t numVertices);
 	VertexData(const Vertex* vertices, uint32_t numVertices);
-
+    
+    void SetNumVertexHint(uint32_t numVertices);
 	void AddVertex(const Vertex& vertex);
 	void AddVertices(const Vertex* vertices, uint32_t numVertices);
-	void Clear();
+	void Clear(bool resetSize=true);
 	Vertex* GetVertices();
 	uint32_t GetNumVertices() const;
 

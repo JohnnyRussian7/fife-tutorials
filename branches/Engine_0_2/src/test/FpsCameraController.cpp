@@ -87,9 +87,7 @@ void FpsCameraController::pitch(float amount)
 }
 
 void FpsCameraController::move(const Vector3& translate)
-{    
-    Vector3 xzTranslate(translate.x, 0.f, translate.z);
-    
+{
     m_cameraNode->Translate(translate);
 }
 

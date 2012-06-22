@@ -37,6 +37,7 @@
 #include "IEntity.h"
 #include "IComponent.h"
 #include "RenderComponent.h"
+#include "TransformComponent.h"
 #include "Visual.h"         // TODO - this should be removed at some point
 
 // filesystem

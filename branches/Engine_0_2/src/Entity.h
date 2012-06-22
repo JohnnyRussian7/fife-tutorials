@@ -1,4 +1,3 @@
-
 /**********************************************************************
 *	Filename: Entity.h
 *	
@@ -34,6 +33,7 @@ class SceneNode;
 class IComponent;
 class Visual;
 struct Matrix4;
+class TransformComponent;
 
 class Entity : public IEntity
 {
@@ -53,6 +53,10 @@ public:
     const Vector3& GetPosition() const;
     void SetPosition(float x, float y, float z);
     void SetPosition(const Vector3& position);
+    
+    const Quaternion& GetOrientation() const;
+    void SetOrientation(const Quaternion& rotation);
+    void SetOrientation(const Vector3& axis, float angle);
 
     virtual void Update(uint32_t time);
 
@@ -68,8 +72,9 @@ protected:
     typedef std::vector<IComponent*> ComponentContainer;
     ComponentContainer m_components;
 
-    // common parameters shared by all game entities
-    Vector3 m_position;
+    // convenience variable for accessing the transform
+    // associated with this entity
+    TransformComponent* m_transformComponent;
 
     // TODO - remove once visual is no longer used
     Visual* m_visual;

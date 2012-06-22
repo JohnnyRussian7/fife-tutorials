@@ -42,6 +42,9 @@ bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event)
     float yaw = -event.GetRelativeX();
     float pitch = -event.GetRelativeY();
     
+	//std::cout << "yaw: " << yaw << std::endl;
+	//std::cout << "pitch: " << pitch << std::endl;
+	
     if  (m_initialized)
     {
         //m_cam->Rotate(test);
@@ -54,30 +57,11 @@ bool SimpleMouseListener::OnMouseMoved(const IMouseEvent& event)
     
     m_initialized = true;
 
-    if (event.IsButtonPressed(MouseButtons::LeftButton))
-    {
-        // TODO - add something fun here
-    }
-    else if (event.IsButtonPressed(MouseButtons::RightButton))
-    {
-        // TODO - maybe something else fun here
-    }
-
     return true;
 }
 
 bool SimpleMouseListener::OnMousePressed(const IMouseEvent& event) 
-{ 
-    float yaw = -event.GetRelativeX();
-    float pitch = -event.GetRelativeY();
-    
-    if (event.IsButtonPressed(MouseButtons::LeftButton))
-    {
-        SceneNode* root = m_fpsCamera->GetSceneManager()->GetRootSceneNode();
-        root->Yaw(yaw);
-        root->Pitch(pitch);
-    }
-    
+{     
     return true; 
 }
 
@@ -97,13 +81,22 @@ bool SimpleMouseListener::OnMouseWheel(const IMouseEvent& event)
 
 bool SimpleMouseListener::OnMouseDragged(const IMouseEvent& event)
 {
-    float yaw = DegToRad(-event.GetRelativeX());
-    float pitch = DegToRad(-event.GetRelativeY());
-    
-    if (event.IsButtonPressed(MouseButtons::LeftButton))
+    float xRel = event.GetRelativeX();
+    float yRel = event.GetRelativeY();
+
+	SceneNode* root = m_fpsCamera->GetSceneManager()->GetRootSceneNode();
+	
+    if (event.IsButtonPressed(MouseButtons::RightButton))
     {
-        SceneNode* root = m_fpsCamera->GetSceneManager()->GetRootSceneNode();
-        root->Yaw(yaw);
-        root->Pitch(pitch);
+		root->Translate(xRel, yRel, 0);
+        //root->Yaw(yaw);
+        //root->Pitch(pitch);
     }
+	else if (event.IsButtonPressed(MouseButtons::LeftButton))
+	{
+		root->Yaw(DegToRad(xRel));
+		root->Pitch(DegToRad(yRel));
+	}
+	
+	return true;
 }

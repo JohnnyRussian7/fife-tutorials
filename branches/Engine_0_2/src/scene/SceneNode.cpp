@@ -63,12 +63,15 @@ m_localBlendingMode(false), m_localCullMode(false), m_localFillMode(false)
 		m_name = CreateUniqueSceneNodeName();
 	}
 
+    m_transformComponent = new TransformComponent();
     MarkDirty();
 }
 
 SceneNode::~SceneNode()
 {
 	RemoveAllChildren();
+    delete m_transformComponent;
+    m_transformComponent = 0;
 }
 
 const char* SceneNode::GetName() const
@@ -90,9 +93,13 @@ void SceneNode::SetParent(SceneNode* parent)
         // if we have one, but tell parent not to 
         // delete us
 		m_parent->RemoveChild(this, false);
+        m_parent->GetTransformComponent()->RemoveTransformChangedListener(GetTransformComponent());
 	}
 
+    // set new parent and add ourselves as a listener for transform changes
 	m_parent = parent;
+    m_parent->GetTransformComponent()->AddTransformChangedListener(GetTransformComponent());
+    GetTransformComponent()->SetParent(m_parent->GetTransformComponent());
 
     MarkDirty();
 }
@@ -153,6 +160,8 @@ void SceneNode::AddEntity(IEntity* entity)
     if (entity)
     {
         entity->SetParent(this);
+        TransformComponent* transformComponent = checked_cast<TransformComponent*>(entity->GetComponent("Transform"));
+        transformComponent->SetParent(m_transformComponent);
         m_entities.push_back(entity);
     }
 }
@@ -184,6 +193,8 @@ void SceneNode::RemoveEntity(const char* name, bool shouldDeleteEntity)
         {
             if ((*iter)->GetName() == name)
             {
+                TransformComponent* transformComponent = checked_cast<TransformComponent*>((*iter)->GetComponent("Transform"));
+                transformComponent->SetParent(0);
                 if (shouldDeleteEntity)
                 {
                     delete *iter;
@@ -199,9 +210,16 @@ void SceneNode::RemoveAllEntities()
 {
     for (EntityContainer::iterator iter = m_entities.begin(); iter != m_entities.end(); ++iter)
     {
+        TransformComponent* transformComponent = checked_cast<TransformComponent*>((*iter)->GetComponent("Transform"));
+        transformComponent->SetParent(0);
         delete *iter;
     }
     m_entities.clear();
+}
+
+TransformComponent* SceneNode::GetTransformComponent() const
+{
+    return m_transformComponent;
 }
 
 void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperations)
@@ -261,39 +279,37 @@ void SceneNode::GetRenderOperations(std::vector<RenderOperation>& renderOperatio
 
 const Vector3& SceneNode::GetScale() const
 {
-	return m_scale;
+   return m_transformComponent->GetScale();
 }
 
 const Vector3& SceneNode::GetPosition() const
 {
-	return m_position;
+    return m_transformComponent->GetPosition();
 }
 
 const Quaternion& SceneNode::GetOrientation() const
 {
-	return m_orientation;
+	return m_transformComponent->GetOrientation();
 }
 
 const Vector3& SceneNode::GetRelativeScale() const
 {
-	return m_relativeScale;
+	return m_transformComponent->GetRelativeScale();
 }
 
 const Vector3& SceneNode::GetRelativePosition() const
 {
-	return m_relativePosition;
+	return m_transformComponent->GetRelativePosition();
 }
 
 const Quaternion& SceneNode::GetRelativeOrientation() const
 {
-	return m_relativeOrientation;
+	return m_transformComponent->GetRelativeOrientation();
 }
 
 void SceneNode::SetScale(const Vector3& scale)
 {
-	m_scale = scale;
-
-    MarkDirty();
+	m_transformComponent->SetScale(scale);
 }
 
 void SceneNode::SetScale(float x, float y, float z)
@@ -303,9 +319,7 @@ void SceneNode::SetScale(float x, float y, float z)
 
 void SceneNode::SetPosition(const Vector3& position)
 {
-	m_position = position;
-
-    MarkDirty();
+	m_transformComponent->SetPosition(position);
 }
 
 void SceneNode::SetPosition(float x, float y, float z)
@@ -315,9 +329,7 @@ void SceneNode::SetPosition(float x, float y, float z)
 
 void SceneNode::SetOrientation(const Quaternion& orientation)
 {
-	m_orientation = Normalize(orientation);
-
-    MarkDirty();
+	m_transformComponent->SetOrientation(orientation);
 }
 
 void SceneNode::SetOrientation(const Vector3& axis, float angle)
@@ -449,19 +461,12 @@ Matrix4 SceneNode::GetTransform()
 {
     // performs lazy update of transform if needed
     // we do it here so it only gets updated if its actually used
-    if (IsTransformDirty())
-    {
-        m_transform = MakeTransform(m_relativeScale, m_relativePosition, m_relativeOrientation);
-        ResetTransformDirty();
-    }
-    
-    return m_transform;
+    return m_transformComponent->GetTransform();
 }
 
 void SceneNode::Translate(const Vector3& translation)
 {
-    // translation with respect to parent
-    m_position += translation;
+    m_transformComponent->Translate(translation);
 
     // translation with respect to local coordinates
     //m_position += m_orientation * translation;
@@ -476,8 +481,6 @@ void SceneNode::Translate(const Vector3& translation)
     //{
     //    m_position += translation;
     //}
-
-    MarkDirty();
 }
 
 void SceneNode::Translate(float x, float y, float z)
@@ -487,12 +490,7 @@ void SceneNode::Translate(float x, float y, float z)
 
 void SceneNode::Rotate(const Quaternion& rotation)
 {
-    Quaternion normRotation = Normalize(rotation);
-
-    // rotation in local space
-    m_orientation = m_orientation * normRotation;
-    
-    MarkDirty();
+    m_transformComponent->Rotate(rotation);
 }
 
 void SceneNode::Rotate(const Vector3& axis, float angle)
@@ -527,29 +525,7 @@ bool SceneNode::IsTransformDirty()
 
 void SceneNode::Update(uint32_t time)
 {
-    if (IsDirty())
-    {
-        if (m_parent)
-        {
-            m_relativeOrientation = m_parent->GetRelativeOrientation() * m_orientation;
-            m_relativeScale = m_parent->GetRelativeScale() * m_scale; 
-            
-            // calculation relative to parent's position and scale
-            m_relativePosition = m_parent->GetRelativeOrientation() * (m_parent->GetRelativeScale() * m_position);
-            
-            // add to parent's relative position
-            m_relativePosition += m_parent->GetRelativePosition();
-        }
-        else
-        {
-            m_relativePosition = m_position;
-            m_relativeOrientation = m_orientation;
-            m_relativeScale = m_scale;
-        }
-
-        // mark the cached transform for this node as needing an update
-        MarkTransformDirty();
-    }
+    m_transformComponent->Update(time);
 
     EntityContainer::iterator entityIter;
     for (entityIter = m_entities.begin(); entityIter != m_entities.end(); ++entityIter)

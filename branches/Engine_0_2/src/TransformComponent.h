@@ -42,12 +42,14 @@ public:
     void SetParent(TransformComponent* parent);
     
     const Vector3& GetPosition() const;
+    void SetPosition(float x, float y, float z);
     void SetPosition(const Vector3& position);
     
     const Quaternion& GetOrientation() const;
     void SetOrientation(const Quaternion& orientation);
     
     const Vector3& GetScale() const;
+    void SetScale(float x, float y, float z);
     void SetScale(const Vector3& scale);
     
     void Translate(float x, float y, float z);

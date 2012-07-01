@@ -60,6 +60,18 @@ Vector3 Matrix4::GetZ() const
     return Vector3(m_matrix[8], m_matrix[9], m_matrix[10]);
 }
 
+void Matrix4::SetTranslation(const Vector3& translation)
+{
+    m_matrix[12] = translation.x;
+    m_matrix[13] = translation.y;
+    m_matrix[14] = translation.z;
+}
+
+Vector3 Matrix4::GetTranslation() const
+{
+    return Vector3(m_matrix[12], m_matrix[13], m_matrix[14]);
+}
+
 Matrix4 operator*(const Matrix4& lhs, const Matrix4& rhs)
 {
 	Matrix4 result;

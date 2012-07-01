@@ -45,7 +45,7 @@ namespace
 }
 
 Camera::Camera(const char* name)
-: m_viewMatrix(Matrix4::Identity()), m_viewDirty(true), m_needsUpdate(true), 
+: m_viewMatrix(Matrix4::Identity()), m_viewDirty(true), 
 m_fixedYaw(false), m_fixedYawAxis(Vector3::UnitY())
 {
     if (name)
@@ -60,14 +60,12 @@ m_fixedYaw(false), m_fixedYawAxis(Vector3::UnitY())
 
 void Camera::SetPosition(float x, float y, float z)
 {
-    SetPosition(Vector3(x,y,z));
+    m_transformComponent->SetPosition(x, y, z);
 }
 
 void Camera::SetPosition(const Vector3& position)
 {
     m_transformComponent->SetPosition(position);
-
-    MarkDirty();
 }
 
 const Quaternion& Camera::GetOrientation() const
@@ -93,35 +91,28 @@ const Frustum& Camera::GetFrustum()
 
 Vector3 Camera::GetUp() const
 {
-	return m_transformComponent->GetOrientation() * Vector3::UnitY();
+	return m_transformComponent->GetRelativeOrientation() * Vector3::UnitY();
 }
 
 Vector3 Camera::GetRight() const
 {
-	return m_transformComponent->GetOrientation() * Vector3::UnitX();
+	return m_transformComponent->GetRelativeOrientation() * Vector3::UnitX();
 }
 
 Vector3 Camera::GetLookAt() const
 {
 	// always looking down the -z axis
-	return m_transformComponent->GetOrientation() * -Vector3::UnitZ();
+	return m_transformComponent->GetRelativeOrientation() * -Vector3::UnitZ();
 }
 
 void Camera::Translate(float x, float y, float z)
 {
-    Translate(Vector3(x, y, z));
+    m_transformComponent->Translate(x, y, z);
 }
 
 void Camera::Translate(const Vector3& translation)
 {
-	// translate in world space
-	//m_position += translation;
-
-	// translate in local space 
-	//m_position += m_orientation * translation;
     m_transformComponent->Translate(translation);
-    
-    MarkDirty();
 }
 
 void Camera::LookAt(float x, float y, float z)
@@ -166,23 +157,19 @@ void Camera::LookAt(const Vector3& target)
     if (m_parent)
     {
         // calculate orientation with respect to parent
-        m_transformComponent->SetOrientation(Inverse(m_parent->GetRelativeOrientation()) * m_transformComponent->GetOrientation());
+        //m_transformComponent->SetOrientation(Inverse(m_parent->GetRelativeOrientation()) * m_transformComponent->GetOrientation());
+        m_transformComponent->SetOrientation(Inverse(m_parent->GetRelativeOrientation()) * orientation);
     }
     else
     {
         // no parent just set orientation directly
         m_transformComponent->SetOrientation(orientation);
     }
-
-    MarkDirty();
 }
 
 void Camera::Pitch(float angle)
 {
-	Vector3 xaxis = GetRight();
-	Rotate(xaxis, angle);
-
-    MarkDirty();
+    m_transformComponent->Rotate(GetRight(), angle);
 }
 
 void Camera::Yaw(float angle)
@@ -198,17 +185,12 @@ void Camera::Yaw(float angle)
         yAxis = GetUp();
     }
 
-    Rotate(yAxis, angle);
-
-    MarkDirty();
+    m_transformComponent->Rotate(yAxis, angle);
 }
 
 void Camera::Roll(float angle)
 {
-	Vector3 zaxis = m_transformComponent->GetOrientation() * Vector3::UnitZ();
-	Rotate(zaxis, angle);
-
-    MarkDirty();
+    m_transformComponent->Rotate(GetLookAt(), angle);
 }
 
 bool Camera::IsYawAxisFixed() const
@@ -229,17 +211,12 @@ void Camera::SetFixedYawAxis(bool fixedYaw, const Vector3& axis)
 
 void Camera::Rotate(const Vector3& axis, float angle)
 {
-	Quaternion rotQ = FromAxisAngle(axis, angle);
-	Rotate(rotQ);
-
-    MarkDirty();
+    m_transformComponent->Rotate(axis, angle);
 }
 
 void Camera::Rotate(const Quaternion& rotation)
 {
     m_transformComponent->Rotate(rotation);
-
-    MarkDirty();
 }
 
 void Camera::UpdateView()
@@ -281,17 +258,12 @@ void Camera::UpdateView()
     temp[15] = 1;
     Vector3 translation = temp * m_transformComponent->GetRelativePosition();
     
-    //Vector3 translation = -rotMatrix * m_position;
-    rotMatrix[12] = translation.x;
-    rotMatrix[13] = translation.y;
-    rotMatrix[14] = translation.z;
+    rotMatrix.SetTranslation(translation);
     m_viewMatrix = rotMatrix;
 
     // update frustum
     m_frustum.Update(m_viewMatrix);
 
-    //std::cout << "view matrix" << std::endl;
-    //std::cout << m_viewMatrix << std::endl;
     // reset dirty flag
     ResetViewDirty();
 }
@@ -305,44 +277,16 @@ void Camera::Update(uint32_t time)
     
     // call base class update, handles all component updates
     Entity::Update(time);
-    
-    if (m_parent && m_parent->IsDirty())
-    {
-        //m_relativeOrientation = m_parent->GetRelativeOrientation() * m_orientation;
-        //m_relativePosition = (m_parent->GetRelativeOrientation() * m_position) + m_parent->GetRelativePosition();
-
-        MarkDirty();
-    }
 }
 
 Matrix4 Camera::GetTransform()
 {
     return m_transformComponent->GetTransform();
-    
-    /*
-    if (m_parent)
-    {
-        return m_parent->GetTransform();
-    }
-
-    return Matrix4::Identity();
-    */
-}
-
-void Camera::MarkDirty()
-{
-    m_needsUpdate = true;
-}
-
-void Camera::ResetDirty()
-{
-    m_needsUpdate = false;
 }
 
 bool Camera::IsDirty()
 {
     return m_transformComponent->IsDirty();
-    //return m_needsUpdate;
 }
 
 void Camera::MarkViewDirty()

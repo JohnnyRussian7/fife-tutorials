@@ -86,7 +86,6 @@ private:
     //Vector3 m_relativePosition;
     Matrix4 m_viewMatrix;
     Frustum m_frustum;
-    bool m_needsUpdate;
     bool m_viewDirty;
     bool m_fixedYaw;
     Vector3 m_fixedYawAxis;

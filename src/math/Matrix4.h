@@ -124,6 +124,9 @@ struct Matrix4
     Vector3 GetY() const;
     void SetZ(const Vector3& lookAt);
     Vector3 GetZ() const;
+    
+    void SetTranslation(const Vector3& translation);
+    Vector3 GetTranslation() const;
 
     static const uint32_t NumMatrixElements = 16;
 	float m_matrix[NumMatrixElements];

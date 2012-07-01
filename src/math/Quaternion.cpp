@@ -353,3 +353,16 @@ Quaternion Squad(float t, const Quaternion& q0, const Quaternion& a0,
 	return Slerp(slerpT, slerpP, slerpQ);
 }
 
+std::ostream& operator<<(std::ostream& os, const Quaternion& q)
+{
+    const uint32_t Width = 10;
+    os  << std::setprecision(3)
+    << std::fixed
+    << q.x << std::setw(Width) 
+    << q.y << std::setw(Width) 
+    << q.z << std::setw(Width)
+    << q.w << std::endl;
+    
+    return os;
+}
+

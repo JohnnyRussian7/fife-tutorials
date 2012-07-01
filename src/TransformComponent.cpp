@@ -99,6 +99,11 @@ const Vector3& TransformComponent::GetPosition() const
     return m_position;
 }
 
+void TransformComponent::SetPosition(float x, float y, float z)
+{
+    SetPosition(Vector3(x, y, z));
+}
+
 void TransformComponent::SetPosition(const Vector3& position)
 {
     m_position = position;
@@ -113,14 +118,18 @@ const Quaternion& TransformComponent::GetOrientation() const
 
 void TransformComponent::SetOrientation(const Quaternion& orientation)
 {
-    m_orientation = orientation;
-    
+    m_orientation = Normalize(orientation);
     MarkDirty();
 }
 
 const Vector3& TransformComponent::GetScale() const
 {
     return m_scale;
+}
+
+void TransformComponent::SetScale(float x, float y, float z)
+{
+    SetScale(Vector3(x, y, z));
 }
 
 void TransformComponent::SetScale(const Vector3& scale)

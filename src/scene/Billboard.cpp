@@ -235,11 +235,44 @@ void Billboard::Update()
     const float halfHeight = m_height/2.f;
 
     Matrix4 transposeView = Matrix4::Identity();
+    Vector3 rightVec = transposeView.GetX();
+    Vector3 upVec = transposeView.GetY();
+    
+    
     Camera* camera = m_sceneManager->GetCamera();
     if (camera)
     {
-        transposeView = camera->GetViewMatrix() * GetTransform();
+        transposeView = camera->GetViewMatrix();
     }
+    
+    TransformComponent* tc = checked_cast<TransformComponent*>(m_owner->GetComponent("Transform"));
+    //TransformComponent* camTc = checked_cast<TransformComponent*>(camera->GetComponent("Transform"));
+    Vector3 lookAt = Normalize(tc->GetRelativePosition() - transposeView.GetTranslation());
+    //upVec = Vector3(0, 1, 0);
+    upVec = transposeView.GetY();
+    rightVec = Normalize(Cross(upVec, lookAt));
+    upVec = Normalize(Cross(lookAt, rightVec));
+
+    /*
+    Matrix4 rotMatrix;
+    rotMatrix.SetX(rightVec);
+    rotMatrix.SetY(upVec);
+    rotMatrix.SetZ(lookAt);
+    Quaternion rot = FromRotationMatrix(rotMatrix);
+    tc->SetOrientation(rot);
+    
+    
+    /*
+    std::cout << "cam position: " << camTc->GetRelativePosition() << std::endl;
+    std::cout << "cam up : " << camera->GetUp() << std::endl;
+    std::cout << "cam right: " << camera->GetRight() << std::endl;
+    std::cout << "cam lookAt: " << camera->GetLookAt() << std::endl;
+    std::cout << "position: " << tc->GetRelativePosition() << std::endl;
+    */
+    std::cout << "lookAt: " << lookAt << std::endl;
+    std::cout << "upVec: " << upVec << std::endl;
+    std::cout << "rightVec: " << rightVec << std::endl;
+    
     
     // 4 vertices per billboard
     // split into 2 triangles with 
@@ -249,44 +282,22 @@ void Billboard::Update()
     //     |  \   |
     //     |   \  |
     //  (0)|_____\| (1)
-
-    Vector3 lookAt = -Normalize(camera->GetPosition() - m_owner->GetParent()->GetRelativePosition());
-    Vector3 upVec = Vector3(0, 1, 0);
-    Vector3 rightVec = Normalize(Cross(upVec, lookAt));
-    upVec = Normalize(Cross(lookAt, rightVec));
-    
-    /*
-    std::cout << "cam position: " << camera->GetPosition() << std::endl;
-    std::cout << "cam up : " << camera->GetUp() << std::endl;
-    std::cout << "cam right: " << camera->GetRight() << std::endl;
-    std::cout << "cam lookAt: " << camera->GetLookAt() << std::endl;
-    std::cout << "position: " << m_owner->GetParent()->GetRelativePosition() << std::endl;
-    std::cout << "lookAt: " << lookAt << std::endl;
-    std::cout << "upVec: " << upVec << std::endl;
-    std::cout << "rightVec: " << rightVec << std::endl;
-    */
-    
-    //float m[16];
-    //glGetFloatv(GL_MODELVIEW_MATRIX, m);
-    //transposeView = Matrix4(m);
-    //Vector3 rightVec = transposeView.GetX();
-    //Vector3 upVec = transposeView.GetY();
     
     // first vertex (0)
-    Vector3 position = m_position + (-halfWidth*rightVec + halfHeight*upVec);
-    m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
-
-    // second vertex (1)
-    position = m_position + (halfWidth*rightVec + halfHeight*upVec);
-    m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
-
-    // third vertex (2)
-    position = m_position + (-halfWidth*rightVec - halfHeight*upVec);
+    Vector3 position = m_position + (-halfWidth*rightVec - halfHeight*upVec);
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_bottom)));
 
-    // fourth vertex (3)
+    // second vertex (1)
     position = m_position + (halfWidth*rightVec - halfHeight*upVec);
     m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_bottom)));
+
+    // third vertex (2)
+    position = m_position + (-halfWidth*rightVec + halfHeight*upVec);
+    m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_left, m_textureCoords.m_top)));
+
+    // fourth vertex (3)
+    position = m_position + (halfWidth*rightVec + halfHeight*upVec);
+    m_vertexData.AddVertex(Vertex(position, Vector3(0,0,0), m_color, Vector2(m_textureCoords.m_right, m_textureCoords.m_top)));
 
     ResetDirty();
 }

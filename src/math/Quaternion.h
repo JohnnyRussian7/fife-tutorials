@@ -104,4 +104,6 @@ Vector3 ZAxis(const Quaternion& q);
 Quaternion Slerp(float t, const Quaternion& p, const Quaternion& q);
 Quaternion Squad(float t, const Quaternion& q0, const Quaternion& a0, const Quaternion& a1, const Quaternion& q1);
 
+std::ostream& operator<<(std::ostream& os, const Quaternion& q);
+
 #endif
